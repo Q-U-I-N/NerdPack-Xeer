@@ -1,0 +1,7 @@
+## Title: |r[|cffff6060Xeer|r] Combat Routines
+## Notes: Custom Combat Routines for NerdPack.
+## Interface: 70000
+## Dependencies: NerdPack
+## Author: Xeer
+
+Xeer.xml
