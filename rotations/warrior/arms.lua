@@ -14,6 +14,9 @@ local exeOnLoad = function()
 end
 
 local _Xeer = {
+
+--nothing atm:P
+
 --[[
 warrior="Warrior_Arms_T19P"
 level=110
@@ -41,15 +44,21 @@ local PreCombat = {
 
 
 local Survival = {
+
 -- {'', ''},
+
 }
 
 local Cooldowns = {
 
+-- {'', ''},
+
+}
+
+
+local Util = {
+
 	--# Executed every time the actor is available.
-	
-	--actions=charge
-	{'Charge', 'target.range>8&target.range<=25&target.infront'},
 	
 	--actions+=/potion,name=old_war,if=(target.health.pct<20&buff.battle_cry.up)||target.time_to_die<=26
 	
@@ -193,7 +202,7 @@ local Execute = {
 	{'Warbreaker', '!buff(Shattered Defenses)&rage<=30'},
 	
 	--actions.execute+=/execute,if=buff.shattered_defenses.up&rage>22||buff.shattered_defenses.down
-	{'Execute', '{buff(Shattered Defenses)&rage>22||buff(Shattered Defenses)}'},	
+	{'Execute', '{buff(Shattered Defenses)&rage>22}||!buff(Shattered Defenses)'}	
 
 }
 
@@ -242,15 +251,20 @@ local Keybinds = {
 local inCombat = {
 
 	{Keybinds},
-	{_Xeer},
+	--{_Xeer},
 	--{Survival, 'player.health < 100'},
-	{Cooldowns, 'toggle(cooldowns)'},
+	--{Cooldowns, 'toggle(cooldowns)'},
+	
+	--actions=charge
+	{'Charge', 'target.range>8&target.range<=25&target.infront'},
+	
+	{Util, 'target.range<8'},
 	
 	--actions+=/run_action_list,name=cleave,if=spell_targets.whirlwind>=2&talent.sweeping_strikes.enabled
-	{Cleave, {'player.area(8).enemies>=2&talent(1,3)'}},
+	{Cleave, 'player.area(8).enemies>=2&talent(1,3)'},
 	
 	--actions+=/run_action_list,name=aoe,if=spell_targets.whirlwind>=2&!talent.sweeping_strikes.enabled
-	{AoE, {'player.area(8).enemies>=2&!talent(1,3)'}},
+	{AoE, 'player.area(8).enemies>=2&!talent(1,3)'},
 	
 	--actions+=/run_action_list,name=execute,if=target.health.pct<=20
 	{Execute, {'target.range < 8', 'target.infront', 'target.health<=20'}},
@@ -263,7 +277,7 @@ local inCombat = {
 local outCombat = {
 
 	{Keybinds},
-	{PreCombat},
+	{PreCombat}
 	
 }
 
