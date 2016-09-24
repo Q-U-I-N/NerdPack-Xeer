@@ -58,6 +58,7 @@ local Cooldowns = {
 }
 
 local PreCombat = {
+
 	--# Executed before combat begins. Accepts non-harmful actions only.
 	--actions.precombat=flask,type=countless_armies
 	--actions.precombat+=/food,type=seedbattered_fish_plate
@@ -91,6 +92,7 @@ local AoE = {
 	
 	--actions.prot_aoe+=/neltharions_fury,if=buff.battle_cry.up
 	{'Neltharion\'s Fury', 'buff(Battle Cry)'},
+	
 	--actions.prot_aoe+=/shield_slam,if=!(cooldown.shield_block.remains<=gcd.max*2&!buff.shield_block.up&talent.heavy_repercussions.enabled)
 	{'Shield Slam', '!{spell(Shield Block).cooldown<=gcd*2&!buff(Shield Block)&talent(7,2)}'},
 	
@@ -131,15 +133,12 @@ local ST = {
 	
 	--actions.prot+=/neltharions_fury,if=incoming_damage_2500ms>health.max*0.20&!buff.shield_block.up
 	{'Neltharion\'s Fury', 'incdmg(2.5)>health.max*0.20&!buff(Shield Block)'},
-
 	
 	--actions.prot+=/shield_slam,if=!(cooldown.shield_block.remains<=gcd.max*2&!buff.shield_block.up&talent.heavy_repercussions.enabled)
 	{'Shield Slam', '!{spell(Shield Block).cooldown<=gcd*2&!buff(Shield Block)&talent(7,2)}||{rage<=5}'},
-
 	
 	--actions.prot+=/revenge,if=cooldown.shield_slam.remains<=gcd.max*2
 	{'Revenge', '{spell(Shield Slam).cooldown<=gcd*2}||{rage<=5}'},
-
 	
 	--actions.prot+=/devastate
 	{'Devastate'}
