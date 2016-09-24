@@ -4,6 +4,11 @@ local GUI = {
 
 local exeOnLoad = function()
 	--Xeer.Splash()
+
+	print("|cffADFF2F ----------------------------------------------------------------------|r")
+	print("|cffADFF2F --- |rWARRIOR |cffADFF2FProtection |r")
+	print("|cffADFF2F --- |rRecommended Talents: 1/1 - 2/1 - 3/2 - 4/2 - 5/3 - 6/1 - 7/2")
+	print("|cffADFF2F ----------------------------------------------------------------------|r")	
 	
 	NeP.Interface.CreateToggle(
 		'autotaunt',
@@ -79,12 +84,13 @@ local Something = { --same skills in same order in both parts of rotation... pla
 	{'Ravager', 'talent(7,3)&buff(Battle Cry)'}
 	
 }
+
 local AoE = {
 	
 	{Something},
 	
 	--actions.prot_aoe+=/neltharions_fury,if=buff.battle_cry.up
-	{'Neltharions Fury', 'buff(Battle Cry)'},
+	{'Neltharion\'s Fury', 'buff(Battle Cry)'},
 	--actions.prot_aoe+=/shield_slam,if=!(cooldown.shield_block.remains<=gcd.max*2&!buff.shield_block.up&talent.heavy_repercussions.enabled)
 	{'Shield Slam', '!{spell(Shield Block).cooldown<=gcd*2&!buff(Shield Block)&talent(7,2)}'},
 	
@@ -98,11 +104,10 @@ local AoE = {
 	{'Devastate'}
 }
 
-
 local ST = {
 
 	--actions.prot=shield_block,if=!buff.neltharions_fury.up&((cooldown.shield_slam.remains<6&!buff.shield_block.up)||(cooldown.shield_slam.remains<6+buff.shield_block.remains&buff.shield_block.up))
-	{'Shield Block', '!buff(203524)&{{spell(Shield Slam).cooldown<6&!buff(Shield Block)}||{spell(Shield Slam).cooldown<6+buff(Shield Block).duration&buff(Shield Block)}}'},
+	{'Shield Block', '!buff(Neltharion\'s Fury)&{{spell(Shield Slam).cooldown<6&!buff(Shield Block)}||{spell(Shield Slam).cooldown<6+buff(Shield Block).duration&buff(Shield Block)}}'},
 	--actions.prot+=/ignore_pain,if=(rage>=60&!talent.vengeance.enabled)||(buff.vengeance_ignore_pain.up&buff.ultimatum.up)||(buff.vengeance_ignore_pain.up&rage>=30)||(talent.vengeance.enabled&!buff.ultimatum.up&!buff.vengeance_ignore_pain.up&!buff.vengeance_focused_rage.up&rage<30)
 	{'Ignore Pain','{rage>=60&!talent(6,1)}||{buff(Vengeance: Ignore Pain)&buff(Ultimatum)}||{buff(Vengeance: Ignore Pain)&rage>=30}||{talent(6,1)&!buff(Ultimatum)&!buff(Vengeance: Ignore Pain)&!buff(Vengeance: Focused Rage)&rage<30}'},
 	--actions.prot+=/focused_rage,if=(buff.vengeance_focused_rage.up&!buff.vengeance_ignore_pain.up)||(buff.ultimatum.up&buff.vengeance_focused_rage.up&!buff.vengeance_ignore_pain.up)||(talent.vengeance.enabled&buff.ultimatum.up&!buff.vengeance_ignore_pain.up&!buff.vengeance_focused_rage.up)||(talent.vengeance.enabled&!buff.vengeance_ignore_pain.up&!buff.vengeance_focused_rage.up&rage>=30)||(buff.ultimatum.up&buff.vengeance_ignore_pain.up&cooldown.shield_slam.remains=0&rage<10)||(rage>=100)
@@ -125,7 +130,8 @@ local ST = {
 	{Something},
 	
 	--actions.prot+=/neltharions_fury,if=incoming_damage_2500ms>health.max*0.20&!buff.shield_block.up
-	{'203524', 'incdmg(2.5)>health.max*0.20&!buff(Shield Block)'},
+	{'Neltharion\'s Fury', 'incdmg(2.5)>health.max*0.20&!buff(Shield Block)'},
+
 	
 	--actions.prot+=/shield_slam,if=!(cooldown.shield_block.remains<=gcd.max*2&!buff.shield_block.up&talent.heavy_repercussions.enabled)
 	{'Shield Slam', '!{spell(Shield Block).cooldown<=gcd*2&!buff(Shield Block)&talent(7,2)}||{rage<=5}'},
@@ -152,7 +158,7 @@ local inCombat = {
 local outCombat = {
 
 	{Keybinds},
-	{PreCombat},
+	{PreCombat}
 
 }
 
