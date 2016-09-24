@@ -16,6 +16,9 @@ end
 local _Xeer = {
 
 	{'@Xeer.Targeting()' , '!target.alive'},
+	
+	--actions=charge
+	{'Charge', 'target.range>8&target.range<=25&target.infront'},
 
 --[[
 warrior="Warrior_Arms_T19P"
@@ -254,10 +257,7 @@ local inCombat = {
 	{_Xeer},
 	--{Survival, 'player.health < 100'},
 	--{Cooldowns, 'toggle(cooldowns)'},
-	
-	--actions=charge
-	{'Charge', 'target.range>8&target.range<=25&target.infront'},
-	
+		
 	{Util, 'target.range<8'},
 	
 	--actions+=/run_action_list,name=cleave,if=spell_targets.whirlwind>=2&talent.sweeping_strikes.enabled

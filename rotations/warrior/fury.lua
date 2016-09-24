@@ -16,6 +16,9 @@ end
 local _Xeer = {
 
 	{'@Xeer.Targeting()' , '!target.alive'},
+	
+	--actions=charge
+	{'Charge', 'target.range>8&target.range<=25&target.infront'},
 
 --[[
 warrior="Warrior_Fury_T19P"
@@ -45,13 +48,20 @@ local PreCombat = {
 
 local Survival = {
 
+-- {'', ''},
+
 }
 
 local Cooldowns = {
 
+-- {'', ''},
+
+}
+
+local Util = {
+
 	--# Executed every time the actor is available.
-	--actions=auto_attack
-	--actions+=/charge
+
 	--# This is mostly to prevent cooldowns from being accidentally used during movement.
 	--actions+=/run_action_list,name=movement,if=movement.distance>5
 	--actions+=/heroic_leap,if=(raid_event.movement.distance>25&raid_event.movement.in>45)||!raid_event.movement.exists
