@@ -251,7 +251,7 @@ local Keybinds = {
 local inCombat = {
 
 	{Keybinds},
-	--{_Xeer},
+	{_Xeer},
 	--{Survival, 'player.health < 100'},
 	--{Cooldowns, 'toggle(cooldowns)'},
 	
