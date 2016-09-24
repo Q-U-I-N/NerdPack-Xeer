@@ -127,8 +127,6 @@ local ST = {
 	--actions.prot+=/neltharions_fury,if=incoming_damage_2500ms>health.max*0.20&!buff.shield_block.up
 	{'203524', 'incdmg(2.5)>health.max*0.20&!buff(Shield Block)'},
 	
-	
-	
 	--actions.prot+=/shield_slam,if=!(cooldown.shield_block.remains<=gcd.max*2&!buff.shield_block.up&talent.heavy_repercussions.enabled)
 	{'Shield Slam', '!{spell(Shield Block).cooldown<=gcd*2&!buff(Shield Block)&talent(7,2)}||{rage<=5}'},
 
