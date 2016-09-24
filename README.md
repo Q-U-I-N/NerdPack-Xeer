@@ -1,3 +1,3 @@
 # NerdPack-Xeer
 
---WIP
+Routines are supported with English-only clients now.
