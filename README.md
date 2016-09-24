@@ -1,6 +1,6 @@
 # NerdPack-Xeer
 
-Routines are supported with every language clients now.
+Routines are supported (should work...) with every language clients now.
 
 If you got some errors be sure you got LASTEST NeP core files here: 
 https://github.com/MrTheSoulz/NerdPack
