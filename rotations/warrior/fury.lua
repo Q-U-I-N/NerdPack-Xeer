@@ -4,10 +4,20 @@ local GUI = {
 
 local exeOnLoad = function()
 
+	--Xeer.Splash()
+
+	print("|cffADFF2F ----------------------------------------------------------------------|r")
+	print("|cffADFF2F --- |rWARRIOR |cffADFF2FFury |r")
+	print("|cffADFF2F --- |rRecommended Talents: 1/2 - 2/2 - 3/3 - 4/2 - 5/1 - 6/3 - 7/3")
+	print("|cffADFF2F ----------------------------------------------------------------------|r")
+
 end
 
 local _Xeer = {
-	--[[
+
+	{'@Xeer.Targeting()' , '!target.alive'},
+
+--[[
 warrior="Warrior_Fury_T19P"
 level=110
 race=tauren
@@ -17,9 +27,11 @@ talents=2232133
 artifact=35:0:0:0:0:982:1:984:1:985:1:986:1:988:3:990:3:991:3:995:3:996:3:1357:1
 spec=fury
 ]]	--
+
 }
 
 local PreCombat = {
+
 	--# Executed before combat begins. Accepts non-harmful 	--actions only.
 	--actions.precombat=flask,type=countless_armies
 	--actions.precombat+=/food,type=nightborne_delicacy_platter
@@ -138,9 +150,9 @@ local inCombat = {
 	{Survival, 'player.health < 100'},
 	{Cooldowns, 'toggle(cooldowns)'},
 	--actions+=/call_action_list,name=two_targets,if=spell_targets.whirlwind=2||spell_targets.whirlwind=3
-	{TwoTargets},
+	{TwoTargets, 'player.area(8).enemies=2||player.area(8).enemies=3'},
 	--actions+=/call_action_list,name=aoe,if=spell_targets.whirlwind>3
-	{AoE, {'toggle(AoE)', 'player.area(8).enemies >= 3'}},
+	{AoE, 'player.area(8).enemies>3'},
 	--actions+=/call_action_list,name=single_target
 	{ST, {'target.range < 8', 'target.infront'}}
 	

@@ -15,7 +15,7 @@ end
 
 local _Xeer = {
 
---nothing atm:P
+	{'@Xeer.Targeting()' , '!target.alive'},
 
 --[[
 warrior="Warrior_Arms_T19P"
