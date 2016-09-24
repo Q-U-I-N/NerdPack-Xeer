@@ -2,7 +2,7 @@ Xeer = {
 	Version = 0.00001,
 	Branch = 'BETA',
 	Interface = {
-		addonColor = 'ff6060',
+		addonColor = 'ADFF2F',
 		Logo = NeP.Interface.Logo -- Temp until i get a logo
 	},
 }
@@ -18,14 +18,6 @@ end
 local Parse = NeP.DSL.Parse
 local Fetch = NeP.Interface.fetchKey
 
--- Temp Hack
-function Xeer.Splash()
-	NeP.Interface.CreateToggle(
-		'ADots',
-		'Interface\\Icons\\Ability_creature_cursed_05.png',
-		'Automated Dotting',
-		'Click here to dot all the things!')
-end
 
 function Xeer.ClassSetting(key)
 	local name = '|cff'..NeP.Core.classColor('player')..'Class Settings'
@@ -36,156 +28,60 @@ function Xeer.dynEval(condition, spell)
 	return Parse(condition, spell or '')
 end
 
-NeP.library.register('Xeer', {
+NeP.library.register('Xeer', Xeer)
 
-	HolyNova = function(units)
-		local minHeal = GetSpellBonusDamage(2) * 1.125
-		local total = 0
-		for i=1,#NeP.OM['unitFriend'] do
-			local Obj = NeP.OM['unitFriend'][i]
-			if Obj.distance <= 12 then
-				if max(0, Obj.maxHealth - Obj.actualHealth) > minHeal then
-					total = total + 1
-				end
-			end
-		end
-		return total > units
-	end,
-
-	instaKill = function(health)
-		local Spell = NeP.Engine.Current_Spell
-		if NeP.DSL.Conditions['toggle']('ADots') then
-			for i=1,#NeP.OM['unitEnemie'] do
-				local Obj = NeP.OM['unitEnemie'][i]
-				if NeP.DSL.Conditions['health'](Obj.key) <= health then
-					if IsSpellInRange(Spell, Obj.key)
-					and NeP.Engine.Infront('player', Obj.key)
-					and UnitCanAttack('player', Obj.key) then
-						NeP.Engine.Macro('/target '..Obj.key)
-						return true
-					end
-				end
-			end
-		else
-			if NeP.DSL.Conditions['health']('target') <= health then
-				if IsSpellInRange(Spell, 'target')
-				and NeP.Engine.Infront('player', 'target')
-				and UnitCanAttack('player', 'target') then
-					return true
-				end
-			end
-		end
-		return false
-	end,
-	
-	aoeExecute = function()
-		local Spell = "Execute"
-		if not IsUsableSpell(Spell) then return false end
-
-		for i=1,#NeP.OM['unitEnemie'] do
-			local Obj = NeP.OM['unitEnemie'][i]
-
-			-- exclude the ones we can't hit
-			if Obj.distance > 5 then
-				return false
-			end
-
-			if UnitCanAttack('player', Obj.key)
-			and NeP.Engine.Infront('player', Obj.key) 
-			and Obj.health < 20 then
-				NeP.Engine.ForceTarget = Obj.key
+function Xeer.Targeting()
+	local exists = UnitExists("target")
+	local hp = UnitHealth("target")
+	if exists == false or (exists == true and hp < 1) then
+		for i=1,#NeP.OM.unitEnemie do
+			local Obj = NeP.OM.unitEnemie[i]	
+			if Obj.distance <= 10 then
+				RunMacroText("/tar " .. Obj.key)
 				return true
 			end
 		end
+	end
+end
 
-		return false
-	end,
-
-	areaRend = function(maxApplications, refreshAt)
-		local Spell = "Rend"
-		if not IsUsableSpell(Spell) then return false end
-		local currentApplications = 0
-
-		-- loop through all enemies and check if they have rend
-		for i=1,#NeP.OM['unitEnemie'] do
-			local Obj = NeP.OM['unitEnemie'][i]
-			if (UnitAffectingCombat(Obj.key) or Obj.is == 'dummy') then
-				if UnitDebuff(Obj.key, Spell, nil, 'PLAYER') then
-					currentApplications = currentApplications + 1
-				end
-			end
-		end
-
-		-- check to see if the enemies with rend exceed or equal the max applications wanted
-		if currentApplications >= maxApplications then
-			return false
-		else
-			for i=1,#NeP.OM['unitEnemie'] do
-				local Obj = NeP.OM['unitEnemie'][i]
-
-				-- exclude the ones that we can't hit
-				if Obj.distance > 5 then
-					return false
-				end
-
-				if (UnitAffectingCombat(Obj.key) or Obj.is == 'dummy') then
-					local _,_,_,_,_,_,debuffDuration = UnitDebuff(Obj.key, Spell, nil, 'PLAYER')
-					if not debuffDuration or debuffDuration - GetTime() < refreshAt then
-						if UnitCanAttack('player', Obj.key)
-						and NeP.Engine.Infront('player', Obj.key) then
-							NeP.Engine.ForceTarget = Obj.key
-							return true
-						end
-					end
-				end
-			end
-		end
-
-		return false
-	end,
-
-	aDot = function(refreshAt)
-		local Spell = NeP.Engine.Current_Spell
-		if not IsUsableSpell(Spell) then return false end
-		local _,_,_, SpellcastingTime = GetSpellInfo(Spell)
-		local SpellcastingTime = SpellcastingTime * 0.001
-
-		if NeP.DSL.Conditions['toggle']('ADots') then
-			for i=1,#NeP.OM['unitEnemie'] do
-				local Obj = NeP.OM['unitEnemie'][i]
-				if (UnitAffectingCombat(Obj.key) or Obj.is == 'dummy') then
-					local _,_,_,_,_,_,debuffDuration = UnitDebuff(Obj.key, Spell, nil, 'PLAYER')
-					if not debuffDuration or debuffDuration - GetTime() < refreshAt then
-						if UnitCanAttack('player', Obj.key)
-						and NeP.Engine.Infront('player', Obj.key)
-						and IsSpellInRange(Spell, Obj.key) then				
-							if NeP.DSL.Conditions['ttd'](Obj.key) > ((debuffDuration or 0) + SpellcastingTime)
-							or SpellcastingTime < 1 then
-								NeP.Engine.ForceTarget = Obj.key
-								return true
-							end
-						end
-					end
-				end
-			end
-		else
-			local _,_,_,_,_,_,debuffDuration = UnitDebuff('target', Spell, nil, 'PLAYER')
-			if not debuffDuration or debuffDuration - GetTime() < refreshAt then
-				if IsSpellInRange(Spell, 'target')
-				and NeP.Engine.Infront('player', 'target')
-				and UnitCanAttack('player', 'target') then
-					if NeP.DSL.Conditions['ttd']('target') > ((debuffDuration or 0) + SpellcastingTime)
-					or SpellcastingTime < 1 then
-
-						return true
-					end
-				end
-			end
-		end
+function Xeer.AoETaunt()
+	--Warrior
+	if select(3,UnitClass("player")) == 1 then 
+		local spell = "Taunt"
+	end
+	--Paladin
+	if select(3,UnitClass("player")) == 2 then 
+		local spell = "Hand of Reckoning"
+	end
+	--Death Knight
+	if select(3,UnitClass("player")) == 6 then 
+		local spell = "Dark Command"
+	end
+	--Monk
+	if select(3,UnitClass("player")) == 10 then 
+		local spell = "Provoke"
+	end
+	--Druid
+	if select(3,UnitClass("player")) == 11 then 
+		local spell = "Growl"
+	end
+	--Demon Hunter
+	if select(3,UnitClass("player")) == 12 then 
+		local spell = "Torment"
+	end
+	local spellCooldown = NeP.DSL.Conditions['spell.cooldown']("player", spell)
+	if spellCooldown > 0 then
 		return false
 	end
-
-})
+	for i=1,#NeP.OM.unitEnemie do
+		local Obj = NeP.OM.unitEnemie[i]	
+		local Threat = UnitThreatSituation("player", Obj.key)
+		if Threat ~= nil and Threat >= 0 and Threat < 3 and Obj.distance <= 30 then
+			NeP.Engine.Cast_Queue(spell, Obj.key)
+			return true
+		end
+	end
+end
 
 NeP.DSL.RegisterConditon("petinmelee", function(target)
 	if target then
