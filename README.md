@@ -8,16 +8,18 @@ https://github.com/MrTheSoulz/NerdPack
 im using new features so if you don't have newest, it won't work :P
 
 
-
 Working rotations:
 
 Warrior - Protection
+
 Warrior - Arms
 
 
 WIP(do not use them even if you see them on github):
 
 Warrior - Fury
+
 Warlock - Demo
+
 Hunter - SV
 
