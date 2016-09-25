@@ -4,7 +4,7 @@ local GUI = {
 
 local exeOnLoad = function()
 
-	--Xeer.Splash()
+	----Xeer.Splash()
 
 	print("|cffADFF2F ----------------------------------------------------------------------|r")
 	print("|cffADFF2F --- |rWARRIOR |cffADFF2FFury |r")
@@ -68,8 +68,9 @@ local Util = {
 	
 	--actions+=/potion,name=old_war,if=(target.health.pct<20&buff.battle_cry.up)||target.time_to_die<30
 	
-	--actions+=/battle_cry,if=(cooldown.odyns_fury.remains=0&(cooldown.bloodthirst.remains=0||(buff.enrage.remains>cooldown.bloodthirst.remains)))
-	{'Battle Cry', 'spell(Odyn\'s Fury).cooldown<1&{spell(Bloodthirst).cooldown=0||buff(Enrage).duration>spell(Bloodthirst).cooldown}'}, 
+	--actions+=/battle_cry,if=(cooldown.odyns_fury.remains=0&(cooldown.bloodthirst.remains=0||(buff.enrage.remains>cooldown.bloodthirst.remains))) 
+	{'Battle Cry', '{spell(Odyn\'s Fury).cooldown=0&{spell(Bloodthirst).cooldown=0||{buff(Enrage).duration>spell(Bloodthirst).cooldown}}}'},
+
 	
 	--actions+=/avatar,if=buff.battle_cry.up||(target.time_to_die<(cooldown.battle_cry.remains+10))
 	{'Avatar', 'buff(Battle Cry)'}, --todo: TTD<{spell(Battle Cry).cooldown+10}
@@ -228,8 +229,10 @@ local inCombat = {
 
 	{Keybinds},
 	{_Xeer},
-	{Survival, 'player.health < 100'},
-	{Cooldowns, 'toggle(cooldowns)'},
+	--{Survival, 'player.health < 100'},
+	--{Cooldowns, 'toggle(cooldowns)'},
+	--{PreCombat},
+	{Util},
 	
 	--actions+=/call_action_list,name=two_targets,if=spell_targets.whirlwind=2||spell_targets.whirlwind=3
 	{TwoTargets, 'player.area(8).enemies=2||player.area(8).enemies=3'},

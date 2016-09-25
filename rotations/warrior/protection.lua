@@ -3,7 +3,7 @@ local GUI = {
 }
 
 local exeOnLoad = function()
-	--Xeer.Splash()
+	----Xeer.Splash()
 
 	print("|cffADFF2F ----------------------------------------------------------------------|r")
 	print("|cffADFF2F --- |rWARRIOR |cffADFF2FProtection |r")
