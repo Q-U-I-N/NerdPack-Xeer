@@ -13,17 +13,64 @@ im using new features so if you don't have newest, it won't work :P
 
 Working rotations:
 
-Warrior - Protection
-
 Warrior - Arms
-
-------------------------------------
-
-WIP(do not use them even if you see them on github):
 
 Warrior - Fury
 
-Warlock - Demo
+Warrior - Protection
 
-Hunter - SV
+
+------------------------------------
+
+Future routines + WIP (do not use them even if you see them on github):
+
+Death Knight - Frost
+
+Death Knight - Unholy
+
+Demon Hunter - Havoc
+
+Demon Hunter - Vengeance
+
+Druid - Balance
+
+Druid - Feral
+
+Druid - Guardian
+
+Hunter - Beast Mastery
+
+Hunter - Marksmanship
+
+Hunter - Survival
+
+Mage - Arcane
+
+Mage - Fire
+ 
+Mage - Frost
+
+Monk - Windwalker
+
+Paladin - Protection
+
+Paladin - Retribution
+
+Priest - Shadow
+
+Rogue - Assassination
+
+Rogue - Outlaw
+
+Rogue - Subtlety
+
+Shaman - Elemental
+
+Shaman - Enhancement
+
+Warlock - Affliction
+
+Warlock - Demonology
+
+Warlock - Destruction
 
