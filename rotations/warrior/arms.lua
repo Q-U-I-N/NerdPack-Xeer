@@ -15,7 +15,7 @@ end
 
 local _Xeer = {
 
-	--{'@Xeer.Targeting()' , '!target.alive'},
+	{'@Xeer.Targeting()' , '!target.alive'},
 	
 	--actions=charge
 	{'Charge', 'target.range>8&target.range<=25&target.infront'},
