@@ -15,7 +15,7 @@ end
 
 local _Xeer = {
 
-	{'@Xeer.Targeting()' , '!target.alive'},
+	--{'@Xeer.Targeting()' , '!target.alive'},
 	
 	--actions=charge
 	{'Charge', 'target.range>8&target.range<=25&target.infront'},
@@ -88,7 +88,7 @@ local Util = {
 	--waste of rage i would say unless ... it's PvP, maybe?
 	
 	--actions+=/heroic_leap,if=debuff.colossus_smash.up
-	--manual usage of leap... seriously
+	--manual usage of leap via keybind... 
 	
 	--actions+=/rend,if=remains<gcd
 	{'Rend', 'talent(3,2)&target.debuff(Rend).duration<=gcd'},
@@ -257,7 +257,7 @@ local inCombat = {
 	{_Xeer},
 	--{Survival, 'player.health < 100'},
 	--{Cooldowns, 'toggle(cooldowns)'},
-		
+	
 	{Util, 'target.range<8'},
 	
 	--actions+=/run_action_list,name=cleave,if=spell_targets.whirlwind>=2&talent.sweeping_strikes.enabled
@@ -273,6 +273,7 @@ local inCombat = {
 	{ST, {'target.range<8', 'target.infront', 'target.health>20'}}
 	
 }
+
 
 local outCombat = {
 

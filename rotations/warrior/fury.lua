@@ -15,7 +15,7 @@ end
 
 local _Xeer = {
 
-	{'@Xeer.Targeting()' , '!target.alive'},
+	--{'@Xeer.Targeting()' , '!target.alive'},
 	
 	--actions=charge
 	{'Charge', 'target.range>8&target.range<=25&target.infront'},
@@ -62,20 +62,26 @@ local Util = {
 
 	--# Executed every time the actor is available.
 
-	--# This is mostly to prevent cooldowns from being accidentally used during movement.
-	--actions+=/run_action_list,name=movement,if=movement.distance>5
 	--actions+=/heroic_leap,if=(raid_event.movement.distance>25&raid_event.movement.in>45)||!raid_event.movement.exists
+	--manual usage of leap via keybind... 
 	--actions+=/use_item,name=faulty_countermeasure,if=(spell_targets.whirlwind>1||!raid_event.adds.exists)&((talent.bladestorm.enabled&cooldown.bladestorm.remains=0)||buff.battle_cry.up||target.time_to_die<25)
+	
 	--actions+=/potion,name=old_war,if=(target.health.pct<20&buff.battle_cry.up)||target.time_to_die<30
+	
 	--actions+=/battle_cry,if=(cooldown.odyns_fury.remains=0&(cooldown.bloodthirst.remains=0||(buff.enrage.remains>cooldown.bloodthirst.remains)))
+	
 	--actions+=/avatar,if=buff.battle_cry.up||(target.time_to_die<(cooldown.battle_cry.remains+10))
+	
 	--actions+=/bloodbath,if=buff.dragon_roar.up||(!talent.dragon_roar.enabled&(buff.battle_cry.up||cooldown.battle_cry.remains>10))
+	
 	--actions+=/blood_fury,if=buff.battle_cry.up
+	{'Blood Fury', 'buff(Battle Cry)'},
+	
 	--actions+=/berserking,if=buff.battle_cry.up
+	{'Berserking', 'buff(Battle Cry)'},
+	
 	--actions+=/arcane_torrent,if=rage<rage.max-40
-	--actions+=/call_action_list,name=two_targets,if=spell_targets.whirlwind=2||spell_targets.whirlwind=3
-	--actions+=/call_action_list,name=aoe,if=spell_targets.whirlwind>3
-	--actions+=/call_action_list,name=single_target
+	{'Arcane Torrent', 'rage<60'},
 
 }
 
