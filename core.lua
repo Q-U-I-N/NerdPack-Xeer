@@ -83,3 +83,14 @@ NeP.library.register('Xeer', {
 		end
 	end,
 })
+
+
+NeP.DSL.RegisterConditon('ragedeficit', function(target, spell)
+	local max = UnitPowerMax(target, SPELL_POWER_RAGE)
+	local curr = UnitPower(target, SPELL_POWER_RAGE)
+	return (max - curr)
+end)
+
+NeP.DSL.RegisterConditon('equipped', function(target, item)
+	if IsEquippedItem(item) == true then return true else return false end
+end)
