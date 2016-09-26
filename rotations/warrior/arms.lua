@@ -4,7 +4,7 @@ local GUI = {
 
 local exeOnLoad = function()
 
-	----Xeer.Splash()
+	Xeer.Splash()
 
 	print("|cffADFF2F ----------------------------------------------------------------------|r")
 	print("|cffADFF2F --- |rWARRIOR |cffADFF2FArms |r")
@@ -15,7 +15,7 @@ end
 
 local _Xeer = {
 
-	{'@Xeer.Targeting()', '!target.alive'},
+	{'@Xeer.Targeting()', {'!target.alive', 'toggle(autotarget)'}},
 	
 	--actions=charge
 	{'Charge', 'target.range>8&target.range<=25&target.infront'},
@@ -72,10 +72,10 @@ local Util = {
 	{'Berserking', 'buff(Battle Cry)'},
 	
 	--actions+=/arcane_torrent,if=buff.battle_cry_deadly_calm.down&rage.deficit>40
-	{'Arcane Torrent', 'buff(Battle Cry)&talent(6,1)&ragedeficit>40'},
+	--{'Arcane Torrent', 'buff(Battle Cry)&talent(6,1)&ragedeficit>40'},
 	
 	--actions+=/battle_cry,if=(buff.bloodlust.up||time>=1)&!gcd.remains&(buff.shattered_defenses.up||(cooldown.colossus_smash.remains&cooldown.warbreaker.remains))||target.time_to_die<=10
-	{'Battle Cry', '{buff(Bloodlust)||combat(player).time>1}&{buff(Shattered Defenses)||{spell(Colossus Smash).cooldown>gcd&spell(Warbreaker).cooldown>gcd}}'},
+	{'Battle Cry', '{buff(Bloodlust)||combat(player).time>=1}&{buff(Shattered Defenses)||{spell(Colossus Smash).cooldown>gcd&spell(Warbreaker).cooldown>gcd}}'},
 	
 	--actions+=/avatar,if=(buff.bloodlust.up||time>=1)
 	{'Avatar', 'buff(Bloodlust)||combat(player).time>=1'},

@@ -4,18 +4,18 @@ local GUI = {
 
 local exeOnLoad = function()
 
-	----Xeer.Splash()
+	Xeer.Splash()
 
 	print("|cffADFF2F ----------------------------------------------------------------------|r")
 	print("|cffADFF2F --- |rWARRIOR |cffADFF2FFury |r")
 	print("|cffADFF2F --- |rRecommended Talents: 1/2 - 2/2 - 3/3 - 4/2 - 5/1 - 6/3 - 7/3")
 	print("|cffADFF2F ----------------------------------------------------------------------|r")
-
+	
 end
 
 local _Xeer = {
 
-	{'@Xeer.Targeting()', '!target.alive'},
+	{'@Xeer.Targeting()', {'!target.alive', 'toggle(autotarget)'}},
 	
 	--actions=charge
 	{'Charge', 'target.range>8&target.range<=25&target.infront'},
@@ -85,7 +85,7 @@ local Util = {
 	{'Berserking', 'buff(Battle Cry)'},
 	
 	--actions+=/arcane_torrent,if=rage<rage.max-40
-	{'Arcane Torrent', 'rage<60'},
+	--{'Arcane Torrent', 'rage<60'},
 
 }
 

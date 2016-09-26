@@ -3,7 +3,7 @@ local GUI = {
 }
 
 local exeOnLoad = function()
-	----Xeer.Splash()
+	Xeer.Splash()
 
 	print("|cffADFF2F ----------------------------------------------------------------------|r")
 	print("|cffADFF2F --- |rWARRIOR |cffADFF2FProtection |r")
@@ -14,21 +14,13 @@ local exeOnLoad = function()
 		'autotaunt',
 		'Interface\\Icons\\spell_nature_shamanrage.png',
 		'Auto Taunt',
-		'Automatically taunt enemies.')
-		
---[[	
-	NeP.Interface.CreateToggle(
-		'autotarget', 
-		'Interface\\Icons\\ability_hunter_snipershot', 
-		'Auto Target', 
-		'Automatically target the nearest enemy when target dies or does not exist')
-]]--
-	
+		'Automatically taunt nearby enemies.')
+			
 end
 
 local _Xeer = { -- some non-SiMC stuffs
 
-	{'@Xeer.Targeting()', '!target.alive'},
+	{'@Xeer.Targeting()', {'!target.alive', 'toggle(autotarget)'}},
 	{'@Xeer.AoETaunt()', 'toggle.autotaunt'},
 
 	{'Impending Victory', '{!buff(Victorious)&rage>10&player.health<=85}||{buff(Victorious)&player.health<=70}'},

@@ -18,6 +18,14 @@ end
 local Parse = NeP.DSL.Parse
 local Fetch = NeP.Interface.fetchKey
 
+-- Temp Hack
+function Xeer.Splash()
+	NeP.Interface.CreateToggle(
+		'autotarget', 
+		'Interface\\Icons\\ability_hunter_snipershot', 
+		'Auto Target', 
+		'Automatically target the nearest enemy when target dies or does not exist')	
+end
 
 function Xeer.ClassSetting(key)
 	local name = '|cff'..NeP.Core.classColor('player')..'Class Settings'
@@ -45,28 +53,29 @@ NeP.library.register('Xeer', {
 	end,
 
 	AoETaunt = function()
-		--Warrior
-		if select(3,UnitClass("player")) == 1 then 
+	local class = select(3,UnitClass("player"))
+			--Warrior
+		if class == 1 then 
 			local spell = "Taunt"
-		end
-		--Paladin
-		if select(3,UnitClass("player")) == 2 then 
+		elseif
+			--Paladin
+			class == 2 then 
 			local spell = "Hand of Reckoning"
-		end
-		--Death Knight
-		if select(3,UnitClass("player")) == 6 then 
+		elseif
+			--Death Knight
+			class == 6 then 
 			local spell = "Dark Command"
-		end
-		--Monk
-		if select(3,UnitClass("player")) == 10 then 
+		elseif
+			--Monk
+			class == 10 then 
 			local spell = "Provoke"
-		end
-		--Druid
-		if select(3,UnitClass("player")) == 11 then 
+		elseif
+			--Druid
+			class == 11 then 
 			local spell = "Growl"
-		end
-		--Demon Hunter
-		if select(3,UnitClass("player")) == 12 then 
+		elseif
+			--Demon Hunter
+			class == 12 then 
 			local spell = "Torment"
 		end
 		local spellCooldown = NeP.DSL.Conditions['spell.cooldown']("player", spell)
@@ -84,7 +93,6 @@ NeP.library.register('Xeer', {
 	end,
 })
 
-
 NeP.DSL.RegisterConditon('ragedeficit', function(target, spell)
 	local max = UnitPowerMax(target, SPELL_POWER_RAGE)
 	local curr = UnitPower(target, SPELL_POWER_RAGE)
@@ -93,4 +101,14 @@ end)
 
 NeP.DSL.RegisterConditon('equipped', function(target, item)
 	if IsEquippedItem(item) == true then return true else return false end
+end)
+
+NeP.DSL.RegisterConditon('execute_time', function(target, spell)
+	local GCD = math.floor((1.5 / ((GetHaste() / 100) + 1)) * 10^3 ) / 10^3	
+	local name, rank, icon, cast_time, min_range, max_range = GetSpellInfo(spell)
+		if cast_time < GCD then
+			return cast_time
+		else
+			return GCD
+		end
 end)
