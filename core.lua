@@ -39,59 +39,56 @@ end
 NeP.library.register('Xeer', {
 
 	Targeting = function()
-		local exists = UnitExists("target")
-		local hp = UnitHealth("target")
+		local exists = UnitExists('target')
+		local hp = UnitHealth('target')
 		if exists == false or (exists == true and hp < 1) then
 			for i=1,#NeP.OM.unitEnemie do
 				local Obj = NeP.OM.unitEnemie[i]	
 				if Obj.distance <= 10 then
-					RunMacroText("/tar " .. Obj.key)
+					RunMacroText('/tar ' .. Obj.key)
 					return true
 				end
 			end
 		end
 	end,
 
-	AoETaunt = function()
-	local class = select(3,UnitClass("player"))
-			--Warrior
+	AutoTaunt = function()
+		local _,_,class = UnitClass('player')
 		if class == 1 then 
-			local spell = "Taunt"
-		elseif
+			--Warrior		
+			spell = 'Taunt'
+		elseif class == 2 then 
 			--Paladin
-			class == 2 then 
-			local spell = "Hand of Reckoning"
-		elseif
+			spell = 'Hand of Reckoning'
+		elseif class == 6 then 
 			--Death Knight
-			class == 6 then 
-			local spell = "Dark Command"
-		elseif
+			spell = 'Dark Command'
+		elseif class == 10 then 
 			--Monk
-			class == 10 then 
-			local spell = "Provoke"
-		elseif
+			spell = 'Provoke'
+		elseif class == 11 then 
 			--Druid
-			class == 11 then 
-			local spell = "Growl"
-		elseif
+			spell = 'Growl'
+		elseif class == 12 then
 			--Demon Hunter
-			class == 12 then 
-			local spell = "Torment"
+			spell = 'Torment'
+		else
+		return false
 		end
-		local spellCooldown = NeP.DSL.Conditions['spell.cooldown']("player", spell)
+		local spellCooldown = NeP.DSL.Conditions['spell.cooldown']('player', spell)
 		if spellCooldown > 0 then
 			return false
 		end
 		for i=1,#NeP.OM.unitEnemie do
 			local Obj = NeP.OM.unitEnemie[i]	
-			local Threat = UnitThreatSituation("player", Obj.key)
+			local Threat = UnitThreatSituation('player', Obj.key)
 			if Threat ~= nil and Threat >= 0 and Threat < 3 and Obj.distance <= 30 then
 				NeP.Engine.Cast_Queue(spell, Obj.key)
 				return true
 			end
 		end
-	end,
-})
+	end
+})	
 
 NeP.DSL.RegisterConditon('ragedeficit', function(target, spell)
 	local max = UnitPowerMax(target, SPELL_POWER_RAGE)

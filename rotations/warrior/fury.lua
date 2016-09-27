@@ -33,6 +33,12 @@ spec=fury
 
 }
 
+local Interrupts = {
+
+	{'Pummel'}
+
+}
+
 local PreCombat = {
 
 	--# Executed before combat begins. Accepts non-harmful 	--actions only.
@@ -228,6 +234,7 @@ local Keybinds = {
 local inCombat = {
 
 	{Keybinds},
+	{Interrupts, 'target.interruptAt(40)'},
 	{_Xeer},
 	--{Survival, 'player.health < 100'},
 	--{Cooldowns, 'toggle(cooldowns)'},

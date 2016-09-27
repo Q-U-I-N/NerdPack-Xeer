@@ -21,7 +21,8 @@ end
 local _Xeer = { -- some non-SiMC stuffs
 
 	{'@Xeer.Targeting()', {'!target.alive', 'toggle(autotarget)'}},
-	{'@Xeer.AoETaunt()', 'toggle.autotaunt'},
+	{'@Xeer.AutoTaunt()', 'toggle(autotaunt)'},
+	--{"%taunt(Taunt)"},
 
 	{'Impending Victory', '{!buff(Victorious)&rage>10&player.health<=85}||{buff(Victorious)&player.health<=70}'},
 	{'Heroic Throw', 'target.range>8&target.range<=30&target.infront'},
@@ -35,6 +36,12 @@ local Keybinds = {
 	{'%pause', 'keybind(alt)'},
 	{'Heroic Leap', 'keybind(lcontrol)' , 'mouseover.ground'}
 	
+}
+
+local Interrupts = {
+
+	{'Pummel'}
+
 }
 
 local Cooldowns = {
@@ -140,6 +147,7 @@ local ST = {
 local inCombat = {
 
 	{Keybinds},
+	{Interrupts, 'target.interruptAt(40)'},
 	{Cooldowns},
 	{_Xeer},
 	{ST, {'target.range < 8', 'target.infront'}}

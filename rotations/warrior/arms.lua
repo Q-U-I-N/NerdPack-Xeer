@@ -251,9 +251,16 @@ local Keybinds = {
 	
 }
 
+local Interrupts = {
+
+	{'Pummel'}
+
+}
+
 local inCombat = {
 
 	{Keybinds},
+	{Interrupts, 'target.interruptAt(40)'},
 	{_Xeer},
 	--{Survival, 'player.health < 100'},
 	--{Cooldowns, 'toggle(cooldowns)'},
