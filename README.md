@@ -19,6 +19,7 @@ Warrior - Fury
 
 Warrior - Protection
 
+Paladin - Protection
 
 ------------------------------------
 
@@ -51,8 +52,6 @@ Mage - Fire
 Mage - Frost
 
 Monk - Windwalker
-
-Paladin - Protection
 
 Paladin - Retribution
 
