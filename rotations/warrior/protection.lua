@@ -21,7 +21,7 @@ end
 local _Xeer = { -- some non-SiMC stuffs
 
 	{'@Xeer.Targeting()', {'!target.alive', 'toggle(autotarget)'}},
-	{'%taunt(Taunt)', 'toggle(autotaunt)'}
+	{'%taunt(Taunt)', 'toggle(autotaunt)'},
 
 	{'Impending Victory', '{!buff(Victorious)&rage>10&player.health<=85}||{buff(Victorious)&player.health<=70}'},
 	{'Heroic Throw', 'target.range>8&target.range<=30&target.infront'},

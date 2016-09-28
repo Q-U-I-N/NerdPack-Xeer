@@ -76,16 +76,16 @@ local Cooldowns = {
 	{'Bastion of Light', 'talent(2,2)&spell(Shield of the Righteous).charges<1'},
 	
 	--actions.prot+=/light_of_the_protector,if=(health.pct<40)
-	{'Light of the Protector', 'player.health<50'},
+	{'Light of the Protector', 'player.health<40'},
 	
 	--actions.prot+=/hand_of_the_protector,if=(health.pct<40)
-	{'Hand of the Protector', 'talent(5,1)&player.health<50'},
+	{'Hand of the Protector', 'talent(5,1)&player.health<40'},
 	
 	--actions.prot+=/light_of_the_protector,if=(incoming_damage_10000ms<health.max*1.25)&health.pct<55&talent.righteous_protector.enabled
-	{'Light of the Protector', 'incdmg(10)>health.max*1.25&player.health<55&talent(7,1)'},
+	{'Light of the Protector', '{incdmg(10)>health.max*1.25}&player.health<55&talent(7,1)'},
 	
 	--actions.prot+=/light_of_the_protector,if=(incoming_damage_13000ms<health.max*1.6)&health.pct<55
-	{'Light of the Protector', 'incdmg(13)>health.max*1.6&player.health<55'},
+	{'Light of the Protector', '{incdmg(13)>health.max*1.6}&player.health<55'},
 	
 	--actions.prot+=/hand_of_the_protector,if=(incoming_damage_6000ms<health.max*0.7)&health.pct<65&talent.righteous_protector.enabled
 	{'Hand of the Protector', 'talent(5,1)&{incdmg(6)>health.max*0.7}&player.health<55&talent(7,1)'},
