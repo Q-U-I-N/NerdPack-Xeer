@@ -36,6 +36,15 @@ function Xeer.dynEval(condition, spell)
 	return Parse(condition, spell or '')
 end
 
+local classTaunt = {
+	[1] = 'Taunt',
+	[2] = 'Hand of Reckoning',
+	[6] = 'Dark Command',
+	[10] = 'Provoke',
+	[11] = 'Growl',
+	[12] = 'Torment'
+}
+
 NeP.library.register('Xeer', {
 
 	Targeting = function()
@@ -50,32 +59,12 @@ NeP.library.register('Xeer', {
 				end
 			end
 		end
-	end,
-
+	end
+--[[
 	AutoTaunt = function()
 		local _,_,class = UnitClass('player')
-		if class == 1 then 
-			--Warrior		
-			spell = 'Taunt'
-		elseif class == 2 then 
-			--Paladin
-			spell = 'Hand of Reckoning'
-		elseif class == 6 then 
-			--Death Knight
-			spell = 'Dark Command'
-		elseif class == 10 then 
-			--Monk
-			spell = 'Provoke'
-		elseif class == 11 then 
-			--Druid
-			spell = 'Growl'
-		elseif class == 12 then
-			--Demon Hunter
-			spell = 'Torment'
-		else
-		return false
-		end
-		local spellCooldown = NeP.DSL.Conditions['spell.cooldown']('player', spell)
+		spell = classTaunt[class]
+		local spellCooldown = NeP.DSL.Get('spell.cooldown')('player', spell)
 		if spellCooldown > 0 then
 			return false
 		end
@@ -88,6 +77,7 @@ NeP.library.register('Xeer', {
 			end
 		end
 	end
+]]--
 })	
 
 NeP.DSL.RegisterConditon('ragedeficit', function(target, spell)

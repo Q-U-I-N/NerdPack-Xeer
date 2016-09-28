@@ -21,7 +21,7 @@ end
 local _Xeer = { -- some non-SiMC stuffs
 
 	{'@Xeer.Targeting()', {'!target.alive', 'toggle(autotarget)'}},
-	{'@Xeer.AutoTaunt()', 'toggle(autotaunt)'}
+	{'%taunt(Hand of Reckoning)', 'toggle(autotaunt)'}
 
 --[[
 paladin='Paladin_Protection_T19P'
