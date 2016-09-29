@@ -27,6 +27,17 @@ position=ranged_back
 talents=3112212
 artifact=40:137365:137272:137365:0:291:1:294:1:295:1:296:1:298:3:300:6:301:3:302:3:303:3:1350:1
 spec=elemental
+
+# Gear Summary
+# gear_ilvl=843.75
+# gear_stamina=17944
+# gear_intellect=18697
+# gear_crit_rating=10236
+# gear_haste_rating=4293
+# gear_mastery_rating=2418
+# gear_versatility_rating=898
+# gear_armor=2433
+# set_bonus=tier19p_mail_2pc=1
 ]]--
 	
 }

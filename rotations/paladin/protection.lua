@@ -32,6 +32,18 @@ position=front
 talents=2231223
 artifact=49:137548:136778:137547:0:1120:1:1121:3:1124:3:1125:1:1126:3:1128:6:1129:3:1133:1:1135:1:1343:1
 spec=protection
+
+# Gear Summary
+# gear_ilvl=843.75
+# gear_strength=9969
+# gear_stamina=19629
+# gear_crit_rating=1891
+# gear_haste_rating=9554
+# gear_mastery_rating=680
+# gear_versatility_rating=4820
+# gear_armor=3965
+# set_bonus=march_of_the_legion_2pc=1
+# set_bonus=tier19p_plate_2pc=1
 ]]--
 	
 }

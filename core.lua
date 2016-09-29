@@ -81,10 +81,16 @@ NeP.library.register('Xeer', {
 ]]--
 
 })	
-
-NeP.DSL.RegisterConditon('ragedeficit', function(target, spell)
+--/dump NeP.DSL.Conditions['focusdeficit']('player')
+NeP.DSL.RegisterConditon('ragedeficit', function(target)
 	local max = UnitPowerMax(target, SPELL_POWER_RAGE)
 	local curr = UnitPower(target, SPELL_POWER_RAGE)
+	return (max - curr)
+end)
+
+NeP.DSL.RegisterConditon('focusdeficit', function(target)
+	local max = UnitPowerMax(target, SPELL_POWER_FOCUS)
+	local curr = UnitPower(target, SPELL_POWER_FOCUS)
 	return (max - curr)
 end)
 

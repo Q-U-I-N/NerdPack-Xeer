@@ -26,7 +26,27 @@ local _Xeer = { -- some non-SiMC stuffs
 	{'Impending Victory', '{!buff(Victorious)&rage>10&player.health<=85}||{buff(Victorious)&player.health<=70}'},
 	{'Heroic Throw', 'target.range>8&target.range<=30&target.infront'},
 	{'Shockwave', 'area(6).enemies>=3'}
+
+--[[
+warrior="Warrior_Protection_T19P"
+level=110
+race=tauren
+role=tank
+position=front
+talents=1222312
+artifact=11:0:0:0:0:91:1:92:1:93:1:95:2:99:3:100:3:101:3:102:3:103:1:104:1:1358:1
+spec=protection
 	
+# Gear Summary
+# gear_ilvl=843.75
+# gear_strength=11292
+# gear_stamina=17944
+# gear_crit_rating=971
+# gear_haste_rating=1910
+# gear_mastery_rating=7106
+# gear_versatility_rating=6958
+# gear_armor=3965
+]]--	
 }
 
 local Keybinds = {

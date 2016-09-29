@@ -26,6 +26,15 @@ position=back
 talents=3003112
 artifact=41:137316:137543:133682:0:899:1:901:1:902:1:903:1:904:1:905:1:906:1:909:3:910:5:911:3:912:3:913:1:1351:1
 spec=enhancement
+
+# Gear Summary
+# gear_ilvl=843.75
+# gear_agility=11083
+# gear_stamina=17628
+# gear_crit_rating=1510
+# gear_haste_rating=4970
+# gear_mastery_rating=10279
+# gear_armor=2433
 ]]--
 	
 }

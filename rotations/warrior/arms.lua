@@ -29,6 +29,16 @@ position=back
 talents=1332311
 artifact=36:0:0:0:0:1136:1:1137:1:1139:1:1142:1:1145:3:1147:3:1148:3:1149:3:1150:3:1356:1
 spec=arms
+
+# Gear Summary
+# gear_ilvl=842.00
+# gear_strength=11138
+# gear_stamina=17965
+# gear_crit_rating=984
+# gear_haste_rating=2229
+# gear_mastery_rating=12496
+# gear_versatility_rating=2013
+# gear_armor=3965
 ]]--
 
 }
@@ -128,7 +138,7 @@ local AoE = {
 	{'Warbreaker', '!buff(Shattered Defenses)'},
 
 	--actions.aoe+=/whirlwind,if=talent.fervor_of_battle.enabled&(debuff.colossus_smash.up||rage.deficit<50)&(!talent.focused_rage.enabled||buff.battle_cry_deadly_calm.up||buff.cleave.up)
-	{'Whirlwind', 'talent(3,1)&{target.debuff(Colossus Smash)||ragedeficit<50}&{!talent(5,3)||{buff(Battle Cry)&talent(6,1)}||buff(Cleave)}'},
+	{'Whirlwind', 'talent(3,1)&{target.debuff(Colossus Smash)||player.ragedeficit<50}&{!talent(5,3)||{buff(Battle Cry)&talent(6,1)}||buff(Cleave)}'},
 	
 	--actions.aoe+=/rend,if=remains<=duration*0.3
 	{'Rend', 'talent(3,2)&target.debuff(Rend).duration<=4.5'},
@@ -168,7 +178,7 @@ local Cleave = {
 	{'Focused Rage', '!buff(Shattered Defenses)'},
 	
 	--actions.cleave+=/whirlwind,if=talent.fervor_of_battle.enabled&(debuff.colossus_smash.up||rage.deficit<50)&(!talent.focused_rage.enabled||buff.battle_cry_deadly_calm.up||buff.cleave.up)
-	{'Whirlwind', 'talent(3,1)&{target.debuff(Colossus Smash)||ragedeficit<50}&{!talent(5,3)||{buff(Battle Cry)&talent(6,1)}||buff(Cleave)}'},
+	{'Whirlwind', 'talent(3,1)&{target.debuff(Colossus Smash)||player.ragedeficit<50}&{!talent(5,3)||{buff(Battle Cry)&talent(6,1)}||buff(Cleave)}'},
 	
 	--actions.cleave+=/rend,if=remains<=duration*0.3
 	{'Rend', 'talent(3,2)&target.debuff(Rend).duration<=4.5'},
@@ -230,7 +240,10 @@ local ST = {
 	{'Execute', 'buff(Ayala\'s Stone Heart)'},
 	
 	--actions.single+=/slam,if=buff.battle_cry_deadly_calm.up||buff.focused_rage.stack=3||rage.deficit<=30
-	{'Slam', '{buff(Battle Cry)&talent(6,1)}||buff(Focused Rage).count=3||ragedeficit<=30'},
+	{'Slam', '!talent(3,1)&{{buff(Battle Cry)&talent(6,1)}||buff(Focused Rage).count=3||player.ragedeficit<=30}'},
+	
+	--Whirlwind instead Slam if "Fevor of Battle" is picked
+	{'Whirlwind', 'talent(3,1)&{{buff(Battle Cry)&talent(6,1)}||buff(Focused Rage).count=3||player.ragedeficit<=30}'},
 	
 	--actions.single+=/execute,if=equipped.archavons_heavy_hand
 	{'Execute', 'equipped(137060)'},

@@ -29,6 +29,17 @@ position=back
 talents=2232133
 artifact=35:0:0:0:0:982:1:984:1:985:1:986:1:988:3:990:3:991:3:995:3:996:3:1357:1
 spec=fury
+
+# Gear Summary
+# gear_ilvl=843.75
+# gear_strength=11746
+# gear_stamina=20310
+# gear_crit_rating=5429
+# gear_haste_rating=10182
+# gear_mastery_rating=3043
+# gear_versatility_rating=606
+# gear_armor=3965
+# set_bonus=tier19p_plate_2pc=1
 ]]	--
 
 }
