@@ -91,7 +91,7 @@ local Util = {
 	--manual usage of leap via keybind... 
 	
 	--actions+=/rend,if=remains<gcd
-	{'Rend', 'talent(3,2)&target.debuff(Rend).duration<=gcd'},
+	{'Rend', 'talent(3,2)&target.debuff(Rend).duration<gcd'},
 	
 	--# The tl;dr of this line is to spam focused rage inside battle cry, the added nonsense is to help modeling the difficulty of timing focused rage immediately after mortal strike. 
 	--# In game, if focused rage is used the same instant as mortal strike, rage will be deducted for focused rage, the buff is immediately consumed, but it does not buff the damage of mortal strike.

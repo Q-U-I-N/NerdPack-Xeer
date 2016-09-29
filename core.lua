@@ -116,3 +116,12 @@ NeP.DSL.RegisterConditon('infront.enemies', function(unit, distance)
 	end
 	return total
 end)
+
+NeP.DSL.RegisterConditon("xmoving", function(target)
+	local speed, _ = GetUnitSpeed(target)
+		if speed ~= 0 then
+			return 1 
+		else
+			return 0
+		end
+end)

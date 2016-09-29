@@ -23,6 +23,8 @@ Paladin - Protection
 
 Shaman - Enhancement
 
+Shaman - Elemental - TODO: need fix Totem Mastery
+
 ------------------------------------
 
 Future routines + WIP (do not use them even if you see them on github):
@@ -64,8 +66,6 @@ Rogue - Assassination
 Rogue - Outlaw
 
 Rogue - Subtlety
-
-Shaman - Elemental
 
 Warlock - Affliction
 
