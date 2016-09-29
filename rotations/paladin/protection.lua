@@ -11,7 +11,7 @@ local exeOnLoad = function()
 	print('|cffADFF2F ----------------------------------------------------------------------|r')	
 	
 	NeP.Interface.CreateToggle(
-		'autotaunt',
+		'AutoTaunt',
 		'Interface\\Icons\\spell_nature_shamanrage.png',
 		'Auto Taunt',
 		'Automatically taunt nearby enemies.')
@@ -20,8 +20,8 @@ end
 
 local _Xeer = { -- some non-SiMC stuffs
 
-	{'@Xeer.Targeting()', {'!target.alive', 'toggle(autotarget)'}},
-	{'%taunt(Hand of Reckoning)', 'toggle(autotaunt)'}
+	{'@Xeer.Targeting()', {'!target.alive', 'toggle(AutoTarget)'}},
+	{'%taunt(Hand of Reckoning)', 'toggle(AutoTaunt)'}
 
 --[[
 paladin='Paladin_Protection_T19P'
@@ -169,8 +169,8 @@ local inCombat = {
 	{Keybinds},
 	{_Xeer},
 	--{Survival, 'player.health < 100'},
-	{Interrupts, {'target.interruptAt(50)', 'toggle(interrupts)', 'target.infront', 'target.range<8'}},
-	{Cooldowns, 'toggle(cooldowns)'},
+	{Interrupts, {'target.interruptAt(50)', 'toggle(Interrupts)', 'target.infront', 'target.range<8'}},
+	{Cooldowns, 'toggle(Cooldowns)'},
 	{AoE, {'toggle(AoE)', 'area(8).enemies>=3'}},
 	{ST, 'target.infront'}
 

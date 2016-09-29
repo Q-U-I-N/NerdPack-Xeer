@@ -21,6 +21,8 @@ Warrior - Protection
 
 Paladin - Protection
 
+Shaman - Enhancement
+
 ------------------------------------
 
 Future routines + WIP (do not use them even if you see them on github):
@@ -64,8 +66,6 @@ Rogue - Outlaw
 Rogue - Subtlety
 
 Shaman - Elemental
-
-Shaman - Enhancement
 
 Warlock - Affliction
 

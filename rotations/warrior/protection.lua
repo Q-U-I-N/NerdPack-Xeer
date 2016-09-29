@@ -11,7 +11,7 @@ local exeOnLoad = function()
 	print("|cffADFF2F ----------------------------------------------------------------------|r")	
 	
 	NeP.Interface.CreateToggle(
-		'autotaunt',
+		'AutoTaunt',
 		'Interface\\Icons\\spell_nature_shamanrage.png',
 		'Auto Taunt',
 		'Automatically taunt nearby enemies.')
@@ -20,8 +20,8 @@ end
 
 local _Xeer = { -- some non-SiMC stuffs
 
-	{'@Xeer.Targeting()', {'!target.alive', 'toggle(autotarget)'}},
-	{'%taunt(Taunt)', 'toggle(autotaunt)'},
+	{'@Xeer.Targeting()', {'!target.alive', 'toggle(AutoTarget)'}},
+	{'%taunt(Taunt)', 'toggle(AutoTaunt)'},
 
 	{'Impending Victory', '{!buff(Victorious)&rage>10&player.health<=85}||{buff(Victorious)&player.health<=70}'},
 	{'Heroic Throw', 'target.range>8&target.range<=30&target.infront'},
@@ -114,13 +114,13 @@ local ST = {
 	{'Focused Rage', '{buff(Vengeance: Focused Rage)&!buff(Vengeance: Ignore Pain)}||{buff(Ultimatum)&buff(Vengeance: Focused Rage)&!buff(Vengeance: Ignore Pain)}||{talent(6,1)&buff(Ultimatum)&!buff(Vengeance: Ignore Pain)&!buff(Vengeance: Focused Rage)}||{talent(6,1)&!buff(Vengeance: Ignore Pain)&!buff(Vengeance: Focused Rage)&rage>=30}||{buff(Ultimatum)&buff(Vengeance: Ignore Pain)&spell(Shield Slam)&rage<10}||{rage>=100}'},
 	
 	--actions.prot+=/demoralizing_shout,if=incoming_damage_2500ms>health.max*0.20
-	{'Demoralizing Shout', '{incdmg(2.5)>health.max*0.20}'},
+	{'Demoralizing Shout', 'incdmg(2.5)>health.max*0.20'},
 	
 	--actions.prot+=/shield_wall,if=incoming_damage_2500ms>health.max*0.50
-	{'Shield Wall', '{incdmg(2.5)>health.max*0.50}'},
+	{'Shield Wall', 'incdmg(2.5)>health.max*0.50'},
 	
 	--actions.prot+=/last_stand,if=incoming_damage_2500ms>health.max*0.50&!cooldown.shield_wall.remains=0
-	{'Last Stand', '{incdmg(2.5)>health.max*0.50}&!spell(Shield Wall).cooldown=0'},
+	{'Last Stand', 'incdmg(2.5)>health.max*0.50&!spell(Shield Wall).cooldown=0'},
 	
 	--actions.prot+=/potion,name=unbending_potion,if=(incoming_damage_2500ms>health.max*0.15&!buff.potion.up)||target.time_to_die<=25
 	
@@ -130,7 +130,7 @@ local ST = {
 	{Something},
 	
 	--actions.prot+=/neltharions_fury,if=incoming_damage_2500ms>health.max*0.20&!buff.shield_block.up
-	{'Neltharion\'s Fury', '{incdmg(2.5)>health.max*0.20}&!buff(Shield Block)'},
+	{'Neltharion\'s Fury', 'incdmg(2.5)>health.max*0.20&!buff(Shield Block)'},
 	
 	--actions.prot+=/shield_slam,if=!(cooldown.shield_block.remains<=gcd.max*2&!buff.shield_block.up&talent.heavy_repercussions.enabled)
 	{'Shield Slam', '!{spell(Shield Block).cooldown<=gcd*2&!buff(Shield Block)&talent(7,2)}||{rage<=5}'},

@@ -14,7 +14,7 @@ end
 
 local _Xeer = { -- some non-SiMC stuffs
 
-	{'@Xeer.Targeting()', {'!target.alive', 'toggle(autotarget)'}},
+	{'@Xeer.Targeting()', {'!target.alive', 'toggle(AutoTarget)'}},
 
 --[[
 paladin="Paladin_Retribution_T19P"
@@ -80,7 +80,7 @@ local Cooldowns = {
 	--actions+=/blood_fury
 	{'Blood Fury'},
 	--actions+=/berserking
-	{'berserking'},
+	{'Berserking'},
 	--actions+=/arcane_torrent,if=holy_power<5
 	{'Arcane Torrent', 'player.holypower < 5'}
 }

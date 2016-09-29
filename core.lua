@@ -21,7 +21,7 @@ local Fetch = NeP.Interface.fetchKey
 -- Temp Hack
 function Xeer.Splash()
 	NeP.Interface.CreateToggle(
-		'autotarget', 
+		'AutoTarget', 
 		'Interface\\Icons\\ability_hunter_snipershot', 
 		'Auto Target', 
 		'Automatically target the nearest enemy when target dies or does not exist')	
@@ -60,6 +60,7 @@ NeP.library.register('Xeer', {
 			end
 		end
 	end
+	
 --[[
 	AutoTaunt = function()
 		local _,_,class = UnitClass('player')
@@ -78,6 +79,7 @@ NeP.library.register('Xeer', {
 		end
 	end
 ]]--
+
 })	
 
 NeP.DSL.RegisterConditon('ragedeficit', function(target, spell)
@@ -98,4 +100,19 @@ NeP.DSL.RegisterConditon('execute_time', function(target, spell)
 		else
 			return GCD
 		end
+end)
+
+NeP.DSL.RegisterConditon('infront.enemies', function(unit, distance)
+	local total = 0
+	if not UnitExists(unit) then return total end
+	for i=1, #NeP.OM['unitEnemie'] do
+		local Obj = NeP.OM['unitEnemie'][i]
+		if UnitExists(Obj.key) and (UnitAffectingCombat(Obj.key) or isDummy(Obj.key))
+		and NeP.Engine.Distance(unit, Obj.key) <= tonumber(distance) then
+			if NeP.Engine.Infront('player', Obj.key) then
+				total = total +1
+			end
+		end
+	end
+	return total
 end)

@@ -15,7 +15,7 @@ end
 
 local _Xeer = {
 
-	{'@Xeer.Targeting()', {'!target.alive', 'toggle(autotarget)'}},
+	{'@Xeer.Targeting()', {'!target.alive', 'toggle(AutoTarget)'}},
 	
 	
 
