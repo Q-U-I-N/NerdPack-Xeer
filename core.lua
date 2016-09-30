@@ -81,7 +81,7 @@ NeP.library.register('Xeer', {
 ]]--
 
 })	
---/dump NeP.DSL.Conditions['focusdeficit']('player')
+--/dump NeP.DSL.Conditions['ragedeficit']('player')
 NeP.DSL.RegisterConditon('ragedeficit', function(target)
 	local max = UnitPowerMax(target, SPELL_POWER_RAGE)
 	local curr = UnitPower(target, SPELL_POWER_RAGE)
