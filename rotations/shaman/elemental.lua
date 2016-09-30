@@ -38,7 +38,7 @@ spec=elemental
 # gear_versatility_rating=898
 # gear_armor=2433
 # set_bonus=tier19p_mail_2pc=1
-]]--
+--]]
 	
 }
 local Survival = {

@@ -35,7 +35,7 @@ spec=enhancement
 # gear_haste_rating=4970
 # gear_mastery_rating=10279
 # gear_armor=2433
-]]--
+--]]
 	
 }
 

@@ -3,6 +3,7 @@ local GUI = {
 }
 
 local exeOnLoad = function()
+
 	Xeer.Splash()
 
 	print('|cffADFF2F ----------------------------------------------------------------------|r')
@@ -38,7 +39,7 @@ spec=marksmanship
 # gear_armor=2433
 # set_bonus=tier19p_mail_2pc=1
 summon_pet=cat
-]]--
+--]]
 	
 }
 
@@ -80,7 +81,7 @@ local Cooldowns = {
 	--{'', ''},
 
  	--actions..cooldowns+=/trueshot,if=(buff.bloodlust.react||target.health.pct>20+(cooldown.trueshot.remains+15))||buff.bullseye.react>25
-	{'', ''}
+	{'Trueshot', '{buff(Bloodlust)||target.health>20+{spell(Trueshot).cooldown+15}}||buff(Bullseye).count>25'}
 
 }
 
@@ -88,7 +89,7 @@ local xCombat = {
 
 	--# Executed every time the actor is available.
  	--actions.+=/arcane_torrent,if=focus.deficit>=30
-	{'Arcane Torrent', 'player.focusdeficit>=30'},
+	{'Arcane Torrent', 'focus.deficit>=30'},
 
  	--actions.+=/blood_fury
 	{'Blood Fury'},
@@ -100,113 +101,90 @@ local xCombat = {
 	{Cooldowns},
 
  	--actions.+=/a_murder_of_crows
-	{'A Murder of Crows', ''},
+	{'A Murder of Crows', 'talent(6,1)'},
 
  	--actions.+=/barrage
-	{'Barrage', ''},
+	{'Barrage', 'talent(6,2)'},
 
  	--actions.+=/piercing_shot,if=!talent.patient_sniper.enabled&focus>50
-	{'Piercing Shot', ''},
+	{'Piercing Shot', '!talent(4,3)&focus>50'},
 
  	--actions.+=/windburst,if=active_enemies<2&buff.marking_targets.down&(debuff.vulnerability.down||debuff.vulnerability.remains<cast_time)
-	{'', ''},
+	{'Windburst', 'xinfront(40).enemies<2&!buff(Marking Targets)&{!target.debuff(Vulnerable)||target.debuff(Vulnerable).duration<spell(Windburst).casttime}'},
 
  	--actions.+=/windburst,if=active_enemies<2&buff.marking_targets.down&focus+cast_regen>90
-	{'Windburst', ''},
+	{'Windburst', 'xinfront(40).enemies<2&!buff(Marking Targets)&focus+cast_regen>90'},
 
  	--actions.+=/windburst,if=active_enemies<2&cooldown.sidewinders.charges=0
-	{'Windburst', ''},
+	{'Windburst', 'xinfront(40).enemies<2&spell(Sidewinders).charges<1'},
 
  	--actions.+=/arcane_shot,if=!talent.patient_sniper.enabled&active_enemies=1&debuff.vulnerability.react<3&buff.marking_targets.react&debuff.hunters_mark.down
-	{'Arcane Shot', ''},
+	{'Arcane Shot', '!talent(4,3)&xinfront(40).enemies<2&target.debuff(Vulnerable).count<3&buff(Marking Targets)&!target.debuff(Hunter\'s Mark)'},
 
  	--actions.+=/marked_shot,if=!talent.patient_sniper.enabled&debuff.vulnerability.react<3
-	{'Marked Shot', ''},
+	{'Marked Shot', '!talent(4,3)&target.debuff(Hunter\'s Mark)&target.debuff(Vulnerable).count<3'},
 
  	--actions.+=/marked_shot,if=prev_off_gcd.sentinel
-	{'Marked Shot', ''},
+	{'Marked Shot', 'target.debuff(Hunter\'s Mark)'},
 
  	--actions.+=/sentinel,if=debuff.hunters_mark.down&buff.marking_targets.down
-	{'Sentinel', ''},
+	{'Sentinel', '!target.debuff(Hunter\'s Mark)&!buff(Marking Targets)'},
 
  	--actions.+=/explosive_shot
-	{'Explosive Shot', ''},
+	{'Explosive Shot', 'talent(4,1)'},
 
  	--actions.+=/marked_shot,if=active_enemies>=4&cooldown.sidewinders.charges_fractional>=0.8
-	{'Marked Shot', ''},
+	{'Marked Shot', 'xinfront(40).enemies>=4&spell(Sidewinders).charges>=0.8'},
 
  	--actions.+=/sidewinders,if=active_enemies>1&debuff.hunters_mark.down&(buff.marking_targets.react||buff.trueshot.react||charges=2)
-	{'Sidewinders', ''},
+	{'Sidewinders', 'xinfront(40).enemies>1&!target.debuff(Hunter\'s Mark)&{buff(Marking Targets)||buff(Trueshot)||spell(Sidewinders).charges=2}'},
 
  	--actions.+=/arcane_shot,if=talent.steady_focus.enabled&active_enemies=1&(buff.steady_focus.down||buff.steady_focus.remains<2)
-	{'Arcane Shot', ''},
+	{'Arcane Shot', 'talent(1,2)&xinfront(40).enemies<2&{!buff(Steady Focus)||buff(Steady Focus).duration<2}'},
 
  	--actions.+=/multishot,if=talent.steady_focus.enabled&active_enemies>1&(buff.steady_focus.down||buff.steady_focus.remains<2)
-	{'Multi-Shot', ''},
+	{'Multi-Shot', 'talent(1,2)&xinfront(40).enemies>1&{!buff(Steady Focus)||buff(Steady Focus).duration<2}'},
 
  	--actions.+=/arcane_shot,if=talent.true_aim.enabled&active_enemies=1&(debuff.true_aim.react<1||debuff.true_aim.remains<2)
-	{'Arcane Shot', ''},
+	{'Arcane Shot', 'talent(2,3)&xinfront(40).enemies<2&{target.debuff(True Aim).count<1||target.debuff(True Aim).duration<2}'},
 
  	--actions.+=/aimed_shot,if=buff.lock_and_load.up&debuff.vulnerability.remains>gcd.max
-	{'Aimed Shot', ''},
+	{'Aimed Shot', 'buff(Lock and Load)&target.debuff(Vulnerable).duration>gcd'},
 
  	--actions.+=/piercing_shot,if=talent.patient_sniper.enabled&focus>80
-	{'Piercing Shot', ''},
+	{'Piercing Shot', 'talent(4,3)&focus>80'},
 
  	--actions.+=/marked_shot,if=!talent.sidewinders.enabled&(debuff.vulnerability.remains<2||buff.marking_targets.react)
-	{'Marked Shot', ''},
+	{'Marked Shot', '!talent(Sidewinders)&{target.debuff(Vulnerable).duration<2||buff(Marking Targets)}'},
 
  	--actions.+=/pool_resource,for_next=1,if=talent.sidewinders.enabled&(focus<60&cooldown.sidewinders.charges_fractional<=1.2)
-	{'', ''},
+	--TODO: figure out how to pause rotation until have enough resources to cast THIS SKILL(=simc pool_resource)
+	{'Sidewinders', 'talent(7,1)&{focus<60&spell(Sidewinders).charges<=1.2}'},
 
  	--actions.+=/aimed_shot,if=cast_time<debuff.vulnerability.remains&(focus+cast_regen>80||debuff.hunters_mark.down)
-	{'Aimed Shot', ''},
+	{'Aimed Shot', 'spell(Aimed Shot).casttime<target.debuff(Vulnerable).duration&{focus+cast_regen>80||!target.debuff(Hunter\'s Mark)}'},
 
  	--actions.+=/marked_shot
-	{'Marked Shot', ''},
+	{'Marked Shot', 'target.debuff(Hunter\'s Mark)'},
 
  	--actions.+=/black_arrow
-	{'Black Arrow', ''},
+	{'Black Arrow', 'talent(2,2)'},
 
- 	--actions.+=/sidewinders,if=debuff.hunters_mark.down&(buff.marking_targets.remains>6||buff.trueshot.react||charges=2)
-	{'Sidewinders', ''},
+	--actions.+=/sidewinders,if=debuff.hunters_mark.down&(buff.marking_targets.remains>6||buff.trueshot.react||charges=2)
+	{'Sidewinders', '!target.debuff(Hunter\'s Mark)&{buff(Marking Targets).duration>6||buff(Trueshot)||spell(Sidewinders).charges=2}'},
 
  	--actions.+=/sidewinders,if=focus<30&charges<=1&recharge_time<=5
-	{'Sidewinders', ''},
+	{'Sidewinders', 'focus<30&spell(Sidewinders).charges<=1&spell(Sidewinders).recharge<=5'},
 
  	--actions.+=/multishot,if=spell_targets.barrage>1&(debuff.hunters_mark.down&buff.marking_targets.react||focus.time_to_max>=2)
-	{'Multi-Shot', ''},
+	{'Multi-Shot', 'xinfront(40).enemies>1&{!target.debuff(Hunter\'s Mark)&buff(Marking Targets)||focus.timetomax>=2}'},
 
  	--actions.+=/arcane_shot,if=spell_targets.barrage=1&(debuff.hunters_mark.down&buff.marking_targets.react||focus.time_to_max>=2)
-	{'Arcane Shot', ''},
+	{'Arcane Shot', 'xinfront(40).enemies<2&{!target.debuff(Hunter\'s Mark)&buff(Marking Targets)||focus.timetomax>=2}'},
 
  	--actions.+=/arcane_shot,if=focus.deficit<10
-	{'Arcane Shot', ''},
+	{'Arcane Shot', 'focus.deficit<10'}
 
-}
-
-
-local Pet = {
-	-- Mend Pet
-	{'Mend Pet', 'pet.health < 100'},
-}
-
-
-local ST = {
-	--Marked Shot to maintain Vulnerable.
-	{'Marked Shot', {
-		'!target.debuff(Vulnerable).count >= 3', 
-		'or', -- OR
-		'target.debuff(Vulnerable).duration < 8'
-	}, 'target'},
-	--Aimed Shot with Lock and Load or to dump excess Focus.
-	{'Aimed Shot', {
-		'player.buff(Lock and Load)',
-		'or', -- OR
-		'player.focus > 65'
-	}, 'target'},
-	--Arcane Shot to build Focus.
-	{'Arcane Shot'}
 }
 
 local Keybinds = {
@@ -218,19 +196,17 @@ local Keybinds = {
 
 local inCombat = {
 
-	{Keybinds},
-	{Survival, 'player.health < 100'},
-	{Cooldowns, 'toggle(cooldowns)'},
-	{pet, {'pet.exists', 'pet.alive'}},
-	{AoE, {'toggle(AoE)', 'player.area(40).enemies >= 3'}},
-	{ST, {'target.range < 40', 'target.infront'}}
+	--{Keybinds},
+	--{Survival, 'player.health < 100'},
+	--{Cooldowns, 'toggle(cooldowns)'},
+	{xCombat, {'target.range < 40', 'target.infront'}}
 
 }
 
 local outCombat = {
 
-	{Keybinds},
+	--{Keybinds},
 
 }
 
-NeP.Engine.registerRotation(254, '[|cff'..Xeer.Interface.addonColor..'Xeer|r] Hunter - Marksmanship', Interface, outCombat, exeOnLoad, GUI)
+NeP.Engine.registerRotation(254, '[|cff'..Xeer.Interface.addonColor..'Xeer|r] HUNTER - Marksmanship', inCombat, outCombat, exeOnLoad, GUI)

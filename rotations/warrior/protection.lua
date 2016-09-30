@@ -46,7 +46,7 @@ spec=protection
 # gear_mastery_rating=7106
 # gear_versatility_rating=6958
 # gear_armor=3965
-]]--	
+--]]	
 }
 
 local Keybinds = {
@@ -178,7 +178,7 @@ local inCombat = {
 local outCombat = {
 
 	{Keybinds},
-	{PreCombat}
+	--{PreCombat}
 
 }
 

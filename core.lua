@@ -36,14 +36,16 @@ function Xeer.dynEval(condition, spell)
 	return Parse(condition, spell or '')
 end
 
-local classTaunt = {
-	[1] = 'Taunt',
-	[2] = 'Hand of Reckoning',
-	[6] = 'Dark Command',
-	[10] = 'Provoke',
-	[11] = 'Growl',
-	[12] = 'Torment'
-}
+--[[
+	local classTaunt = {
+		[1] = 'Taunt',
+		[2] = 'Hand of Reckoning',
+		[6] = 'Dark Command',
+		[10] = 'Provoke',
+		[11] = 'Growl',
+		[12] = 'Torment'
+	}
+--]]
 
 NeP.library.register('Xeer', {
 
@@ -60,6 +62,7 @@ NeP.library.register('Xeer', {
 			end
 		end
 	end
+})
 	
 --[[
 	AutoTaunt = function()
@@ -78,19 +81,28 @@ NeP.library.register('Xeer', {
 			end
 		end
 	end
-]]--
+--]]
 
-})	
---/dump NeP.DSL.Conditions['ragedeficit']('player')
-NeP.DSL.RegisterConditon('ragedeficit', function(target)
+
+--[[	
+--/dump NeP.DSL.Conditions['focus_deficit']('player')
+NeP.DSL.RegisterConditon('rage_deficit', function(target)
 	local max = UnitPowerMax(target, SPELL_POWER_RAGE)
 	local curr = UnitPower(target, SPELL_POWER_RAGE)
 	return (max - curr)
 end)
 
-NeP.DSL.RegisterConditon('focusdeficit', function(target)
+NeP.DSL.RegisterConditon('focus_deficit', function(target)
 	local max = UnitPowerMax(target, SPELL_POWER_FOCUS)
 	local curr = UnitPower(target, SPELL_POWER_FOCUS)
+	return (max - curr)
+end)
+--]]
+
+--/dump NeP.DSL.Conditions['deficit']('player')
+NeP.DSL.RegisterConditon('deficit', function(target, spell)
+	local max = UnitPowerMax(target)
+	local curr = UnitPower(target)
 	return (max - curr)
 end)
 
@@ -99,16 +111,18 @@ NeP.DSL.RegisterConditon('equipped', function(target, item)
 end)
 
 NeP.DSL.RegisterConditon('execute_time', function(target, spell)
+--TODO:fix for rogues and feral form
 	local GCD = math.floor((1.5 / ((GetHaste() / 100) + 1)) * 10^3 ) / 10^3	
 	local name, rank, icon, cast_time, min_range, max_range = GetSpellInfo(spell)
-		if cast_time < GCD then
-			return cast_time
+	local ctt = math.floor((cast_time / 1000) * 10^3 ) / 10^3
+		if ctt > GCD then
+			return ctt
 		else
 			return GCD
 		end
 end)
 
-NeP.DSL.RegisterConditon('infront.enemies', function(unit, distance)
+NeP.DSL.RegisterConditon('xinfront.enemies', function(unit, distance)
 	local total = 0
 	if not UnitExists(unit) then return total end
 	for i=1, #NeP.OM['unitEnemie'] do
@@ -123,7 +137,7 @@ NeP.DSL.RegisterConditon('infront.enemies', function(unit, distance)
 	return total
 end)
 
-NeP.DSL.RegisterConditon("xmoving", function(target)
+NeP.DSL.RegisterConditon('xmoving', function(target)
 	local speed, _ = GetUnitSpeed(target)
 		if speed ~= 0 then
 			return 1 
@@ -131,3 +145,44 @@ NeP.DSL.RegisterConditon("xmoving", function(target)
 			return 0
 		end
 end)
+
+NeP.DSL.RegisterConditon('cast_regen', function(target, spell)
+	local regen = select(2, GetPowerRegen(target))
+	local _, _, _, cast_time = GetSpellInfo(spell)
+	return math.floor(((regen * cast_time) / 1000) * 10^3 ) / 10^3
+end)
+
+---------------------------------SIMC NAMES---------------------------------
+--[[
+NeP.DSL.RegisterConditon("buff.stack", function(target, spell)
+	local buff,stack,_,caster = NeP.APIs['UnitBuff'](target, spell)
+	if not not buff and (caster == 'player' or caster == 'pet') then
+		return stack
+	end
+	return 0
+end)
+
+NeP.DSL.RegisterConditon("buff.remains", function(target, spell)
+	local buff,_,expires,caster = NeP.APIs['UnitBuff'](target, spell)
+	if buff and (caster == 'player' or caster == 'pet') then
+		return (expires - GetTime())
+	end
+	return 0
+end)
+
+NeP.DSL.RegisterConditon("debuff.stack", function(target, spell)
+	local debuff,stack,_,caster = NeP.APIs['UnitDebuff'](target, spell)
+	if not not debuff and (caster == 'player' or caster == 'pet') then
+		return stack
+	end
+	return 0
+end)
+
+NeP.DSL.RegisterConditon("debuff.remains", function(target, spell)
+	local debuff,_,expires,caster = NeP.APIs['UnitDebuff'](target, spell)
+	if debuff and (caster == 'player' or caster == 'pet') then
+		return (expires - GetTime())
+	end
+	return 0
+end)
+]]--

@@ -44,7 +44,7 @@ spec=protection
 # gear_armor=3965
 # set_bonus=march_of_the_legion_2pc=1
 # set_bonus=tier19p_plate_2pc=1
-]]--
+--]]
 	
 }
 

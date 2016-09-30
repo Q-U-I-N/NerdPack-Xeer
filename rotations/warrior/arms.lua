@@ -39,7 +39,7 @@ spec=arms
 # gear_mastery_rating=12496
 # gear_versatility_rating=2013
 # gear_armor=3965
-]]--
+--]]
 
 }
 
@@ -82,7 +82,7 @@ local Util = {
 	{'Berserking', 'buff(Battle Cry)'},
 	
 	--actions+=/arcane_torrent,if=buff.battle_cry_deadly_calm.down&rage.deficit>40
-	--{'Arcane Torrent', 'buff(Battle Cry)&talent(6,1)&ragedeficit>40'},
+	--{'Arcane Torrent', 'buff(Battle Cry)&talent(6,1)&rage.deficit>40'},
 	
 	--actions+=/battle_cry,if=(buff.bloodlust.up||time>=1)&!gcd.remains&(buff.shattered_defenses.up||(cooldown.colossus_smash.remains&cooldown.warbreaker.remains))||target.time_to_die<=10
 	{'Battle Cry', '{buff(Bloodlust)||combat(player).time>=1}&{buff(Shattered Defenses)||{spell(Colossus Smash).cooldown>gcd&spell(Warbreaker).cooldown>gcd}}'},
@@ -138,7 +138,7 @@ local AoE = {
 	{'Warbreaker', '!buff(Shattered Defenses)'},
 
 	--actions.aoe+=/whirlwind,if=talent.fervor_of_battle.enabled&(debuff.colossus_smash.up||rage.deficit<50)&(!talent.focused_rage.enabled||buff.battle_cry_deadly_calm.up||buff.cleave.up)
-	{'Whirlwind', 'talent(3,1)&{target.debuff(Colossus Smash)||player.ragedeficit<50}&{!talent(5,3)||{buff(Battle Cry)&talent(6,1)}||buff(Cleave)}'},
+	{'Whirlwind', 'talent(3,1)&{target.debuff(Colossus Smash)||rage.deficit<50}&{!talent(5,3)||{buff(Battle Cry)&talent(6,1)}||buff(Cleave)}'},
 	
 	--actions.aoe+=/rend,if=remains<=duration*0.3
 	{'Rend', 'talent(3,2)&target.debuff(Rend).duration<=4.5'},
@@ -178,7 +178,7 @@ local Cleave = {
 	{'Focused Rage', '!buff(Shattered Defenses)'},
 	
 	--actions.cleave+=/whirlwind,if=talent.fervor_of_battle.enabled&(debuff.colossus_smash.up||rage.deficit<50)&(!talent.focused_rage.enabled||buff.battle_cry_deadly_calm.up||buff.cleave.up)
-	{'Whirlwind', 'talent(3,1)&{target.debuff(Colossus Smash)||player.ragedeficit<50}&{!talent(5,3)||{buff(Battle Cry)&talent(6,1)}||buff(Cleave)}'},
+	{'Whirlwind', 'talent(3,1)&{target.debuff(Colossus Smash)||rage.deficit<50}&{!talent(5,3)||{buff(Battle Cry)&talent(6,1)}||buff(Cleave)}'},
 	
 	--actions.cleave+=/rend,if=remains<=duration*0.3
 	{'Rend', 'talent(3,2)&target.debuff(Rend).duration<=4.5'},
@@ -240,10 +240,10 @@ local ST = {
 	{'Execute', 'buff(Ayala\'s Stone Heart)'},
 	
 	--actions.single+=/slam,if=buff.battle_cry_deadly_calm.up||buff.focused_rage.stack=3||rage.deficit<=30
-	{'Slam', '!talent(3,1)&{{buff(Battle Cry)&talent(6,1)}||buff(Focused Rage).count=3||player.ragedeficit<=30}'},
+	{'Slam', '!talent(3,1)&{{buff(Battle Cry)&talent(6,1)}||buff(Focused Rage).count=3||rage.deficit<=30}'},
 	
 	--Whirlwind instead Slam if "Fevor of Battle" is picked
-	{'Whirlwind', 'talent(3,1)&{{buff(Battle Cry)&talent(6,1)}||buff(Focused Rage).count=3||player.ragedeficit<=30}'},
+	{'Whirlwind', 'talent(3,1)&{{buff(Battle Cry)&talent(6,1)}||buff(Focused Rage).count=3||rage.deficit<=30}'},
 	
 	--actions.single+=/execute,if=equipped.archavons_heavy_hand
 	{'Execute', 'equipped(137060)'},

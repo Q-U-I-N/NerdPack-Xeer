@@ -25,6 +25,8 @@ Shaman - Enhancement
 
 Shaman - Elemental - TODO: need fix Totem Mastery
 
+Hunter - Marksmanship
+
 ------------------------------------
 
 Future routines + WIP (do not use them even if you see them on github):
@@ -44,8 +46,6 @@ Druid - Feral
 Druid - Guardian
 
 Hunter - Beast Mastery
-
-Hunter - Marksmanship
 
 Hunter - Survival
 
