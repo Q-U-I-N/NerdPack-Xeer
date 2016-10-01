@@ -10,7 +10,14 @@ local exeOnLoad = function()
 	print('|cffADFF2F --- |rHUNTER |cffADFF2FMarksmanship |r')
 	print('|cffADFF2F --- |rRecommended Talents: 1/1 - 2/1 - 3/X - 4/3 - 5/X - 6/2 - 7/1')
 	print('|cffADFF2F ----------------------------------------------------------------------|r')	
+	
+	NeP.Interface.CreateToggle(
+		'xBarrage',
+		'Interface\\Icons\\Ability_Hunter_RapidRegeneration',
+		'Barrage',
+		'ON/OFF using Barrage in rotation if you have talent')
 			
+
 end
 
 local _Xeer = { -- some non-SiMC stuffs
@@ -85,6 +92,13 @@ local Cooldowns = {
 
 }
 
+local Barrage = {
+
+--actions.+=/barrage
+	{'Barrage', 'talent(6,2)'},
+
+}
+
 local xCombat = {
 
 	--# Executed every time the actor is available.
@@ -104,7 +118,7 @@ local xCombat = {
 	{'A Murder of Crows', 'talent(6,1)'},
 
  	--actions.+=/barrage
-	{'Barrage', 'talent(6,2)'},
+	{Barrage, 'toggle(xBarrage)'},
 
  	--actions.+=/piercing_shot,if=!talent.patient_sniper.enabled&focus>50
 	{'Piercing Shot', '!talent(4,3)&focus>50'},
