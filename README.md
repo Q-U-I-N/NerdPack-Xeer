@@ -25,7 +25,7 @@ Shaman - Enhancement
 
 Shaman - Elemental - TODO: need fix Totem Mastery
 
-Hunter - Marksmanship - TODO: weird bugs, dont use it atm
+Hunter - Marksmanship 
 
 Hunter - Beast Mastery
 
