@@ -155,7 +155,7 @@ local xCombat = {
 	{'Piercing Shot', 'talent(4,3)&focus>80'},
 
  	--actions.+=/marked_shot,if=!talent.sidewinders.enabled&(debuff.vulnerability.remains<2||buff.marking_targets.react)
-	{'Marked Shot', '!talent(Sidewinders)&{target.debuff(Vulnerable).remains<2||buff(Marking Targets)}'},
+	{'Marked Shot', '!talent(7,1)&{target.debuff(Vulnerable).remains<2||buff(Marking Targets)}'},
 
  	--actions.+=/pool_resource,for_next=1,if=talent.sidewinders.enabled&(focus<60&cooldown.sidewinders.charges_fractional<=1.2)
 	--TODO: figure out how to pause rotation until have enough resources to cast THIS SKILL(=simc pool_resource)
