@@ -199,7 +199,7 @@ local inCombat = {
 	--{Keybinds},
 	--{Survival, 'player.health < 100'},
 	--{Cooldowns, 'toggle(cooldowns)'},
-	{xCombat, {'target.range < 40', 'target.infront'}}
+	{xCombat, {'target.range < 40', 'target.infront', '!channeling(Barrage)'}}
 
 }
 
