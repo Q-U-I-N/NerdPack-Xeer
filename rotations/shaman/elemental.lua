@@ -171,7 +171,7 @@ local ST = {
 	{'Flame Shock', 'player.maelstrom>=20&buff(Elemental Focus)&target.debuff(Flame Shock).duration<gcd'},
 
  	--actions.single+=/frost_shock,if=talent.icefury.enabled&buff.icefury.up&((maelstrom>=20&raid_event.movement.in>buff.icefury.remains)||buff.icefury.remains<(1.5*spell_haste*buff.icefury.stack))
-	{'Frost Shock', 'talent(5,3)&buff(Icefury)&{player.maelstrom>=20||buff(Icefury).duration<{gcd*buff(Icefury).count}}'},
+	{'Frost Shock', 'talent(5,3)&buff(Icefury)&{player.maelstrom>=20||buff(Icefury).duration<{gcd*buff(Icefury).stack}}'},
 
  	--actions.single+=/frost_shock,moving=1,if=buff.icefury.up
 	{'Frost Shock', 'xmoving=1&buff(Icefury)'},

@@ -25,7 +25,9 @@ Shaman - Enhancement
 
 Shaman - Elemental - TODO: need fix Totem Mastery
 
-Hunter - Marksmanship
+Hunter - Marksmanship - TODO: weird bugs, dont use it atm
+
+Hunter - Beast Mastery
 
 ------------------------------------
 
@@ -44,8 +46,6 @@ Druid - Balance
 Druid - Feral
 
 Druid - Guardian
-
-Hunter - Beast Mastery
 
 Hunter - Survival
 

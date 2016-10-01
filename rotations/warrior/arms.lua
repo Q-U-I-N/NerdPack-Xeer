@@ -18,7 +18,7 @@ local _Xeer = {
 	{'@Xeer.Targeting()', {'!target.alive', 'toggle(AutoTarget)'}},
 	
 	--actions=charge
-	{'Charge', 'target.range>8&target.range<=25&target.infront'},
+	--{'Charge', 'target.range>8&target.range<=25&target.infront'},
 
 --[[
 warrior="Warrior_Arms_T19P"
@@ -101,12 +101,12 @@ local Util = {
 	--manual usage of leap via keybind... 
 	
 	--actions+=/rend,if=remains<gcd
-	{'Rend', 'talent(3,2)&target.debuff(Rend).duration<gcd'},
+	{'Rend', 'talent(3,2)&target.debuff(Rend).remains<gcd'},
 	
 	--# The tl;dr of this line is to spam focused rage inside battle cry, the added nonsense is to help modeling the difficulty of timing focused rage immediately after mortal strike. 
 	--# In game, if focused rage is used the same instant as mortal strike, rage will be deducted for focused rage, the buff is immediately consumed, but it does not buff the damage of mortal strike.
 	--actions+=/focused_rage,if=buff.battle_cry_deadly_calm.remains>cooldown.focused_rage.remains&(buff.focused_rage.stack<3||!cooldown.mortal_strike.up)&((!buff.focused_rage.react&prev_gcd.mortal_strike)||!prev_gcd.mortal_strike)
-	{'Focused Rage', 'buff(Battle Cry)&talent(6,1)&buff(Focused Rage).count<3'},
+	{'Focused Rage', 'buff(Battle Cry)&talent(6,1)&buff(Focused Rage).stack<3'},
 	
 	--actions+=/colossus_smash,if=debuff.colossus_smash.down
 	{'Colossus Smash', '!target.debuff(Colossus Smash)'},
@@ -141,7 +141,7 @@ local AoE = {
 	{'Whirlwind', 'talent(3,1)&{target.debuff(Colossus Smash)||rage.deficit<50}&{!talent(5,3)||{buff(Battle Cry)&talent(6,1)}||buff(Cleave)}'},
 	
 	--actions.aoe+=/rend,if=remains<=duration*0.3
-	{'Rend', 'talent(3,2)&target.debuff(Rend).duration<=4.5'},
+	{'Rend', 'talent(3,2)&target.debuff(Rend).remains<=4.5'},
 	
 	--actions.aoe+=/bladestorm
 	{'Bladestorm'},
@@ -181,7 +181,7 @@ local Cleave = {
 	{'Whirlwind', 'talent(3,1)&{target.debuff(Colossus Smash)||rage.deficit<50}&{!talent(5,3)||{buff(Battle Cry)&talent(6,1)}||buff(Cleave)}'},
 	
 	--actions.cleave+=/rend,if=remains<=duration*0.3
-	{'Rend', 'talent(3,2)&target.debuff(Rend).duration<=4.5'},
+	{'Rend', 'talent(3,2)&target.debuff(Rend).remains<=4.5'},
 	
 	--actions.cleave+=/bladestorm
 	{'Bladestorm'},
@@ -190,7 +190,7 @@ local Cleave = {
 	{'Cleave'},
 	
 	--actions.cleave+=/whirlwind,if=rage>=100||buff.focused_rage.stack=3
-	{'Whirlwind', 'rage>=100||buff(Focused Rage).count=3'},
+	{'Whirlwind', 'rage>=100||buff(Focused Rage).stack=3'},
 	
 	--actions.cleave+=/shockwave
 	{'Shockwave', 'talent(2,1)'},
@@ -203,7 +203,7 @@ local Cleave = {
 local Execute = {
 
 	--actions.execute=mortal_strike,if=buff.battle_cry.up&buff.focused_rage.stack=3
-	{'Mortal Strike', 'buff(Battle Cry)&buff(Focused Rage).count=3'},
+	{'Mortal Strike', 'buff(Battle Cry)&buff(Focused Rage).stack=3'},
 	
 	--actions.execute+=/execute,if=buff.battle_cry_deadly_calm.up
 	{'Execute', 'buff(Battle Cry)&talent(6,1)'},
@@ -222,7 +222,7 @@ local Execute = {
 local ST = {
 
 	--actions.single=mortal_strike,if=buff.battle_cry.up&buff.focused_rage.stack>=1&buff.battle_cry.remains<gcd
-	{'Mortal Strike', 'buff(Battle Cry)&buff(Focused Rage).count>=1&spell(Battle Cry).cooldown<gcd'},
+	{'Mortal Strike', 'buff(Battle Cry)&buff(Focused Rage).stack>=1&spell(Battle Cry).cooldown<gcd'},
 	
 	--actions.single+=/colossus_smash,if=buff.shattered_defenses.down
 	{'Colossus Smash', '!buff(Shattered Defenses)'},
@@ -231,7 +231,7 @@ local ST = {
 	{'Warbreaker', '!buff(Shattered Defenses)&spell(Mortal Strike).cooldown<gcd'},
 	
 	--actions.single+=/focused_rage,if=((!buff.focused_rage.react&prev_gcd.mortal_strike)||!prev_gcd.mortal_strike)&buff.focused_rage.stack<3&(buff.shattered_defenses.up||cooldown.colossus_smash.remains)
-	{'Focused Rage', '!buff(Focused Rage)||buff(Focused Rage).count<3&{buff(Shattered Defenses)||spell(Colossus Smash).cooldown>gcd}'},
+	{'Focused Rage', '!buff(Focused Rage)||buff(Focused Rage).stack<3&{buff(Shattered Defenses)||spell(Colossus Smash).cooldown>gcd}'},
 	
 	--actions.single+=/mortal_strike
 	{'Mortal Strike'},
@@ -240,10 +240,10 @@ local ST = {
 	{'Execute', 'buff(Ayala\'s Stone Heart)'},
 	
 	--actions.single+=/slam,if=buff.battle_cry_deadly_calm.up||buff.focused_rage.stack=3||rage.deficit<=30
-	{'Slam', '!talent(3,1)&{{buff(Battle Cry)&talent(6,1)}||buff(Focused Rage).count=3||rage.deficit<=30}'},
+	{'Slam', '!talent(3,1)&{{buff(Battle Cry)&talent(6,1)}||buff(Focused Rage).stack=3||rage.deficit<=30}'},
 	
 	--Whirlwind instead Slam if "Fevor of Battle" is picked
-	{'Whirlwind', 'talent(3,1)&{{buff(Battle Cry)&talent(6,1)}||buff(Focused Rage).count=3||rage.deficit<=30}'},
+	{'Whirlwind', 'talent(3,1)&{{buff(Battle Cry)&talent(6,1)}||buff(Focused Rage).stack=3||rage.deficit<=30}'},
 	
 	--actions.single+=/execute,if=equipped.archavons_heavy_hand
 	{'Execute', 'equipped(137060)'},

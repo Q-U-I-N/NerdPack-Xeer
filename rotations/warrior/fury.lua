@@ -86,7 +86,7 @@ local Util = {
 	--actions+=/potion,name=old_war,if=(target.health.pct<20&buff.battle_cry.up)||target.time_to_die<30
 	
 	--actions+=/battle_cry,if=(cooldown.odyns_fury.remains=0&(cooldown.bloodthirst.remains=0||(buff.enrage.remains>cooldown.bloodthirst.remains))) 
-	{'Battle Cry', '{spell(Odyn\'s Fury).cooldown=0&{spell(Bloodthirst).cooldown=0||{buff(Enrage).duration>spell(Bloodthirst).cooldown}}}'},
+	{'Battle Cry', '{spell(Odyn\'s Fury).cooldown=0&{spell(Bloodthirst).cooldown=0||{buff(Enrage).remains>spell(Bloodthirst).cooldown}}}'},
 
 	
 	--actions+=/avatar,if=buff.battle_cry.up||(target.time_to_die<(cooldown.battle_cry.remains+10))
@@ -109,7 +109,7 @@ local Util = {
 local Bladestorm = {
 
 	--actions.bladestorm=bladestorm,if=buff.enrage.remains>2&(raid_event.adds.in>90||!raid_event.adds.exists||spell_targets.bladestorm_mh>desired_targets)
-	{'Bladestorm', 'talent(7,1)&buff(Enrage).duration>2'}, --raid_event not supported
+	{'Bladestorm', 'talent(7,1)&buff(Enrage).remains>2'}, --raid_event not supported
 	
 }
 
@@ -142,13 +142,13 @@ local AoE = {
 local ST = {
 
 	--actions.single_target=bloodthirst,if=buff.fujiedas_fury.up&buff.fujiedas_fury.remains<2
-	{'Bloodthirst', 'buff(Fujieda\'s Fury)&buff(Fujieda\'s Fury).count<2'},
+	{'Bloodthirst', 'buff(Fujieda\'s Fury)&buff(Fujieda\'s Fury).stack<2'},
 	
 	--actions.single_target+=/execute,if=(artifact.juggernaut.enabled&(!buff.juggernaut.up||buff.juggernaut.remains<2))||buff.stone_heart.react
-	{'Execute', '{buff(Juggernaut)||buff(Juggernaut).count<2}||buff(Stone Heart)'},
+	{'Execute', '{buff(Juggernaut)||buff(Juggernaut).stack<2}||buff(Stone Heart)'},
 	
 	--actions.single_target+=/rampage,if=rage=100&(target.health.pct>20||target.health.pct<20&!talent.massacre.enabled)||buff.massacre.react&buff.enrage.remains<1
-	{'Rampage', 'rage=100&{target.health>20||{target.health<20&!talent(5,1)}||{buff(Massacre)&buff(Enrage).duration<1}}'},
+	{'Rampage', 'rage=100&{target.health>20||{target.health<20&!talent(5,1)}||{buff(Massacre)&buff(Enrage).remains<1}}'},
 	
 	--actions.single_target+=/berserker_rage,if=talent.outburst.enabled&cooldown.odyns_fury.remains=0&buff.enrage.down
 	{'Berserker Rage', 'talent(3,2)&spell(Odyn\'s Fury).cooldown=0&!buff(Enrage)'},
@@ -163,7 +163,7 @@ local ST = {
 	{'Rampage', '!buff(Enrage)&!buff(Juggernaut)'},
 	
 	--actions.single_target+=/furious_slash,if=talent.frenzy.enabled&(buff.frenzy.down||buff.frenzy.remains<=3)
-	{'Furious Slash', 'talent(6,2)&{!buff(Frenzy)||buff(Frenzy).count<=3}'},
+	{'Furious Slash', 'talent(6,2)&{!buff(Frenzy)||buff(Frenzy).stack<=3}'},
 	
 	--actions.single_target+=/raging_blow,if=buff.juggernaut.down&buff.enrage.up
 	{'Raging Blow', '!buff(Juggernaut)&buff(Enrage)'},
@@ -259,7 +259,7 @@ local inCombat = {
 	{AoE, 'player.area(8).enemies>3'},
 	
 	--actions+=/call_action_list,name=single_target
-	{ST, {'target.range < 8', 'target.infront'}}
+	{ST, {'target.range<8', 'target.infront'}}
 	
 }
 

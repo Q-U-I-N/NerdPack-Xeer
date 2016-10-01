@@ -64,42 +64,7 @@ NeP.library.register('Xeer', {
 	end
 })
 	
---[[
-	AutoTaunt = function()
-		local _,_,class = UnitClass('player')
-		spell = classTaunt[class]
-		local spellCooldown = NeP.DSL.Get('spell.cooldown')('player', spell)
-		if spellCooldown > 0 then
-			return false
-		end
-		for i=1,#NeP.OM.unitEnemie do
-			local Obj = NeP.OM.unitEnemie[i]	
-			local Threat = UnitThreatSituation('player', Obj.key)
-			if Threat ~= nil and Threat >= 0 and Threat < 3 and Obj.distance <= 30 then
-				NeP.Engine.Cast_Queue(spell, Obj.key)
-				return true
-			end
-		end
-	end
---]]
 
-
---[[	
---/dump NeP.DSL.Conditions['focus_deficit']('player')
-NeP.DSL.RegisterConditon('rage_deficit', function(target)
-	local max = UnitPowerMax(target, SPELL_POWER_RAGE)
-	local curr = UnitPower(target, SPELL_POWER_RAGE)
-	return (max - curr)
-end)
-
-NeP.DSL.RegisterConditon('focus_deficit', function(target)
-	local max = UnitPowerMax(target, SPELL_POWER_FOCUS)
-	local curr = UnitPower(target, SPELL_POWER_FOCUS)
-	return (max - curr)
-end)
---]]
-
---/dump NeP.DSL.Conditions['deficit']('player')
 NeP.DSL.RegisterConditon('deficit', function(target, spell)
 	local max = UnitPowerMax(target)
 	local curr = UnitPower(target)
@@ -122,6 +87,7 @@ NeP.DSL.RegisterConditon('execute_time', function(target, spell)
 		end
 end)
 
+--[[
 NeP.DSL.RegisterConditon('xinfront.enemies', function(unit, distance)
 	local total = 0
 	if not UnitExists(unit) then return total end
@@ -129,13 +95,14 @@ NeP.DSL.RegisterConditon('xinfront.enemies', function(unit, distance)
 		local Obj = NeP.OM['unitEnemie'][i]
 		if UnitExists(Obj.key) and (UnitAffectingCombat(Obj.key) or isDummy(Obj.key))
 		and NeP.Engine.Distance(unit, Obj.key) <= tonumber(distance) then
-			if NeP.Engine.Infront('player', Obj.key) then
+			--if NeP.Engine.Infront('player', Obj.key) then
 				total = total +1
-			end
+			--end
 		end
 	end
 	return total
 end)
+--]]
 
 NeP.DSL.RegisterConditon('xmoving', function(target)
 	local speed, _ = GetUnitSpeed(target)
@@ -153,36 +120,28 @@ NeP.DSL.RegisterConditon('cast_regen', function(target, spell)
 end)
 
 ---------------------------------SIMC NAMES---------------------------------
---[[
-NeP.DSL.RegisterConditon("buff.stack", function(target, spell)
-	local buff,stack,_,caster = NeP.APIs['UnitBuff'](target, spell)
-	if not not buff and (caster == 'player' or caster == 'pet') then
-		return stack
-	end
-	return 0
+--/dump NeP.DSL.Conditions['cooldown.remains']('player','Bloodthirst')
+
+NeP.DSL.RegisterConditon('cooldown.remains', function(_, spell)
+	return NeP.DSL.Conditions['spell.cooldown'](_, spell)
 end)
 
-NeP.DSL.RegisterConditon("buff.remains", function(target, spell)
-	local buff,_,expires,caster = NeP.APIs['UnitBuff'](target, spell)
-	if buff and (caster == 'player' or caster == 'pet') then
-		return (expires - GetTime())
-	end
-	return 0
+NeP.DSL.RegisterConditon('buff.stack', function(target, spell)
+	return NeP.DSL.Conditions['buff.count'](target, spell)
 end)
 
-NeP.DSL.RegisterConditon("debuff.stack", function(target, spell)
-	local debuff,stack,_,caster = NeP.APIs['UnitDebuff'](target, spell)
-	if not not debuff and (caster == 'player' or caster == 'pet') then
-		return stack
-	end
-	return 0
+NeP.DSL.RegisterConditon('buff.remains', function(target, spell)
+	return NeP.DSL.Conditions['buff.duration'](target, spell)
 end)
 
-NeP.DSL.RegisterConditon("debuff.remains", function(target, spell)
-	local debuff,_,expires,caster = NeP.APIs['UnitDebuff'](target, spell)
-	if debuff and (caster == 'player' or caster == 'pet') then
-		return (expires - GetTime())
-	end
-	return 0
+NeP.DSL.RegisterConditon('debuff.stack', function(target, spell)
+	return NeP.DSL.Conditions['debuff.count'](target, spell)
 end)
-]]--
+
+NeP.DSL.RegisterConditon('debuff.remains', function(target, spell)
+	return NeP.DSL.Conditions['debuff.duration'](target, spell)
+end)
+
+NeP.DSL.RegisterConditon('time_to_die', function(target)
+	return NeP.DSL.Conditions['deathin'](target)
+end)

@@ -81,7 +81,7 @@ local Cooldowns = {
 	--{'', ''},
 
  	--actions..cooldowns+=/trueshot,if=(buff.bloodlust.react||target.health.pct>20+(cooldown.trueshot.remains+15))||buff.bullseye.react>25
-	{'Trueshot', '{buff(Bloodlust)||target.health>20+{spell(Trueshot).cooldown+15}}||buff(Bullseye).count>25'}
+	{'Trueshot', '{buff(Bloodlust)||target.health>20+{spell(Trueshot).cooldown+15}}||buff(Bullseye).stack>25'}
 
 }
 
@@ -110,19 +110,19 @@ local xCombat = {
 	{'Piercing Shot', '!talent(4,3)&focus>50'},
 
  	--actions.+=/windburst,if=active_enemies<2&buff.marking_targets.down&(debuff.vulnerability.down||debuff.vulnerability.remains<cast_time)
-	{'Windburst', 'xinfront(40).enemies<2&!buff(Marking Targets)&{!target.debuff(Vulnerable)||target.debuff(Vulnerable).duration<spell(Windburst).casttime}'},
+	{'Windburst', 'area(40).enemies<2&!buff(Marking Targets)&{!target.debuff(Vulnerable)||target.debuff(Vulnerable).remains<spell(Windburst).casttime}'},
 
  	--actions.+=/windburst,if=active_enemies<2&buff.marking_targets.down&focus+cast_regen>90
-	{'Windburst', 'xinfront(40).enemies<2&!buff(Marking Targets)&focus+cast_regen>90'},
+	{'Windburst', 'area(40).enemies<2&!buff(Marking Targets)&focus+cast_regen>90'},
 
  	--actions.+=/windburst,if=active_enemies<2&cooldown.sidewinders.charges=0
-	{'Windburst', 'xinfront(40).enemies<2&spell(Sidewinders).charges<1'},
+	{'Windburst', 'area(40).enemies<2&spell(Sidewinders).charges<1'},
 
  	--actions.+=/arcane_shot,if=!talent.patient_sniper.enabled&active_enemies=1&debuff.vulnerability.react<3&buff.marking_targets.react&debuff.hunters_mark.down
-	{'Arcane Shot', '!talent(4,3)&xinfront(40).enemies<2&target.debuff(Vulnerable).count<3&buff(Marking Targets)&!target.debuff(Hunter\'s Mark)'},
+	{'Arcane Shot', '!talent(4,3)&area(40).enemies<2&target.debuff(Vulnerable).stack<3&buff(Marking Targets)&!target.debuff(Hunter\'s Mark)'},
 
  	--actions.+=/marked_shot,if=!talent.patient_sniper.enabled&debuff.vulnerability.react<3
-	{'Marked Shot', '!talent(4,3)&target.debuff(Hunter\'s Mark)&target.debuff(Vulnerable).count<3'},
+	{'Marked Shot', '!talent(4,3)&target.debuff(Hunter\'s Mark)&target.debuff(Vulnerable).stack<3'},
 
  	--actions.+=/marked_shot,if=prev_off_gcd.sentinel
 	{'Marked Shot', 'target.debuff(Hunter\'s Mark)'},
@@ -134,35 +134,35 @@ local xCombat = {
 	{'Explosive Shot', 'talent(4,1)'},
 
  	--actions.+=/marked_shot,if=active_enemies>=4&cooldown.sidewinders.charges_fractional>=0.8
-	{'Marked Shot', 'xinfront(40).enemies>=4&spell(Sidewinders).charges>=0.8'},
+	{'Marked Shot', 'area(40).enemies>=4&spell(Sidewinders).charges>=0.8'},
 
  	--actions.+=/sidewinders,if=active_enemies>1&debuff.hunters_mark.down&(buff.marking_targets.react||buff.trueshot.react||charges=2)
-	{'Sidewinders', 'xinfront(40).enemies>1&!target.debuff(Hunter\'s Mark)&{buff(Marking Targets)||buff(Trueshot)||spell(Sidewinders).charges=2}'},
+	{'Sidewinders', 'area(40).enemies>1&!target.debuff(Hunter\'s Mark)&{buff(Marking Targets)||buff(Trueshot)||spell(Sidewinders).charges=2}'},
 
  	--actions.+=/arcane_shot,if=talent.steady_focus.enabled&active_enemies=1&(buff.steady_focus.down||buff.steady_focus.remains<2)
-	{'Arcane Shot', 'talent(1,2)&xinfront(40).enemies<2&{!buff(Steady Focus)||buff(Steady Focus).duration<2}'},
+	{'Arcane Shot', 'talent(1,2)&area(40).enemies<2&{!buff(Steady Focus)||buff(Steady Focus).remains<2}'},
 
  	--actions.+=/multishot,if=talent.steady_focus.enabled&active_enemies>1&(buff.steady_focus.down||buff.steady_focus.remains<2)
-	{'Multi-Shot', 'talent(1,2)&xinfront(40).enemies>1&{!buff(Steady Focus)||buff(Steady Focus).duration<2}'},
+	{'Multi-Shot', 'talent(1,2)&area(40).enemies>1&{!buff(Steady Focus)||buff(Steady Focus).remains<2}'},
 
  	--actions.+=/arcane_shot,if=talent.true_aim.enabled&active_enemies=1&(debuff.true_aim.react<1||debuff.true_aim.remains<2)
-	{'Arcane Shot', 'talent(2,3)&xinfront(40).enemies<2&{target.debuff(True Aim).count<1||target.debuff(True Aim).duration<2}'},
+	{'Arcane Shot', 'talent(2,3)&area(40).enemies<2&{target.debuff(True Aim).stack<1||target.debuff(True Aim).remains<2}'},
 
  	--actions.+=/aimed_shot,if=buff.lock_and_load.up&debuff.vulnerability.remains>gcd.max
-	{'Aimed Shot', 'buff(Lock and Load)&target.debuff(Vulnerable).duration>gcd'},
+	{'Aimed Shot', 'buff(Lock and Load)&target.debuff(Vulnerable).remains>gcd'},
 
  	--actions.+=/piercing_shot,if=talent.patient_sniper.enabled&focus>80
 	{'Piercing Shot', 'talent(4,3)&focus>80'},
 
  	--actions.+=/marked_shot,if=!talent.sidewinders.enabled&(debuff.vulnerability.remains<2||buff.marking_targets.react)
-	{'Marked Shot', '!talent(Sidewinders)&{target.debuff(Vulnerable).duration<2||buff(Marking Targets)}'},
+	{'Marked Shot', '!talent(Sidewinders)&{target.debuff(Vulnerable).remains<2||buff(Marking Targets)}'},
 
  	--actions.+=/pool_resource,for_next=1,if=talent.sidewinders.enabled&(focus<60&cooldown.sidewinders.charges_fractional<=1.2)
 	--TODO: figure out how to pause rotation until have enough resources to cast THIS SKILL(=simc pool_resource)
 	{'Sidewinders', 'talent(7,1)&{focus<60&spell(Sidewinders).charges<=1.2}'},
 
  	--actions.+=/aimed_shot,if=cast_time<debuff.vulnerability.remains&(focus+cast_regen>80||debuff.hunters_mark.down)
-	{'Aimed Shot', 'spell(Aimed Shot).casttime<target.debuff(Vulnerable).duration&{focus+cast_regen>80||!target.debuff(Hunter\'s Mark)}'},
+	{'Aimed Shot', 'spell(Aimed Shot).casttime<target.debuff(Vulnerable).remains&{focus+cast_regen>80||!target.debuff(Hunter\'s Mark)}'},
 
  	--actions.+=/marked_shot
 	{'Marked Shot', 'target.debuff(Hunter\'s Mark)'},
@@ -171,16 +171,16 @@ local xCombat = {
 	{'Black Arrow', 'talent(2,2)'},
 
 	--actions.+=/sidewinders,if=debuff.hunters_mark.down&(buff.marking_targets.remains>6||buff.trueshot.react||charges=2)
-	{'Sidewinders', '!target.debuff(Hunter\'s Mark)&{buff(Marking Targets).duration>6||buff(Trueshot)||spell(Sidewinders).charges=2}'},
+	{'Sidewinders', '!target.debuff(Hunter\'s Mark)&{buff(Marking Targets).remains>6||buff(Trueshot)||spell(Sidewinders).charges=2}'},
 
  	--actions.+=/sidewinders,if=focus<30&charges<=1&recharge_time<=5
 	{'Sidewinders', 'focus<30&spell(Sidewinders).charges<=1&spell(Sidewinders).recharge<=5'},
 
  	--actions.+=/multishot,if=spell_targets.barrage>1&(debuff.hunters_mark.down&buff.marking_targets.react||focus.time_to_max>=2)
-	{'Multi-Shot', 'xinfront(40).enemies>1&{!target.debuff(Hunter\'s Mark)&buff(Marking Targets)||focus.timetomax>=2}'},
+	{'Multi-Shot', 'area(40).enemies>1&{!target.debuff(Hunter\'s Mark)&buff(Marking Targets)||focus.timetomax>=2}'},
 
  	--actions.+=/arcane_shot,if=spell_targets.barrage=1&(debuff.hunters_mark.down&buff.marking_targets.react||focus.time_to_max>=2)
-	{'Arcane Shot', 'xinfront(40).enemies<2&{!target.debuff(Hunter\'s Mark)&buff(Marking Targets)||focus.timetomax>=2}'},
+	{'Arcane Shot', 'area(40).enemies<2&{!target.debuff(Hunter\'s Mark)&buff(Marking Targets)||focus.timetomax>=2}'},
 
  	--actions.+=/arcane_shot,if=focus.deficit<10
 	{'Arcane Shot', 'focus.deficit<10'}
@@ -205,7 +205,7 @@ local inCombat = {
 
 local outCombat = {
 
-	--{Keybinds},
+	{Keybinds},
 
 }
 
