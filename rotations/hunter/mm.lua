@@ -200,7 +200,7 @@ local xCombat = {
 	{'Arcane Shot', '!talent(7,1)&focus.deficit<10'},
 
 	--test
-	{'Aimed Shot'}
+	--{'Aimed Shot'}
 
 }
 
