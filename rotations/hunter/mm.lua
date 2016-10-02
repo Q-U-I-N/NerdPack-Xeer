@@ -9,21 +9,21 @@ local exeOnLoad = function()
 	print('|cffADFF2F ----------------------------------------------------------------------|r')
 	print('|cffADFF2F --- |rHUNTER |cffADFF2FMarksmanship |r')
 	print('|cffADFF2F --- |rRecommended Talents: 1/1 - 2/1 - 3/X - 4/3 - 5/X - 6/2 - 7/1')
-	print('|cffADFF2F ----------------------------------------------------------------------|r')	
-	
+	print('|cffADFF2F ----------------------------------------------------------------------|r')
+
 	NeP.Interface.CreateToggle(
 		'xBarrage',
 		'Interface\\Icons\\Ability_Hunter_RapidRegeneration',
 		'Barrage',
 		'ON/OFF using Barrage in rotation if you have talent')
-			
+
 
 end
 
 local _Xeer = { -- some non-SiMC stuffs
 
 	{'@Xeer.Targeting()', {'!target.alive', 'toggle(AutoTarget)'}},
-	
+
 
 --[[
 hunter="Hunter_MM_T19P"
@@ -47,7 +47,7 @@ spec=marksmanship
 # set_bonus=tier19p_mail_2pc=1
 summon_pet=cat
 --]]
-	
+
 }
 
 local PreCombat = {
@@ -154,13 +154,13 @@ local xCombat = {
 	{'Sidewinders', 'area(40).enemies>1&!target.debuff(Hunter\'s Mark)&{buff(Marking Targets)||buff(Trueshot)||spell(Sidewinders).charges=2}'},
 
  	--actions.+=/arcane_shot,if=talent.steady_focus.enabled&active_enemies=1&(buff.steady_focus.down||buff.steady_focus.remains<2)
-	{'Arcane Shot', 'talent(1,2)&area(40).enemies<2&{!buff(Steady Focus)||buff(Steady Focus).remains<2}'},
+	{'Arcane Shot', '!talent(7,1)&talent(1,2)&area(40).enemies<2&{!buff(Steady Focus)||buff(Steady Focus).remains<2}'},
 
  	--actions.+=/multishot,if=talent.steady_focus.enabled&active_enemies>1&(buff.steady_focus.down||buff.steady_focus.remains<2)
 	{'Multi-Shot', 'talent(1,2)&area(40).enemies>1&{!buff(Steady Focus)||buff(Steady Focus).remains<2}'},
 
  	--actions.+=/arcane_shot,if=talent.true_aim.enabled&active_enemies=1&(debuff.true_aim.react<1||debuff.true_aim.remains<2)
-	{'Arcane Shot', 'talent(2,3)&area(40).enemies<2&{target.debuff(True Aim).stack<1||target.debuff(True Aim).remains<2}'},
+	{'Arcane Shot', '!talent(7,1)&talent(2,3)&area(40).enemies<2&{target.debuff(True Aim).stack<1||target.debuff(True Aim).remains<2}'},
 
  	--actions.+=/aimed_shot,if=buff.lock_and_load.up&debuff.vulnerability.remains>gcd.max
 	{'Aimed Shot', 'buff(Lock and Load)&target.debuff(Vulnerable).remains>gcd'},
@@ -194,10 +194,13 @@ local xCombat = {
 	{'Multi-Shot', 'area(40).enemies>1&{!target.debuff(Hunter\'s Mark)&buff(Marking Targets)||focus.timetomax>=2}'},
 
  	--actions.+=/arcane_shot,if=spell_targets.barrage=1&(debuff.hunters_mark.down&buff.marking_targets.react||focus.time_to_max>=2)
-	{'Arcane Shot', 'area(40).enemies<2&{!target.debuff(Hunter\'s Mark)&buff(Marking Targets)||focus.timetomax>=2}'},
+	{'Arcane Shot', '!talent(7,1)&area(40).enemies<2&{!target.debuff(Hunter\'s Mark)&buff(Marking Targets)||focus.timetomax>=2}'},
 
  	--actions.+=/arcane_shot,if=focus.deficit<10
-	{'Arcane Shot', 'focus.deficit<10'}
+	{'Arcane Shot', '!talent(7,1)&focus.deficit<10'},
+
+	--test
+	{'Aimed Shot'}
 
 }
 
@@ -205,7 +208,7 @@ local Keybinds = {
 
 	-- Pause
 	{'%pause', 'keybind(alt)'},
-	
+
 }
 
 local inCombat = {
@@ -213,7 +216,7 @@ local inCombat = {
 	--{Keybinds},
 	--{Survival, 'player.health < 100'},
 	--{Cooldowns, 'toggle(cooldowns)'},
-	{xCombat, {'target.range < 40', 'target.infront', '!channeling(Barrage)'}}
+	{xCombat, {'target.range < 40', 'target.infront'}}
 
 }
 

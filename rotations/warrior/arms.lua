@@ -64,15 +64,6 @@ local Survival = {
 
 local Cooldowns = {
 
--- {'', ''},
-
-}
-
-
-local Util = {
-
-	--# Executed every time the actor is available.
-	
 	--actions+=/potion,name=old_war,if=(target.health.pct<20&buff.battle_cry.up)||target.time_to_die<=26
 	
 	--actions+=/blood_fury,if=buff.battle_cry.up||target.time_to_die<=16
@@ -92,6 +83,15 @@ local Util = {
 	
 	--actions+=/use_item,name=gift_of_radiance
 	--trinket... 
+
+}
+
+
+local Util = {
+
+
+	{Cooldowns, 'toggle(cooldowns)'},
+
 	
 	--actions+=/hamstring,if=buff.battle_cry_deadly_calm.remains>cooldown.hamstring.remains
 	--{'Hamstring', 'buff(Battle Cry)&talent(6,1)&!target.debuff(Hamstring)'}, 
