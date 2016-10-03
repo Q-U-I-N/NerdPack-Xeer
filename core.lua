@@ -21,10 +21,10 @@ local Fetch = NeP.Interface.fetchKey
 -- Temp Hack
 function Xeer.Splash()
 	NeP.Interface.CreateToggle(
-		'AutoTarget', 
-		'Interface\\Icons\\ability_hunter_snipershot', 
-		'Auto Target', 
-		'Automatically target the nearest enemy when target dies or does not exist')	
+		'AutoTarget',
+		'Interface\\Icons\\ability_hunter_snipershot',
+		'Auto Target',
+		'Automatically target the nearest enemy when target dies or does not exist')
 end
 
 function Xeer.ClassSetting(key)
@@ -54,7 +54,7 @@ NeP.library.register('Xeer', {
 		local hp = UnitHealth('target')
 		if exists == false or (exists == true and hp < 1) then
 			for i=1,#NeP.OM.unitEnemie do
-				local Obj = NeP.OM.unitEnemie[i]	
+				local Obj = NeP.OM.unitEnemie[i]
 				if Obj.distance <= 10 then
 					RunMacroText('/tar ' .. Obj.key)
 					return true
@@ -63,28 +63,9 @@ NeP.library.register('Xeer', {
 		end
 	end
 })
-	
-
-NeP.DSL.RegisterConditon('deficit', function(target, spell)
-	local max = UnitPowerMax(target)
-	local curr = UnitPower(target)
-	return (max - curr)
-end)
 
 NeP.DSL.RegisterConditon('equipped', function(target, item)
 	if IsEquippedItem(item) == true then return true else return false end
-end)
-
-NeP.DSL.RegisterConditon('execute_time', function(target, spell)
---TODO:fix for rogues and feral form
-	local GCD = math.floor((1.5 / ((GetHaste() / 100) + 1)) * 10^3 ) / 10^3	
-	local name, rank, icon, cast_time, min_range, max_range = GetSpellInfo(spell)
-	local ctt = math.floor((cast_time / 1000) * 10^3 ) / 10^3
-		if ctt > GCD then
-			return ctt
-		else
-			return GCD
-		end
 end)
 
 --[[
@@ -107,20 +88,18 @@ end)
 NeP.DSL.RegisterConditon('xmoving', function(target)
 	local speed, _ = GetUnitSpeed(target)
 		if speed ~= 0 then
-			return 1 
+			return 1
 		else
 			return 0
 		end
 end)
 
-NeP.DSL.RegisterConditon('cast_regen', function(target, spell)
-	local regen = select(2, GetPowerRegen(target))
-	local _, _, _, cast_time = GetSpellInfo(spell)
-	return math.floor(((regen * cast_time) / 1000) * 10^3 ) / 10^3
-end)
-
----------------------------------SIMC NAMES---------------------------------
---/dump NeP.DSL.Conditions['cooldown.remains']('player','Bloodthirst')
+--------------------------------SIMC STUFFS---------------------------------
+--/dump NeP.DSL.Conditions['cooldown.remains']('player','Fire Blast')
+--/dump NeP.DSL.Conditions['spell_haste']('player')
+--/dump NeP.DSL.Conditions['talent.enabled']('player','1,1')
+--/dump NeP.DSL.Conditions['cast_regen']('player','Fireball')
+--/dump NeP.DSL.Conditions['cast_time']('player','Fireball')
 
 NeP.DSL.RegisterConditon('cooldown.remains', function(_, spell)
 	return NeP.DSL.Conditions['spell.cooldown'](_, spell)
@@ -144,4 +123,46 @@ end)
 
 NeP.DSL.RegisterConditon('time_to_die', function(target)
 	return NeP.DSL.Conditions['deathin'](target)
+end)
+
+NeP.DSL.RegisterConditon('spell_haste', function(target)
+	local haste = NeP.DSL.Conditions['haste'](target)
+	return 100 / ( 100 + haste )
+end)
+
+NeP.DSL.RegisterConditon('talent.enabled', function(target, args)
+	local havetalent = NeP.DSL.Conditions['talent'](target, args)
+	if havetalent == true then
+		return 1
+	else
+		return 0
+	end
+end)
+
+NeP.DSL.RegisterConditon('execute_time', function(target, spell)
+--TODO:fix for rogues and feral form
+	local GCD = math.floor((1.5 / ((GetHaste() / 100) + 1)) * 10^3 ) / 10^3
+	local name, rank, icon, cast_time, min_range, max_range = GetSpellInfo(spell)
+	local ctt = math.floor((cast_time / 1000) * 10^3 ) / 10^3
+		if ctt > GCD then
+			return ctt
+		else
+			return GCD
+		end
+end)
+
+NeP.DSL.RegisterConditon('deficit', function(target, spell)
+	local max = UnitPowerMax(target)
+	local curr = UnitPower(target)
+	return (max - curr)
+end)
+
+NeP.DSL.RegisterConditon('cast_regen', function(target, spell)
+	local regen = select(2, GetPowerRegen(target))
+	local _, _, _, cast_time = GetSpellInfo(spell)
+	return math.floor(((regen * cast_time) / 1000) * 10^3 ) / 10^3
+end)
+
+NeP.DSL.RegisterConditon('cast_time', function(target, spell)
+	return (NeP.DSL.Conditions['casttime'](target, spell))/1000
 end)
