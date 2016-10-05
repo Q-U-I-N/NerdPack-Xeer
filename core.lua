@@ -18,24 +18,6 @@ end
 local Parse = NeP.DSL.Parse
 local Fetch = NeP.Interface.fetchKey
 
--- Temp Hack
-function Xeer.Splash()
-	NeP.Interface.CreateToggle(
-		'AutoTarget',
-		'Interface\\Icons\\ability_hunter_snipershot',
-		'Auto Target',
-		'Automatically target the nearest enemy when target dies or does not exist')
-end
-
-function Xeer.ClassSetting(key)
-	local name = '|cff'..NeP.Core.classColor('player')..'Class Settings'
-	NeP.Interface.CreateSetting(name, function() NeP.Interface.ShowGUI(key) end)
-end
-
-function Xeer.dynEval(condition, spell)
-	return Parse(condition, spell or '')
-end
-
 --[[
 	local classTaunt = {
 		[1] = 'Taunt',
@@ -47,122 +29,119 @@ end
 	}
 --]]
 
-NeP.library.register('Xeer', {
+NeP.library.register('Xeer', Xeer)
 
-	Targeting = function()
-		local exists = UnitExists('target')
-		local hp = UnitHealth('target')
-		if exists == false or (exists == true and hp < 1) then
-			for i=1,#NeP.OM.unitEnemie do
-				local Obj = NeP.OM.unitEnemie[i]
-				if Obj.distance <= 10 then
-					RunMacroText('/tar ' .. Obj.key)
-					return true
+	-- Temp Hack
+	function Xeer.Splash()
+		NeP.Interface.CreateToggle(
+			'AutoTarget',
+			'Interface\\Icons\\ability_hunter_snipershot',
+			'Auto Target',
+			'Automatically target the nearest enemy when target dies or does not exist')
+	end
+
+	function Xeer.ClassSetting(key)
+		local name = '|cff'..NeP.Core.classColor('player')..'Class Settings'
+		NeP.Interface.CreateSetting(name, function() NeP.Interface.ShowGUI(key) end)
+	end
+
+	function Xeer.dynEval(condition, spell)
+		return Parse(condition, spell or '')
+	end
+
+	function Xeer.Taunt(eval, args)
+	local spell = NeP.Engine:Spell(args)
+	if not spell then return end
+	for i=1,#NeP.OM['unitEnemie'] do
+		local Obj = NeP.OM['unitEnemie'][i]
+		local Threat = UnitThreatSituation("player", Obj.key)
+		if Threat and Threat >= 0 and Threat < 3 and Obj.distance <= 30 then
+			eval.spell = spell
+			eval.target = Obj.key
+			return NeP.Engine:STRING(eval)
+		end
+	end
+end
+
+--------------------------NeP CombatHelper Targeting --------------------------
+
+	local NeP_forceTarget = {
+		-- WOD DUNGEONS/RAIDS
+		[75966] = 100,	-- Defiled Spirit (Shadowmoon Burial Grounds)
+		[76220] = 100,	-- Blazing Trickster (Auchindoun Normal)
+		[76222] = 100,	-- Rallying Banner (UBRS Black Iron Grunt)
+		[76267] = 100,	-- Solar Zealot (Skyreach)
+		[76518] = 100,	-- Ritual of Bones (Shadowmoon Burial Grounds)
+		[77252] = 100,	-- Ore Crate (BRF Oregorger)
+		[77665] = 100,	-- Iron Bomber (BRF Blackhand)
+		[77891] = 100,	-- Grasping Earth (BRF Kromog)
+		[77893] = 100,	-- Grasping Earth (BRF Kromog)
+		[86752] = 100,	-- Stone Pillars (BRF Mythic Kromog)
+		[78583] = 100,	-- Dominator Turret (BRF Iron Maidens)
+		[78584] = 100,	-- Dominator Turret (BRF Iron Maidens)
+		[79504] = 100,	-- Ore Crate (BRF Oregorger)
+		[79511] = 100,	-- Blazing Trickster (Auchindoun Heroic)
+		[81638] = 100,	-- Aqueous Globule (The Everbloom)
+		[86644] = 100,	-- Ore Crate (BRF Oregorger)
+		[94873] = 100,	-- Felfire Flamebelcher (HFC)
+		[90432] = 100,	-- Felfire Flamebelcher (HFC)
+		[95586] = 100,	-- Felfire Demolisher (HFC)
+		[93851] = 100,	-- Felfire Crusher (HFC)
+		[90410] = 100,	-- Felfire Crusher (HFC)
+		[94840] = 100,	-- Felfire Artillery (HFC)
+		[90485] = 100,	-- Felfire Artillery (HFC)
+		[93435] = 100,	-- Felfire Transporter (HFC)
+		[93717] = 100,	-- Volatile Firebomb (HFC)
+		[188293] = 100,	-- Reinforced Firebomb (HFC)
+		[94865] = 100,	-- Grasping Hand (HFC)
+		[93838] = 100,	-- Grasping Hand (HFC)
+		[93839] = 100,	-- Dragging Hand (HFC)
+		[91368] = 100,	-- Crushing Hand (HFC)
+		[94455] = 100,	-- Blademaster Jubei'thos (HFC)
+		[90387] = 100,	-- Shadowy Construct (HFC)
+		[90508] = 100,	-- Gorebound Construct (HFC)
+		[90568] = 100,	-- Gorebound Essence (HFC)
+		[94996] = 100,	-- Fragment of the Crone (HFC)
+		[95656] = 100,	-- Carrion Swarm (HFC)
+		[91540] = 100,	-- Illusionary Outcast (HFC)
+	}
+
+	local function getTargetPrio(Obj)
+		local objectType, _, _, _, _, _id, _ = strsplit('-', UnitGUID(Obj))
+		local ID = tonumber(_id) or '0'
+		local prio = 1
+		-- Elite
+		if NeP.DSL.Conditions['elite'](Obj) then
+			prio = prio + 30
+		end
+		-- If its forced
+		if NeP_forceTarget[tonumber(Obj)] ~= nil then
+			prio = prio + NeP_forceTarget[tonumber(Obj)]
+		end
+		return prio
+	end
+
+	function Xeer.Targeting()
+		-- If dont have a target, target is friendly or dead
+		if not UnitExists('target') or UnitIsFriend('player', 'target') or UnitIsDeadOrGhost('target') then
+			local setPrio = {}
+			for i=1,#NeP.OM['unitEnemie'] do
+				local Obj = NeP.OM['unitEnemie'][i]
+				if UnitExists(Obj.key) and Obj.distance <= 40 then
+					if (UnitAffectingCombat(Obj.key) or isDummy(Obj.key))
+					and NeP.Engine.LineOfSight('player', Obj.key) then
+						setPrio[#setPrio+1] = {
+							key = Obj.key,
+							bonus = getTargetPrio(Obj.key),
+							name = Obj.name
+						}
+					end
 				end
+			end
+			table.sort(setPrio, function(a,b) return a.bonus > b.bonus end)
+			if setPrio[1] then
+				NeP.Engine.Macro('/target '..setPrio[1].key)
 			end
 		end
 	end
-})
-
-NeP.DSL.RegisterConditon('equipped', function(target, item)
-	if IsEquippedItem(item) == true then return true else return false end
-end)
-
---[[
-NeP.DSL.RegisterConditon('xinfront.enemies', function(unit, distance)
-	local total = 0
-	if not UnitExists(unit) then return total end
-	for i=1, #NeP.OM['unitEnemie'] do
-		local Obj = NeP.OM['unitEnemie'][i]
-		if UnitExists(Obj.key) and (UnitAffectingCombat(Obj.key) or isDummy(Obj.key))
-		and NeP.Engine.Distance(unit, Obj.key) <= tonumber(distance) then
-			--if NeP.Engine.Infront('player', Obj.key) then
-				total = total +1
-			--end
-		end
-	end
-	return total
-end)
---]]
-
-NeP.DSL.RegisterConditon('xmoving', function(target)
-	local speed, _ = GetUnitSpeed(target)
-		if speed ~= 0 then
-			return 1
-		else
-			return 0
-		end
-end)
-
---------------------------------SIMC STUFFS---------------------------------
---/dump NeP.DSL.Conditions['cooldown.remains']('player','Fire Blast')
---/dump NeP.DSL.Conditions['spell_haste']('player')
---/dump NeP.DSL.Conditions['talent.enabled']('player','1,1')
---/dump NeP.DSL.Conditions['cast_regen']('player','Fireball')
---/dump NeP.DSL.Conditions['cast_time']('player','Fireball')
-
-NeP.DSL.RegisterConditon('cooldown.remains', function(_, spell)
-	return NeP.DSL.Conditions['spell.cooldown'](_, spell)
-end)
-
-NeP.DSL.RegisterConditon('buff.stack', function(target, spell)
-	return NeP.DSL.Conditions['buff.count'](target, spell)
-end)
-
-NeP.DSL.RegisterConditon('buff.remains', function(target, spell)
-	return NeP.DSL.Conditions['buff.duration'](target, spell)
-end)
-
-NeP.DSL.RegisterConditon('debuff.stack', function(target, spell)
-	return NeP.DSL.Conditions['debuff.count'](target, spell)
-end)
-
-NeP.DSL.RegisterConditon('debuff.remains', function(target, spell)
-	return NeP.DSL.Conditions['debuff.duration'](target, spell)
-end)
-
-NeP.DSL.RegisterConditon('time_to_die', function(target)
-	return NeP.DSL.Conditions['deathin'](target)
-end)
-
-NeP.DSL.RegisterConditon('spell_haste', function(target)
-	local haste = NeP.DSL.Conditions['haste'](target)
-	return 100 / ( 100 + haste )
-end)
-
-NeP.DSL.RegisterConditon('talent.enabled', function(target, args)
-	local havetalent = NeP.DSL.Conditions['talent'](target, args)
-	if havetalent == true then
-		return 1
-	else
-		return 0
-	end
-end)
-
-NeP.DSL.RegisterConditon('execute_time', function(target, spell)
---TODO:fix for rogues and feral form
-	local GCD = math.floor((1.5 / ((GetHaste() / 100) + 1)) * 10^3 ) / 10^3
-	local name, rank, icon, cast_time, min_range, max_range = GetSpellInfo(spell)
-	local ctt = math.floor((cast_time / 1000) * 10^3 ) / 10^3
-		if ctt > GCD then
-			return ctt
-		else
-			return GCD
-		end
-end)
-
-NeP.DSL.RegisterConditon('deficit', function(target, spell)
-	local max = UnitPowerMax(target)
-	local curr = UnitPower(target)
-	return (max - curr)
-end)
-
-NeP.DSL.RegisterConditon('cast_regen', function(target, spell)
-	local regen = select(2, GetPowerRegen(target))
-	local _, _, _, cast_time = GetSpellInfo(spell)
-	return math.floor(((regen * cast_time) / 1000) * 10^3 ) / 10^3
-end)
-
-NeP.DSL.RegisterConditon('cast_time', function(target, spell)
-	return (NeP.DSL.Conditions['casttime'](target, spell))/1000
-end)
+--------------------------NeP CombatHelper Targeting --------------------------

@@ -1,5 +1,4 @@
 local GUI = {
-
 }
 
 local exeOnLoad = function()
@@ -8,14 +7,13 @@ local exeOnLoad = function()
 	print('|cffADFF2F ----------------------------------------------------------------------|r')
 	print('|cffADFF2F --- |rSHAMAN |cffADFF2FEnhancement |r')
 	print('|cffADFF2F --- |rRecommended Talents: 1/3 - 2/X - 3/X - 4/3 - 5/1 - 6/1 - 7/2')
-	print('|cffADFF2F ----------------------------------------------------------------------|r')	
-			
+	print('|cffADFF2F ----------------------------------------------------------------------|r')
+
 end
 
-local _Xeer = { -- some non-SiMC stuffs
-
+local _Xeer = {
+-- Some non-SiMC stuffs
 	{'@Xeer.Targeting()', {'!target.alive', 'toggle(AutoTarget)'}},
-	
 
 --[[
 shaman="Shaman_Enhancement_T19P"
@@ -36,11 +34,9 @@ spec=enhancement
 # gear_mastery_rating=10279
 # gear_armor=2433
 --]]
-	
 }
 
 local PreCombat = {
-
 	--# Executed before combat begins. Accepts non-harmful --actions only.
 	--actions.precombat=flask,type=seventh_demon
 	--actions.precombat+=/augmentation,type=defiled
@@ -49,7 +45,6 @@ local PreCombat = {
 	--actions.precombat+=/snapshot_stats
 	--actions.precombat+=/potion,name=old_war
 	--actions.precombat+=/lightning_shield
-	
 }
 
 local Survival = {
@@ -63,98 +58,66 @@ local Cooldowns = {
 local xCombat = {
 	--# Executed every time the actor is available.
 	--actions=wind_shear
-	--# Bloodlust casting behavior mirrors the simulator settings for proxy bloodlust. See options 'bloodlust_percent', and 'bloodlust_time'. 
+	--# Bloodlust casting behavior mirrors the simulator settings for proxy bloodlust. See options 'bloodlust_percent', and 'bloodlust_time'.
 	--actions+=/bloodlust,if=target.health.pct<25||time>0.500
-
 	--actions+=/feral_spirit
 	{'Feral Spirit'},
-	
 	--actions+=/potion,name=old_war,if=pet.feral_spirit.remains>10||pet.frost_wolf.remains>5||pet.fiery_wolf.remains>5||pet.lightning_wolf.remains>5||target.time_to_die<=30
-	
 	--actions+=/berserking,if=buff.ascendance.up||!talent.ascendance.enabled||level<100
 	{'Berserking', 'buff(Ascendance)||!talent(7,1)||player.level<100'},
-	
 	--actions+=/blood_fury
 	{'Blood Fury'},
-	
 	--actions+=/boulderfist,if=buff.boulderfist.remains<gcd||charges_fractional>1.75
 	{'Boulderfist', 'buff(Boulderfist).duration<gcd||spell(Boulderfist).charges>1.75'},
-	
 	--actions+=/frostbrand,if=talent.hailstorm.enabled&buff.frostbrand.remains<gcd
 	{'Frostbrand', 'talent(4,3)&buff(Frostbrand).duration<gcd'},
-	
 	--actions+=/flametongue,if=buff.flametongue.remains<gcd
 	{'Flametongue', 'buff(Flametongue).duration<gcd'},
-	
 	--actions+=/windsong
 	{'Windsong', 'talent(1,1)'},
-	
 	--actions+=/ascendance
 	{'Ascendance', 'talent(7,1)'},
-	
 	--actions+=/fury_of_air,if=!ticking
 	{'Fury of Air', 'talent(6,2)&!buff(Fury of Air)'},
-	
 	--actions+=/doom_winds
 	{'Doom Winds'},
-	
 	--actions+=/crash_lightning,if=active_enemies>=3
 	{'Crash Lightning', 'infront(8).enemies>=3'},
-	
 	--actions+=/windstrike
 	--{'', ''},
-	
 	--actions+=/stormstrike
 	{'StormStrike'},
-	
 	--actions+=/frostbrand,if=talent.hailstorm.enabled&buff.frostbrand.remains<4.8
 	{'Frostbrand', 'talent(4,3)&buff(Frostbrand).duration<4.8'},
-	
 	--actions+=/flametongue,if=buff.flametongue.remains<4.8
 	{'Flametongue', 'target.debuff(Flametongue).duration < 4.8'},
-	
 	--actions+=/lightning_bolt,if=talent.overcharge.enabled&maelstrom>=60
 	{'Lightning Bolt', 'talent(5,2)&player.maelstrom>=60'},
-	
 	--actions+=/lava_lash,if=buff.hot_hand.react
 	{'Lava Lash', 'buff(Hot Hand)'},
-	
 	--actions+=/earthen_spike
 	{'Earthen Spike'},
-	
 	--actions+=/crash_lightning,if=active_enemies>1||talent.crashing_storm.enabled||(pet.feral_spirit.remains>5||pet.frost_wolf.remains>5||pet.fiery_wolf.remains>5||pet.lightning_wolf.remains>5)
 	{'Crash Lightning', 'infront(8).enemies>1||talent(6,1)||spell(Feral Spirit).cooldown>110'},
-	
 	--actions+=/sundering
 	{'Sundering'},
-	
 	--actions+=/lava_lash,if=maelstrom>=90
 	{'Lava Lash', 'player.maelstrom>=90'},
-	
 	--actions+=/rockbiter
 	{'Rockbiter'},
-	
 	--actions+=/flametongue
 	{'Flametongue'},
-	
 	--actions+=/boulderfist
 	{'Boulderfist'}
-
 }
 
--- {'', ''},
-
 local Ranged = {
-
 	{'Lightning Bolt'}
-
 }
 
 local Keybinds = {
-	
 	-- Pause
 	{'%pause', 'keybind(alt)'}
-	
 }
 
 local inCombat = {

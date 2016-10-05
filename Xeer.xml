@@ -3,7 +3,8 @@
 
   <!-- Core Files -->
   <Script file="core.lua" />
-  
+  <Script file="conditions.lua" />
+
   <!-- Rotations -->
   <Script file="rotations\deathknight\frost.lua" />
   <Script file="rotations\deathknight\unholy.lua" />
@@ -22,16 +23,16 @@
   <Script file="rotations\paladin\protection.lua" />
   <Script file="rotations\paladin\retribution.lua" />
   <Script file="rotations\priest\shadow.lua" />
-  <Script file="rotations\rogue\assassination.lua" />  
-  <Script file="rotations\rogue\outlaw.lua" />  
-  <Script file="rotations\rogue\subtlety.lua" />  
+  <Script file="rotations\rogue\assassination.lua" />
+  <Script file="rotations\rogue\outlaw.lua" />
+  <Script file="rotations\rogue\subtlety.lua" />
   <Script file="rotations\shaman\elemental.lua" />
-  <Script file="rotations\shaman\enhancement.lua" />  
-  <Script file="rotations\warlock\affliction.lua" />  
-  <Script file="rotations\warlock\demonology.lua" />  
-  <Script file="rotations\warlock\destro.lua" /> 
-  <Script file="rotations\warrior\arms.lua" />  
+  <Script file="rotations\shaman\enhancement.lua" />
+  <Script file="rotations\warlock\affliction.lua" />
+  <Script file="rotations\warlock\demonology.lua" />
+  <Script file="rotations\warlock\destro.lua" />
+  <Script file="rotations\warrior\arms.lua" />
   <Script file="rotations\warrior\fury.lua" />
   <Script file="rotations\warrior\protection.lua" />
- 
+
 </Ui>
