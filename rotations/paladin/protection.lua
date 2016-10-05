@@ -136,7 +136,8 @@ local ST = {
 }
 
 local inCombat = {
-	{Keybinds},	{_Xeer},
+	{Keybinds},
+	{_Xeer},
 --{Survival, 'player.health < 100'},
 	{Interrupts, {'target.interruptAt(50)', 'toggle(Interrupts)', 'target.infront', 'target.range<8'}},
 	{Cooldowns, 'toggle(Cooldowns)'},
