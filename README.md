@@ -2,7 +2,7 @@
 
 Routines are supported (should work...) with every language clients now.
 
-If you got some errors be sure you got LASTEST NeP core files here: 
+If you got some errors be sure you got LASTEST NeP core files here:
 
 https://github.com/MrTheSoulz/NerdPack
 
@@ -25,9 +25,11 @@ Shaman - Enhancement
 
 Shaman - Elemental - TODO: need fix Totem Mastery
 
-Hunter - Marksmanship 
+Hunter - Marksmanship
 
 Hunter - Beast Mastery
+
+Mage - Fire
 
 ------------------------------------
 
@@ -50,8 +52,6 @@ Druid - Guardian
 Hunter - Survival
 
 Mage - Arcane
-
-Mage - Fire
  
 Mage - Frost
 
@@ -72,4 +72,3 @@ Warlock - Affliction
 Warlock - Demonology
 
 Warlock - Destruction
-
