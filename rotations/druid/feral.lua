@@ -100,7 +100,7 @@ local Cooldowns = {
 	--actions.=/ferocious_bite,cycle_targets=1,if=dot.rip.ticking&dot.rip.remains<3&target.time_to_die>3&(target.health.pct<25||talent.sabertooth.enabled)
 	--# Use Healing Touch at 5 Combo Points, if Predatory Swiftness is about to fall off, at 2 Combo Points before Ashamane's Frenzy, before Elune's Guidance is cast or before the Elune's Guidance buff gives you a 5th Combo Point.
 	--actions.=/healing_touch,if=talent.bloodtalons.enabled&buff.predatory_swiftness.up&(combo_points>=5||buff.predatory_swiftness.remains<1.5||(talent.bloodtalons.enabled&combo_points=2&buff.bloodtalons.down&cooldown.ashamanes_frenzy.remains<gcd)||(talent.elunes_guidance.enabled&((cooldown.elunes_guidance.remains<gcd&combo_points=0)||(buff.elunes_guidance.up&combo_points>=4))))
-	{'Healing Touch', 'talent(7,2)&buff(Predatory Swiftness)&{combo_points>=5||buff(Predatory Swiftness).remains<1.5||{talent(7,2)&combo_points=2&!buff(Bloodtalons)&artifact(Ashamane\'s Frenzy).equipped&cooldown(Ashamane\'s Frenzy).remains<gcd}||{talent(6,3)&{{cooldown(Elune\'s Guidance),remains<gcd&combo_points=0}}}}'},
+	{'Healing Touch', 'talent(7,2)&buff(Predatory Swiftness)&{combo_points>=5||buff(Predatory Swiftness).remains<1.5||{talent(7,2)&combo_points=2&!buff(Bloodtalons)&cooldown(Ashamane\'s Frenzy).remains<gcd}||{talent(6,3)&{{cooldown(Elune\'s Guidance),remains<gcd&combo_points=0}}}}'},
 	--actions.=/call_action_list,name=sbt_opener,if=talent.sabertooth.enabled&time<20
 	{SBT_Opener, 'talent(6,1)&combat.time<20'},
 	--# Special logic for Ailuro Pouncers legendary.

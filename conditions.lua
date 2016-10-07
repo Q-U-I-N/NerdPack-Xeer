@@ -77,15 +77,19 @@ local DotTicks = {
 	[155625] = 2,
 }
 
---/dump NeP.DSL.Conditions['dot.tick_time']('target','Rip')
+--/dump NeP.DSL.Conditions['dot.x']('target', 'Moonfire')
+--/dump NeP.DSL.Conditions['dot.tick_time']('target','155625')
 NeP.DSL.RegisterConditon('dot.tick_time', function(target, spell)
 	local spell = GetSpellID(GetSpellName(spell))
 	local class = select(3,UnitClass('player'))
 	if class == 11 and GetSpecialization() == 2 then
 		if hasTalent(6,2) == true and spell == 1822 or spell == 1079 or spell == 106832 then
 			return DotTicks[spell] * 0.67
-		else
-			return DotTicks[spell]
+		else if spell == 1822 or spell == 1079 or spell == 106832 then
+					return DotTicks[spell]
+				else
+					return math.floor((DotTicks[spell] / ((GetHaste() / 100) + 1)) * 10^3 ) / 10^3
+				end
 		end
 	end
 end)
