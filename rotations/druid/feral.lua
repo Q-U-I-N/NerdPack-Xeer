@@ -40,12 +40,14 @@ spec=feral
 }
 
 local Survival = {
-
+	{'Rejuvenation', 'talent(3,3)&!buff(Rejuvenation)'},
+	{'Swiftmend', 'talent(3,3)&health<=75'},
 }
 
 local Interrupts = {
 	{'Skull Bash'},
-	{'Typhoon', 'action(Skull Bash).cooldown>gcd'},
+	{'Typhoon', 'talent(4,3)&action(Skull Bash).cooldown>gcd'},
+	{'Mighty Bash', 'talent(4,1)&action(Skull Bash).cooldown>gcd'},
 }
 
 local PreCombat = {
@@ -196,7 +198,7 @@ local inCombat = {
 	{Keybinds},
 	{Interrupts, {'target.interruptAt(50)', 'toggle(Interrupts)', 'target.infront', 'target.range<8'}},
 	{'Cat Form', 'form~=2'},
-	{Survival, 'player.health < 100'},
+	{Survival, 'player.health<100'},
 	{Cooldowns, 'toggle(cooldowns)'},
 	{xCombat, {'target.range<8', 'target.infront'}},
 }
