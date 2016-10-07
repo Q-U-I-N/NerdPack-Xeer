@@ -86,7 +86,6 @@ NeP.DSL.RegisterConditon('dot.tick_time', function(target, spell)
 			return DotTicks[spell] * 0.67
 		else
 			return DotTicks[spell]
-			return math.floor((DotTicks[spell] / ((GetHaste() / 100) + 1)) * 10^3 ) / 10^3
 		end
 	end
 end)
@@ -139,7 +138,7 @@ end)
 
 
 --/dump NeP.DSL.Conditions['buff']('player','202060')
-/dump NeP.DSL.Conditions['buff']('player','774')
+
 NeP.DSL.RegisterConditon('buff.react', function(target, spell)
 	local x = NeP.DSL.Conditions['buff.count'](target, spell)
   if x == 1 then
