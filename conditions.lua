@@ -32,16 +32,114 @@ NeP.DSL.RegisterConditon('xmoving', function(target)
 		end
 end)
 
---------------------------------SIMC STUFFS---------------------------------
+--------------------------------------FERAL-------------------------------------
+--[[
+	local classTaunt = {
+		[1] = 'Taunt',
+		[2] = 'Hand of Reckoning',
+		[6] = 'Dark Command',
+		[10] = 'Provoke',
+		[11] = 'Growl',
+		[12] = 'Torment'
+	}
+--]]
+--/dump NeP.DSL.Conditions['action.cost']('Maim')
+--/dump NeP.DSL.Conditions['action.cost']('Rake')
+local PowerT = {
+	[0] = ('^.-Mana'),
+	[1] = ('^.-Rage'),
+	[2] = ('^.-Focus'),
+	[3] = ('^.-Energy'),
+}
+
+--/dump NeP.DSL.Conditions['action.cost']('Rejuvenation')
+NeP.DSL.RegisterConditon('action.cost', function(spell)
+	local costText = Xeer:Scan_SpellCost(spell)
+	local numcost = 0
+		for i = 0, 3 do
+			local cost = strmatch(costText, PowerT[i])
+			if cost ~= nil then
+        numcost = gsub(cost, '%D', '') + 0
+			end
+		end
+		if numcost > 0 then
+			return numcost
+		else
+			return 0
+		end
+end)
+
+local DotTicks = {
+	[1822] = 3,
+	[1079] = 2,
+	[106832] = 3,
+	[8921] = 2,
+	[155625] = 2,
+}
+
+--/dump NeP.DSL.Conditions['dot.tick_time']('target','Rip')
+NeP.DSL.RegisterConditon('dot.tick_time', function(target, spell)
+	local spell = GetSpellID(GetSpellName(spell))
+	local class = select(3,UnitClass('player'))
+	if class == 11 and GetSpecialization() == 2 then
+		if hasTalent(6,2) == true and spell == 1822 or spell == 1079 or spell == 106832 then
+			return DotTicks[spell] * 0.67
+		else
+			return DotTicks[spell]
+			return math.floor((DotTicks[spell] / ((GetHaste() / 100) + 1)) * 10^3 ) / 10^3
+		end
+	end
+end)
+
+--/dump NeP.DSL.Conditions['dot.duration']('target','Rip')
+NeP.DSL.RegisterConditon('dot.duration', function(target, spell)
+	local debuff,_,duration,expires,caster = Xeer['UnitDot'](target, spell)
+	if debuff and (caster == 'player' or caster == 'pet') then
+		return duration
+	end
+	return 0
+end)
+
+--/dump NeP.DSL.Conditions['debuff']('target','Rip')
+NeP.DSL.RegisterConditon('dot.ticking', function(target, spell)
+	if NeP.DSL.Conditions['debuff'](target, spell) then
+		return true
+	else
+		return false
+	end
+end)
+
+--/dump NeP.DSL.Conditions['dot.remains']('target','Rip')
+NeP.DSL.RegisterConditon('dot.remains', function(target, spell)
+	return NeP.DSL.Conditions['debuff.duration'](target, spell)
+end)
+
+NeP.DSL.RegisterConditon('dot.ticks_remain', function(target, spell)
+end)
+
+NeP.DSL.RegisterConditon('dot.current_ticks', function(target, spell)
+end)
+
+NeP.DSL.RegisterConditon('dot.ticks', function(target, spell)
+end)
+
+NeP.DSL.RegisterConditon('dot.tick_time_remains', function(target, spell)
+end)
+
+NeP.DSL.RegisterConditon('dot.active_dot', function(target, spell)
+end)
+
+-----------------------------------SIMC STUFFS----------------------------------
 --/dump NeP.DSL.Conditions['cooldown.remains']('player','Combustion')
 --/dump NeP.DSL.Conditions['buff.stack']('player','Incanter\'s Flow')
 --/dump NeP.DSL.Conditions['spell_haste']('player')
---/dump NeP.DSL.Conditions['talent.enabled']('player','1,1')
+--/dump NeP.DSL.Conditions['talent.enabled']('player','6,2')
 --/dump NeP.DSL.Conditions['cast_regen']('player','Fireball')
 --/dump NeP.DSL.Conditions['cast_time']('player','Cinderstorm')
 
 
---/dump NeP.DSL.Conditions['buff.react']('player','Ice Floes')
+--/dump NeP.DSL.Conditions['buff']('player','202060')
+/dump NeP.DSL.Conditions['buff']('player','774')
 NeP.DSL.RegisterConditon('buff.react', function(target, spell)
 	local x = NeP.DSL.Conditions['buff.count'](target, spell)
   if x == 1 then
@@ -80,8 +178,8 @@ NeP.DSL.RegisterConditon('debuff.remains', function(target, spell)
 	return NeP.DSL.Conditions['debuff.duration'](target, spell)
 end)
 
---TODO: work out off gcd/gcd only skills now all of this is just like SiMC "prev"
---/dump NeP.DSL.Conditions['prev_off_gcd']('player', 'Fire Blast')
+--TODO: work out off gcd/gcd only skills now all of this is just like SiMC 'prev'
+--/dump NeP.DSL.Conditions['debuff.remains']('target', 'Thrash')
 NeP.DSL.RegisterConditon('prev_off_gcd', function(Unit, Spell)
 	return NeP.DSL.Conditions['lastcast'](Unit, Spell)
 end)
@@ -111,7 +209,7 @@ NeP.DSL.RegisterConditon('cooldown.remains', function(_, spell)
 	end
 end)
 
---/dump NeP.DSL.Conditions['charges_fractional']('player','Phoenix\'s Flames')
+--/dump NeP.DSL.Conditions['action.charges']('player','Phoenix\'s Flames')
 NeP.DSL.RegisterConditon('action.charges', function(_, spell)
 	if NeP.DSL.Conditions['spell.exists'](_, spell) == true then
 		return NeP.DSL.Conditions['spell.charges'](_, spell)
@@ -120,6 +218,7 @@ NeP.DSL.RegisterConditon('action.charges', function(_, spell)
 	end
 end)
 
+--/dump NeP.DSL.Conditions['charges_fractional']('player','Phoenix\'s Flames')
 NeP.DSL.RegisterConditon('charges_fractional', function(_, spell)
 	if NeP.DSL.Conditions['spell.exists'](_, spell) == true then
 		return NeP.DSL.Conditions['spell.charges'](_, spell)
@@ -161,16 +260,59 @@ NeP.DSL.RegisterConditon('execute_time', function(target, spell)
 		end
 end)
 
-NeP.DSL.RegisterConditon('deficit', function(target, spell)
+--/dump NeP.DSL.Conditions['combo_points']()
+NeP.DSL.RegisterConditon('combo_points', function()
+	return GetComboPoints('player', 'target')
+end)
+
+--/dump NeP.DSL.Conditions['cast_regen']()
+NeP.DSL.RegisterConditon('cast_regen', function(target, spell)
+	local regen = select(2, GetPowerRegen(target))
+	local _, _, _, cast_time = GetSpellInfo(spell)
+	return math.floor(((regen * cast_time) / 1000) * 10^3 ) / 10^3
+end)
+
+--/dump NeP.DSL.Conditions['deficit']('player')
+NeP.DSL.RegisterConditon('deficit', function(target)
 	local max = UnitPowerMax(target)
 	local curr = UnitPower(target)
 	return (max - curr)
 end)
 
-NeP.DSL.RegisterConditon('cast_regen', function(target, spell)
-	local regen = select(2, GetPowerRegen(target))
-	local _, _, _, cast_time = GetSpellInfo(spell)
-	return math.floor(((regen * cast_time) / 1000) * 10^3 ) / 10^3
+--/dump NeP.DSL.Conditions['energy.deficit']('player')
+NeP.DSL.RegisterConditon('energy.deficit', function(target)
+	return NeP.DSL.Conditions['deficit'](target)
+end)
+
+--/dump NeP.DSL.Conditions['energy.regen']('player')
+NeP.DSL.RegisterConditon('energy.regen', function(target)
+	local eregen = select(2, GetPowerRegen(target))
+	return eregen
+end)
+
+--/dump NeP.DSL.Conditions['energy.time_to_max']('player')
+NeP.DSL.RegisterConditon('energy.time_to_max', function(target)
+	local deficit = NeP.DSL.Conditions['deficit'](target)
+	local eregen = NeP.DSL.Conditions['energy.regen'](target)
+	return deficit / eregen
+end)
+
+--/dump NeP.DSL.Conditions['focus.deficit']('player')
+NeP.DSL.RegisterConditon('focus.deficit', function(target)
+	return NeP.DSL.Conditions['deficit'](target)
+end)
+
+--/dump NeP.DSL.Conditions['focus.regen']('player')
+NeP.DSL.RegisterConditon('focus.regen', function()
+	local fregen = select(2, GetPowerRegen(target))
+	return fregen
+end)
+
+--/dump NeP.DSL.Conditions['focus.time_to_max']('player')
+NeP.DSL.RegisterConditon('focus.time_to_max', function(target)
+	local deficit = NeP.DSL.Conditions['deficit'](target)
+	local fregen = NeP.DSL.Conditions['focus.regen'](target)
+	return deficit / fregen
 end)
 
 NeP.DSL.RegisterConditon('action.cast_time', function(_, spell)

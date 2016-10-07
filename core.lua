@@ -5,6 +5,7 @@ Xeer = {
 		addonColor = 'ADFF2F',
 		Logo = NeP.Interface.Logo -- Temp until i get a logo
 	},
+	frame = CreateFrame('GameTooltip', 'NeP_ScanningTooltip', UIParent, 'GameTooltipTemplate')
 }
 
 -- Core version check
@@ -61,6 +62,18 @@ NeP.library.register('Xeer', Xeer)
 			return NeP.Engine:STRING(eval)
 		end
 	end
+end
+----------------------------------ToolTips-------------------------------------
+
+function Xeer:Scan_SpellCost(spell)
+	local spell = GetSpellID(GetSpellName(spell))
+	self.frame:SetOwner(UIParent, 'ANCHOR_NONE')
+	self.frame:SetSpellByID(spell)
+	for i = 2, self.frame:NumLines() do
+		local tooltipText = _G["NeP_ScanningTooltipTextLeft" .. i]:GetText()
+		return tooltipText
+	end
+	return false
 end
 
 --------------------------NeP CombatHelper Targeting --------------------------
@@ -144,4 +157,60 @@ end
 			end
 		end
 	end
---------------------------NeP CombatHelper Targeting --------------------------
+
+-------------------------------NeP HoT / DoT API -------------------------------
+
+local function rFilter(expires, duration)
+	if expires and expires ~= 0 then
+		return (expires - GetTime()) < GetReactionTime()
+	end
+end
+
+local function oFilter(owner, spell, spellID, caster)
+	if not owner then
+		if spellID == tonumber(spell) and (caster == 'player' or caster == 'pet') then
+			return false
+		end
+	elseif owner == "any" then
+		if spellID == tonumber(spell) then
+			return false
+		end
+	end
+	return true
+end
+
+ Xeer['UnitHot'] = function(target, spell, owner)
+	local name, count, caster, expires, spellID
+	if tonumber(spell) then
+		local go, i = true, 0
+		while i <= 40 and go do
+			i = i + 1
+			name,_,_,count,_,duration,expires,caster,_,_,spellID = _G['UnitBuff'](target, i)
+			go = oFilter(owner, spell, spellID, caster)
+		end
+	else
+		name,_,_,count,_,duration,expires,caster = _G['UnitBuff'](target, spell)
+	end
+	-- This adds some random factor
+	if name and not rFilter(expires, duration) then
+		return name, count, expires, caster
+	end
+end
+
+ Xeer['UnitDot'] = function(target, spell, owner)
+	local name, count, caster, expires, spellID, power
+	if tonumber(spell) then
+		local go, i = true, 0
+		while i <= 40 and go do
+			i = i + 1
+			name,_,_,count,_,duration,expires,caster,_,_,spellID,_,_,_,power = _G['UnitDebuff'](target, i)
+			go = oFilter(owner, spell, spellID, caster)
+		end
+	else
+		name,_,_,count,_,duration,expires,caster = _G['UnitDebuff'](target, spell)
+	end
+	-- This adds some random factor
+	if name and not rFilter(expires, duration) then
+		return name, count, duration, expires, caster, power
+	end
+end

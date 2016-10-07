@@ -49,7 +49,8 @@ spec=protection
 
 local Keybinds = {
 	-- Pause
-	{'%pause', 'keybind(alt)'},	{'Heroic Leap', 'keybind(lcontrol)' , 'mouseover.ground'}
+	{'%pause', 'keybind(alt)'},
+	{'Heroic Leap', 'keybind(lcontrol)' , 'mouseover.ground'}
 }
 
 local Interrupts = {
@@ -136,7 +137,7 @@ local ST = {
 local inCombat = {
 	{Keybinds},
 	{Interrupts, 'target.interruptAt(40)'},
-	{Cooldowns},
+	--{Cooldowns},
 	{_Xeer},
 	{ST, {'target.range<8', 'target.infront'}}
 }
