@@ -32,6 +32,8 @@ Hunter - Beast Mastery
 
 Mage - Fire
 
+Druid - Feral
+
 ------------------------------------
 
 Future routines + WIP (do not use them even if you see them on github):
@@ -45,8 +47,6 @@ Demon Hunter - Havoc
 Demon Hunter - Vengeance
 
 Druid - Balance
-
-Druid - Feral
 
 Druid - Guardian
 
