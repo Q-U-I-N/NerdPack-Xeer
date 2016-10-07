@@ -165,7 +165,7 @@ local Generator = {
 	--# Refresh Rake early with Bloodtalons
 	--actions.generator+=/rake,if=combo_points<5&(!ticking||(!talent.bloodtalons.enabled&remains<duration*0.3)||(talent.bloodtalons.enabled&buff.bloodtalons.up&(!talent.soul_of_the_forest.enabled&remains<=7||remains<=5)))&target.time_to_die-remains>tick_time
 	{'Rake', 'combo_points<5&{!target.dot(Rake).ticking||{!talent(7,2)&target.dot(Rake).remains<target.dot(Rake).duration*0.3}||{talent(7,2)&buff(Bloodtalons)&{!talent(5,1)&target.dot(Rake).remains<=7||target.dot(Rake).remains<=5}}}&target.time_to_die-target.dot(Rake).remains>target.dot(Rake).tick_time'},
-	{Moonfire, '!prev_gcd(155625)'},
+	{Moonfire, 'talent(1,3)&!prev_gcd(155625)'},
 	--actions.generator+=/thrash_cat,cycle_targets=1,if=remains<=duration*0.3&spell_targets.swipe_cat>=2
 	{'Thrash', 'target.dot(Thrash).remains<=target.dot(Thrash).duration*0.3&area(8).enemies>=2'},
 	--# Brutal Slash if you would cap out charges before the next adds spawn
