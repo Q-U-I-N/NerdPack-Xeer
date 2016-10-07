@@ -8,6 +8,7 @@ https://github.com/MrTheSoulz/NerdPack
 
 im using new features so if you don't have newest, it won't work :P
 
+------Right now all routines are designed for +100 level characters with their class artifact weapons! -------
 
 ------------------------------------
 
@@ -52,7 +53,7 @@ Druid - Guardian
 Hunter - Survival
 
 Mage - Arcane
- 
+
 Mage - Frost
 
 Monk - Windwalker
