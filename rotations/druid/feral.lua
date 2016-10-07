@@ -137,6 +137,11 @@ local Finisher = {
 	--TODO: set_bonus.tier18_4pc
 }
 
+local Moonfire = {
+	--actions.generator+=/moonfire_cat,cycle_targets=1,if=combo_points<5&remains<=4.2&target.time_to_die-remains>tick_time*2
+	{'155625', 'combo_points<5&target.dot(155625).remains<=4.2&target.time_to_die-target.dot(155625).remains>target.dot(155625).tick_time*2'},
+}
+
 local Generator = {
 	--# Brutal Slash if there's adds up
 	--actions.generator=brutal_slash,if=spell_targets.brutal_slash>desired_targets&combo_points<5
@@ -160,8 +165,7 @@ local Generator = {
 	--# Refresh Rake early with Bloodtalons
 	--actions.generator+=/rake,if=combo_points<5&(!ticking||(!talent.bloodtalons.enabled&remains<duration*0.3)||(talent.bloodtalons.enabled&buff.bloodtalons.up&(!talent.soul_of_the_forest.enabled&remains<=7||remains<=5)))&target.time_to_die-remains>tick_time
 	{'Rake', 'combo_points<5&{!target.dot(Rake).ticking||{!talent(7,2)&target.dot(Rake).remains<target.dot(Rake).duration*0.3}||{talent(7,2)&buff(Bloodtalons)&{!talent(5,1)&target.dot(Rake).remains<=7||target.dot(Rake).remains<=5}}}&target.time_to_die-target.dot(Rake).remains>target.dot(Rake).tick_time'},
-	--actions.generator+=/moonfire_cat,cycle_targets=1,if=combo_points<5&remains<=4.2&target.time_to_die-remains>tick_time*2
-	{'155625', 'combo_points<5&target.dot(155625).remains<=4.2&target.time_to_die-target.dot(155625).remains>target.dot(155625).tick_time*2'},
+	{Moonfire, '!prev_gcd(155625)'},
 	--actions.generator+=/thrash_cat,cycle_targets=1,if=remains<=duration*0.3&spell_targets.swipe_cat>=2
 	{'Thrash', 'target.dot(Thrash).remains<=target.dot(Thrash).duration*0.3&area(8).enemies>=2'},
 	--# Brutal Slash if you would cap out charges before the next adds spawn
