@@ -3,9 +3,9 @@ NeP.DSL.RegisterConditon('equipped', function(target, item)
 	if IsEquippedItem(item) == true then return true else return false end
 end)
 
+
+--[[
 --/dump NeP.DSL.Conditions['xinfront.enemies']('10','30')
---/dump NeP.DSL.Conditions['area.enemies']('10','30')
---player.area(8).enemies >= 3
 NeP.DSL.RegisterConditon('xinfront.enemies', function(unit, distance)
 	local total = 0
 	if not UnitExists(unit) then return total end
@@ -22,7 +22,7 @@ NeP.DSL.RegisterConditon('xinfront.enemies', function(unit, distance)
 end)
 
 --]]
-
+-----------------------------------SIMC STUFFS----------------------------------
 NeP.DSL.RegisterConditon('xmoving', function(target)
 	local speed, _ = GetUnitSpeed(target)
 		if speed ~= 0 then
@@ -32,7 +32,6 @@ NeP.DSL.RegisterConditon('xmoving', function(target)
 		end
 end)
 
---------------------------------------FERAL-------------------------------------
 --[[
 	local classTaunt = {
 		[1] = 'Taunt',
@@ -43,8 +42,8 @@ end)
 		[12] = 'Torment'
 	}
 --]]
---/dump NeP.DSL.Conditions['action.cost']('Maim')
---/dump NeP.DSL.Conditions['action.cost']('Rake')
+
+
 local PowerT = {
 	[0] = ('^.-Mana'),
 	[1] = ('^.-Rage'),
@@ -52,6 +51,8 @@ local PowerT = {
 	[3] = ('^.-Energy'),
 }
 
+--/dump NeP.DSL.Conditions['action.cost']('Maim')
+--/dump NeP.DSL.Conditions['action.cost']('Rake')
 --/dump NeP.DSL.Conditions['action.cost']('Rejuvenation')
 NeP.DSL.RegisterConditon('action.cost', function(spell)
 	local costText = Xeer:Scan_SpellCost(spell)
@@ -69,6 +70,7 @@ NeP.DSL.RegisterConditon('action.cost', function(spell)
 		end
 end)
 
+--------------------------------------FERAL-------------------------------------
 local DotTicks = {
 	[1822] = 3,
 	[1079] = 2,
@@ -93,6 +95,7 @@ NeP.DSL.RegisterConditon('dot.tick_time', function(target, spell)
 		end
 	end
 end)
+--------------------------------------FERAL-------------------------------------
 
 --/dump NeP.DSL.Conditions['dot.duration']('target','Rip')
 NeP.DSL.RegisterConditon('dot.duration', function(target, spell)
@@ -132,7 +135,7 @@ end)
 NeP.DSL.RegisterConditon('dot.active_dot', function(target, spell)
 end)
 
------------------------------------SIMC STUFFS----------------------------------
+
 --/dump NeP.DSL.Conditions['cooldown.remains']('player','Combustion')
 --/dump NeP.DSL.Conditions['buff.stack']('player','Incanter\'s Flow')
 --/dump NeP.DSL.Conditions['spell_haste']('player')
@@ -280,6 +283,18 @@ NeP.DSL.RegisterConditon('deficit', function(target)
 	local max = UnitPowerMax(target)
 	local curr = UnitPower(target)
 	return (max - curr)
+end)
+
+--max_energy=1, this means that u will get energy cap in less than one GCD
+--/dump NeP.DSL.Conditions['max_energy']('player')
+NeP.DSL.RegisterConditon('max_energy', function(target)
+	 local ttm = NeP.DSL.Conditions['energy.time_to_max'](target)
+	 local GCD = NeP.DSL.Get('gcd')()
+	 if GCD > ttm then
+		 return 1
+	 else
+		 return false
+	 end
 end)
 
 --/dump NeP.DSL.Conditions['energy.deficit']('player')

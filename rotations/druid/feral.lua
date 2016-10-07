@@ -40,8 +40,8 @@ spec=feral
 }
 
 local Survival = {
-	{'Rejuvenation', 'talent(3,3)&!buff(Rejuvenation)'},
-	{'Swiftmend', 'talent(3,3)&health<=75'},
+--	{'Rejuvenation', 'talent(3,3)&!buff(Rejuvenation)', 'player'},
+--	{'Swiftmend', 'talent(3,3)&player.health<=75', 'player'},
 }
 
 local Interrupts = {
@@ -197,8 +197,8 @@ local Keybinds = {
 local inCombat = {
 	{Keybinds},
 	{Interrupts, {'target.interruptAt(50)', 'toggle(Interrupts)', 'target.infront', 'target.range<8'}},
+--	{Survival},
 	{'Cat Form', 'form~=2'},
-	{Survival, 'player.health<100'},
 	{Cooldowns, 'toggle(cooldowns)'},
 	{xCombat, {'target.range<8', 'target.infront'}},
 }
