@@ -51,7 +51,7 @@ local PowerT = {
 	[3] = ('^.-Energy'),
 }
 
---/dump NeP.DSL.Conditions['action.cost']('Maim')
+
 --/dump NeP.DSL.Conditions['action.cost']('Rake')
 --/dump NeP.DSL.Conditions['action.cost']('Rejuvenation')
 NeP.DSL.RegisterConditon('action.cost', function(spell)
@@ -68,6 +68,26 @@ NeP.DSL.RegisterConditon('action.cost', function(spell)
 		else
 			return 0
 		end
+end)
+
+
+--UnitBuff(Unit,GetSpellInfo(SpellID))
+--/dump GetSpellInfo(190456)
+--/dump UnitBuff('player',GetSpellInfo(190456))
+
+--/dump NeP.DSL.Conditions['ignorepain_cost']()
+NeP.DSL.RegisterConditon('ignorepain_cost', function()
+	return Xeer:Scan_IgnorePain()
+end)
+
+--/dump NeP.DSL.Conditions['ignorepain_max']()
+NeP.DSL.RegisterConditon('ignorepain_max', function()
+	local ss = NeP.DSL.Conditions['health.max']('player')
+	if hasTalent(5,2) == true then
+		return NeP.Core.Round((((77.86412474516502 * 1.70) * ss) / 100))
+	else
+		return NeP.Core.Round(((77.86412474516502 * ss) / 100))
+	end
 end)
 
 --------------------------------------FERAL-------------------------------------
@@ -144,7 +164,9 @@ end)
 --/dump NeP.DSL.Conditions['cast_time']('player','Cinderstorm')
 
 
---/dump NeP.DSL.Conditions['buff']('player','202060')
+--/dump NeP.DSL.Conditions['ignorepain_max']('player')
+
+
 
 NeP.DSL.RegisterConditon('buff.react', function(target, spell)
 	local x = NeP.DSL.Conditions['buff.count'](target, spell)
@@ -207,6 +229,7 @@ NeP.DSL.RegisterConditon('time', function(target)
 	return NeP.DSL.Conditions['combat.time'](target)
 end)
 
+--/dump NeP.DSL.Conditions['spell.cooldown']('player','Rip')
 NeP.DSL.RegisterConditon('cooldown.remains', function(_, spell)
 	if NeP.DSL.Conditions['spell.exists'](_, spell) == true then
 		return NeP.DSL.Conditions['spell.cooldown'](_, spell)
