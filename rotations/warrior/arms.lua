@@ -1,9 +1,5 @@
-local GUI = {
-}
-
 local exeOnLoad = function()
-
-	Xeer.Splash()
+	 NeP.Xeer:Splash()
 
 	print("|cffADFF2F ----------------------------------------------------------------------|r")
 	print("|cffADFF2F --- |rWARRIOR |cffADFF2FArms |r")
@@ -193,7 +189,7 @@ local Interrupts = {
 }
 
 local inCombat = {
-	{Keybinds},	{Interrupts, 'target.interruptAt(40)'},	
+	{Keybinds},	{Interrupts, 'target.interruptAt(40)'},
 	{_Xeer},
 	--{Survival, 'player.health < 100'},
 	--{Cooldowns, 'toggle(cooldowns)'},
@@ -215,4 +211,4 @@ local outCombat = {
 
 }
 
-NeP.Engine.registerRotation(71, '[|cff'..Xeer.Interface.addonColor..'Xeer|r] WARRIOR - Arms', inCombat, outCombat, exeOnLoad, GUI)
+NeP.CR:Add(71, '[|cff'..NeP.Xeer.Interface.addonColor..'Xeer|r] WARRIOR - Arms', inCombat, outCombat, exeOnLoad)

@@ -2,7 +2,7 @@ local GUI = {
 }
 
 local exeOnLoad = function()
-	Xeer.Splash()
+	 NeP.Xeer:Splash()
 
 	print('|cffADFF2F ----------------------------------------------------------------------|r')
 	print('|cffADFF2F --- |rDEMON HUNTER |cffADFF2FVengeance |r')
@@ -122,4 +122,4 @@ local outCombat = {
 	{Keybinds},
 }
 
-NeP.Engine.registerRotation(581, '[|cff'..Xeer.Interface.addonColor..'Xeer|r] DEMON HUNTER - Vengeance', inCombat, outCombat, exeOnLoad, GUI)
+NeP.CR:Add(581, '[|cff'..NeP.Xeer.Interface.addonColor..'Xeer|r] DEMON HUNTER - Vengeance', inCombat, outCombat, exeOnLoad)

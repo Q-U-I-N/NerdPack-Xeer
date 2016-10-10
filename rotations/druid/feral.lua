@@ -1,8 +1,5 @@
-local GUI = {
-}
-
 local exeOnLoad = function()
-	Xeer.Splash()
+	NeP.Xeer:Splash()
 
 	print('|cffADFF2F ----------------------------------------------------------------------|r')
 	print('|cffADFF2F --- |rDRUID |cffADFF2FFeral |r')
@@ -40,6 +37,8 @@ spec=feral
 }
 
 local Survival = {
+-- this was not working in 1.0!! didn't had time to check it yet in 1.5
+
 --	{'Rejuvenation', 'talent(3,3)&!buff(Rejuvenation)', 'player'},
 --	{'Swiftmend', 'talent(3,3)&player.health<=75', 'player'},
 }
@@ -211,4 +210,4 @@ local outCombat = {
 	{Keybinds},
 }
 
-NeP.Engine.registerRotation(103, '[|cff'..Xeer.Interface.addonColor..'Xeer|r] Druid - Feral', inCombat, outCombat, exeOnLoad, GUI)
+NeP.CR:Add(103, '[|cff'..NeP.Xeer.Interface.addonColor..'Xeer|r] Druid - Feral', inCombat, outCombat)

@@ -3,7 +3,7 @@ local GUI = {
 }
 
 local exeOnLoad = function()
-	--Xeer.Splash()
+	-- NeP.Xeer:Splash()
 end
 
 local Survival = {
@@ -51,4 +51,4 @@ local outCombat = {
 	{Keybinds},
 }
 
-NeP.Engine.registerRotation(269, '[|cff'..Xeer.Interface.addonColor..'Xeer|r] Monk - Windwalker', inCombat, outCombat, exeOnLoad, GUI)
+NeP.CR:Add(269, '[|cff'..NeP.Xeer.Interface.addonColor..'Xeer|r] Monk - Windwalker', inCombat, outCombat, exeOnLoad)

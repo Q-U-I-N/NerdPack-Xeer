@@ -4,7 +4,7 @@ local GUI = {
 
 local exeOnLoad = function()
 
-	Xeer.Splash()
+	 NeP.Xeer:Splash()
 
 	print("|cffADFF2F ----------------------------------------------------------------------|r")
 	print("|cffADFF2F --- |rWARLOCK |cffADFF2FDemonology |r")
@@ -159,4 +159,4 @@ local outCombat = {
 	
 }
 
-NeP.Engine.registerRotation(266, '[|cff'..Xeer.Interface.addonColor..'Xeer|r] WARLOCK - Demonology', inCombat, outCombat, exeOnLoad, GUI)
+NeP.CR:Add(266, '[|cff'..NeP.Xeer.Interface.addonColor..'Xeer|r] WARLOCK - Demonology', inCombat, outCombat, exeOnLoad)

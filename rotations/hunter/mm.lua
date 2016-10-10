@@ -3,7 +3,7 @@ local GUI = {
 
 local exeOnLoad = function()
 
-	Xeer.Splash()
+	 NeP.Xeer:Splash()
 
 	print('|cffADFF2F ----------------------------------------------------------------------|r')
 	print('|cffADFF2F --- |rHUNTER |cffADFF2FMarksmanship |r')
@@ -169,4 +169,4 @@ local outCombat = {
 	--{PreCombat}
 }
 
-NeP.Engine.registerRotation(254, '[|cff'..Xeer.Interface.addonColor..'Xeer|r] HUNTER - Marksmanship', inCombat, outCombat, exeOnLoad, GUI)
+NeP.CR:Add(254, '[|cff'..NeP.Xeer.Interface.addonColor..'Xeer|r] HUNTER - Marksmanship', inCombat, outCombat, exeOnLoad)

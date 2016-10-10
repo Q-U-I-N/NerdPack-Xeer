@@ -1,23 +1,14 @@
-Xeer = {
-	Version = 0.00001,
-	Branch = 'BETA',
-	Interface = {
-		addonColor = 'ADFF2F',
-		Logo = NeP.Interface.Logo -- Temp until i get a logo
-	},
-	frame = CreateFrame('GameTooltip', 'NeP_ScanningTooltip', UIParent, 'GameTooltipTemplate')
+NeP.Xeer = {
+		Version = 0.00001,
+		Branch = 'BETA',
+		Interface = {
+			addonColor = 'ADFF2F',
+		--	Logo = NeP.Interface.Logo -- Temp until i get a logo
+		},
+		frame = CreateFrame('GameTooltip', 'NeP_ScanningTooltip', UIParent, 'GameTooltipTemplate')
 }
 
--- Core version check
-if NeP.Info.Version >= 70.8 then
-	NeP.Core.Print('Loaded |T'..Xeer.Interface.Logo..':10:10|t[|cff'..Xeer.Interface.addonColor..'Xeer|r] Combat-Routines v:'..Xeer.Version)
-else
-	NeP.Core.Print('Failed to load Xeer Combat Routines.\nYour Core is outdated.')
-	return
-end
-
 local Parse = NeP.DSL.Parse
-local Fetch = NeP.Interface.fetchKey
 
 --[[
 	local classTaunt = {
@@ -30,27 +21,28 @@ local Fetch = NeP.Interface.fetchKey
 	}
 --]]
 
-NeP.library.register('Xeer', Xeer)
+--NeP.library.register('Xeer', Xeer)
 
 	-- Temp Hack
-	function Xeer.Splash()
-		NeP.Interface.CreateToggle(
-			'AutoTarget',
-			'Interface\\Icons\\ability_hunter_snipershot',
-			'Auto Target',
-			'Automatically target the nearest enemy when target dies or does not exist')
+	function NeP.Xeer:Splash()
+		NeP.Interface:AddToggle({
+			key = 'AutoTarget',
+			name = 'Auto Target',
+			text = 'Automatically target the nearest enemy when target dies or does not exist',
+			icon = 'Interface\\Icons\\ability_hunter_snipershot',
+		})
 	end
 
-	function Xeer.ClassSetting(key)
+	function NeP.Xeer:ClassSetting(key)
 		local name = '|cff'..NeP.Core.classColor('player')..'Class Settings'
 		NeP.Interface.CreateSetting(name, function() NeP.Interface.ShowGUI(key) end)
 	end
 
-	function Xeer.dynEval(condition, spell)
+	function NeP.Xeer:dynEval(condition, spell)
 		return Parse(condition, spell or '')
 	end
 
-	function Xeer.Taunt(eval, args)
+	function NeP.Xeer:Taunt(eval, args)
 	local spell = NeP.Engine:Spell(args)
 	if not spell then return end
 	for i=1,#NeP.OM['unitEnemie'] do
@@ -64,8 +56,8 @@ NeP.library.register('Xeer', Xeer)
 	end
 end
 
---[[
-function Xeer.Round(num, idp)
+
+function NeP.Xeer:Round(num, idp)
 	if num then
 		local mult = 10^(idp or 0)
 		return math.floor(num * mult + 0.5) / mult
@@ -73,10 +65,33 @@ function Xeer.Round(num, idp)
 		return 0
 	end
 end
---]]
+
+function NeP.Xeer:ShortNumber(number)
+    local affixes = { "", "k", "m", "b", }
+    local affix = 1
+    local dec = 0
+    local num1 = math.abs(number)
+    while num1 >= 1000 and affix < #affixes do
+        num1 = num1 / 1000
+        affix = affix + 1
+    end
+    if affix > 1 then
+        dec = 2
+        local num2 = num1
+        while num2 >= 10 do
+            num2 = num2 / 10
+            dec = dec - 1
+        end
+    end
+    if number < 0 then
+        num1 = - num1
+    end
+    return string.format("%."..dec.."f"..affixes[affix], num1)
+end
+
 ----------------------------------ToolTips-------------------------------------
---/dump Xeer:Scan_SpellCost('Rip')
-function Xeer:Scan_SpellCost(spell)
+--/dump NeP.Xeer:Scan_SpellCost('Rip')
+function NeP.Xeer:Scan_SpellCost(spell)
 	local spell = GetSpellID(GetSpellName(spell))
 	self.frame:SetOwner(UIParent, 'ANCHOR_NONE')
 	self.frame:SetSpellByID(spell)
@@ -87,8 +102,8 @@ function Xeer:Scan_SpellCost(spell)
 	return false
 end
 
---/dump Xeer:Scan_IgnorePain()
-function Xeer:Scan_IgnorePain()
+--/dump NeP.Xeer:Scan_IgnorePain()
+function NeP.Xeer:Scan_IgnorePain()
 	for i = 1, 40 do
 		local qqq = select(11,UnitBuff('player', i))
 		if qqq == 190456 then
@@ -103,7 +118,7 @@ function Xeer:Scan_IgnorePain()
 end
 
 --------------------------NeP CombatHelper Targeting --------------------------
-
+--[[
 	local NeP_forceTarget = {
 		-- WOD DUNGEONS/RAIDS
 		[75966] = 100,	-- Defiled Spirit (Shadowmoon Burial Grounds)
@@ -160,7 +175,7 @@ end
 		return prio
 	end
 
-	function Xeer.Targeting()
+	function NeP.Xeer:Targeting()
 		-- If dont have a target, target is friendly or dead
 		if not UnitExists('target') or UnitIsFriend('player', 'target') or UnitIsDeadOrGhost('target') then
 			local setPrio = {}
@@ -183,14 +198,9 @@ end
 			end
 		end
 	end
+--]]
 
 -------------------------------NeP HoT / DoT API -------------------------------
-
-local function rFilter(expires, duration)
-	if expires and expires ~= 0 then
-		return (expires - GetTime()) < GetReactionTime()
-	end
-end
 
 local function oFilter(owner, spell, spellID, caster)
 	if not owner then
@@ -205,7 +215,7 @@ local function oFilter(owner, spell, spellID, caster)
 	return true
 end
 
- Xeer['UnitHot'] = function(target, spell, owner)
+local UnitHot = function(target, spell, owner)
 	local name, count, caster, expires, spellID
 	if tonumber(spell) then
 		local go, i = true, 0
@@ -218,12 +228,10 @@ end
 		name,_,_,count,_,duration,expires,caster = _G['UnitBuff'](target, spell)
 	end
 	-- This adds some random factor
-	if name and not rFilter(expires, duration) then
 		return name, count, expires, caster
-	end
 end
 
- Xeer['UnitDot'] = function(target, spell, owner)
+local UnitDot = function(target, spell, owner)
 	local name, count, caster, expires, spellID, power
 	if tonumber(spell) then
 		local go, i = true, 0
@@ -236,41 +244,41 @@ end
 		name,_,_,count,_,duration,expires,caster = _G['UnitDebuff'](target, spell)
 	end
 	-- This adds some random factor
-	if name and not rFilter(expires, duration) then
 		return name, count, duration, expires, caster, power
-	end
 end
 
+-------------------------------- WARRIOR ---------------------------------------
 
---/dump Xeer.getIgnorePain()
-function Xeer.getIgnorePain()
+--/dump NeP.Xeer:getIgnorePain()
+function NeP.Xeer:getIgnorePain()
 		--output
 		local matchTooltip = false
 		local showPercentage = false
 		local simpleOutput = false
 		--Rage
-    local curRage = UnitPower("player")
+    local curRage = UnitPower('player')
     local costs = GetSpellPowerCost(190456)
     local minRage = costs[1].minCost or 20
     local maxRage = costs[1].cost or 60
     local calcRage = math.max(minRage, math.min(maxRage, curRage))
 
     --attack power
-    local apBase, apPos, apNeg = UnitAttackPower("player")
+    local apBase, apPos, apNeg = UnitAttackPower('player')
 
     --Versatility rating
     local vers = 1 + ((GetCombatRatingBonus(29) + GetVersatilityBonus(30)) / 100)
 
+--[[
     --Dragon Skin
     --check artifact traits
     local currentRank = 0
     local loaded = true
     if loaded then
-        artifactID = NeP.DSL.Conditions['artifact.active_id']()
+        artifactID = NeP.DSL:Get['artifact.active_id']()
         if not artifactID then
-            NeP.DSL.Conditions['artifact.force_update']()
+            NeP.DSL:Get['artifact.force_update']()
         end
-        local _, traits = NeP.DSL.Conditions['artifact.traits'](artifactID)
+        local _, traits = NeP.DSL:Get['artifact.traits'](artifactID)
         if traits then
             for _,v in ipairs(traits) do
                 if v.spellID == 203225 then
@@ -281,13 +289,14 @@ function Xeer.getIgnorePain()
         end
     end
     local trait = 1 + 0.02 * currentRank
+--]]
 
     --Dragon Scales
-    local scales = UnitBuff("player", GetSpellInfo(203581)) and 1.6 or 1
+    local scales = UnitBuff('player', GetSpellInfo(203581)) and 1.6 or 1
 
     --Never Surrender
-    local curHP = UnitHealth("player")
-    local maxHP = UnitHealthMax("player")
+    local curHP = UnitHealth('player')
+    local maxHP = UnitHealthMax('player')
     local misPerc = (maxHP - curHP) / maxHP
     local nevSur = select(4, GetTalentInfo(5, 2, 1))
     local nevSurPerc = nevSur and (1 + 0.75 * misPerc) or 1
@@ -295,24 +304,24 @@ function Xeer.getIgnorePain()
     --Indomitable
     local indom = select(4, GetTalentInfo(5, 3, 1)) and 1.25 or 1
 
-    --T18
-    ---local t18 = UnitBuff("player", GetSpellInfo(12975)) and Xeer.GetNumSetPieces("T18") >= 4 and 2 or 1
+		--T18
+    local t18 = UnitBuff("player", GetSpellInfo(12975)) and NeP.Xeer:GetNumberSetPieces("T18") >= 4 and 2 or 1
 
-
-
-    local curIP = select(17, UnitBuff("player", GetSpellInfo(190456))) or 0
+    local curIP = select(17, UnitBuff('player', GetSpellInfo(190456))) or 0
     if matchTooltip then
         curIP = curIP / 0.9 --get the tooltip value instead of the absorb
     end
 
     local maxIP = (apBase + apPos + apNeg) * 18.6 * vers * indom * scales
-    if not matchTooltip then
-        maxIP = NeP.Core.Round(maxIP * 0.9)
+    if  not matchTooltip then --some TODO notes so i wont forget fix it:
+        --maxIP = NeP.Xeer:Round(maxIP * 0.9) - missing dragon skin arti passive -> * trait!!! missing 0.02-0.06
+				maxIP = NeP.Xeer:Round(maxIP * 1.04) -- tooltip value my test with 2/3 dragon skin
+				--maxIP = NeP.Xeer:Round((maxIP * 0.9) * trait) -- need enable after got arti lib again
     end
 
-    local newIP = NeP.Core.Round(maxIP * (calcRage / maxRage) * trait * nevSurPerc) --*t18
+    local newIP = NeP.Xeer:Round(maxIP * (calcRage / maxRage) * 1 * nevSurPerc * t18) --*t18 *trait instead 1
 
-    local cap = NeP.Core.Round(maxIP * 3)
+    local cap = NeP.Xeer:Round(maxIP * 3)
     if nevSur then
         cap = cap * 1.75
     end
@@ -321,21 +330,47 @@ function Xeer.getIgnorePain()
 
     local castIP = math.min(diff, newIP)
 
-    local castPerc = NeP.Core.Round((castIP / cap) * 100)
-    local curPerc = NeP.Core.Round((curIP / cap) * 100)
+    local castPerc = NeP.Xeer:Round((castIP / cap) * 100)
+    local curPerc = NeP.Xeer:Round((curIP / cap) * 100)
 
 --[[
     if showPercentage then
         if simpleOutput then
-            return string.format("|c%s%.1f%%%%|r", color, curPerc*100)
+            return string.format('|c%s%.1f%%%%|r', color, curPerc*100)
         end
-        return string.format("|c%s%.1f%%%%|r\n%.1f%%%%", color, castPerc*100, curPerc*100)
+        return string.format('|c%s%.1f%%%%|r\n%.1f%%%%', color, castPerc*100, curPerc*100)
     end
     if simpleOutput then
-        return string.format("|c%s%s|r", color, shortenNumber(curIP))
+        return string.format('|c%s%s|r', color, shortenNumber(curIP))
     end
-    return string.format("|c%s%s|r\n%s", color, shortenNumber(castIP), shortenNumber(curIP))
+    return string.format('|c%s%s|r\n%s', color, shortenNumber(castIP), shortenNumber(curIP))
 --]]
 	return cap, diff, curIP, curPerc, castIP, castPerc, maxIP, newIP, minRage, maxRage, calcRage
 --maxIP = 268634.7
 end
+
+--set bonuses
+--/dump NeP.Xeer:GetNumberSetPieces('T18', 'WARRIOR')
+function NeP.Xeer:GetNumberSetPieces(set, class)
+    class = class or select(2, UnitClass("player"))
+    local pieces = NeP.Xeer.sets[class][set] or {}
+    local counter = 0
+    for _, itemID in ipairs(pieces) do
+        if IsEquippedItem(itemID) then
+            counter = counter + 1
+        end
+    end
+    return counter
+end
+
+NeP.Xeer.sets = {
+    ["WARRIOR"] = {
+        ["T18"] = {
+            124319,
+            124329,
+            124334,
+            124340,
+            124346,
+        },
+    },
+}

@@ -1,7 +1,6 @@
-## Title: |r[|cffADFF2FXeer|r] Combat Routines
-## Notes: Custom Combat Routines for NerdPack.
+## Title: |r[|cffADFF2FXeer|r] Combat Routines - 2.0
+## Notes: Custom Combat Routines for NerdPack-2.0.
 ## Interface: 70000
-## Dependencies: NerdPack
 ## Author: Xeer
 
 Xeer.xml

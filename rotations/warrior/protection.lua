@@ -1,19 +1,17 @@
-local GUI = {
-}
-
 local exeOnLoad = function()
-	Xeer.Splash()
+	NeP.Xeer:Splash()
 
 	print("|cffADFF2F ----------------------------------------------------------------------|r")
 	print("|cffADFF2F --- |rWARRIOR |cffADFF2FProtection |r")
 	print("|cffADFF2F --- |rRecommended Talents: 1/1 - 2/1 - 3/2 - 4/2 - 5/3 - 6/1 - 7/2")
 	print("|cffADFF2F ----------------------------------------------------------------------|r")
 
-	NeP.Interface.CreateToggle(
-		'AutoTaunt',
-		'Interface\\Icons\\spell_nature_shamanrage',
-		'Auto Taunt',
-		'Automatically taunt nearby enemies.')
+	NeP.Interface:AddToggle({
+		key = 'AutoTaunt',
+		name = 'Auto Taunt',
+		text = 'Automatically taunt nearby enemies.',
+		icon = 'Interface\\Icons\\spell_nature_shamanrage',
+	})
 
 end
 
@@ -148,4 +146,4 @@ local outCombat = {
 --{PreCombat}
 }
 
-NeP.Engine.registerRotation(73, '[|cff'..Xeer.Interface.addonColor..'Xeer|r] WARRIOR - Protection', inCombat, outCombat, exeOnLoad, GUI)
+NeP.CR:Add(73, '[|cff'..NeP.Xeer.Interface.addonColor..'Xeer|r] WARRIOR - Protection', inCombat, outCombat, exeOnLoad)

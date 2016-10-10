@@ -2,7 +2,7 @@ local GUI = {
 }
 
 local exeOnLoad = function()
-	Xeer.Splash()
+	 NeP.Xeer:Splash()
 
 	print('|cffADFF2F ----------------------------------------------------------------------|r')
 	print('|cffADFF2F --- |rSHAMAN |cffADFF2FElemental |r')
@@ -182,4 +182,4 @@ local outCombat = {
 	--{PreCombat}
 }
 
-NeP.Engine.registerRotation(262, '[|cff'..Xeer.Interface.addonColor..'Xeer|r] Shaman - Elemental', inCombat, outCombat, exeOnLoad, GUI)
+NeP.CR:Add(262, '[|cff'..NeP.Xeer.Interface.addonColor..'Xeer|r] Shaman - Elemental', inCombat, outCombat, exeOnLoad)

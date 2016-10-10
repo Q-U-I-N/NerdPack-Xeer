@@ -1,9 +1,5 @@
-local GUI = {
-}
-
 local exeOnLoad = function()
-
-	Xeer.Splash()
+	 NeP.Xeer:Splash()
 
 	print("|cffADFF2F ----------------------------------------------------------------------|r")
 	print("|cffADFF2F --- |rWARRIOR |cffADFF2FFury |r")
@@ -194,4 +190,4 @@ local outCombat = {
 	--{PreCombat},
 }
 
-NeP.Engine.registerRotation(72, '[|cff'..Xeer.Interface.addonColor..'Xeer|r] WARRIOR - Fury', inCombat, outCombat, exeOnLoad, GUI)
+NeP.CR:Add(72, '[|cff'..NeP.Xeer.Interface.addonColor..'Xeer|r] WARRIOR - Fury', inCombat, outCombat, exeOnLoad)
