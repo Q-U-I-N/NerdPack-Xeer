@@ -127,7 +127,7 @@ local ST = {
 	{AoE, 'area(8).enemies>=2'},
 	{Something},
 	--actions.prot+=/neltharions_fury,if=incoming_damage_2500ms>health.max*0.20&!buff.shield_block.up
-	{'Neltharion\'s Fury', 'incdmg(2.5)>health.max*0.20&target.infront&!buff(Shield Block)'},
+	{'Neltharion\'s Fury', 'incdmg(2.5)>health.max*0.20&!buff(Shield Block)'},
 	--actions.prot+=/shield_slam,if=!(cooldown.shield_block.remains<=gcd.max*2&!buff.shield_block.up&talent.heavy_repercussions.enabled)
 	{'Shield Slam', '!{spell(Shield Block).cooldown<=gcd&!buff(Shield Block)&talent(7,2)}||{buff(Vengeance: Ignore Pain)&buff(Ignore Pain).duration<=gcd*2&rage<13}||{!buff(Vengeance: Ignore Pain)&buff(Ignore Pain).duration<=gcd*2&rage<20}||'},
 	{'Shield Slam', '!talent(7,2)'},
