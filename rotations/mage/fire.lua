@@ -109,7 +109,7 @@ local Combustion = {
 	--actions.combustion_phase+=/pyroblast,if=buff.hot_streak.up
 	{'Pyroblast', 'buff(Hot Streak!)'},
 	--actions.combustion_phase+=/fire_blast,if=buff.heating_up.up
-	{'!Fire Blast', 'action(Fire Blast).charges>=1&buff(Heating Up)'},
+	{'&Fire Blast', 'action(Fire Blast).charges>=1&buff(Heating Up)'},
 	--actions.combustion_phase+=/phoenixs_flames
 	{'Phoenix\'s Flames', 'artifact(Phoenix\'s Flames).equipped'},
 	--actions.combustion_phase+=/scorch,if=buff.combustion.remains>cast_time
@@ -128,7 +128,7 @@ local RoP = {
 	--actions.rop_phase+=/pyroblast,if=buff.kaelthas_ultimate_ability.react
 	{'Pyroblast', 'buff(Kael\'thas\'s Ultimate Ability).react'},
 	--actions.rop_phase+=/fire_blast,if=!prev_off_gcd.fire_blast
-	{'Fire Blast', 'action(Fire Blast).charges>=1&!prev_off_gcd(Fire Blast)'},
+	{'&Fire Blast', 'action(Fire Blast).charges>=1&!prev_off_gcd(Fire Blast)'},
 	--actions.rop_phase+=/phoenixs_flames,if=!prev_gcd.phoenixs_flames
 	{'Phoenix\'s Flames', 'artifact(Phoenix\'s Flames).equipped&!prev_gcd(Phoenix\'s Flames)'},
 	--actions.rop_phase+=/scorch,if=target.health.pct<=25&equipped.132454
@@ -153,9 +153,9 @@ local MainRotation = {
 	--actions.single_target+=/call_action_list,name=active_talents
 	{Talents},
 	--actions.single_target+=/fire_blast,if=!talent.kindling.enabled&buff.heating_up.up&(!talent.rune_of_power.enabled||charges_fractional>1.4||cooldown.combustion.remains<40)&(3-charges_fractional)*(12*spell_haste)<cooldown.combustion.remains+3||target.time_to_die.remains<4
-	{'!Fire Blast', '!talent(7,1)&buff(Heating Up)&{!talent(3,2)||action(Fire Blast).charges>1.4||cooldown(Combustion).remains<40}&{3-action(Fire Blast).charges}*{12*spell_haste}<=cooldown(Combustion).remains||target.time_to_die.remains<4'},
+	{'&Fire Blast', '!talent(7,1)&buff(Heating Up)&{!talent(3,2)||action(Fire Blast).charges>1.4||cooldown(Combustion).remains<40}&{3-action(Fire Blast).charges}*{12*spell_haste}<=cooldown(Combustion).remains||target.time_to_die.remains<4'},
 	--actions.single_target+=/fire_blast,if=talent.kindling.enabled&buff.heating_up.up&(!talent.rune_of_power.enabled||charges_fractional>1.5||cooldown.combustion.remains<40)&(3-charges_fractional)*(18*spell_haste)<cooldown.combustion.remains+3||target.time_to_die.remains<4
-	{'!Fire Blast', 'talent(7,1)&buff(Heating Up)&{!talent(3,2)||action(Fire Blast).charges>1.5||{cooldown(Combustion).remains<40}}&{3-action(Fire Blast).charges}*{18*spell_haste}<=cooldown(Combustion).remains||target.time_to_die.remains<4'},
+	{'&Fire Blast', 'talent(7,1)&buff(Heating Up)&{!talent(3,2)||action(Fire Blast).charges>1.5||{cooldown(Combustion).remains<40}}&{3-action(Fire Blast).charges}*{18*spell_haste}<=cooldown(Combustion).remains||target.time_to_die.remains<4'},
 	--actions.single_target+=/phoenixs_flames,if=(buff.combustion.up||buff.rune_of_power.up||buff.incanters_flow.stack>3||talent.mirror_image.enabled)&artifact.phoenix_reborn.enabled&(4-charges_fractional)*13<cooldown.combustion.remains+5||target.time_to_die.remains<10
 	{'Phoenix\'s Flames', '{buff(Combustion)||buff(Rune of Power)||buff(Incanter\'s Flow).stack>3||talent(3,1)}&{4-action(Phoenix\'s Flames).charges} * 13<cooldown(Combustion).remains + 5||target.time_to_die.remains<10'},
 	--actions.single_target+=/phoenixs_flames,if=(buff.combustion.up||buff.rune_of_power.up)&(4-charges_fractional)*30<cooldown.combustion.remains+5
@@ -170,7 +170,7 @@ local xCombat = {
 	--actions+=/call_action_list,name=combustion_phase,if=cooldown.combustion.remains<=action.rune_of_power.cast_time+(!talent.kindling.enabled*gcd)||buff.combustion.up
 	{Combustion, 'cooldown(Combustion).remains<=action(Rune of Power).cast_time||buff(Combustion)'},
 	--actions+=/call_action_list,name=rop_phase,if=buff.rune_of_power.up&buff.combustion.down
-	{RoP, 'buff(Rune of Power)&!buff(Combustion)'},
+	{RoP, 'buff(Rune of Power)&!buff(Combustion)&xmoving=0'},
 	--actions+=/call_action_list,name=single_target
 	{MainRotation}
 }

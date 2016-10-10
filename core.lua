@@ -55,7 +55,7 @@ NeP.library.register('Xeer', Xeer)
 	if not spell then return end
 	for i=1,#NeP.OM['unitEnemie'] do
 		local Obj = NeP.OM['unitEnemie'][i]
-		local Threat = UnitThreatSituation("player", Obj.key)
+		local Threat = UnitThreatSituation('player', Obj.key)
 		if Threat and Threat >= 0 and Threat < 3 and Obj.distance <= 30 then
 			eval.spell = spell
 			eval.target = Obj.key
@@ -63,15 +63,41 @@ NeP.library.register('Xeer', Xeer)
 		end
 	end
 end
-----------------------------------ToolTips-------------------------------------
 
+--[[
+function Xeer.Round(num, idp)
+	if num then
+		local mult = 10^(idp or 0)
+		return math.floor(num * mult + 0.5) / mult
+	else
+		return 0
+	end
+end
+--]]
+----------------------------------ToolTips-------------------------------------
+--/dump Xeer:Scan_SpellCost('Rip')
 function Xeer:Scan_SpellCost(spell)
 	local spell = GetSpellID(GetSpellName(spell))
 	self.frame:SetOwner(UIParent, 'ANCHOR_NONE')
 	self.frame:SetSpellByID(spell)
 	for i = 2, self.frame:NumLines() do
-		local tooltipText = _G["NeP_ScanningTooltipTextLeft" .. i]:GetText()
+		local tooltipText = _G['NeP_ScanningTooltipTextLeft' .. i]:GetText()
 		return tooltipText
+	end
+	return false
+end
+
+--/dump Xeer:Scan_IgnorePain()
+function Xeer:Scan_IgnorePain()
+	for i = 1, 40 do
+		local qqq = select(11,UnitBuff('player', i))
+		if qqq == 190456 then
+			self.frame:SetOwner(UIParent, 'ANCHOR_NONE')
+			self.frame:SetUnitBuff('player', i)
+			local tooltipText = _G['NeP_ScanningTooltipTextLeft2']:GetText()
+			local match = tooltipText:lower():match('of the next.-$')
+    	return gsub(match, '%D', '') + 0
+		end
 	end
 	return false
 end
@@ -171,7 +197,7 @@ local function oFilter(owner, spell, spellID, caster)
 		if spellID == tonumber(spell) and (caster == 'player' or caster == 'pet') then
 			return false
 		end
-	elseif owner == "any" then
+	elseif owner == 'any' then
 		if spellID == tonumber(spell) then
 			return false
 		end
@@ -213,4 +239,103 @@ end
 	if name and not rFilter(expires, duration) then
 		return name, count, duration, expires, caster, power
 	end
+end
+
+
+--/dump Xeer.getIgnorePain()
+function Xeer.getIgnorePain()
+		--output
+		local matchTooltip = false
+		local showPercentage = false
+		local simpleOutput = false
+		--Rage
+    local curRage = UnitPower("player")
+    local costs = GetSpellPowerCost(190456)
+    local minRage = costs[1].minCost or 20
+    local maxRage = costs[1].cost or 60
+    local calcRage = math.max(minRage, math.min(maxRage, curRage))
+
+    --attack power
+    local apBase, apPos, apNeg = UnitAttackPower("player")
+
+    --Versatility rating
+    local vers = 1 + ((GetCombatRatingBonus(29) + GetVersatilityBonus(30)) / 100)
+
+    --Dragon Skin
+    --check artifact traits
+    local currentRank = 0
+    local loaded = true
+    if loaded then
+        artifactID = NeP.DSL.Conditions['artifact.active_id']()
+        if not artifactID then
+            NeP.DSL.Conditions['artifact.force_update']()
+        end
+        local _, traits = NeP.DSL.Conditions['artifact.traits'](artifactID)
+        if traits then
+            for _,v in ipairs(traits) do
+                if v.spellID == 203225 then
+                    currentRank = v.currentRank
+                    break
+                end
+            end
+        end
+    end
+    local trait = 1 + 0.02 * currentRank
+
+    --Dragon Scales
+    local scales = UnitBuff("player", GetSpellInfo(203581)) and 1.6 or 1
+
+    --Never Surrender
+    local curHP = UnitHealth("player")
+    local maxHP = UnitHealthMax("player")
+    local misPerc = (maxHP - curHP) / maxHP
+    local nevSur = select(4, GetTalentInfo(5, 2, 1))
+    local nevSurPerc = nevSur and (1 + 0.75 * misPerc) or 1
+
+    --Indomitable
+    local indom = select(4, GetTalentInfo(5, 3, 1)) and 1.25 or 1
+
+    --T18
+    ---local t18 = UnitBuff("player", GetSpellInfo(12975)) and Xeer.GetNumSetPieces("T18") >= 4 and 2 or 1
+
+
+
+    local curIP = select(17, UnitBuff("player", GetSpellInfo(190456))) or 0
+    if matchTooltip then
+        curIP = curIP / 0.9 --get the tooltip value instead of the absorb
+    end
+
+    local maxIP = (apBase + apPos + apNeg) * 18.6 * vers * indom * scales
+    if not matchTooltip then
+        maxIP = NeP.Core.Round(maxIP * 0.9)
+    end
+
+    local newIP = NeP.Core.Round(maxIP * (calcRage / maxRage) * trait * nevSurPerc) --*t18
+
+    local cap = NeP.Core.Round(maxIP * 3)
+    if nevSur then
+        cap = cap * 1.75
+    end
+
+    local diff = cap - curIP
+
+    local castIP = math.min(diff, newIP)
+
+    local castPerc = NeP.Core.Round((castIP / cap) * 100)
+    local curPerc = NeP.Core.Round((curIP / cap) * 100)
+
+--[[
+    if showPercentage then
+        if simpleOutput then
+            return string.format("|c%s%.1f%%%%|r", color, curPerc*100)
+        end
+        return string.format("|c%s%.1f%%%%|r\n%.1f%%%%", color, castPerc*100, curPerc*100)
+    end
+    if simpleOutput then
+        return string.format("|c%s%s|r", color, shortenNumber(curIP))
+    end
+    return string.format("|c%s%s|r\n%s", color, shortenNumber(castIP), shortenNumber(curIP))
+--]]
+	return cap, diff, curIP, curPerc, castIP, castPerc, maxIP, newIP, minRage, maxRage, calcRage
+--maxIP = 268634.7
 end
