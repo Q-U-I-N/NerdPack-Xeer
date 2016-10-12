@@ -1,12 +1,12 @@
 Xeer= {
-		Version = 0.00001,
+		Version = 0.01,
 		Branch = 'BETA',
 		Name = 'NerdPack- Xeer Routines',
 		Author = 'Xeer',
 		Interface = {
 			addonColor = 'ADFF2F',
-			Logo = 'Interface\\AddOns\\NerdPack-MTS_Routines\\media\\logo.blp',
-			Splash = 'Interface\\AddOns\\NerdPack-MTS_Routines\\media\\splash.blp'
+			Logo = 'Interface\\AddOns\\NerdPack-Xeer\\media\\logo.blp',
+			Splash = 'Interface\\AddOns\\NerdPack-Xeer\\media\\splash.blp'
 		},
 		frame = CreateFrame('GameTooltip', 'NeP_ScanningTooltip', UIParent, 'GameTooltipTemplate')
 }
