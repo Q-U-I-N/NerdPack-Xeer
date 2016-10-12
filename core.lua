@@ -1,4 +1,4 @@
-Xeer= {
+Xeer = {
 		Version = 0.01,
 		Branch = 'BETA',
 		Name = 'NerdPack- Xeer Routines',
@@ -10,6 +10,7 @@ Xeer= {
 		},
 		frame = CreateFrame('GameTooltip', 'NeP_ScanningTooltip', UIParent, 'GameTooltipTemplate')
 }
+
 Xeer.Core = {}
 
 --local Parse = NeP.DSL.Parse
