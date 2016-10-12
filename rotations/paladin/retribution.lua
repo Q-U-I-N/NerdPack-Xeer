@@ -1,15 +1,11 @@
-local GUI = {
-
-}
-
 local exeOnLoad = function()
 	 Xeer.ExeOnLoad()
 
 	print('|cffADFF2F ----------------------------------------------------------------------|r')
 	print('|cffADFF2F --- |rPALADIN |cffADFF2FRetribution |r')
 	print('|cffADFF2F --- |rRecommended Talents: 1/2 - 2/2 - 3/3 - 4/1 - 5/2 - 6/2 - 7/3')
-	print('|cffADFF2F ----------------------------------------------------------------------|r')	
-	
+	print('|cffADFF2F ----------------------------------------------------------------------|r')
+
 end
 
 local _Xeer = { -- some non-SiMC stuffs
@@ -26,7 +22,7 @@ talents=1111112
 artifact=2:136717:137316:136717:0:40:1:41:3:42:3:47:1:50:3:51:3:53:6:350:1:353:1:1275:1
 spec=retribution
 --]]
-	
+
 }
 
 local PreCombat = {
@@ -46,13 +42,13 @@ local Keybinds = {
 
 	-- Pause
 	{'%pause', 'keybind(alt)'}
-	
+
 }
 local Survival = {
 
 	{'Lay on Hands', 'player.health <= 20'},
 	--{'Flash of Light', 'player.health <= 40'},
-	
+
 }
 
 local Interupts = {
@@ -73,7 +69,7 @@ local Cooldowns = {
 	--actions+=/wake_of_ashes,if=holy_power>=0&time<2
 	--actions+=/execution_sentence,if=spell_targets.divine_storm<=3&(cooldown.judgment.remains<gcd*4.5||debuff.judgment.remains>gcd*4.67)&(!talent.crusade.enabled||cooldown.crusade.remains>gcd*2)
 	{'Execution Sentence', {
-		'player.area(6).enemies <=3', 
+		'player.area(6).enemies <=3',
 		{'spell(Judgment).cooldown < gcd * 4.5', 'or', 'target.debuff(judgment).duration > gcd * 4.5'},
 		{'!talent(7,2)', 'or', 'spell(Crusade).cooldown > gcd * 2'}
 	},'target'},
@@ -148,12 +144,12 @@ local virtues_blade = {
 		{'Divine Storm', {'player.area(6).enemies >= 2', 'player.buff(Divine Purpose)'}},
 		--actions.VB+=/divine_storm,if=debuff.judgment.up&spell_targets.divine_storm>=2&buff.the_fires_of_justice.react&(!talent.crusade.enabled||cooldown.crusade.remains>gcd*3)
 		{'Divine Storm', {
-			'player.area(6).enemies >= 2', 'player.buff(The Fires of Justice)', 
+			'player.area(6).enemies >= 2', 'player.buff(The Fires of Justice)',
 			{'!talent(7,2)', 'or', 'spell(Crusade).cooldown > gcd * 3'}
 		}},
 		--actions.VB+=/divine_storm,if=debuff.judgment.up&spell_targets.divine_storm>=2&holy_power>=4&(!talent.crusade.enabled||cooldown.crusade.remains>gcd*4)
 		{'Divine Storm', {
-			'player.area(6).enemies >= 2', 'player.holypower >= 4', 
+			'player.area(6).enemies >= 2', 'player.holypower >= 4',
 			{'!talent(7,2)', 'or', 'spell(Crusade).cooldown > gcd * 4'}
 		}},
 		--actions.VB+=/justicars_vengeance,if=debuff.judgment.up&buff.divine_purpose.react&!equipped.whisper_of_the_nathrezim
@@ -264,7 +260,7 @@ local inCombat = {
 		--actions+=/call_action_list,name=DH,if=talent.divine_hammer.enabled
 		{divine_hammer, 'talent(4,3)'}
 	},{'target.range < 8', 'target.infront'}}
-	
+
 }
 
 NeP.CR:Add(70, '[|cff'..Xeer.Interface.addonColor..'Xeer|r] PALADIN - Retribution', inCombat, outCombat, exeOnLoad)

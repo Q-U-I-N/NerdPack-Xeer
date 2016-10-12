@@ -133,7 +133,7 @@ local RoP = {
 
 local MainRotation = {
 	--actions.single_target=pyroblast,if=buff.hot_streak.up&buff.hot_streak.remains<action.fireball.execute_time
-	{'Pyroblast', 'player.buff(Hot Streak!)&player.buff(Hot Streak!).remains<action(Fireball.execute_time)'},
+	{'Pyroblast', 'player.buff(Hot Streak!)&player.buff(Hot Streak!).remains<action(Fireball).execute_time'},
 	--actions.single_target+=/phoenixs_flames,if=charges_fractional>2.7&active_enemies>2
 	{'Phoenix\'s Flames', 'artifact(Phoenix\'s Flames).equipped&{action(Phoenix\'s Flames).charges>2.7&player.area(40).enemies>2}'},
 	--actions.single_target+=/flamestrike,if=talent.flame_patch.enabled&active_enemies>2&buff.hot_streak.react

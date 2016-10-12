@@ -5,19 +5,19 @@ local exeOnLoad = function()
 	print("|cffADFF2F --- |rWARRIOR |cffADFF2FProtection |r")
 	print("|cffADFF2F --- |rRecommended Talents: 1/1 - 2/1 - 3/2 - 4/2 - 5/3 - 6/1 - 7/2")
 	print("|cffADFF2F ----------------------------------------------------------------------|r")
-
+--[[
 	NeP.Interface:AddToggle({
 		key = 'AutoTaunt',
 		name = 'Auto Taunt',
 		text = 'Automatically taunt nearby enemies.',
 		icon = 'Interface\\Icons\\spell_nature_shamanrage',
 	})
-
+--]]
 end
 
 local _Xeer = {
 	-- some non-SiMC stuffs
-	{'@Xeer.Targeting()', {'!target.alive', 'toggle(AutoTarget)'}},
+	--{'@Xeer.Targeting()', {'!target.alive', 'toggle(AutoTarget)'}},
 	--{'@Xeer.Taunt(Taunt)', 'toggle(AutoTaunt)'},
 	--{'%taunt(Taunt)', 'toggle(AutoTaunt)'},
 	{'Impending Victory', '{!player.buff(Victorious)&player.rage>10&player.health<=85}||{player.buff(Victorious)&player.health<=70}'},
@@ -128,7 +128,7 @@ local ST = {
 	{'Shield Slam', '!{spell(Shield Block).cooldown<=gcd&!player.buff(Shield Block)&talent(7,2)}||{player.buff(Vengeance: Ignore Pain)&player.buff(Ignore Pain).duration<=gcd*2&player.rage<13}||{!player.buff(Vengeance: Ignore Pain)&player.buff(Ignore Pain).duration<=gcd*2&player.rage<20}||'},
 	{'Shield Slam', '!talent(7,2)'},
 	--actions.prot+=/revenge,if=cooldown.shield_slam.remains<=gcd.max*2
-	{'Revenge', '{spell(Shield Slam).cooldown<=gcd*2||player.rage<=5}'},
+	{'Revenge', 'spell(Shield Slam).cooldown<=gcd*2||player.rage<=5'},
 	--actions.prot+=/devastate
 	{'Devastate'}
 }

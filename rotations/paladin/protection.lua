@@ -1,6 +1,3 @@
-local GUI = {
-}
-
 local exeOnLoad = function()
 	 Xeer.ExeOnLoad()
 
@@ -8,13 +5,13 @@ local exeOnLoad = function()
 	print('|cffADFF2F --- |rPALADIN |cffADFF2FProtection |r')
 	print('|cffADFF2F --- |rRecommended Talents: 1/2 - 2/2 - 3/3 - 4/1 - 5/2 - 6/2 - 7/3')
 	print('|cffADFF2F ----------------------------------------------------------------------|r')
-
+--[[
 	NeP.Interface.CreateToggle(
 		'AutoTaunt',
 		'Interface\\Icons\\spell_nature_shamanrage.png',
 		'Auto Taunt',
 		'Automatically taunt nearby enemies.')
-
+--]]
 end
 
 local _Xeer = {

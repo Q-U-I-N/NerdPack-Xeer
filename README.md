@@ -1,4 +1,4 @@
-# NerdPack-Xeer
+# NerdPack 1.5 - Xeer Routines
 
 Routines are supported (should work...) with every language clients now.
 

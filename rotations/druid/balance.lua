@@ -1,7 +1,3 @@
-local GUI = {
-
-}
-
 local exeOnLoad = function()
 	-- Xeer.ExeOnLoad()
 end

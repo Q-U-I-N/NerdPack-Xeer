@@ -8,10 +8,9 @@ Xeer = {
 			Logo = 'Interface\\AddOns\\NerdPack-Xeer\\media\\logo.blp',
 			Splash = 'Interface\\AddOns\\NerdPack-Xeer\\media\\splash.blp'
 		},
-		frame = CreateFrame('GameTooltip', 'NeP_ScanningTooltip', UIParent, 'GameTooltipTemplate')
 }
 
---local frame = CreateFrame('GameTooltip', 'NeP_ScanningTooltip', UIParent, 'GameTooltipTemplate')
+local frame = CreateFrame('GameTooltip', 'NeP_ScanningTooltip', UIParent, 'GameTooltipTemplate')
 --[[
 	local classTaunt = {
 		[1] = 'Taunt',
@@ -24,26 +23,28 @@ Xeer = {
 --]]
 
 	-- Temp Hack
-	Xeer.ExeOnLoad = function()
+Xeer.ExeOnLoad = function()
 		Xeer.Splash()
+		--[[
 		NeP.Interface:AddToggle({
 			key = 'AutoTarget',
 			name = 'Auto Target',
 			text = 'Automatically target the nearest enemy when target dies or does not exist',
 			icon = 'Interface\\Icons\\ability_hunter_snipershot',
 		})
-	end
+		--]]
+end
 
-	Xeer.ClassSetting = function(key)
+Xeer.ClassSetting = function(key)
 		local name = '|cff'..NeP.Core.classColor('player')..'Class Settings'
 		NeP.Interface.CreateSetting(name, function() NeP.Interface.ShowGUI(key) end)
-	end
+end
 --[[
 	Xeer.dynEval(condition, spell)
 		return Parse(condition, spell or '')
 	end
 --]]
-	Xeer.Taunt = function(eval, args)
+Xeer.Taunt = function(eval, args)
 	local spell = NeP.Engine:Spell(args)
 	if not spell then return end
 	for i=1,#NeP.OM['unitEnemie'] do
@@ -120,7 +121,7 @@ end
 
 --------------------------NeP CombatHelper Targeting --------------------------
 --[[
-	local NeP_forceTarget = {
+local NeP_forceTarget = {
 		-- WOD DUNGEONS/RAIDS
 		[75966] = 100,	-- Defiled Spirit (Shadowmoon Burial Grounds)
 		[76220] = 100,	-- Blazing Trickster (Auchindoun Normal)
@@ -161,7 +162,7 @@ end
 		[91540] = 100,	-- Illusionary Outcast (HFC)
 	}
 
-	local function getTargetPrio(Obj)
+local function getTargetPrio(Obj)
 		local objectType, _, _, _, _, _id, _ = strsplit('-', UnitGUID(Obj))
 		local ID = tonumber(_id) or '0'
 		local prio = 1
@@ -174,33 +175,31 @@ end
 			prio = prio + NeP_forceTarget[tonumber(Obj)]
 		end
 		return prio
-	end
+end
 
-	Xeer.Targeting()
-		-- If dont have a target, target is friendly or dead
-		if not UnitExists('target') or UnitIsFriend('player', 'target') or UnitIsDeadOrGhost('target') then
-			local setPrio = {}
-			for i=1,#NeP.OM['unitEnemie'] do
-				local Obj = NeP.OM['unitEnemie'][i]
-				if UnitExists(Obj.key) and Obj.distance <= 40 then
-					if (UnitAffectingCombat(Obj.key) or isDummy(Obj.key))
-					and NeP.Engine.LineOfSight('player', Obj.key) then
-						setPrio[#setPrio+1] = {
-							key = Obj.key,
-							bonus = getTargetPrio(Obj.key),
-							name = Obj.name
-						}
-					end
+Xeer.Targeting = function()
+	-- If dont have a target, target is friendly or dead
+	if not UnitExists('target') or UnitIsFriend('player', 'target') or UnitIsDeadOrGhost('target') then
+		local setPrio = {}
+		for GUID, Obj in pairs(NeP.OM:Get('Enemy')) do
+			if UnitExists(Obj.key) and Obj.distance <= 40 then
+				if (UnitAffectingCombat(Obj.key) or NeP.DSL:Get('isdummy')(Obj.key))
+				and NeP.Protected:LineOfSight('player', Obj.key) then
+					setPrio[#setPrio+1] = {
+						key = Obj.key,
+						bonus = getTargetPrio(Obj.key),
+						name = Obj.name
+					}
 				end
 			end
-			table.sort(setPrio, function(a,b) return a.bonus > b.bonus end)
-			if setPrio[1] then
-				NeP.Engine.Macro('/target '..setPrio[1].key)
-			end
+		end
+		table.sort(setPrio, function(a,b) return a.bonus > b.bonus end)
+		if setPrio[1] then
+			NeP.Engine.Macro('/target '..setPrio[1].key)
 		end
 	end
+end
 --]]
-
 -------------------------------NeP HoT / DoT API -------------------------------
 
 local function oFilter(owner, spell, spellID, caster)

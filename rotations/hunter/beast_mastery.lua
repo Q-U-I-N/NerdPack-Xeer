@@ -1,6 +1,3 @@
-local GUI = {
-}
-
 local exeOnLoad = function()
 
 	 Xeer.ExeOnLoad()
@@ -69,7 +66,7 @@ local Cooldowns = {
 local xCombat = {
 	{'Mend Pet', 'pet.exists&pet.alive&pet.health<100'},
  	--actions+=/arcane_torrent,if=player.focus.deficit>=30
-	{'Arcane Torrent', 'player.focus.deficit>=30'},
+	--{'Arcane Torrent', 'player.focus.deficit>=30'},
  	--actions+=/blood_fury
 	{'Blood Fury'},
  	--actions+=/berserking
@@ -87,7 +84,7 @@ local xCombat = {
  	--actions+=/aspect_of_the_wild,if=buff.bestial_wrath.up
 	{'Aspect of the Wild', 'player.buff(Bestial Wrath)'},
  	--actions+=/barrage,if=spell_targets.barrage>1||(spell_targets.barrage=1&focus>90)
-	{'Barrage', 'talent(6,1)&player.area(40).enemies>1||{player.area(40).enemies=1&focus>90}'},
+	{'Barrage', 'talent(6,1)&player.area(40).enemies>1||{talent(6,1)&player.area(40).enemies=1&player.focus>90}'},
  	--actions+=/titans_thunder,if=cooldown.dire_beast.remains>=3||buff.bestial_wrath.up&pet.dire_beast.active
 	{'Titan\'s Thunder', 'spell(Dire Beast).cooldown>=3||player.buff(Bestial Wrath)&player.buff(Dire Beast)'},
  	--actions+=/bestial_wrath
@@ -98,10 +95,10 @@ local xCombat = {
 	{'Kill Command', 'target.petrange<25'},
  	--actions+=/multi_shot,if=spell_targets.multi_shot>1&(pet.buff.beast_cleave.remains<gcd.max*2||pet.buff.beast_cleave.down)
 	{'Multi-Shot', 'player.area(40).enemies>1&{pet.player.buff(Beast Cleave).remains<gcd*2||!pet.player.buff(Beast Cleave)}'},
- 	--actions+=/chimaera_shot,if=focus<90
-	{'Chimaera Shot', 'talent(2,3)&focus<90'},
- 	--actions+=/cobra_shot,if=talent.killer_cobra.enabled&(cooldown.bestial_wrath.remains>=4&(buff.bestial_wrath.up&cooldown.kill_command.remains>=2)||focus>119)||!talent.killer_cobra.enabled&focus>90
-	{'Cobra Shot', 'talent(7,2)&{spell(Bestial Wrath).cooldown>=4&{player.buff(Bestial Wrath)&spell(Kill Command).cooldown>=2}||focus>119}||{!talent(7,2)&focus>90}'},
+ 	--actions+=/chimaera_shot,if=player.focus<90
+	{'Chimaera Shot', 'talent(2,3)&player.focus<90'},
+ 	--actions+=/cobra_shot,if=talent.killer_cobra.enabled&(cooldown.bestial_wrath.remains>=4&(buff.bestial_wrath.up&cooldown.kill_command.remains>=2)||player.focus>119)||!talent.killer_cobra.enabled&player.focus>90
+	{'Cobra Shot', 'talent(7,2)&{spell(Bestial Wrath).cooldown>=4&{player.buff(Bestial Wrath)&spell(Kill Command).cooldown>=2}||player.focus>119}||{!talent(7,2)&player.focus>90}'},
 }
 
 
@@ -114,7 +111,7 @@ local inCombat = {
 	{Keybinds},
 	--{Survival, 'player.health < 100'},
 	--{Cooldowns, 'toggle(cooldowns)'},
-	{xCombat, {'target.range < 40', 'target.infront'}}
+	{xCombat, {'target.range<40', 'target.infront'}}
 }
 
 local outCombat = {

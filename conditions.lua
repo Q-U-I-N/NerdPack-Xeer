@@ -117,22 +117,22 @@ local DotTicks = {
         [106832] = 3,
     },
     [2] = {
-        [8921] = 2,
+				[8921] = 2,
         [155625] = 2,
     }
 }
 
-NeP.DSL:Register('dot.tick_time', function(spell)
-    local spell = NeP.Core:GetSpellID(NeP.Core:GetSpellName(spell))
+NeP.DSL:Register('dot.tick_time', function(_,spell)
+    local spell = NeP.Core:GetSpellID(spell)
     local class = select(3,UnitClass('player'))
     if class == 11 and GetSpecialization() == 2 then
         if NeP.DSL:Get('talent')(nil, '6,2') and DotTicks[1][spell] then
             return DotTicks[1][spell] * 0.67
         else
-            if DotTicks[2][spell] then
-                return DotTicks[2][spell]
+            if DotTicks[1][spell] then
+                return DotTicks[1][spell]
             else
-                local tick = DotTicks[1][spell] or DotTicks[2][spell]
+                local tick = DotTicks[2][spell]
                 return math.floor((tick / ((GetHaste() / 100) + 1)) * 10^3 ) / 10^3
             end
         end
@@ -293,21 +293,10 @@ NeP.DSL:Register('spell_haste', function()
 	return math.floor((100 / ( 100 + shaste )) * 10^3 ) / 10^3
 end)
 
-NeP.DSL:Register('talent.enabled', function(_, args)
---[[
-	local havetalent = NeP.DSL:Get('talent')(target, args)
-	if havetalent == true then
-		return 1
-	else
-		return 0
-	end
---]]
-	return NeP.DSL:Get('talent')(_, args)
-end)
 
 --/dump NeP.DSL:Get('action.execute_time')('player','Fireball')
 NeP.DSL:Register('action.execute_time', function(_, spell)
-	return NeP.DSL:Get('execute_time')(target, spell)
+	return NeP.DSL:Get('execute_time')(_, spell)
 end)
 
 NeP.DSL:Register('execute_time', function(_, spell)
@@ -355,13 +344,13 @@ NeP.DSL:Register('max_energy', function()
 end)
 
 --/dump NeP.DSL:Get('energy.deficit')('player')
-NeP.DSL:Register('energy.deficit', function(target)
-	return NeP.DSL:Get('deficit')(target)
+NeP.DSL:Register('energy.deficit', function()
+	return NeP.DSL:Get('deficit')('player')
 end)
 
 --/dump NeP.DSL:Get('energy.regen')('player')
-NeP.DSL:Register('energy.regen', function(target)
-	local eregen = select(2, GetPowerRegen(target))
+NeP.DSL:Register('energy.regen', function()
+	local eregen = select(2, GetPowerRegen('player'))
 	return eregen
 end)
 
@@ -373,17 +362,17 @@ NeP.DSL:Register('energy.time_to_max', function()
 end)
 
 --/dump NeP.DSL:Get('focus.deficit')('player')
-NeP.DSL:Register('focus.deficit', function(target)
-	return NeP.DSL:Get('deficit')(target)
+NeP.DSL:Register('focus.deficit', function()
+	return NeP.DSL:Get('deficit')('player')
 end)
 
 --/dump NeP.DSL:Get('focus.regen')('player')
-NeP.DSL:Register('focus.regen', function(target)
-	local fregen = select(2, GetPowerRegen(target))
+NeP.DSL:Register('focus.regen', function()
+	local fregen = select(2, GetPowerRegen('player'))
 	return fregen
 end)
 
---/dump NeP.DSL:Get('focus.time_to_max')('player')
+--/dump NeP.DSL:Get('focus.time_to_max')()
 NeP.DSL:Register('focus.time_to_max', function()
 	local deficit = NeP.DSL:Get('deficit')('player')
 	local fregen = NeP.DSL:Get('focus.regen')('player')
@@ -392,8 +381,8 @@ end)
 
 
 --/dump NeP.DSL:Get('rage.deficit')('player')
-NeP.DSL:Register('rage.deficit', function(target)
-	return NeP.DSL:Get('deficit')(target)
+NeP.DSL:Register('rage.deficit', function()
+	return NeP.DSL:Get('deficit')('player')
 end)
 --/dump NeP.DSL:Get('action.cast_time')('player','Revenge')
 NeP.DSL:Register('action.cast_time', function(_, spell)

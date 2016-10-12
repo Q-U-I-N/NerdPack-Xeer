@@ -6,14 +6,13 @@ local exeOnLoad = function()
 	print('|cffADFF2F --- |rHUNTER |cffADFF2FMarksmanship |r')
 	print('|cffADFF2F --- |rRecommended Talents: 1/1 - 2/1 - 3/X - 4/3 - 5/X - 6/2 - 7/1')
 	print('|cffADFF2F ----------------------------------------------------------------------|r')
---[[
-	NeP.Interface.CreateToggle(
-		'xBarrage',
-		'Interface\\Icons\\Ability_Hunter_RapidRegeneration',
-		'Barrage',
-		'ON/OFF using Barrage in rotation if you have talent')
 
---]]
+		NeP.Interface:AddToggle({
+			key = 'xBarrage',
+			name = 'Barrage',
+			text = 'ON/OFF using Barrage in rotation if you have talent',
+			icon = 'Interface\\Icons\\Ability_Hunter_RapidRegeneration',
+		})
 end
 
 local _Xeer = {
@@ -94,12 +93,12 @@ local xCombat = {
 	{'A Murder of Crows', 'talent(6,1)'},
  	--actions.+=/barrage
 	{Barrage, 'toggle(xBarrage)'},
- 	--actions.+=/piercing_shot,if=!talent.patient_sniper.enabled&focus>50
-	{'Piercing Shot', '!talent(4,3)&focus>50'},
+ 	--actions.+=/piercing_shot,if=!talent.patient_sniper.enabled&player.focus>50
+	{'Piercing Shot', '!talent(4,3)&player.focus>50'},
  	--actions.+=/windburst,if=active_enemies<2&buff.marking_targets.down&(debuff.vulnerability.down||debuff.vulnerability.remains<cast_time)
 	{'Windburst', 'player.area(40).enemies<2&!player.buff(Marking Targets)&{!target.debuff(Vulnerable)||target.debuff(Vulnerable).remains<action(Windburst).cast_time}'},
- 	--actions.+=/windburst,if=active_enemies<2&buff.marking_targets.down&focus+player.cast_regen>90
-	{'Windburst', 'player.area(40).enemies<2&!player.buff(Marking Targets)&focus+player.cast_regen>90'},
+ 	--actions.+=/windburst,if=active_enemies<2&buff.marking_targets.down&player.focus+player.cast_regen>90
+	{'Windburst', 'player.area(40).enemies<2&!player.buff(Marking Targets)&player.focus+player.cast_regen>90'},
  	--actions.+=/windburst,if=active_enemies<2&cooldown.sidewinders.charges=0
 	{'Windburst', 'player.area(40).enemies<2&spell(Sidewinders).charges<1'},
  	--actions.+=/arcane_shot,if=!talent.patient_sniper.enabled&active_enemies=1&debuff.vulnerability.react<3&buff.marking_targets.react&debuff.hunters_mark.down
@@ -124,23 +123,23 @@ local xCombat = {
 	{'Arcane Shot', 'talent(2,3)&player.area(40).enemies<2&{target.debuff(True Aim).stack<1||target.debuff(True Aim).remains<2}'},
  	--actions.+=/aimed_shot,if=buff.lock_and_load.up&debuff.vulnerability.remains>gcd.max
 	{'Aimed Shot', 'player.buff(Lock and Load)&target.debuff(Vulnerable).remains>gcd'},
- 	--actions.+=/piercing_shot,if=talent.patient_sniper.enabled&focus>80
-	{'Piercing Shot', 'talent(4,3)&focus>80'},
+ 	--actions.+=/piercing_shot,if=talent.patient_sniper.enabled&player.focus>80
+	{'Piercing Shot', 'talent(4,3)&player.focus>80'},
  	--actions.+=/marked_shot,if=!talent.sidewinders.enabled&(debuff.vulnerability.remains<2||buff.marking_targets.react)
 	{'Marked Shot', '!talent(7,1)&{target.debuff(Vulnerable).remains<2||player.buff(Marking Targets)}'},
- 	--actions.+=/pool_resource,for_next=1,if=talent.sidewinders.enabled&(focus<60&cooldown.sidewinders.charges_fractional<=1.2)
+ 	--actions.+=/pool_resource,for_next=1,if=talent.sidewinders.enabled&(player.focus<60&cooldown.sidewinders.charges_fractional<=1.2)
 	--TODO: figure out how to pause rotation until have enough resources to cast THIS SKILL(=simc pool_resource)
-	{'Sidewinders', 'talent(7,1)&{focus<60&spell(Sidewinders).charges<=1.2}'},
- 	--actions.+=/aimed_shot,if=cast_time<debuff.vulnerability.remains&(focus+player.cast_regen>80||debuff.hunters_mark.down)
-	{'Aimed Shot', 'spell(Aimed Shot).casttime<target.debuff(Vulnerable).remains&{focus+player.cast_regen>80||!target.debuff(Hunter\'s Mark)}'},
+	{'Sidewinders', 'talent(7,1)&{player.focus<60&spell(Sidewinders).charges<=1.2}'},
+ 	--actions.+=/aimed_shot,if=cast_time<debuff.vulnerability.remains&(player.focus+player.cast_regen>80||debuff.hunters_mark.down)
+	{'Aimed Shot', 'spell(Aimed Shot).casttime<target.debuff(Vulnerable).remains&{player.focus+player.cast_regen>80||!target.debuff(Hunter\'s Mark)}'},
  	--actions.+=/marked_shot
 	{'Marked Shot', 'target.debuff(Hunter\'s Mark)'},
  	--actions.+=/black_arrow
 	{'Black Arrow', 'talent(2,2)'},
 	--actions.+=/sidewinders,if=debuff.hunters_mark.down&(buff.marking_targets.remains>6||buff.trueshot.react||charges=2)
 	{'Sidewinders', '!target.debuff(Hunter\'s Mark)&{player.buff(Marking Targets).remains>6||player.buff(Trueshot)||spell(Sidewinders).charges=2}'},
- 	--actions.+=/sidewinders,if=focus<30&charges<=1&recharge_time<=5
-	{'Sidewinders', 'focus<30&spell(Sidewinders).charges<=1&spell(Sidewinders).recharge<=5'},
+ 	--actions.+=/sidewinders,if=player.focus<30&charges<=1&recharge_time<=5
+	{'Sidewinders', 'player.focus<30&spell(Sidewinders).charges<=1&spell(Sidewinders).recharge<=5'},
  	--actions.+=/multishot,if=spell_targets.barrage>1&(debuff.hunters_mark.down&buff.marking_targets.react||focus.time_to_max>=2)
 	{'Multi-Shot', 'player.area(40).enemies>1&{!target.debuff(Hunter\'s Mark)&player.buff(Marking Targets)||focus.time_to_max>=2}'},
  	--actions.+=/arcane_shot,if=spell_targets.barrage=1&(debuff.hunters_mark.down&buff.marking_targets.react||focus.time_to_max>=2)

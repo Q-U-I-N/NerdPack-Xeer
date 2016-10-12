@@ -38,8 +38,9 @@ spec=feral
 
 local Survival = {
 -- this was not working in 1.0!! didn't had time to check it yet in 1.5
-	--{'Cat Form', 'form=2&!player.buff(Rejuvenation)'},
+	{'/run CancelShapeshiftForm()', 'form>0&talent(3,3)&!player.buff(Rejuvenation)'},
 	{'Rejuvenation', 'talent(3,3)&!player.buff(Rejuvenation)', 'player'},
+	{'/run CancelShapeshiftForm()', 'form>0&talent(3,3)&player.health<=75'},
 	{'Swiftmend', 'talent(3,3)&player.health<=75', 'player'},
 }
 
@@ -100,8 +101,8 @@ local Cooldowns = {
 	--{'', ''},
 	--actions.=/potion,name=old_war,if=((buff.berserk.remains>10||buff.incarnation.remains>20)&(target.time_to_die<180||(trinket.proc.all.react&target.health.pct<25)))||target.time_to_die<=40
 	--{'', ''},
-	--actions.=/tigers_fury,if=(!buff.clearcasting.react&player.energy.deficit>=60)||player.energy.deficit>=80||(t18_class_trinket&buff.berserk.up&buff.tigers_fury.down)
-	{'Tiger\'s Fury', '{!player.buff(Clearcasting).react&player.energy.deficit>=60}||player.energy.deficit>=80'},--t18_class_trinket ?
+	--actions.=/tigers_fury,if=(!buff.clearcasting.react&energy.deficit>=60)||energy.deficit>=80||(t18_class_trinket&buff.berserk.up&buff.tigers_fury.down)
+	{'Tiger\'s Fury', '{!player.buff(Clearcasting).react&energy.deficit>=60}||energy.deficit>=80'},--t18_class_trinket ?
 	--actions.=/incarnation,if=energy.time_to_max>1&energy>=35
 	{'Incarnation: King of the Jungle', 'talent(5,2)&{energy.time_to_max>1&energy>=35}'},
 	--# Keep Rip from falling off during execute range.
@@ -156,8 +157,8 @@ local Generator = {
 	--actions.generator+=/ashamanes_frenzy,if=combo_points<=2&buff.elunes_guidance.down&(buff.bloodtalons.up||!talent.bloodtalons.enabled)&(buff.savage_roar.up||!talent.savage_roar.enabled)
 	{'Ashamane\'s Frenzy', 'combo_points<=2&{player.buff(Bloodtalons)||!talent(7,2)}&{player.buff(Savage Roar)||!talent(5,3)}'},
 	--# Pool energy for Elune's Guidance when it's coming off cooldown.
-	--actions.generator+=/pool_resource,if=talent.elunes_guidance.enabled&combo_points=0&energy<action.ferocious_bite.cost+25-player.energy.regen*cooldown.elunes_guidance.remains
-	{'Elune\'s Guidance', 'talent(6,3)&combo_points=0&energy>=action(Ferocious Bite).cost+25-player.energy.regen*cooldown(Elune\'s Guidance).remains'},
+	--actions.generator+=/pool_resource,if=talent.elunes_guidance.enabled&combo_points=0&energy<action.ferocious_bite.cost+25-energy.regen*cooldown.elunes_guidance.remains
+	{'Elune\'s Guidance', 'talent(6,3)&combo_points=0&energy>=action(Ferocious Bite).cost+25-energy.regen*cooldown(Elune\'s Guidance).remains'},
 	--actions.generator+=/elunes_guidance,if=talent.elunes_guidance.enabled&combo_points=0&energy>=action.ferocious_bite.cost+25
 	{'Elune\'s Guidance', 'talent(6,3)&combo_points=0&energy>=action(Ferocious Bite).cost+25'},
 	--# Spam Thrash over Rake or Moonfire at 9 targets with Brutal Slash talent.
@@ -198,8 +199,9 @@ local Keybinds = {
 
 local inCombat = {
 	{Keybinds},
+	--{_Xeer},
 	{Interrupts, {'target.interruptAt(50)', 'toggle(Interrupts)', 'target.infront', 'target.range<8'}},
-  --{Survival},
+  {Survival, 'player.health<100'},
 	{'Cat Form', 'form~=2'},
 	{Cooldowns, 'toggle(cooldowns)'},
 	{xCombat, {'target.range<8', 'target.infront'}},
