@@ -1,20 +1,17 @@
-local GUI = {
-}
-
 local exeOnLoad = function()
-	Xeer.Splash()
+	 Xeer.ExeOnLoad()
 
 	print('|cffADFF2F ----------------------------------------------------------------------|r')
 	print('|cffADFF2F --- |rPALADIN |cffADFF2FProtection |r')
 	print('|cffADFF2F --- |rRecommended Talents: 1/2 - 2/2 - 3/3 - 4/1 - 5/2 - 6/2 - 7/3')
 	print('|cffADFF2F ----------------------------------------------------------------------|r')
-
+--[[
 	NeP.Interface.CreateToggle(
 		'AutoTaunt',
 		'Interface\\Icons\\spell_nature_shamanrage.png',
 		'Auto Taunt',
 		'Automatically taunt nearby enemies.')
-
+--]]
 end
 
 local _Xeer = {
@@ -71,39 +68,39 @@ local Cooldowns = {
 	--actions.prot=seraphim,if=talent.seraphim.enabled&action.shield_of_the_righteous.charges>=2
 	{'Seraphim', 'talent(7,2)&spell(Shield of the Righteous).charges>=2'},
 	--actions.prot+=/shield_of_the_righteous,if=(!talent.seraphim.enabled||action.shield_of_the_righteous.charges>2)&!(debuff.eye_of_tyr.up&buff.aegis_of_light.up&buff.ardent_defender.up&buff.guardian_of_ancient_kings.up&buff.divine_shield.up&buff.potion.up)
-	{'Shield of the Righteous', {'target.range<8', 'target.infront', '{!talent(7,2)||spell(Shield of the Righteous).charges>2}&!{buff(Eye of Tyr)&buff(Aegis of Light)&buff(Ardent Defender)&buff(Guardian of Ancient Kings)&buff(Divine Shield)}'}},
+	{'Shield of the Righteous', {'target.range<8', 'target.infront', '{!talent(7,2)||spell(Shield of the Righteous).charges>2}&!{player.buff(Eye of Tyr)&player.buff(Aegis of Light)&player.buff(Ardent Defender)&player.buff(Guardian of Ancient Kings)&player.buff(Divine Shield)}'}},
 	--actions.prot+=/bastion_of_light,if=talent.bastion_of_light.enabled&action.shield_of_the_righteous.charges<1
 	{'Bastion of Light', 'talent(2,2)&spell(Shield of the Righteous).charges<1'},
 	--actions.prot+=/light_of_the_protector,if=(health.pct<40)
 	{'Light of the Protector', 'player.health<40'},
 	--actions.prot+=/hand_of_the_protector,if=(health.pct<40)
 	{'Hand of the Protector', 'talent(5,1)&player.health<40'},
-	--actions.prot+=/light_of_the_protector,if=(incoming_damage_10000ms<health.max*1.25)&health.pct<55&talent.righteous_protector.enabled
-	{'Light of the Protector', '{incdmg(10)>health.max*1.25}&player.health<55&talent(7,1)'},
-	--actions.prot+=/light_of_the_protector,if=(incoming_damage_13000ms<health.max*1.6)&health.pct<55
-	{'Light of the Protector', '{incdmg(13)>health.max*1.6}&player.health<55'},
-	--actions.prot+=/hand_of_the_protector,if=(incoming_damage_6000ms<health.max*0.7)&health.pct<65&talent.righteous_protector.enabled
-	{'Hand of the Protector', 'talent(5,1)&{incdmg(6)>health.max*0.7}&player.health<55&talent(7,1)'},
-	--actions.prot+=/hand_of_the_protector,if=(incoming_damage_9000ms<health.max*1.2)&health.pct<55
-	{'Hand of the Protector', 'talent(5,1)&{incdmg(9)>health.max*1.2}&player.health<55'},
-	--actions.prot+=/divine_steed,if=talent.knight_templar.enabled&incoming_damage_2500ms>health.max*0.4&!(debuff.eye_of_tyr.up||buff.aegis_of_light.up||buff.ardent_defender.up||buff.guardian_of_ancient_kings.up||buff.divine_shield.up||buff.potion.up)
-	{'Divine Steed', 'talent(5,2)&incdmg(2.5)>health.max*0.40&!{buff(Eye of Tyr)||buff(Aegis of Light)||buff(Ardent Defender)||buff(Guardian of Ancient Kings)||buff(Divine Shield)}'},
-	--actions.prot+=/eye_of_tyr,if=incoming_damage_2500ms>health.max*0.4&!(debuff.eye_of_tyr.up||buff.aegis_of_light.up||buff.ardent_defender.up||buff.guardian_of_ancient_kings.up||buff.divine_shield.up||buff.potion.up)
-	{'Eye of Tyr', 'incdmg(2.5)>health.max*0.40&!{buff(Eye of Tyr)||buff(Aegis of Light)||buff(Ardent Defender)||buff(Guardian of Ancient Kings)||buff(Divine Shield)}'},
-	--actions.prot+=/aegis_of_light,if=incoming_damage_2500ms>health.max*0.4&!(debuff.eye_of_tyr.up||buff.aegis_of_light.up||buff.ardent_defender.up||buff.guardian_of_ancient_kings.up||buff.divine_shield.up||buff.potion.up)
-	{'Aegis of Light', 'talent(6,1)&incdmg(2.5)>health.max*0.40&!{buff(Eye of Tyr)||buff(Aegis of Light)||buff(Ardent Defender)||buff(Guardian of Ancient Kings)||buff(Divine Shield)}'},
-	--actions.prot+=/guardian_of_ancient_kings,if=incoming_damage_2500ms>health.max*0.4&!(debuff.eye_of_tyr.up||buff.aegis_of_light.up||buff.ardent_defender.up||buff.guardian_of_ancient_kings.up||buff.divine_shield.up||buff.potion.up)
-	{'Guardian of Ancient Kings', 'incdmg(2.5)>health.max*0.40&!{buff(Eye of Tyr)||buff(Aegis of Light)||buff(Ardent Defender)||buff(Guardian of Ancient Kings)||buff(Divine Shield)}'},
-	--actions.prot+=/divine_shield,if=talent.final_stand.enabled&incoming_damage_2500ms>health.max*0.4&!(debuff.eye_of_tyr.up||buff.aegis_of_light.up||buff.ardent_defender.up||buff.guardian_of_ancient_kings.up||buff.divine_shield.up||buff.potion.up)
-	{'Divine Shield', 'incdmg(2.5)>health.max*0.40&!{buff(Eye of Tyr)||buff(Aegis of Light)||buff(Ardent Defender)||buff(Guardian of Ancient Kings)||buff(Divine Shield)}'},
-	--actions.prot+=/ardent_defender,if=incoming_damage_2500ms>health.max*0.4&!(debuff.eye_of_tyr.up||buff.aegis_of_light.up||buff.ardent_defender.up||buff.guardian_of_ancient_kings.up||buff.divine_shield.up||buff.potion.up)
-	{'Ardent Defender', 'incdmg(2.5)>health.max*0.40&!{buff(Eye of Tyr)||buff(Aegis of Light)||buff(Ardent Defender)||buff(Guardian of Ancient Kings)||buff(Divine Shield)}'},
+	--actions.prot+=/light_of_the_protector,if=(incoming_damage_10000ms<player.health.max*1.25)&health.pct<55&talent.righteous_protector.enabled
+	{'Light of the Protector', '{player.incdmg(10)>player.health.max*1.25}&player.health<55&talent(7,1)'},
+	--actions.prot+=/light_of_the_protector,if=(incoming_damage_13000ms<player.health.max*1.6)&health.pct<55
+	{'Light of the Protector', '{player.incdmg(13)>player.health.max*1.6}&player.health<55'},
+	--actions.prot+=/hand_of_the_protector,if=(incoming_damage_6000ms<player.health.max*0.7)&health.pct<65&talent.righteous_protector.enabled
+	{'Hand of the Protector', 'talent(5,1)&{player.incdmg(6)>player.health.max*0.7}&player.health<55&talent(7,1)'},
+	--actions.prot+=/hand_of_the_protector,if=(incoming_damage_9000ms<player.health.max*1.2)&health.pct<55
+	{'Hand of the Protector', 'talent(5,1)&{player.incdmg(9)>player.health.max*1.2}&player.health<55'},
+	--actions.prot+=/divine_steed,if=talent.knight_templar.enabled&incoming_damage_2500ms>player.health.max*0.4&!(debuff.eye_of_tyr.up||buff.aegis_of_light.up||buff.ardent_defender.up||buff.guardian_of_ancient_kings.up||buff.divine_shield.up||buff.potion.up)
+	{'Divine Steed', 'talent(5,2)&player.incdmg(2.5)>player.health.max*0.40&!{player.buff(Eye of Tyr)||player.buff(Aegis of Light)||player.buff(Ardent Defender)||player.buff(Guardian of Ancient Kings)||player.buff(Divine Shield)}'},
+	--actions.prot+=/eye_of_tyr,if=incoming_damage_2500ms>player.health.max*0.4&!(debuff.eye_of_tyr.up||buff.aegis_of_light.up||buff.ardent_defender.up||buff.guardian_of_ancient_kings.up||buff.divine_shield.up||buff.potion.up)
+	{'Eye of Tyr', 'player.incdmg(2.5)>player.health.max*0.40&!{player.buff(Eye of Tyr)||player.buff(Aegis of Light)||player.buff(Ardent Defender)||player.buff(Guardian of Ancient Kings)||player.buff(Divine Shield)}'},
+	--actions.prot+=/aegis_of_light,if=incoming_damage_2500ms>player.health.max*0.4&!(debuff.eye_of_tyr.up||buff.aegis_of_light.up||buff.ardent_defender.up||buff.guardian_of_ancient_kings.up||buff.divine_shield.up||buff.potion.up)
+	{'Aegis of Light', 'talent(6,1)&player.incdmg(2.5)>player.health.max*0.40&!{player.buff(Eye of Tyr)||player.buff(Aegis of Light)||player.buff(Ardent Defender)||player.buff(Guardian of Ancient Kings)||player.buff(Divine Shield)}'},
+	--actions.prot+=/guardian_of_ancient_kings,if=incoming_damage_2500ms>player.health.max*0.4&!(debuff.eye_of_tyr.up||buff.aegis_of_light.up||buff.ardent_defender.up||buff.guardian_of_ancient_kings.up||buff.divine_shield.up||buff.potion.up)
+	{'Guardian of Ancient Kings', 'player.incdmg(2.5)>player.health.max*0.40&!{player.buff(Eye of Tyr)||player.buff(Aegis of Light)||player.buff(Ardent Defender)||player.buff(Guardian of Ancient Kings)||player.buff(Divine Shield)}'},
+	--actions.prot+=/divine_shield,if=talent.final_stand.enabled&incoming_damage_2500ms>player.health.max*0.4&!(debuff.eye_of_tyr.up||buff.aegis_of_light.up||buff.ardent_defender.up||buff.guardian_of_ancient_kings.up||buff.divine_shield.up||buff.potion.up)
+	{'Divine Shield', 'player.incdmg(2.5)>player.health.max*0.40&!{player.buff(Eye of Tyr)||player.buff(Aegis of Light)||player.buff(Ardent Defender)||player.buff(Guardian of Ancient Kings)||player.buff(Divine Shield)}'},
+	--actions.prot+=/ardent_defender,if=incoming_damage_2500ms>player.health.max*0.4&!(debuff.eye_of_tyr.up||buff.aegis_of_light.up||buff.ardent_defender.up||buff.guardian_of_ancient_kings.up||buff.divine_shield.up||buff.potion.up)
+	{'Ardent Defender', 'player.incdmg(2.5)>player.health.max*0.40&!{player.buff(Eye of Tyr)||player.buff(Aegis of Light)||player.buff(Ardent Defender)||player.buff(Guardian of Ancient Kings)||player.buff(Divine Shield)}'},
 	--actions.prot+=/lay_on_hands,if=health.pct<15
 	{'Lay on Hands', 'player.health<15'},
 	--actions.prot+=/avenging_wrath,if=!talent.seraphim.enabled
 	{'Avenging Wrath', '!talent(7,2)'},
 	--actions.prot+=/avenging_wrath,if=talent.seraphim.enabled&buff.seraphim.up
-	{'Avenging Wrath', 'talent(7,2)&buff(Seraphim)'}
+	{'Avenging Wrath', 'talent(7,2)&player.buff(Seraphim)'}
 }
 
 
@@ -141,7 +138,7 @@ local inCombat = {
 --{Survival, 'player.health < 100'},
 	{Interrupts, {'target.interruptAt(50)', 'toggle(Interrupts)', 'target.infront', 'target.range<8'}},
 	{Cooldowns, 'toggle(Cooldowns)'},
-	{AoE, {'toggle(AoE)', 'area(8).enemies>=3'}},
+	{AoE, {'toggle(AoE)', 'player.area(8).enemies>=3'}},
 	{ST, 'target.infront'}
 }
 
@@ -150,4 +147,4 @@ local outCombat = {
 	{PreCombat}
 }
 
-NeP.Engine.registerRotation(66, '[|cff'..Xeer.Interface.addonColor..'Xeer|r] PALADIN - Protection', inCombat, outCombat, exeOnLoad, GUI)
+NeP.CR:Add(66, '[|cff'..Xeer.Interface.addonColor..'Xeer|r] PALADIN - Protection', inCombat, outCombat, exeOnLoad)

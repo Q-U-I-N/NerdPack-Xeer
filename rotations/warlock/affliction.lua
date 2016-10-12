@@ -1,9 +1,5 @@
-local GUI = {
-
-}
-
 local exeOnLoad = function()
-	--Xeer.Splash()
+	-- Xeer.ExeOnLoad()
 end
 
 local Survival = {
@@ -40,4 +36,4 @@ local outCombat = {
 	{Keybinds},
 }
 
-NeP.Engine.registerRotation(265, '[|cff'..Xeer.Interface.addonColor..'Xeer|r] Warlock - Affliction', inCombat, outCombat, exeOnLoad, GUI)
+NeP.CR:Add(265, '[|cff'..Xeer.Interface.addonColor..'Xeer|r] Warlock - Affliction', inCombat, outCombat, exeOnLoad)

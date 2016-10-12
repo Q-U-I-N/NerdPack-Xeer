@@ -1,8 +1,5 @@
-local GUI = {
-}
-
 local exeOnLoad = function()
-	Xeer.Splash()
+	 Xeer.ExeOnLoad()
 
 	print('|cffADFF2F ----------------------------------------------------------------------|r')
 	print('|cffADFF2F --- |rSHAMAN |cffADFF2FElemental |r')
@@ -58,7 +55,7 @@ local PreCombat = {
  	--actions.precombat+=/stormkeeper
 	{'Stormkeeper'},
  	--actions.precombat+=/totem_mastery
-	{'Totem Mastery', '!buff(Tailwind Totem)||!buff(Storm Totem)||!buff(Resonance Totem)||!buff(Ember Totem)'}
+	{'Totem Mastery', '!player.buff(Tailwind Totem)||!player.buff(Storm Totem)||!player.buff(Resonance Totem)||!player.buff(Ember Totem)'}
 }
 
 local Cooldowns = {
@@ -78,9 +75,9 @@ local Cooldowns = {
  	--actions+=/elemental_mastery
 	{'Elemental Mastery', 'talent(6,1)'},
  	--actions+=/blood_fury,if=!talent.ascendance.enabled||buff.ascendance.up||cooldown.ascendance.remains>50
-	{'Blood Fury', '!talent(7,1)||buff(Ascendance)||spell(Ascendance)cooldown>50'},
+	{'Blood Fury', '!talent(7,1)||player.buff(Ascendance)||spell(Ascendance)cooldown>50'},
  	--actions+=/berserking,if=!talent.ascendance.enabled||buff.ascendance.up
-	{'Berserking', '!talent(Ascendance)||buff(Ascendance)'}
+	{'Berserking', '!talent(Ascendance)||player.buff(Ascendance)'}
 }
 
 local AoE = {
@@ -95,9 +92,9 @@ local AoE = {
  	--actions.aoe+=/earthquake_totem
 	{'Earthquake Totem', 'totem(Earthquake Totem).duration<1', 'target.ground'},
  	--actions.aoe+=/lava_burst,if=buff.lava_surge.up&spell_targets.chain_lightning=3
-	{'Lava Burst', '!buff(Lava Surge)'},
+	{'Lava Burst', '!player.buff(Lava Surge)'},
  	--actions.aoe+=/lava_beam
-	{'Lava Beam', 'talent(7,1)&buff(Ascendance)'},
+	{'Lava Beam', 'talent(7,1)&player.buff(Ascendance)'},
  	--actions.aoe+=/chain_lightning,target_if=!debuff.lightning_rod.up
 	{'Chain Lightning', 'talent(7,2)&!target.debuff(Lightning Rod)'},
  	--actions.aoe+=/chain_lightning
@@ -110,31 +107,31 @@ local AoE = {
 
 local ST = {
  	--actions.single=ascendance,if=dot.flame_shock.remains>buff.ascendance.duration&(time>=60||buff.bloodlust.up)&cooldown.lava_burst.remains>0&!buff.stormkeeper.up
-	{'Ascendance', 'target.debuff(Flame Shock).duration>buff(Ascendance).duration&{combat(player).time>=60||buff(Bloodlust)}&spell(Lava Burst).cooldown>0&!buff(Stormkeeper)'},
+	{'Ascendance', 'target.debuff(Flame Shock).duration>player.buff(Ascendance).duration&{combat(player).time>=60||player.buff(Bloodlust)}&spell(Lava Burst).cooldown>0&!player.buff(Stormkeeper)'},
  	--actions.single+=/flame_shock,if=!ticking
 	{'Flame Shock', '!target.debuff(Flame Shock)'},
  	--actions.single+=/flame_shock,if=maelstrom>=20&remains<=buff.ascendance.duration&cooldown.ascendance.remains+buff.ascendance.duration<=duration
-	{'Flame Shock', 'player.maelstrom>=20&target.debuff(Flame Shock).duration<buff(Ascendance).duration&spell(Ascendance).cooldown+buff(Ascendance).duration<=target.debuff(Flame Shock).duration'},
+	{'Flame Shock', 'player.maelstrom>=20&target.debuff(Flame Shock).duration<player.buff(Ascendance).duration&spell(Ascendance).cooldown+player.buff(Ascendance).duration<=target.debuff(Flame Shock).duration'},
  	--actions.single+=/earth_shock,if=maelstrom>=92
 	{'Earth Shock', 'player.maelstrom>=92'},
  	--actions.single+=/icefury,if=raid_event.movement.in<5
 	--{'Icefury', 'talent(5,3)'},
  	--actions.single+=/lava_burst,if=dot.flame_shock.remains>cast_time&(cooldown_react||buff.ascendance.up)
-	{'Lava Burst', 'target.debuff(Flame Shock).duration>spell(Lava Burst).casttime&{spell(Lava Burst).cooldown=0||buff(Ascendance)}'},
+	{'Lava Burst', 'target.debuff(Flame Shock).duration>action(Lava Burst).cast_time&{spell(Lava Burst).cooldown=0||player.buff(Ascendance)}'},
  	--actions.single+=/elemental_blast
 	{'Elemental Blast', '(4,1)'},
  	--actions.single+=/earthquake_totem,if=buff.echoes_of_the_great_sundering.up
-	{'Earthquake Totem', '{buff(Echoes of the Great Sundering)&totem(Earthquake Totem).duration<1}', 'target.ground'},
+	{'Earthquake Totem', '{player.buff(Echoes of the Great Sundering)&totem(Earthquake Totem).duration<1}', 'target.ground'},
 	--actions.single+=/flame_shock,if=maelstrom>=20&buff.elemental_focus.up,target_if=refreshable
-	{'Flame Shock', 'player.maelstrom>=20&buff(Elemental Focus)&target.debuff(Flame Shock).duration<gcd'},
+	{'Flame Shock', 'player.maelstrom>=20&player.buff(Elemental Focus)&target.debuff(Flame Shock).duration<gcd'},
  	--actions.single+=/frost_shock,if=talent.icefury.enabled&buff.icefury.up&((maelstrom>=20&raid_event.movement.in>buff.icefury.remains)||buff.icefury.remains<(1.5*spell_haste*buff.icefury.stack))
-	{'Frost Shock', 'talent(5,3)&buff(Icefury)&{player.maelstrom>=20||buff(Icefury).duration<{gcd*buff(Icefury).stack}}'},
+	{'Frost Shock', 'talent(5,3)&player.buff(Icefury)&{player.maelstrom>=20||player.buff(Icefury).duration<{1.5*{spell_haste}*player.buff(Icefury).stack}}'},
  	--actions.single+=/frost_shock,moving=1,if=buff.icefury.up
-	{'Frost Shock', 'xmoving=1&buff(Icefury)'},
+	{'Frost Shock', 'xmoving=1&player.buff(Icefury)'},
  	--actions.single+=/earth_shock,if=maelstrom>=86
 	{'Earth Shock', 'player.maelstrom>=86'},
  	--actions.single+=/icefury,if=maelstrom<=70&raid_event.movement.in>30&((talent.ascendance.enabled&cooldown.ascendance.remains>buff.icefury.duration)||!talent.ascendance.enabled)
-	{'Icefury', 'talent(5,3)&player.maelstrom<=70&{{talent(7,1)&spell(Ascendance).cooldown>buff(Icefury).duration}||!talent(7,1)}'},
+	{'Icefury', 'talent(5,3)&player.maelstrom<=70&{{talent(7,1)&spell(Ascendance).cooldown>player.buff(Icefury).duration}||!talent(7,1)}'},
  	--actions.single+=/liquid_magma_totem,if=raid_event.adds.count<3||raid_event.adds.in>50
 	--{'Liquid Magma Totem', '...'},
  	--actions.single+=/stormkeeper,if=(talent.ascendance.enabled&cooldown.ascendance.remains>10)||!talent.ascendance.enabled
@@ -143,15 +140,15 @@ local ST = {
 	--{'Totem Mastery', 'totem(Totem Mastery).duration<1||{!player.buff(Tailwind Totem)||!player.buff(Storm Totem)||!player.buff(Resonance Totem)||!player.buff(Ember Totem)}'},
 	{'Totem Mastery', 'totem(Totem Mastery).duration<1'},
  	--actions.single+=/lava_beam,if=active_enemies>1&spell_targets.lava_beam>1
-	{'Lava Beam', 'talent(7,1)&buff(Ascendance)&area(40).enemies>1'},
+	{'Lava Beam', 'talent(7,1)&player.buff(Ascendance)&player.area(40).enemies>1'},
  	--actions.single+=/lightning_bolt,if=buff.power_of_the_maelstrom.up,target_if=!debuff.lightning_rod.up
-	{'Lightning Bolt', 'talent(7,2)&buff(Power of the Maelstrom)&!target.debuff(Lightning Rod)'},
+	{'Lightning Bolt', 'talent(7,2)&player.buff(Power of the Maelstrom)&!target.debuff(Lightning Rod)'},
  	--actions.single+=/lightning_bolt,if=buff.power_of_the_maelstrom.up
-	{'Lightning Bolt', '!talent(7,2)&buff(Power of the Maelstrom)'},
+	{'Lightning Bolt', '!talent(7,2)&player.buff(Power of the Maelstrom)'},
  	--actions.single+=/chain_lightning,if=active_enemies>1&spell_targets.chain_lightning>1,target_if=!debuff.lightning_rod.up
-	{'Chain Lightning', 'talent(7,2)&area(40).enemies>1&!target.debuff(Lightning Rod)'},
+	{'Chain Lightning', 'talent(7,2)&player.area(40).enemies>1&!target.debuff(Lightning Rod)'},
  	--actions.single+=/chain_lightning,if=active_enemies>1&spell_targets.chain_lightning>1
-	{'Chain Lightning', '!talent(7,2)&area(40).enemies>1'},
+	{'Chain Lightning', '!talent(7,2)&player.area(40).enemies>1'},
  	--actions.single+=/lightning_bolt,target_if=!debuff.lightning_rod.up
 	{'Lightning Bolt', '!talent(7,2)&!target.debuff(Lightning Rod)'},
  	--actions.single+=/lightning_bolt
@@ -172,9 +169,9 @@ local inCombat = {
 	--{Survival, 'player.health < 100'},
 	{Cooldowns, 'toggle(cooldowns)'},
 	--actions+=/run_action_list,name=aoe,if=active_enemies>2&(spell_targets.chain_lightning>2||spell_targets.lava_beam>2)
-	{AoE, {'toggle(AoE)', 'player.area(40).enemies > 2'}},
+	{AoE, {'toggle(AoE)', 'player.area(40).enemies>2'}},
 	--actions+=/run_action_list,name=single
-	{ST, {'target.range < 40', 'target.infront'}}
+	{ST, {'target.range<40', 'target.infront'}}
 }
 
 local outCombat = {
@@ -182,4 +179,4 @@ local outCombat = {
 	--{PreCombat}
 }
 
-NeP.Engine.registerRotation(262, '[|cff'..Xeer.Interface.addonColor..'Xeer|r] Shaman - Elemental', inCombat, outCombat, exeOnLoad, GUI)
+NeP.CR:Add(262, '[|cff'..Xeer.Interface.addonColor..'Xeer|r] Shaman - Elemental', inCombat, outCombat, exeOnLoad)

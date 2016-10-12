@@ -1,9 +1,5 @@
-local GUI = {
-
-}
-
 local exeOnLoad = function()
-	--Xeer.Splash()
+	-- Xeer.ExeOnLoad()
 end
 
 local Voidform = {
@@ -41,4 +37,4 @@ local outCombat = {
 
 }
 
-NeP.Engine.registerRotation(258, '[|cff'..Xeer.Interface.addonColor..'Xeer|r] Priest - Shadow', inCombat, outCombat, exeOnLoad, GUI)
+NeP.CR:Add(258, '[|cff'..Xeer.Interface.addonColor..'Xeer|r] Priest - Shadow', inCombat, outCombat, exeOnLoad)

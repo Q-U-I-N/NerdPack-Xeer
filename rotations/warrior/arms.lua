@@ -1,9 +1,5 @@
-local GUI = {
-}
-
 local exeOnLoad = function()
-
-	Xeer.Splash()
+	 Xeer.ExeOnLoad()
 
 	print("|cffADFF2F ----------------------------------------------------------------------|r")
 	print("|cffADFF2F --- |rWARRIOR |cffADFF2FArms |r")
@@ -13,7 +9,7 @@ local exeOnLoad = function()
 end
 
 local _Xeer = {
-	{'@Xeer.Targeting()', {'!target.alive', 'toggle(AutoTarget)'}},
+	--{'@Xeer.Targeting()', {'!target.alive', 'toggle(AutoTarget)'}},
 --{'Charge', 'target.range>8&target.range<=25&target.infront'},
 
 --[[
@@ -56,15 +52,15 @@ local Survival = {
 local Cooldowns = {
 	--actions+=/potion,name=old_war,if=(target.health.pct<20&buff.battle_cry.up)||target.time_to_die<=26
 	--actions+=/blood_fury,if=buff.battle_cry.up||target.time_to_die<=16
-	{'Blood Fury', 'buff(Battle Cry)'},
+	{'Blood Fury', 'player.buff(Battle Cry)'},
 	--actions+=/berserking,if=buff.battle_cry.up||target.time_to_die<=11
-	{'Berserking', 'buff(Battle Cry)'},
-	--actions+=/arcane_torrent,if=buff.battle_cry_deadly_calm.down&rage.deficit>40
-	--{'Arcane Torrent', 'buff(Battle Cry)&talent(6,1)&rage.deficit>40'},
+	{'Berserking', 'player.buff(Battle Cry)'},
+	--actions+=/arcane_torrent,if=buff.battle_cry_deadly_calm.down&player.rage.deficit>40
+	--{'Arcane Torrent', 'player.buff(Battle Cry)&talent(6,1)&player.rage.deficit>40'},
 	--actions+=/battle_cry,if=(buff.bloodlust.up||time>=1)&!gcd.remains&(buff.shattered_defenses.up||(cooldown.colossus_smash.remains&cooldown.warbreaker.remains))||target.time_to_die<=10
-	{'Battle Cry', '{buff(Bloodlust)||combat(player).time>=1}&{buff(Shattered Defenses)||{spell(Colossus Smash).cooldown>gcd&spell(Warbreaker).cooldown>gcd}}'},
+	{'Battle Cry', '{player.buff(Bloodlust)||player.combat.time>=1}&{player.buff(Shattered Defenses)||{spell(Colossus Smash).cooldown>gcd&spell(Warbreaker).cooldown>gcd}}'},
 	--actions+=/avatar,if=(buff.bloodlust.up||time>=1)
-	{'Avatar', 'buff(Bloodlust)||combat(player).time>=1'},
+	{'Avatar', 'talent(3,3)&{player.buff(Bloodlust)||player.combat.time>=1}'},
 	--actions+=/use_item,name=gift_of_radiance
 	--trinket...
 }
@@ -73,15 +69,15 @@ local Cooldowns = {
 local Util = {
 	{Cooldowns, 'toggle(cooldowns)'},
 	--actions+=/hamstring,if=buff.battle_cry_deadly_calm.remains>cooldown.hamstring.remains
-	--{'Hamstring', 'buff(Battle Cry)&talent(6,1)&!target.debuff(Hamstring)'},	--waste of rage i would say unless ... it's PvP, maybe?
+	--{'Hamstring', 'player.buff(Battle Cry)&talent(6,1)&!target.debuff(Hamstring)'},	--waste of player.rage i would say unless ... it's PvP, maybe?
 	--actions+=/heroic_leap,if=debuff.colossus_smash.up
 	--manual usage of leap via ctrl keybind...
 	--actions+=/rend,if=remains<gcd
 	{'Rend', 'talent(3,2)&target.debuff(Rend).remains<gcd'},
-	--# The tl;dr of this line is to spam focused rage inside battle cry, the added nonsense is to help modeling the difficulty of timing focused rage immediately after mortal strike.
-	--# In game, if focused rage is used the same instant as mortal strike, rage will be deducted for focused rage, the buff is immediately consumed, but it does not buff the damage of mortal strike.
+	--# The tl;dr of this line is to spam focused player.rage inside battle cry, the added nonsense is to help modeling the difficulty of timing focused player.rage immediately after mortal strike.
+	--# In game, if focused player.rage is used the same instant as mortal strike, player.rage will be deducted for focused player.rage, the buff is immediately consumed, but it does not buff the damage of mortal strike.
 	--actions+=/focused_rage,if=buff.battle_cry_deadly_calm.remains>cooldown.focused_rage.remains&(buff.focused_rage.stack<3||!cooldown.mortal_strike.up)&((!buff.focused_rage.react&prev_gcd.mortal_strike)||!prev_gcd.mortal_strike)
-	{'Focused Rage', 'buff(Battle Cry)&talent(6,1)&buff(Focused Rage).stack<3'},
+	{'Focused Rage', 'player.buff(Battle Cry)&talent(6,1)&player.buff(Focused Rage).stack<3'},
 	--actions+=/colossus_smash,if=debuff.colossus_smash.down
 	{'Colossus Smash', '!target.debuff(Colossus Smash)'},
 	--actions+=/warbreaker,if=debuff.colossus_smash.down
@@ -89,28 +85,28 @@ local Util = {
 	--actions+=/ravager
 	{'Ravager', 'talent(7,3)'},
 	--actions+=/overpower,if=buff.overpower.react
-	{'Overpower', 'buff(Overpower)'}
+	{'Overpower', 'player.buff(Overpower)'}
 }
 
 local AoE = {
 	--actions.aoe=mortal_strike
 	{'Mortal Strike'},
 	--actions.aoe+=/execute,if=buff.stone_heart.react
-	{'Execute', 'buff(Ayala\'s Stone Heart)'},
+	{'Execute', 'player.buff(Ayala\'s Stone Heart)'},
 	--actions.aoe+=/colossus_smash,if=buff.shattered_defenses.down&buff.precise_strikes.down
-	{'Colossus Smash', '!buff(Shattered Defenses)&!buff(Precise Strikes)'},
+	{'Colossus Smash', '!player.buff(Shattered Defenses)&!player.buff(Precise Strikes)'},
 	--actions.aoe+=/warbreaker,if=buff.shattered_defenses.down
-	{'Warbreaker', '!buff(Shattered Defenses)'},
-	--actions.aoe+=/whirlwind,if=talent.fervor_of_battle.enabled&(debuff.colossus_smash.up||rage.deficit<50)&(!talent.focused_rage.enabled||buff.battle_cry_deadly_calm.up||buff.cleave.up)
-	{'Whirlwind', 'talent(3,1)&{target.debuff(Colossus Smash)||rage.deficit<50}&{!talent(5,3)||{buff(Battle Cry)&talent(6,1)}||buff(Cleave)}'},
+	{'Warbreaker', '!player.buff(Shattered Defenses)'},
+	--actions.aoe+=/whirlwind,if=talent.fervor_of_battle.enabled&(debuff.colossus_smash.up||player.rage.deficit<50)&(!talent.focused_rage.enabled||buff.battle_cry_deadly_calm.up||buff.cleave.up)
+	{'Whirlwind', 'talent(3,1)&{target.debuff(Colossus Smash)||player.rage.deficit<50}&{!talent(5,3)||{player.buff(Battle Cry)&talent(6,1)}||player.buff(Cleave)}'},
 	--actions.aoe+=/rend,if=remains<=duration*0.3
 	{'Rend', 'talent(3,2)&target.debuff(Rend).remains<=4.5'},
 	--actions.aoe+=/bladestorm
 	{'Bladestorm'},
 	--actions.aoe+=/cleave
 	{'Cleave'},
-	--actions.aoe+=/whirlwind,if=rage>=60
-	{'Whirlwind', 'rage>=60'},
+	--actions.aoe+=/whirlwind,if=player.rage>=60
+	{'Whirlwind', 'player.rage>=60'},
 	--actions.aoe+=/shockwave
 	{'Shockwave', 'talent(2,1)'},
 	--actions.aoe+=/storm_bolt
@@ -121,23 +117,23 @@ local Cleave = {
 	--actions.cleave=mortal_strike
 	{'Mortal Strike'},
 	--actions.cleave+=/execute,if=buff.stone_heart.react
-	{'Execute', 'buff(Ayala\'s Stone Heart)'},
+	{'Execute', 'player.buff(Ayala\'s Stone Heart)'},
 	--actions.cleave+=/colossus_smash,if=buff.shattered_defenses.down&buff.precise_strikes.down
-	{'Colossus Smash', '!buff(Shattered Defenses)&!buff(Precise Strikes)'},
+	{'Colossus Smash', '!player.buff(Shattered Defenses)&!player.buff(Precise Strikes)'},
 	--actions.cleave+=/warbreaker,if=buff.shattered_defenses.down
-	{'Warbreaker', '!buff(Shattered Defenses)'},
+	{'Warbreaker', '!player.buff(Shattered Defenses)'},
 	--actions.cleave+=/focused_rage,if=buff.shattered_defenses.down
-	{'Focused Rage', '!buff(Shattered Defenses)'},
-	--actions.cleave+=/whirlwind,if=talent.fervor_of_battle.enabled&(debuff.colossus_smash.up||rage.deficit<50)&(!talent.focused_rage.enabled||buff.battle_cry_deadly_calm.up||buff.cleave.up)
-	{'Whirlwind', 'talent(3,1)&{target.debuff(Colossus Smash)||rage.deficit<50}&{!talent(5,3)||{buff(Battle Cry)&talent(6,1)}||buff(Cleave)}'},
+	{'Focused Rage', '!player.buff(Shattered Defenses)'},
+	--actions.cleave+=/whirlwind,if=talent.fervor_of_battle.enabled&(debuff.colossus_smash.up||player.rage.deficit<50)&(!talent.focused_rage.enabled||buff.battle_cry_deadly_calm.up||buff.cleave.up)
+	{'Whirlwind', 'talent(3,1)&{target.debuff(Colossus Smash)||player.rage.deficit<50}&{!talent(5,3)||{player.buff(Battle Cry)&talent(6,1)}||player.buff(Cleave)}'},
 	--actions.cleave+=/rend,if=remains<=duration*0.3
 	{'Rend', 'talent(3,2)&target.debuff(Rend).remains<=4.5'},
 	--actions.cleave+=/bladestorm
 	{'Bladestorm'},
 	--actions.cleave+=/cleave
 	{'Cleave'},
-	--actions.cleave+=/whirlwind,if=rage>=100||buff.focused_rage.stack=3
-	{'Whirlwind', 'rage>=100||buff(Focused Rage).stack=3'},
+	--actions.cleave+=/whirlwind,if=player.rage>=100||buff.focused_rage.stack=3
+	{'Whirlwind', 'player.rage>=100||player.buff(Focused Rage).stack=3'},
 	--actions.cleave+=/shockwave
 	{'Shockwave', 'talent(2,1)'},
 	--actions.cleave+=/storm_bolt
@@ -146,38 +142,36 @@ local Cleave = {
 
 local Execute = {
 	--actions.execute=mortal_strike,if=buff.battle_cry.up&buff.focused_rage.stack=3
-	{'Mortal Strike', 'buff(Battle Cry)&buff(Focused Rage).stack=3'},
+	{'Mortal Strike', 'player.buff(Battle Cry)&player.buff(Focused Rage).stack=3'},
 	--actions.execute+=/execute,if=buff.battle_cry_deadly_calm.up
-	{'Execute', 'buff(Battle Cry)&talent(6,1)'},
+	{'Execute', 'player.buff(Battle Cry)&talent(6,1)'},
 	--actions.execute+=/colossus_smash,if=buff.shattered_defenses.down
-	{'Colossus Smash', '!buff(Shattered Defenses)'},
-	--actions.execute+=/warbreaker,if=buff.shattered_defenses.down&rage<=30
-	{'Warbreaker', '!buff(Shattered Defenses)&rage<=30'},
-	--actions.execute+=/execute,if=buff.shattered_defenses.up&rage>22||buff.shattered_defenses.down
-	{'Execute', '{buff(Shattered Defenses)&rage>22}||!buff(Shattered Defenses)'}
+	{'Colossus Smash', '!player.buff(Shattered Defenses)'},
+	--actions.execute+=/warbreaker,if=buff.shattered_defenses.down&player.rage<=30
+	{'Warbreaker', '!player.buff(Shattered Defenses)&player.rage<=30'},
+	--actions.execute+=/execute,if=buff.shattered_defenses.up&player.rage>22||buff.shattered_defenses.down
+	{'Execute', '{player.buff(Shattered Defenses)&player.rage>22}||!player.buff(Shattered Defenses)'}
 }
 
 local ST = {
 	--actions.single=mortal_strike,if=buff.battle_cry.up&buff.focused_rage.stack>=1&buff.battle_cry.remains<gcd
-	{'Mortal Strike', 'buff(Battle Cry)&buff(Focused Rage).stack>=1&spell(Battle Cry).cooldown<gcd'},
+	{'Mortal Strike', 'player.buff(Battle Cry)&player.buff(Focused Rage).stack>=1&spell(Battle Cry).cooldown<gcd'},
 	--actions.single+=/colossus_smash,if=buff.shattered_defenses.down
-	{'Colossus Smash', '!buff(Shattered Defenses)'},
+	{'Colossus Smash', '!player.buff(Shattered Defenses)'},
 	--actions.single+=/warbreaker,if=buff.shattered_defenses.down&cooldown.mortal_strike.remains<gcd
-	{'Warbreaker', '!buff(Shattered Defenses)&spell(Mortal Strike).cooldown<gcd'},
-	--actions.single+=/focused_rage,if=((!buff.focused_rage.react&prev_gcd.mortal_strike)||!prev_gcd.mortal_strike)&buff.focused_rage.stack<3&(buff.shattered_defenses.up||cooldown.colossus_smash.remains)
-	{'Focused Rage', '!buff(Focused Rage)||buff(Focused Rage).stack<3&{buff(Shattered Defenses)||spell(Colossus Smash).cooldown>gcd}'},
+	{'Warbreaker', '!player.buff(Shattered Defenses)&spell(Mortal Strike).cooldown<gcd'},
+	--actions.single+=/focused_rage,if=(((!buff.focused_rage.react&prev_gcd.mortal_strike)|!prev_gcd.mortal_strike)&buff.focused_rage.stack<3&(buff.shattered_defenses.up|cooldown.colossus_smash.remains))&player.rage>60
+	{'Focused Rage', '{{{!player.buff(Focused Rage)&prev_gcd(Mortal Strike)}||!prev_gcd(Mortal Strike)}&player.buff(Focused Rage).stack<3&{player.buff(Shattered Defenses)||cooldown(Colossus Smash).remains>gcd}}&player.rage>60'},
 	--actions.single+=/mortal_strike
 	{'Mortal Strike'},
 	--actions.single+=/execute,if=buff.stone_heart.react
-	{'Execute', 'buff(Ayala\'s Stone Heart)'},
-	--actions.single+=/slam,if=buff.battle_cry_deadly_calm.up||buff.focused_rage.stack=3||rage.deficit<=30
-	{'Slam', '!talent(3,1)&{{buff(Battle Cry)&talent(6,1)}||buff(Focused Rage).stack=3||rage.deficit<=30}'},
+	{'Execute', 'player.buff(Ayala\'s Stone Heart)'},
+	--actions.single+=/slam
+	{'Slam'},
 	--Whirlwind instead Slam if "Fevor of Battle" is picked
-	{'Whirlwind', 'talent(3,1)&{{buff(Battle Cry)&talent(6,1)}||buff(Focused Rage).stack=3||rage.deficit<=30}'},
+	{'Whirlwind', 'talent(3,1)&{{player.buff(Battle Cry)&talent(6,1)}||player.buff(Focused Rage).stack=3||player.rage.deficit<=30}'},
 	--actions.single+=/execute,if=equipped.archavons_heavy_hand
 	{'Execute', 'equipped(137060)'},
-	--actions.single+=/slam,if=equipped.archavons_heavy_hand
-	{'Slam', 'equipped(137060)'},
 	--actions.single+=/focused_rage,if=equipped.archavons_heavy_hand
 	{'Focused Rage', 'equipped(137060)'}
 }
@@ -193,7 +187,8 @@ local Interrupts = {
 }
 
 local inCombat = {
-	{Keybinds},	{Interrupts, 'target.interruptAt(40)'},	
+	{Keybinds},
+	{Interrupts, 'target.interruptAt(40)'},
 	{_Xeer},
 	--{Survival, 'player.health < 100'},
 	--{Cooldowns, 'toggle(cooldowns)'},
@@ -210,9 +205,8 @@ local inCombat = {
 
 
 local outCombat = {
-
-	{Keybinds},	{PreCombat}
-
+	{Keybinds},
+	{PreCombat}
 }
 
-NeP.Engine.registerRotation(71, '[|cff'..Xeer.Interface.addonColor..'Xeer|r] WARRIOR - Arms', inCombat, outCombat, exeOnLoad, GUI)
+NeP.CR:Add(71, '[|cff'..Xeer.Interface.addonColor..'Xeer|r] WARRIOR - Arms', inCombat, outCombat, exeOnLoad)
