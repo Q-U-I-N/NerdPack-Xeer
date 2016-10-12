@@ -1,6 +1,3 @@
-local GUI = {
-}
-
 local exeOnLoad = function()
 	 Xeer.ExeOnLoad()
 
@@ -88,21 +85,6 @@ local ST = {
 	{'Soul Cleave', 'pain>=80'},
 	{'Shear', 'player.buff(Blade Turning)'},
 	{'Fracture', 'talent(4,2)&pain>=60'},
-	--actions+=/shear
-	{'Shear'}
-}
-
-local xCombat = {
-	{'Soul Carver'},
-	{'Fel Devastation', 'talent(6,1)&player.incdmg(5)>=player.health.max*0.70'},
-	{'Soul Cleave', 'pain>=80'},
-	{'Immolation Aura', 'pain<=80'},
-	{'Felblade', 'talent(3,1)&pain<=80'},
-	{'Fel Eruption', 'talent(3,3)'},
-	{'Spirit Bomb', '!prev_gcd(Spirit Bomb)&!target.debuff(Frailty)&player.buff(Soul Fragments).count>=1'},
-	{'Shear', 'player.buff(Blade Turning)'},
-	{'Fracture', 'talent(4,2)&pain>=60'},
-	{'Sigil of Flame', 'target.ground'},
 	--actions+=/shear
 	{'Shear'}
 }

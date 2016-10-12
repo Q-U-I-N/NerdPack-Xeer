@@ -103,7 +103,7 @@ local Combustion = {
 	--actions.combustion_phase+=/pyroblast,if=buff.hot_streak.up
 	{'Pyroblast', 'player.buff(Hot Streak!)'},
 	--actions.combustion_phase+=/fire_blast,if=buff.heating_up.up
-	{'!Fire Blast', 'player.buff(Heating Up)'},
+	{'&Fire Blast', 'player.buff(Heating Up)'},
 	--actions.combustion_phase+=/phoenixs_flames
 	{'Phoenix\'s Flames', 'artifact(Phoenix\'s Flames).equipped'},
 	--actions.combustion_phase+=/scorch,if=buff.combustion.remains>cast_time
@@ -122,7 +122,7 @@ local RoP = {
 	--actions.rop_phase+=/pyroblast,if=buff.kaelthas_ultimate_ability.react
 	{'Pyroblast', 'player.buff(Kael\'thas\'s Ultimate Ability).react'},
 	--actions.rop_phase+=/fire_blast,if=!prev_off_gcd.fire_blast
-	{'!Fire Blast', '!prev_off_gcd(Fire Blast)'},
+	{'&Fire Blast', '!prev_off_gcd(Fire Blast)'},
 	--actions.rop_phase+=/phoenixs_flames,if=!prev_gcd.phoenixs_flames
 	{'Phoenix\'s Flames', 'artifact(Phoenix\'s Flames).equipped&!prev_gcd(Phoenix\'s Flames)'},
 	--actions.rop_phase+=/scorch,if=target.health.pct<=25&equipped.132454
@@ -146,7 +146,7 @@ local MainRotation = {
 	{'Pyroblast', 'player.buff(Kael\'thas\'s Ultimate Ability)'},
 	--actions.single_target+=/call_action_list,name=active_talents
 	{Talents},
-	{'!Fire Blast', 'player.buff(Heating Up)'},
+	{'&Fire Blast', 'player.buff(Heating Up)'},
 	--actions.single_target+=/fire_blast,if=!talent.kindling.enabled&buff.heating_up.up&(!talent.rune_of_power.enabled||charges_fractional>1.4||cooldown.combustion.remains<40)&(3-charges_fractional)*(12*spell_haste)<cooldown.combustion.remains+3||target.time_to_die.remains<4
 	--{'!Fire Blast', '!talent(7,1)&player.buff(Heating Up)&player.casting(Fireball).left<98&!prev_off_gcd(Fire Blast)&{!talent(3,2)||action(Fire Blast).charges>1.4||cooldown(Combustion).remains<40}&{3-action(Fire Blast).charges}*{12*{spell_haste}}<=cooldown(Combustion).remains||target.time_to_die.remains<4'},
 	--actions.single_target+=/fire_blast,if=talent.kindling.enabled&buff.heating_up.up&(!talent.rune_of_power.enabled||charges_fractional>1.5||cooldown.combustion.remains<40)&(3-charges_fractional)*(18*spell_haste)<cooldown.combustion.remains+3||target.time_to_die.remains<4

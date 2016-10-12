@@ -169,9 +169,9 @@ local inCombat = {
 	--{Survival, 'player.health < 100'},
 	{Cooldowns, 'toggle(cooldowns)'},
 	--actions+=/run_action_list,name=aoe,if=active_enemies>2&(spell_targets.chain_lightning>2||spell_targets.lava_beam>2)
-	{AoE, {'toggle(AoE)', 'player.area(40).enemies > 2'}},
+	{AoE, {'toggle(AoE)', 'player.area(40).enemies>2'}},
 	--actions+=/run_action_list,name=single
-	{ST, {'target.range < 40', 'target.infront'}}
+	{ST, {'target.range<40', 'target.infront'}}
 }
 
 local outCombat = {

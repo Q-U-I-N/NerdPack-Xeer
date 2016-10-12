@@ -1,8 +1,8 @@
 --/dump NeP.DSL:Get('equipped')('player','1212')
 --/dump NeP.DSL:Get("spell.cooldown")(nil, 'Intercept')
-NeP.DSL:Register('equipped', function(target, item)
-	if IsEquippedItem(item) == true then return true else return false end
-end)
+--NeP.DSL:Register('equipped', function(target, item)
+--	if IsEquippedItem(item) == true then return true else return false end
+--end)
 
 --/dump NeP.DSL:Get('casting.left')('player', 'Fireball')
 NeP.DSL:Register('casting.left', function(target, spell)
