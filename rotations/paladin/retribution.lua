@@ -3,7 +3,7 @@ local GUI = {
 }
 
 local exeOnLoad = function()
-	 Xeer.Core:Splash()
+	 Xeer.ExeOnLoad()
 
 	print('|cffADFF2F ----------------------------------------------------------------------|r')
 	print('|cffADFF2F --- |rPALADIN |cffADFF2FRetribution |r')

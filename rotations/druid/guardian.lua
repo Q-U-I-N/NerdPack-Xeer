@@ -1,5 +1,5 @@
 local exeOnLoad = function()
-	Xeer.Core:Splash()
+	Xeer.ExeOnLoad()
 end
 
 local Survival = {

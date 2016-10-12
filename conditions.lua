@@ -33,8 +33,8 @@ end)
 --]]
 -----------------------------------SIMC STUFFS----------------------------------
 
-NeP.DSL:Register('xmoving', function(target)
-	local speed, _ = GetUnitSpeed(target)
+NeP.DSL:Register('xmoving', function()
+	local speed, _ = GetUnitSpeed('player')
 		if speed ~= 0 then
 			return 1
 		else
@@ -65,7 +65,7 @@ local PowerT = {
 --/dump NeP.DSL:Get('action.cost')('Rake')
 --/dump NeP.DSL:Get('action.cost')('Rejuvenation')
 NeP.DSL:Register('action.cost', function(spell)
-	local costText = Xeer.Core:Scan_SpellCost(spell)
+	local costText = Xeer.Scan_SpellCost(spell)
 	local numcost = 0
 		for i = 0, 3 do
 			local cost = strmatch(costText, PowerT[i])
@@ -87,7 +87,7 @@ end)
 
 --/dump NeP.DSL:Get('ignorepain_cost')()
 NeP.DSL:Register('ignorepain_cost', function()
-	return Xeer.Core:Scan_IgnorePain()
+	return Xeer.Scan_IgnorePain()
 end)
 
 --/dump NeP.DSL:Get['ignorepain_max')()
@@ -100,36 +100,50 @@ NeP.DSL:Register('ignorepain_max', function()
 	end
 end)
 
+--/dump NeP.Core:GetSpellID('Rip')
+--/dump select(8, UnitDebuff('target', GetSpellInfo(NeP.Core:GetSpellID(NeP.Core:GetSpellName('Rip')))))
+--/dump select(6, UnitDebuff('target', GetSpellInfo(NeP.Core:GetSpellID(NeP.Core:GetSpellName('Rip')))))
+
 --------------------------------------FERAL-------------------------------------
+--/dump NeP.DSL:Get('gcd')()
+--/dump NeP.DSL:Get('dot.x')('target', 'Moonfire')
+--/dump NeP.DSL:Get('dot.tick_time')('Moonfire')
+
+
 local DotTicks = {
-	[1822] = 3,
-	[1079] = 2,
-	[106832] = 3,
-	[8921] = 2,
-	[155625] = 2,
+    [1] = {
+        [1822] = 3,
+        [1079] = 2,
+        [106832] = 3,
+    }
+    [2] = {
+        [8921] = 2,
+        [155625] = 2,
+    }
 }
 
---/dump NeP.DSL:Get['dot.x')('target', 'Moonfire')
---/dump NeP.DSL:Get('dot.tick_time')('target','155625')
-NeP.DSL:Register('dot.tick_time', function(target, spell)
-	local spell = NeP.Core:GetSpellID(NeP.Core:GetSpellName(spell))
-	local class = select(3,UnitClass('player'))
-	if class == 11 and GetSpecialization() == 2 then
-		if NeP.DSL:Get('talent')(nil, '6,1') and spell == 1822 or spell == 1079 or spell == 106832 then
-			return DotTicks[spell] * 0.67
-		else if spell == 1822 or spell == 1079 or spell == 106832 then
-					return DotTicks[spell]
-				else
-					return math.floor((DotTicks[spell] / ((GetHaste() / 100) + 1)) * 10^3 ) / 10^3
-				end
-		end
-	end
+NeP.DSL:Register('dot.tick_time', function(spell)
+    local spell = NeP.Core:GetSpellID(NeP.Core:GetSpellName(spell))
+    local class = select(3,UnitClass('player'))
+    if class == 11 and GetSpecialization() == 2 then
+        if NeP.DSL:Get('talent')(nil, '6,2') and DotTicks[1][spell] then
+            return DotTicks[1][spell] * 0.67
+        else
+            if DotTicks[2][spell] then
+                return DotTicks[2][spell]
+            else
+                local tick = DotTicks[1][spell] or DotTicks[2][spell]
+                return math.floor((tick / ((GetHaste() / 100) + 1)) * 10^3 ) / 10^3
+            end
+        end
+    end
 end)
+
 --------------------------------------FERAL-------------------------------------
 
 --/dump NeP.DSL:Get('dot.duration')('target','Rip')
 NeP.DSL:Register('dot.duration', function(target, spell)
-	local debuff,_,duration,expires,caster = Xeer.Core:UnitDot(target, spell)
+	local debuff,_,duration,expires,caster = Xeer.UnitDot(target, spell)
 	if debuff and (caster == 'player' or caster == 'pet') then
 		return duration
 	end
@@ -273,13 +287,13 @@ NeP.DSL:Register('charges_fractional', function(_, spell)
 	end
 end)
 
---/dump NeP.DSL:Get('spell_haste')('player')
-NeP.DSL:Register('spell_haste', function(target)
-	local shaste = NeP.DSL:Get('haste')(target)
+--/dump NeP.DSL:Get('spell_haste')()
+NeP.DSL:Register('spell_haste', function()
+	local shaste = NeP.DSL:Get('haste')('player')
 	return math.floor((100 / ( 100 + shaste )) * 10^3 ) / 10^3
 end)
 
-NeP.DSL:Register('talent.enabled', function(target, args)
+NeP.DSL:Register('talent.enabled', function(_, args)
 --[[
 	local havetalent = NeP.DSL:Get('talent')(target, args)
 	if havetalent == true then
@@ -288,15 +302,15 @@ NeP.DSL:Register('talent.enabled', function(target, args)
 		return 0
 	end
 --]]
-	return NeP.DSL:Get('talent')(target, args)
+	return NeP.DSL:Get('talent')(_, args)
 end)
 
 --/dump NeP.DSL:Get('action.execute_time')('player','Fireball')
-NeP.DSL:Register('action.execute_time', function(target, spell)
+NeP.DSL:Register('action.execute_time', function(_, spell)
 	return NeP.DSL:Get('execute_time')(target, spell)
 end)
 
-NeP.DSL:Register('execute_time', function(target, spell)
+NeP.DSL:Register('execute_time', function(_, spell)
 	if NeP.DSL:Get('spell.exists')(_, spell) then
   	local GCD = NeP.DSL:Get('gcd')()
   	local CTT = NeP.DSL:Get('spell.casttime')(_, spell)
@@ -330,8 +344,8 @@ end)
 
 --max_energy=1, this means that u will get energy cap in less than one GCD
 --/dump NeP.DSL:Get('max_energy')('player')
-NeP.DSL:Register('max_energy', function(target)
-	 local ttm = NeP.DSL:Get('energy.time_to_max')(target)
+NeP.DSL:Register('max_energy', function()
+	 local ttm = NeP.DSL:Get('energy.time_to_max')()
 	 local GCD = NeP.DSL:Get('gcd')()
 	 if GCD > ttm then
 		 return 1
@@ -352,9 +366,9 @@ NeP.DSL:Register('energy.regen', function(target)
 end)
 
 --/dump NeP.DSL:Get('energy.time_to_max')('player')
-NeP.DSL:Register('energy.time_to_max', function(target)
-	local deficit = NeP.DSL:Get('deficit')(target)
-	local eregen = NeP.DSL:Get('energy.regen')(target)
+NeP.DSL:Register('energy.time_to_max', function()
+	local deficit = NeP.DSL:Get('deficit')('player')
+	local eregen = NeP.DSL:Get('energy.regen')('player')
 	return deficit / eregen
 end)
 
@@ -364,28 +378,25 @@ NeP.DSL:Register('focus.deficit', function(target)
 end)
 
 --/dump NeP.DSL:Get('focus.regen')('player')
-NeP.DSL:Register('focus.regen', function()
+NeP.DSL:Register('focus.regen', function(target)
 	local fregen = select(2, GetPowerRegen(target))
 	return fregen
 end)
 
 --/dump NeP.DSL:Get('focus.time_to_max')('player')
-NeP.DSL:Register('focus.time_to_max', function(target)
-	local deficit = NeP.DSL:Get('deficit')(target)
-	local fregen = NeP.DSL:Get('focus.regen')(target)
+NeP.DSL:Register('focus.time_to_max', function()
+	local deficit = NeP.DSL:Get('deficit')('player')
+	local fregen = NeP.DSL:Get('focus.regen')('player')
 	return deficit / fregen
 end)
 
-NeP.DSL:Register('action.cast_time', function(_, spell)
-	if NeP.DSL:Get('spell.exists')(_, spell) == true then
-		return NeP.DSL:Get('spell.casttime')(_, spell)
-	else
-		return 0
-	end
-end)
 
---/dump NeP.DSL:Get('cast_time')('player','Revenge')
-NeP.DSL:Register('cast_time', function(_, spell)
+--/dump NeP.DSL:Get('rage.deficit')('player')
+NeP.DSL:Register('rage.deficit', function(target)
+	return NeP.DSL:Get('deficit')(target)
+end)
+--/dump NeP.DSL:Get('action.cast_time')('player','Revenge')
+NeP.DSL:Register('action.cast_time', function(_, spell)
 	if NeP.DSL:Get('spell.exists')(_, spell) == true then
 		return NeP.DSL:Get('spell.casttime')(_, spell)
 	else

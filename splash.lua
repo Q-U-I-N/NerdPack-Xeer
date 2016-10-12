@@ -32,7 +32,7 @@ end), nil)
 
 local AddonInfo = '|cff'..Xeer.Interface.addonColor..Xeer.Name..' V:'..Xeer.Version
 
-function Xeer.Core:Splash()
+function Xeer:Splash()
 	Splash_Frame:SetAlpha(1)
 	Splash_Frame:Show()
 	--PlaySound('LEVELUP', 'SFX')

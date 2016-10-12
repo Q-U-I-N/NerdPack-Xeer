@@ -11,10 +11,7 @@ Xeer = {
 		frame = CreateFrame('GameTooltip', 'NeP_ScanningTooltip', UIParent, 'GameTooltipTemplate')
 }
 
-Xeer.Core = {}
-
---local Parse = NeP.DSL.Parse
-
+--local frame = CreateFrame('GameTooltip', 'NeP_ScanningTooltip', UIParent, 'GameTooltipTemplate')
 --[[
 	local classTaunt = {
 		[1] = 'Taunt',
@@ -27,8 +24,8 @@ Xeer.Core = {}
 --]]
 
 	-- Temp Hack
-	function Xeer.Core:ExeOnLoad()
-		Xeer.Core.Splash()
+	Xeer.ExeOnLoad = function()
+		Xeer.Splash()
 		NeP.Interface:AddToggle({
 			key = 'AutoTarget',
 			name = 'Auto Target',
@@ -37,16 +34,16 @@ Xeer.Core = {}
 		})
 	end
 
-	function Xeer.Core:ClassSetting(key)
+	Xeer.ClassSetting = function(key)
 		local name = '|cff'..NeP.Core.classColor('player')..'Class Settings'
 		NeP.Interface.CreateSetting(name, function() NeP.Interface.ShowGUI(key) end)
 	end
 --[[
-	function Xeer.Core:dynEval(condition, spell)
+	Xeer.dynEval(condition, spell)
 		return Parse(condition, spell or '')
 	end
 --]]
-	function Xeer.Core:Taunt(eval, args)
+	Xeer.Taunt = function(eval, args)
 	local spell = NeP.Engine:Spell(args)
 	if not spell then return end
 	for i=1,#NeP.OM['unitEnemie'] do
@@ -61,7 +58,7 @@ Xeer.Core = {}
 end
 
 
-function Xeer.Core:Round(num, idp)
+Xeer.Round = function(num, idp)
 	if num then
 		local mult = 10^(idp or 0)
 		return math.floor(num * mult + 0.5) / mult
@@ -70,7 +67,7 @@ function Xeer.Core:Round(num, idp)
 	end
 end
 
-function Xeer.Core:ShortNumber(number)
+Xeer.ShortNumber = function(number)
     local affixes = { "", "k", "m", "b", }
     local affix = 1
     local dec = 0
@@ -94,25 +91,25 @@ function Xeer.Core:ShortNumber(number)
 end
 
 ----------------------------------ToolTips-------------------------------------
---/dump Xeer.Core:Scan_SpellCost('Rip')
-function Xeer.Core:Scan_SpellCost(spell)
+--/dump Xeer.Scan_SpellCost('Rip')
+Xeer.Scan_SpellCost = function(spell)
 	local spell = NeP.Core:GetSpellID(NeP.Core:GetSpellName(spell))
-	self.frame:SetOwner(UIParent, 'ANCHOR_NONE')
-	self.frame:SetSpellByID(spell)
-	for i = 2, self.frame:NumLines() do
+	frame:SetOwner(UIParent, 'ANCHOR_NONE')
+	frame:SetSpellByID(spell)
+	for i = 2, frame:NumLines() do
 		local tooltipText = _G['NeP_ScanningTooltipTextLeft' .. i]:GetText()
 		return tooltipText
 	end
 	return false
 end
 
---/dump Xeer.Core:Scan_IgnorePain()
-function Xeer.Core:Scan_IgnorePain()
+--/dump Xeer.Scan_IgnorePain()
+Xeer.Scan_IgnorePain = function()
 	for i = 1, 40 do
 		local qqq = select(11,UnitBuff('player', i))
 		if qqq == 190456 then
-			self.frame:SetOwner(UIParent, 'ANCHOR_NONE')
-			self.frame:SetUnitBuff('player', i)
+			frame:SetOwner(UIParent, 'ANCHOR_NONE')
+			frame:SetUnitBuff('player', i)
 			local tooltipText = _G['NeP_ScanningTooltipTextLeft2']:GetText()
 			local match = tooltipText:lower():match('of the next.-$')
     	return gsub(match, '%D', '') + 0
@@ -179,7 +176,7 @@ end
 		return prio
 	end
 
-	function Xeer.Core:Targeting()
+	Xeer.Targeting()
 		-- If dont have a target, target is friendly or dead
 		if not UnitExists('target') or UnitIsFriend('player', 'target') or UnitIsDeadOrGhost('target') then
 			local setPrio = {}
@@ -218,8 +215,8 @@ local function oFilter(owner, spell, spellID, caster)
 	end
 	return true
 end
-function Xeer.Core:UnitHot(target, spell, owner)
 
+Xeer.UnitHot = function(target, spell, owner)
 	local name, count, caster, expires, spellID
 	if tonumber(spell) then
 		local go, i = true, 0
@@ -234,8 +231,8 @@ function Xeer.Core:UnitHot(target, spell, owner)
 	-- This adds some random factor
 		return name, count, expires, caster
 end
-function Xeer.Core:UnitDot(target, spell, owner)
 
+Xeer.UnitDot = function(target, spell, owner)
 	local name, count, caster, expires, spellID, power
 	if tonumber(spell) then
 		local go, i = true, 0
@@ -251,10 +248,11 @@ function Xeer.Core:UnitDot(target, spell, owner)
 		return name, count, duration, expires, caster, power
 end
 
+
 -------------------------------- WARRIOR ---------------------------------------
 
---/dump Xeer.Core:getIgnorePain()
-function Xeer.Core:getIgnorePain()
+--/dump Xeer.getIgnorePain()
+Xeer.getIgnorePain = function()
 		--output
 		local matchTooltip = false
 		local showPercentage = false
@@ -309,7 +307,7 @@ function Xeer.Core:getIgnorePain()
     local indom = select(4, GetTalentInfo(5, 3, 1)) and 1.25 or 1
 
 		--T18
-    local t18 = UnitBuff("player", GetSpellInfo(12975)) and Xeer.Core:GetNumberSetPieces("T18") >= 4 and 2 or 1
+    local t18 = UnitBuff("player", GetSpellInfo(12975)) and Xeer.GetNumberSetPieces("T18") >= 4 and 2 or 1
 
     local curIP = select(17, UnitBuff('player', GetSpellInfo(190456))) or 0
     if matchTooltip then
@@ -318,14 +316,14 @@ function Xeer.Core:getIgnorePain()
 
     local maxIP = (apBase + apPos + apNeg) * 18.6 * vers * indom * scales
     if  not matchTooltip then --some TODO notes so i wont forget fix it:
-        --maxIP = Xeer.Core:Round(maxIP * 0.9) - missing dragon skin arti passive -> * trait!!! missing 0.02-0.06
-				maxIP = Xeer.Core:Round(maxIP * 1.04) -- tooltip value my test with 2/3 dragon skin
-				--maxIP = Xeer.Core:Round((maxIP * 0.9) * trait) -- need enable after got arti lib again
+        --maxIP = Xeer.Round(maxIP * 0.9) - missing dragon skin arti passive -> * trait!!! missing 0.02-0.06
+				maxIP = Xeer.Round(maxIP * 1.04) -- tooltip value my test with 2/3 dragon skin
+				--maxIP = Xeer.Round((maxIP * 0.9) * trait) -- need enable after got arti lib again
     end
 
-    local newIP = Xeer.Core:Round(maxIP * (calcRage / maxRage) * 1 * nevSurPerc * t18) --*t18 *trait instead 1
+    local newIP = Xeer.Round(maxIP * (calcRage / maxRage) * 1 * nevSurPerc * t18) --*t18 *trait instead 1
 
-    local cap = Xeer.Core:Round(maxIP * 3)
+    local cap = Xeer.Round(maxIP * 3)
     if nevSur then
         cap = cap * 1.75
     end
@@ -334,8 +332,8 @@ function Xeer.Core:getIgnorePain()
 
     local castIP = math.min(diff, newIP)
 
-    local castPerc = Xeer.Core:Round((castIP / cap) * 100)
-    local curPerc = Xeer.Core:Round((curIP / cap) * 100)
+    local castPerc = Xeer.Round((castIP / cap) * 100)
+    local curPerc = Xeer.Round((curIP / cap) * 100)
 
 --[[
     if showPercentage then
@@ -354,10 +352,10 @@ function Xeer.Core:getIgnorePain()
 end
 
 --set bonuses
---/dump Xeer.Core:GetNumberSetPieces('T18', 'WARRIOR')
-function Xeer.Core:GetNumberSetPieces(set, class)
+--/dump Xeer.GetNumberSetPieces('T18', 'WARRIOR')
+Xeer.GetNumberSetPieces = function(set, class)
     class = class or select(2, UnitClass("player"))
-    local pieces = Xeer.Core.sets[class][set] or {}
+    local pieces = Xeer.sets[class][set] or {}
     local counter = 0
     for _, itemID in ipairs(pieces) do
         if IsEquippedItem(itemID) then
@@ -367,7 +365,7 @@ function Xeer.Core:GetNumberSetPieces(set, class)
     return counter
 end
 
-Xeer.Core.sets = {
+Xeer.sets = {
     ["WARRIOR"] = {
         ["T18"] = {
             124319,

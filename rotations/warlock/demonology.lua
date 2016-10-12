@@ -4,7 +4,7 @@ local GUI = {
 
 local exeOnLoad = function()
 
-	 Xeer.Core:Splash()
+	 Xeer.ExeOnLoad()
 
 	print("|cffADFF2F ----------------------------------------------------------------------|r")
 	print("|cffADFF2F --- |rWARLOCK |cffADFF2FDemonology |r")
