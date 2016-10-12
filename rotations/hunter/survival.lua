@@ -3,7 +3,7 @@ local GUI = {
 }
 
 local exeOnLoad = function()
-	-- NeP.Xeer:Splash()
+	-- Xeer.Core:Splash()
 end
 
 local Survival = {
@@ -57,4 +57,4 @@ local outCombat = {
 	{Keybinds},
 }
 
-NeP.CR:Add(255, '[|cff'..NeP.Xeer.Interface.addonColor..'Xeer|r] Hunter - Survival', inCombat, outCombat, exeOnLoad)
+NeP.CR:Add(255, '[|cff'..Xeer.Interface.addonColor..'Xeer|r] Hunter - Survival', inCombat, outCombat, exeOnLoad)

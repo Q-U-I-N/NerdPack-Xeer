@@ -1,8 +1,5 @@
-local GUI = {
-}
-
 local exeOnLoad = function()
-	 NeP.Xeer:Splash()
+	 Xeer.Core:Splash()
 
 	print('|cffADFF2F ----------------------------------------------------------------------|r')
 	print('|cffADFF2F --- |rSHAMAN |cffADFF2FEnhancement |r')
@@ -134,4 +131,4 @@ local outCombat = {
 	--{PreCombat}
 }
 
-NeP.CR:Add(263, '[|cff'..NeP.Xeer.Interface.addonColor..'Xeer|r] Shaman - Enhancement', inCombat, outCombat, exeOnLoad)
+NeP.CR:Add(263, '[|cff'..Xeer.Interface.addonColor..'Xeer|r] Shaman - Enhancement', inCombat, outCombat, exeOnLoad)

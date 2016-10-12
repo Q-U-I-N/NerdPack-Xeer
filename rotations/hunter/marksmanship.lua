@@ -1,22 +1,19 @@
-local GUI = {
-}
-
 local exeOnLoad = function()
 
-	 NeP.Xeer:Splash()
+	 Xeer.Core:Splash()
 
 	print('|cffADFF2F ----------------------------------------------------------------------|r')
 	print('|cffADFF2F --- |rHUNTER |cffADFF2FMarksmanship |r')
 	print('|cffADFF2F --- |rRecommended Talents: 1/1 - 2/1 - 3/X - 4/3 - 5/X - 6/2 - 7/1')
 	print('|cffADFF2F ----------------------------------------------------------------------|r')
-
+--[[
 	NeP.Interface.CreateToggle(
 		'xBarrage',
 		'Interface\\Icons\\Ability_Hunter_RapidRegeneration',
 		'Barrage',
 		'ON/OFF using Barrage in rotation if you have talent')
 
-
+--]]
 end
 
 local _Xeer = {
@@ -169,4 +166,4 @@ local outCombat = {
 	--{PreCombat}
 }
 
-NeP.CR:Add(254, '[|cff'..NeP.Xeer.Interface.addonColor..'Xeer|r] HUNTER - Marksmanship', inCombat, outCombat, exeOnLoad)
+NeP.CR:Add(254, '[|cff'..Xeer.Interface.addonColor..'Xeer|r] HUNTER - Marksmanship', inCombat, outCombat, exeOnLoad)

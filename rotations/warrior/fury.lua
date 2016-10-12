@@ -1,5 +1,5 @@
 local exeOnLoad = function()
-	 NeP.Xeer:Splash()
+	 Xeer.Core:Splash()
 
 	print("|cffADFF2F ----------------------------------------------------------------------|r")
 	print("|cffADFF2F --- |rWARRIOR |cffADFF2FFury |r")
@@ -9,7 +9,7 @@ local exeOnLoad = function()
 end
 
 local _Xeer = {
-	{'@Xeer.Targeting()', {'!target.alive', 'toggle(AutoTarget)'}},
+	--{'@Xeer.Targeting()', {'!target.alive', 'toggle(AutoTarget)'}},
 --{'Charge', 'target.range>8&target.range<=25&target.infront'},
 
 --[[
@@ -173,14 +173,14 @@ local Keybinds = {
 local inCombat = {
 	{Keybinds},
 	{Interrupts, 'target.interruptAt(40)'},
-	{_Xeer},
+	--{_Xeer},
 	--{Survival, 'player.health < 100'},
 	--{Cooldowns, 'toggle(cooldowns)'},
-	{Util},
+	{Util, 'target.range<8'},
 	--actions+=/call_action_list,name=two_targets,if=spell_targets.whirlwind=2||spell_targets.whirlwind=3
-	{TwoTargets, 'player.area(8).enemies=2||player.area(8).enemies=3'},
+	{TwoTargets, 'area(8).enemies=2||area(8).enemies=3'},
 	--actions+=/call_action_list,name=aoe,if=spell_targets.whirlwind>3
-	{AoE, 'player.area(8).enemies>3'},
+	{AoE, 'area(8).enemies>3'},
 	--actions+=/call_action_list,name=single_target
 	{ST, {'target.range<8', 'target.infront'}}
 }
@@ -190,4 +190,4 @@ local outCombat = {
 	--{PreCombat},
 }
 
-NeP.CR:Add(72, '[|cff'..NeP.Xeer.Interface.addonColor..'Xeer|r] WARRIOR - Fury', inCombat, outCombat, exeOnLoad)
+NeP.CR:Add(72, '[|cff'..Xeer.Interface.addonColor..'Xeer|r] WARRIOR - Fury', inCombat, outCombat, exeOnLoad)

@@ -1,5 +1,5 @@
 local exeOnLoad = function()
-	 NeP.Xeer:Splash()
+	 Xeer.Core:Splash()
 
 	print("|cffADFF2F ----------------------------------------------------------------------|r")
 	print("|cffADFF2F --- |rWARRIOR |cffADFF2FArms |r")
@@ -9,7 +9,7 @@ local exeOnLoad = function()
 end
 
 local _Xeer = {
-	{'@Xeer.Targeting()', {'!target.alive', 'toggle(AutoTarget)'}},
+	--{'@Xeer.Targeting()', {'!target.alive', 'toggle(AutoTarget)'}},
 --{'Charge', 'target.range>8&target.range<=25&target.infront'},
 
 --[[
@@ -58,9 +58,9 @@ local Cooldowns = {
 	--actions+=/arcane_torrent,if=buff.battle_cry_deadly_calm.down&rage.deficit>40
 	--{'Arcane Torrent', 'buff(Battle Cry)&talent(6,1)&rage.deficit>40'},
 	--actions+=/battle_cry,if=(buff.bloodlust.up||time>=1)&!gcd.remains&(buff.shattered_defenses.up||(cooldown.colossus_smash.remains&cooldown.warbreaker.remains))||target.time_to_die<=10
-	{'Battle Cry', '{buff(Bloodlust)||combat(player).time>=1}&{buff(Shattered Defenses)||{spell(Colossus Smash).cooldown>gcd&spell(Warbreaker).cooldown>gcd}}'},
+	{'Battle Cry', '{buff(Bloodlust)||combat.time>=1}&{buff(Shattered Defenses)||{spell(Colossus Smash).cooldown>gcd&spell(Warbreaker).cooldown>gcd}}'},
 	--actions+=/avatar,if=(buff.bloodlust.up||time>=1)
-	{'Avatar', 'buff(Bloodlust)||combat(player).time>=1'},
+	{'Avatar', 'talent(3,3)&{buff(Bloodlust)||combat.time>=1}'},
 	--actions+=/use_item,name=gift_of_radiance
 	--trinket...
 }
@@ -160,20 +160,18 @@ local ST = {
 	{'Colossus Smash', '!buff(Shattered Defenses)'},
 	--actions.single+=/warbreaker,if=buff.shattered_defenses.down&cooldown.mortal_strike.remains<gcd
 	{'Warbreaker', '!buff(Shattered Defenses)&spell(Mortal Strike).cooldown<gcd'},
-	--actions.single+=/focused_rage,if=((!buff.focused_rage.react&prev_gcd.mortal_strike)||!prev_gcd.mortal_strike)&buff.focused_rage.stack<3&(buff.shattered_defenses.up||cooldown.colossus_smash.remains)
-	{'Focused Rage', '!buff(Focused Rage)||buff(Focused Rage).stack<3&{buff(Shattered Defenses)||spell(Colossus Smash).cooldown>gcd}'},
+	--actions.single+=/focused_rage,if=(((!buff.focused_rage.react&prev_gcd.mortal_strike)|!prev_gcd.mortal_strike)&buff.focused_rage.stack<3&(buff.shattered_defenses.up|cooldown.colossus_smash.remains))&rage>60
+	{'Focused Rage', '{{{!buff(Focused Rage)&prev_gcd(Mortal Strike)}||!prev_gcd(Mortal Strike)}&buff(Focused Rage).stack<3&{buff(Shattered Defenses)||cooldown(Colossus Smash).remains>gcd}}&rage>60'},
 	--actions.single+=/mortal_strike
 	{'Mortal Strike'},
 	--actions.single+=/execute,if=buff.stone_heart.react
 	{'Execute', 'buff(Ayala\'s Stone Heart)'},
-	--actions.single+=/slam,if=buff.battle_cry_deadly_calm.up||buff.focused_rage.stack=3||rage.deficit<=30
-	{'Slam', '!talent(3,1)&{{buff(Battle Cry)&talent(6,1)}||buff(Focused Rage).stack=3||rage.deficit<=30}'},
+	--actions.single+=/slam
+	{'Slam'},
 	--Whirlwind instead Slam if "Fevor of Battle" is picked
 	{'Whirlwind', 'talent(3,1)&{{buff(Battle Cry)&talent(6,1)}||buff(Focused Rage).stack=3||rage.deficit<=30}'},
 	--actions.single+=/execute,if=equipped.archavons_heavy_hand
 	{'Execute', 'equipped(137060)'},
-	--actions.single+=/slam,if=equipped.archavons_heavy_hand
-	{'Slam', 'equipped(137060)'},
 	--actions.single+=/focused_rage,if=equipped.archavons_heavy_hand
 	{'Focused Rage', 'equipped(137060)'}
 }
@@ -189,7 +187,8 @@ local Interrupts = {
 }
 
 local inCombat = {
-	{Keybinds},	{Interrupts, 'target.interruptAt(40)'},
+	{Keybinds},
+	{Interrupts, 'target.interruptAt(40)'},
 	{_Xeer},
 	--{Survival, 'player.health < 100'},
 	--{Cooldowns, 'toggle(cooldowns)'},
@@ -206,9 +205,8 @@ local inCombat = {
 
 
 local outCombat = {
-
-	{Keybinds},	{PreCombat}
-
+	{Keybinds},
+	{PreCombat}
 }
 
-NeP.CR:Add(71, '[|cff'..NeP.Xeer.Interface.addonColor..'Xeer|r] WARRIOR - Arms', inCombat, outCombat, exeOnLoad)
+NeP.CR:Add(71, '[|cff'..Xeer.Interface.addonColor..'Xeer|r] WARRIOR - Arms', inCombat, outCombat, exeOnLoad)

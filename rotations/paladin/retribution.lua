@@ -3,7 +3,7 @@ local GUI = {
 }
 
 local exeOnLoad = function()
-	 NeP.Xeer:Splash()
+	 Xeer.Core:Splash()
 
 	print('|cffADFF2F ----------------------------------------------------------------------|r')
 	print('|cffADFF2F --- |rPALADIN |cffADFF2FRetribution |r')
@@ -267,4 +267,4 @@ local inCombat = {
 	
 }
 
-NeP.CR:Add(70, '[|cff'..NeP.Xeer.Interface.addonColor..'Xeer|r] PALADIN - Retribution', inCombat, outCombat, exeOnLoad)
+NeP.CR:Add(70, '[|cff'..Xeer.Interface.addonColor..'Xeer|r] PALADIN - Retribution', inCombat, outCombat, exeOnLoad)

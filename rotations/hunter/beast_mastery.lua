@@ -3,7 +3,7 @@ local GUI = {
 
 local exeOnLoad = function()
 
-	 NeP.Xeer:Splash()
+	 Xeer.Core:Splash()
 
 	print('|cffADFF2F ----------------------------------------------------------------------|r')
 	print('|cffADFF2F --- |rHUNTER |cffADFF2FBeast Mastery |r')
@@ -121,4 +121,4 @@ local outCombat = {
 	{Keybinds},
 }
 
-NeP.CR:Add(253, '[|cff'..NeP.Xeer.Interface.addonColor..'Xeer|r] HUNTER - Beast Mastery', inCombat, outCombat, exeOnLoad)
+NeP.CR:Add(253, '[|cff'..Xeer.Interface.addonColor..'Xeer|r] HUNTER - Beast Mastery', inCombat, outCombat, exeOnLoad)

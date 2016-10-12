@@ -4,6 +4,14 @@ NeP.DSL:Register('equipped', function(target, item)
 	if IsEquippedItem(item) == true then return true else return false end
 end)
 
+--/dump NeP.DSL:Get('casting.left')('player', 'Fireball')
+NeP.DSL:Register('casting.left', function(target, spell)
+	local reverse = NeP.DSL:Get('casting.percent')(target, spell)
+	if reverse ~= 0 then
+	return 100 - reverse
+	end
+return 0
+end)
 
 --[[
 --/dump NeP.DSL:Get('xinfront.enemies')('10','30')
@@ -57,7 +65,7 @@ local PowerT = {
 --/dump NeP.DSL:Get('action.cost')('Rake')
 --/dump NeP.DSL:Get('action.cost')('Rejuvenation')
 NeP.DSL:Register('action.cost', function(spell)
-	local costText = NeP.Xeer:Scan_SpellCost(spell)
+	local costText = Xeer.Core:Scan_SpellCost(spell)
 	local numcost = 0
 		for i = 0, 3 do
 			local cost = strmatch(costText, PowerT[i])
@@ -79,7 +87,7 @@ end)
 
 --/dump NeP.DSL:Get('ignorepain_cost')()
 NeP.DSL:Register('ignorepain_cost', function()
-	return Xeer:Scan_IgnorePain()
+	return Xeer.Core:Scan_IgnorePain()
 end)
 
 --/dump NeP.DSL:Get['ignorepain_max')()
@@ -104,10 +112,10 @@ local DotTicks = {
 --/dump NeP.DSL:Get['dot.x')('target', 'Moonfire')
 --/dump NeP.DSL:Get('dot.tick_time')('target','155625')
 NeP.DSL:Register('dot.tick_time', function(target, spell)
-	local spell = GetSpellID(GetSpellName(spell))
+	local spell = NeP.Core:GetSpellID(NeP.Core:GetSpellName(spell))
 	local class = select(3,UnitClass('player'))
 	if class == 11 and GetSpecialization() == 2 then
-		if hasTalent(6,2) == true and spell == 1822 or spell == 1079 or spell == 106832 then
+		if NeP.DSL:Get('talent')(nil, '6,1') and spell == 1822 or spell == 1079 or spell == 106832 then
 			return DotTicks[spell] * 0.67
 		else if spell == 1822 or spell == 1079 or spell == 106832 then
 					return DotTicks[spell]
@@ -121,7 +129,7 @@ end)
 
 --/dump NeP.DSL:Get('dot.duration')('target','Rip')
 NeP.DSL:Register('dot.duration', function(target, spell)
-	local debuff,_,duration,expires,caster = Xeer['UnitDot'](target, spell)
+	local debuff,_,duration,expires,caster = Xeer.Core:UnitDot(target, spell)
 	if debuff and (caster == 'player' or caster == 'pet') then
 		return duration
 	end

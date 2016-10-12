@@ -1,5 +1,5 @@
 local exeOnLoad = function()
-	NeP.Xeer:Splash()
+	Xeer.Core:Splash()
 
 	print("|cffADFF2F ----------------------------------------------------------------------|r")
 	print("|cffADFF2F --- |rWARRIOR |cffADFF2FProtection |r")
@@ -146,4 +146,4 @@ local outCombat = {
 --{PreCombat}
 }
 
-NeP.CR:Add(73, '[|cff'..NeP.Xeer.Interface.addonColor..'Xeer|r] WARRIOR - Protection', inCombat, outCombat, exeOnLoad)
+NeP.CR:Add(73, '[|cff'..Xeer.Interface.addonColor..'Xeer|r] WARRIOR - Protection', inCombat, outCombat, exeOnLoad)

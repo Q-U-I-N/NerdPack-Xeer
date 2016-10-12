@@ -3,7 +3,7 @@ local GUI = {
 }
 
 local exeOnLoad = function()
-	-- NeP.Xeer:Splash()
+	-- Xeer.Core:Splash()
 end
 
 local Survival = {
@@ -48,4 +48,4 @@ local outCombat = {
 	{'Crippling Poison', '!player.buff(Crippling Poison)'},
 }
 
-NeP.CR:Add(259, '[|cff'..NeP.Xeer.Interface.addonColor..'Xeer|r] Rogue - Assassination', inCombat, outCombat, exeOnLoad)
+NeP.CR:Add(259, '[|cff'..Xeer.Interface.addonColor..'Xeer|r] Rogue - Assassination', inCombat, outCombat, exeOnLoad)

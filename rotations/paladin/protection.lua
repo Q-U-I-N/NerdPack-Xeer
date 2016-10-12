@@ -2,7 +2,7 @@ local GUI = {
 }
 
 local exeOnLoad = function()
-	 NeP.Xeer:Splash()
+	 Xeer.Core:Splash()
 
 	print('|cffADFF2F ----------------------------------------------------------------------|r')
 	print('|cffADFF2F --- |rPALADIN |cffADFF2FProtection |r')
@@ -150,4 +150,4 @@ local outCombat = {
 	{PreCombat}
 }
 
-NeP.CR:Add(66, '[|cff'..NeP.Xeer.Interface.addonColor..'Xeer|r] PALADIN - Protection', inCombat, outCombat, exeOnLoad)
+NeP.CR:Add(66, '[|cff'..Xeer.Interface.addonColor..'Xeer|r] PALADIN - Protection', inCombat, outCombat, exeOnLoad)

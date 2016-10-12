@@ -2,7 +2,7 @@ local GUI = {
 }
 
 local exeOnLoad = function()
-	 NeP.Xeer:Splash()
+	 Xeer.Core:Splash()
 
 	print('|cffADFF2F ----------------------------------------------------------------------|r')
 	print('|cffADFF2F --- |rDEMON HUNTER |cffADFF2FVengeance |r')
@@ -39,14 +39,14 @@ spec=vengeance
 }
 
 local Keybinds = {
-	{'%pause', 'keybind(alt)'},
-	{'Sigil of Flame', 'keybind(lshift)', 'mouseover.ground'},
-	--{'Metamorphosis', 'keybind(lcontrol)', 'mouseover.ground'},
+	{'Sigil of Flame', 'keybind(alt)', 'mouseover.target'},
+	{'%pause', 'keybind(lshift)', 'mouseover.target'},
+	--{'Metamorphosis', 'keybind(lcontrol)', 'mouseover.target'},
 	{'Infernal Strike', 'keybind(lcontrol)', 'mouseover.ground'}
 }
 
 local Interrupts = {
-	{'Arcane Torrent', 'target.range<=8&spell(Consume Magic).cooldown>1&!prev_gcd(Consume Magic)'},
+	{'Arcane Torrent', 'target.range<=8&spell(Consume Magic).cooldown>gcd&!prev_gcd(Consume Magic)'},
 	{'Consume Magic'},
 }
 
@@ -122,4 +122,4 @@ local outCombat = {
 	{Keybinds},
 }
 
-NeP.CR:Add(581, '[|cff'..NeP.Xeer.Interface.addonColor..'Xeer|r] DEMON HUNTER - Vengeance', inCombat, outCombat, exeOnLoad)
+NeP.CR:Add(581, '[|cff'..Xeer.Interface.addonColor..'Xeer|r] DEMON HUNTER - Vengeance', inCombat, outCombat, exeOnLoad)

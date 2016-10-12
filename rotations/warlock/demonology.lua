@@ -4,7 +4,7 @@ local GUI = {
 
 local exeOnLoad = function()
 
-	 NeP.Xeer:Splash()
+	 Xeer.Core:Splash()
 
 	print("|cffADFF2F ----------------------------------------------------------------------|r")
 	print("|cffADFF2F --- |rWARLOCK |cffADFF2FDemonology |r")
@@ -159,4 +159,4 @@ local outCombat = {
 	
 }
 
-NeP.CR:Add(266, '[|cff'..NeP.Xeer.Interface.addonColor..'Xeer|r] WARLOCK - Demonology', inCombat, outCombat, exeOnLoad)
+NeP.CR:Add(266, '[|cff'..Xeer.Interface.addonColor..'Xeer|r] WARLOCK - Demonology', inCombat, outCombat, exeOnLoad)

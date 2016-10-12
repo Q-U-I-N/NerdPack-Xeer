@@ -3,7 +3,7 @@ local GUI = {
 }
 
 local exeOnLoad = function()
-	-- NeP.Xeer:Splash()
+	-- Xeer.Core:Splash()
 end
 
 local Voidform = {
@@ -41,4 +41,4 @@ local outCombat = {
 
 }
 
-NeP.CR:Add(258, '[|cff'..NeP.Xeer.Interface.addonColor..'Xeer|r] Priest - Shadow', inCombat, outCombat, exeOnLoad)
+NeP.CR:Add(258, '[|cff'..Xeer.Interface.addonColor..'Xeer|r] Priest - Shadow', inCombat, outCombat, exeOnLoad)
