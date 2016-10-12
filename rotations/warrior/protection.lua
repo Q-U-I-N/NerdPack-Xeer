@@ -52,7 +52,9 @@ local Keybinds = {
 }
 
 local Interrupts = {
-	{'Pummel'}
+	{'Pummel'},
+	{'Arcane Torrent', 'target.range<=8&spell(Pummel).cooldown>1&!prev_gcd(Pummel)'},
+	{'Shockwave', 'talent(1,1)&target.infront&!target.immune(stun)'}
 }
 
 local Cooldowns = {
