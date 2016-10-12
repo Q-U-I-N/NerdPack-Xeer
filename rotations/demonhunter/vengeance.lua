@@ -58,13 +58,13 @@ local ST = {
 	--actions+=/infernal_strike,if=!sigil_placed&!in_flight&remains-travel_time-delay<0.3*duration&(!artifact.fiery_demise.enabled|(max_charges-charges_fractional)*recharge_time<cooldown.fiery_brand.remains+5)&(cooldown.sigil_of_flame.remains>7|charges=2)
 	{'Sigil of Flame', '!target.debuff(Sigil of Flame)', 'target.ground'},
 	--actions+=/spirit_bomb,if=debuff.frailty.down
-	{'Spirit Bomb', '!prev_gcd(Spirit Bomb)&!target.debuff(Frailty)&player.buff(Soul Fragments).count>=1'},
+	{'Spirit Bomb', '!target.debuff(Frailty)&player.buff(Soul Fragments).count>=1'},
 	--actions+=/soul_carver,if=dot.fiery_brand.ticking
 	{'Soul Carver', 'target.debuff(Fiery Brand)'},
-	--actions+=/immolation_aura,if=pain<=80
-	{'Immolation Aura', 'pain<=80'},
-	--actions+=/felblade,if=pain<=70
-	{'Felblade', 'talent(3,1)&pain<=70'},
+	--actions+=/immolation_aura,if=player.pain<=80
+	{'Immolation Aura', 'player.pain<=80'},
+	--actions+=/felblade,if=player.pain<=70
+	{'Felblade', 'talent(3,1)&player.pain<=70'},
 	--actions+=/soul_barrier
 	{'Soul Barrier', 'talent(7,3)'},
 	--actions+=/soul_cleave,if=soul_fragments=5
@@ -79,12 +79,12 @@ local ST = {
 	{'Fel Eruption', 'talent(3,3)'},
 	--actions+=/sigil_of_flame,if=remains-delay<=0.3*duration
 	--{'Sigil of Flame', {'advancedGround', 'totem.duration<=0.3*totem.time'}, 'target.ground'},
-	--actions+=/fracture,if=pain>=80&soul_fragments<4&incoming_damage_4s<=player.health.max*0.20
-	{'Soul Cleave', 'pain>=80&player.buff(Soul Fragments).count<4&player.incdmg(4)<=player.health.max*0.20'},
-	--actions+=/soul_cleave,if=pain>=80
-	{'Soul Cleave', 'pain>=80'},
+	--actions+=/fracture,if=player.pain>=80&soul_fragments<4&incoming_damage_4s<=player.health.max*0.20
+	{'Soul Cleave', 'player.pain>=80&player.buff(Soul Fragments).count<4&player.incdmg(4)<=player.health.max*0.20'},
+	--actions+=/soul_cleave,if=player.pain>=80
+	{'Soul Cleave', 'player.pain>=80'},
 	{'Shear', 'player.buff(Blade Turning)'},
-	{'Fracture', 'talent(4,2)&pain>=60'},
+	{'Fracture', 'talent(4,2)&player.pain>=60'},
 	--actions+=/shear
 	{'Shear'}
 }
