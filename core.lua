@@ -120,7 +120,7 @@ Xeer.Scan_IgnorePain = function()
 end
 
 --------------------------NeP CombatHelper Targeting --------------------------
---[[
+
 local NeP_forceTarget = {
 		-- WOD DUNGEONS/RAIDS
 		[75966] = 100,	-- Defiled Spirit (Shadowmoon Burial Grounds)

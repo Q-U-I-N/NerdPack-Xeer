@@ -236,18 +236,18 @@ end)
 --TODO: work out off gcd/gcd only skills now all of this is just like SiMC 'prev'
 
 --/dump NeP.DSL:Get('prev_off_gcd')('player', 'Thrash')
-NeP.DSL:Register('prev_off_gcd', function(Unit, Spell)
-	return NeP.DSL:Get('lastcast')(Unit, Spell)
+NeP.DSL:Register('prev_off_gcd', function(_, Spell)
+	return NeP.DSL:Get('lastcast')('player', Spell)
 end)
 
 --/dump NeP.DSL:Get('prev_gcd')('player', 'Thrash')
-NeP.DSL:Register('prev_gcd', function(Unit, Spell)
-	return NeP.DSL:Get('lastcast')(Unit, Spell)
+NeP.DSL:Register('prev_gcd', function(_, Spell)
+	return NeP.DSL:Get('lastcast')('player', Spell)
 end)
 
 --/dump NeP.DSL:Get('prev')('player', 'Thrash')
-NeP.DSL:Register('prev', function(Unit, Spell)
-	return NeP.DSL:Get('lastcast')(Unit, Spell)
+NeP.DSL:Register('prev', function(_, Spell)
+	return NeP.DSL:Get('lastcast')('player', Spell)
 end)
 
 --/dump NeP.DSL:Get('time_to_die')('target')
@@ -260,7 +260,7 @@ NeP.DSL:Register('time', function(target)
 	return NeP.DSL:Get('combat.time')(target)
 end)
 
---/dump NeP.DSL:Get('spell.cooldown')('player','Rip')
+--/dump NeP.DSL:Get('cooldown.remains')('player','Combustion')
 NeP.DSL:Register('cooldown.remains', function(_, spell)
 	if NeP.DSL:Get('spell.exists')(_, spell) == true then
 		return NeP.DSL:Get('spell.cooldown')(_, spell)

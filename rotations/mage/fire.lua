@@ -6,6 +6,13 @@ local exeOnLoad = function()
 	print('|cffADFF2F --- |rRecommended Talents: 1/1 - 2/X - 3/2 - 4/2 - 5/X - 6/2 - 7/1')
 	print('|cffADFF2F ----------------------------------------------------------------------|r')
 
+	NeP.Interface:AddToggle({
+		key = 'xCombustion',
+		name = 'Combustion',
+		text = 'ON/OFF using Combustion in rotation',
+		icon = 'Interface\\Icons\\Spell_fire_sealoffire',
+	})
+
 end
 
 local _Xeer = { -- some non-SiMC stuffs
@@ -64,9 +71,6 @@ local Cooldowns = {
 	--actions+=/time_warp,if=target.health.pct<25|time=0
 	--actions+=/shard_of_the_exodar_warp,if=buff.bloodlust.down
 	--actions+=/mirror_image,if=buff.combustion.down
-	--actions+=/rune_of_power,if=cooldown.combustion.remains>40&buff.combustion.down&(cooldown.flame_on.remains<5||cooldown.flame_on.remains>30)&!talent.kindling.enabled||target.time_to_die.remains<11||talent.kindling.enabled&(charges_fractional>1.8||time<40)&cooldown.combustion.remains>40
-	{'Rune of Power', 'cooldown(Combustion).remains>40&!player.buff(Combustion)&{cooldown(Flame On).remains<5||cooldown(Flame On).remains>30}&!talent(7,1)||target.time_to_die.remains<11||talent(7,1)&{action(Rune of Power).charges>1.8||player.combat.time<40}&cooldown(Combustion).remains>40'},
-	{'Ice Barrier', '!player.buff(Ice Barrier)&!player.buff(Combustion)&!player.buff(Rune of Power)'}
 }
 
 local Survival = {
@@ -162,8 +166,11 @@ local MainRotation = {
 }
 
 local xCombat = {
+	--actions+=/rune_of_power,if=cooldown.combustion.remains>40&buff.combustion.down&(cooldown.flame_on.remains<5||cooldown.flame_on.remains>30)&!talent.kindling.enabled||target.time_to_die.remains<11||talent.kindling.enabled&(charges_fractional>1.8||time<40)&cooldown.combustion.remains>40
+	{'Rune of Power', 'toggle(cooldowns)&xmoving=0&{{cooldown(Combustion).remains>40||!toggle(xCombustion)}&!player.buff(Combustion)&{cooldown(Flame On).remains<5||cooldown(Flame On).remains>30}&!talent(7,1)||target.time_to_die.remains<11||talent(7,1)&{action(Rune of Power).charges>1.8||player.combat.time<40}&{cooldown(Combustion).remains>40||!toggle(xCombustion)}}'},
+	{'Ice Barrier', '!player.buff(Ice Barrier)&!player.buff(Combustion)&!player.buff(Rune of Power)'},
 	--actions+=/call_action_list,name=combustion_phase,if=cooldown.combustion.remains<=action.rune_of_power.cast_time+(!talent.kindling.enabled*gcd)||buff.combustion.up
-	{Combustion, 'cooldown(Combustion).remains<=action(Rune of Power).cast_time||player.buff(Combustion)'},
+	{Combustion, 'toggle(xCombustion)&{cooldown(Combustion).remains<=action(Rune of Power).cast_time||player.buff(Combustion)}'},
 	--actions+=/call_action_list,name=rop_phase,if=buff.rune_of_power.up&buff.combustion.down
 	{RoP, 'player.buff(Rune of Power)&!player.buff(Combustion)&xmoving=0'},
 	--actions+=/call_action_list,name=single_target
@@ -180,7 +187,7 @@ local Moving = {
 local inCombat = {
 	{Keybinds},
 	{Interrupts, {'target.interruptAt(50)', 'toggle(Interrupts)', 'target.infront', 'target.range<40'}},
-	{Cooldowns, 'toggle(cooldowns)'},
+	--{Cooldowns, 'toggle(cooldowns)'},
 	--{Survival, 'player.health < 100'},
 	{Moving, 'xmoving=1'},
 	{xCombat, {'target.range<40', 'target.infront'}}

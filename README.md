@@ -34,6 +34,8 @@ Mage - Fire
 
 Druid - Feral
 
+Demon Hunter - Vengeance
+
 ------------------------------------
 
 Future routines + WIP (do not use them even if you see them on github):
@@ -43,8 +45,6 @@ Death Knight - Frost
 Death Knight - Unholy
 
 Demon Hunter - Havoc
-
-Demon Hunter - Vengeance
 
 Druid - Balance
 
