@@ -1,5 +1,5 @@
 Xeer = {
-		Version = 0.01,
+		Version = 1.5.1,
 		Branch = 'BETA',
 		Name = 'NerdPack- Xeer Routines',
 		Author = 'Xeer',
