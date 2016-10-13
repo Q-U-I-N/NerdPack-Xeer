@@ -35,10 +35,6 @@ spec=fury
 ]]	--
 }
 
-local Interrupts = {
-	{'Pummel'}
-}
-
 local PreCombat = {
 	--# Executed before combat begins. Accepts non-harmful 	--actions only.
 	--actions.precombat=flask,type=countless_armies
@@ -55,13 +51,6 @@ local Survival = {
 }
 
 local Cooldowns = {
--- {'', ''},
-}
-
-local Util = {
-	--# Executed every time the actor is available.
-	--actions+=/heroic_leap,if=(raid_event.movement.distance>25&raid_event.movement.in>45)||!raid_event.movement.exists
-	--manual usage of leap via keybind...
 	--actions+=/use_item,name=faulty_countermeasure,if=(spell_targets.whirlwind>1||!raid_event.adds.exists)&((talent.bladestorm.enabled&cooldown.bladestorm.remains=0)||buff.battle_cry.up||target.time_to_die<25)
 	--actions+=/potion,name=old_war,if=(target.health.pct<20&buff.battle_cry.up)||target.time_to_die<30
 	--actions+=/battle_cry,if=(cooldown.odyns_fury.remains=0&(cooldown.bloodthirst.remains=0||(buff.enrage.remains>cooldown.bloodthirst.remains)))
@@ -74,8 +63,6 @@ local Util = {
 	{'Blood Fury', 'player.buff(Battle Cry)'},
 	--actions+=/berserking,if=buff.battle_cry.up
 	{'Berserking', 'player.buff(Battle Cry)'},
-	--actions+=/arcane_torrent,if=player.rage<player.rage.max-40
-	--{'Arcane Torrent', 'player.rage<60'},
 }
 
 local Bladestorm = {
@@ -113,7 +100,7 @@ local ST = {
 	--actions.single_target+=/dragon_roar,if=!cooldown.odyns_fury.remains<=10||cooldown.odyns_fury.remains<3
 	{'Dragon Roar', '!spell(Odyn\'s Fury).cooldown<=10||spell(Odyn\'s Fury).cooldown<3'},
 	--actions.single_target+=/odyns_fury,if=buff.battle_cry.up&buff.enrage.up
-	{'Odyn\'s Fury', 'player.buff(Battle Cry)&player.buff(Enrage)'},
+	{'Odyn\'s Fury', 'artifact(Odyn\'s Fury).equipped&player.buff(Battle Cry)&player.buff(Enrage)'},
 	--actions.single_target+=/rampage,if=buff.enrage.down&buff.juggernaut.down
 	{'Rampage', '!player.buff(Enrage)&!player.buff(Juggernaut)'},
 	--actions.single_target+=/furious_slash,if=talent.frenzy.enabled&(buff.frenzy.down||buff.frenzy.remains<=3)
@@ -170,19 +157,23 @@ local Keybinds = {
 	{'Heroic Leap', 'keybind(lcontrol)' , 'mouseover.ground'}
 }
 
+local Interrupts = {
+	{'Pummel'},
+	{'Arcane Torrent', 'target.range<=8&spell(Pummel).cooldown>gcd&!prev_gcd(Pummel)'},
+}
+
 local inCombat = {
 	{Keybinds},
-	{Interrupts, 'target.interruptAt(40)'},
+	{Interrupts, 'target.interruptAt(50)&toggle(interrupts)&target.infront&target.range<=8'},
 	--{_Xeer},
 	--{Survival, 'player.health < 100'},
-	--{Cooldowns, 'toggle(cooldowns)'},
-	{Util, 'target.range<8'},
+	{Cooldowns, 'toggle(cooldowns)&target.range<8'},
 	--actions+=/call_action_list,name=two_targets,if=spell_targets.whirlwind=2||spell_targets.whirlwind=3
-	{TwoTargets, 'player.area(8).enemies=2||player.area(8).enemies=3'},
+	{TwoTargets, 'toggle(aoe)&player.area(8).enemies=2||player.area(8).enemies=3'},
 	--actions+=/call_action_list,name=aoe,if=spell_targets.whirlwind>3
-	{AoE, 'player.area(8).enemies>3'},
+	{AoE, 'toggle(aoe)&player.area(8).enemies>3'},
 	--actions+=/call_action_list,name=single_target
-	{ST, {'target.range<8', 'target.infront'}}
+	{ST, 'target.range<8&target.infront'}
 }
 
 local outCombat = {

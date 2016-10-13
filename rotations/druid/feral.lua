@@ -200,11 +200,11 @@ local Keybinds = {
 local inCombat = {
 	{Keybinds},
 	--{_Xeer},
-	{Interrupts, {'target.interruptAt(50)', 'toggle(Interrupts)', 'target.infront', 'target.range<8'}},
+	{Interrupts, 'target.interruptAt(50)&toggle(interrupts)&target.infront&target.range<=8'},
   {Survival, 'player.health<100'},
 	{'Cat Form', 'form~=2'},
 	{Cooldowns, 'toggle(cooldowns)'},
-	{xCombat, {'target.range<8', 'target.infront'}},
+	{xCombat, 'target.range<8&target.infront'},
 }
 
 local outCombat = {

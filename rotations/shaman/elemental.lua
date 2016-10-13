@@ -3,7 +3,7 @@ local exeOnLoad = function()
 
 	print('|cffADFF2F ----------------------------------------------------------------------|r')
 	print('|cffADFF2F --- |rSHAMAN |cffADFF2FElemental |r')
-	print('|cffADFF2F --- !!!YOU NEED CAST TOTEM MASTERY MANUALY SOMETIMES, WILL FIX IT ASAP|r')
+	print('|cffADFF2F --- |r TOTEM MASTERY FIXED? if no report it to me please!|r')
 	print('|cffADFF2F --- |rRecommended Talents: 1/3 - 2/1 - 3/1 - 4/2 - 5/2 - 6/1 - 7/2')
 	print('|cffADFF2F ----------------------------------------------------------------------|r')
 
@@ -78,6 +78,10 @@ local Cooldowns = {
 	{'Blood Fury', '!talent(7,1)||player.buff(Ascendance)||spell(Ascendance)cooldown>50'},
  	--actions+=/berserking,if=!talent.ascendance.enabled||buff.ascendance.up
 	{'Berserking', '!talent(Ascendance)||player.buff(Ascendance)'}
+}
+
+local Interrupts = {
+	{'Wind Shear'},
 }
 
 local AoE = {
@@ -166,12 +170,13 @@ local Keybinds = {
 
 local inCombat = {
 	{Keybinds},
+	{Interrupts, 'target.interruptAt(50)&toggle(interrupts)&target.infront&target.range<=30'},
 	--{Survival, 'player.health < 100'},
 	{Cooldowns, 'toggle(cooldowns)'},
 	--actions+=/run_action_list,name=aoe,if=active_enemies>2&(spell_targets.chain_lightning>2||spell_targets.lava_beam>2)
-	{AoE, {'toggle(AoE)', 'player.area(40).enemies>2'}},
+	{AoE, 'toggle(aoe)&player.area(40).enemies>2'},
 	--actions+=/run_action_list,name=single
-	{ST, {'target.range<40', 'target.infront'}}
+	{ST, 'target.range<40&target.infront'}
 }
 
 local outCombat = {

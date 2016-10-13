@@ -63,6 +63,10 @@ local Cooldowns = {
 
 }
 
+local Interrupts = {
+	{'Counter Shot'},
+}
+
 local xCombat = {
 	{'Mend Pet', 'pet.exists&pet.alive&pet.health<100'},
  	--actions+=/arcane_torrent,if=player.focus.deficit>=30
@@ -111,7 +115,8 @@ local inCombat = {
 	{Keybinds},
 	--{Survival, 'player.health < 100'},
 	--{Cooldowns, 'toggle(cooldowns)'},
-	{xCombat, {'target.range<40', 'target.infront'}}
+	{Interrupts, 'target.interruptAt(50)&toggle(interrupts)&target.infront&target.range<=30'},
+	{xCombat, 'target.range<40&target.infront'}
 }
 
 local outCombat = {

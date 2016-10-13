@@ -52,6 +52,10 @@ local Cooldowns = {
 
 }
 
+local Interrupts = {
+	{'Wind Shear'},
+}
+
 local xCombat = {
 	--# Executed every time the actor is available.
 	--actions=wind_shear
@@ -119,11 +123,12 @@ local Keybinds = {
 
 local inCombat = {
 	{Keybinds},
+	{Interrupts, 'target.interruptAt(50)&toggle(interrupts)&target.infront&target.range<=30'},
 	--{Survival, 'player.health < 100'},
 	--{Cooldowns, 'toggle(cooldowns)'},
 	--{AoE, {'toggle(AoE)', 'player.area(8).enemies >= 3'}},
-	{xCombat, {'target.range<8&target.infront'}},
-	{Ranged, {'target.range>8&target.range<40&target.infront'}}
+	{xCombat, 'target.range<8&target.infront'},
+	{Ranged, 'target.range>8&target.range<40&target.infront'}
 }
 
 local outCombat = {

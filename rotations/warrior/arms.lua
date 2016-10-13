@@ -81,7 +81,7 @@ local Util = {
 	--actions+=/colossus_smash,if=debuff.colossus_smash.down
 	{'Colossus Smash', '!target.debuff(Colossus Smash)'},
 	--actions+=/warbreaker,if=debuff.colossus_smash.down
-	{'Warbreaker', '!target.debuff(Colossus Smash)'},
+	{'Warbreaker', 'artifact(Warbreaker).equipped&!target.debuff(Colossus Smash)'},
 	--actions+=/ravager
 	{'Ravager', 'talent(7,3)'},
 	--actions+=/overpower,if=buff.overpower.react
@@ -96,7 +96,7 @@ local AoE = {
 	--actions.aoe+=/colossus_smash,if=buff.shattered_defenses.down&buff.precise_strikes.down
 	{'Colossus Smash', '!player.buff(Shattered Defenses)&!player.buff(Precise Strikes)'},
 	--actions.aoe+=/warbreaker,if=buff.shattered_defenses.down
-	{'Warbreaker', '!player.buff(Shattered Defenses)'},
+	{'Warbreaker', 'artifact(Warbreaker).equipped&!player.buff(Shattered Defenses)'},
 	--actions.aoe+=/whirlwind,if=talent.fervor_of_battle.enabled&(debuff.colossus_smash.up||player.rage.deficit<50)&(!talent.focused_rage.enabled||buff.battle_cry_deadly_calm.up||buff.cleave.up)
 	{'Whirlwind', 'talent(3,1)&{target.debuff(Colossus Smash)||player.rage.deficit<50}&{!talent(5,3)||{player.buff(Battle Cry)&talent(6,1)}||player.buff(Cleave)}'},
 	--actions.aoe+=/rend,if=remains<=duration*0.3
@@ -121,7 +121,7 @@ local Cleave = {
 	--actions.cleave+=/colossus_smash,if=buff.shattered_defenses.down&buff.precise_strikes.down
 	{'Colossus Smash', '!player.buff(Shattered Defenses)&!player.buff(Precise Strikes)'},
 	--actions.cleave+=/warbreaker,if=buff.shattered_defenses.down
-	{'Warbreaker', '!player.buff(Shattered Defenses)'},
+	{'Warbreaker', 'artifact(Warbreaker).equipped&!player.buff(Shattered Defenses)'},
 	--actions.cleave+=/focused_rage,if=buff.shattered_defenses.down
 	{'Focused Rage', '!player.buff(Shattered Defenses)'},
 	--actions.cleave+=/whirlwind,if=talent.fervor_of_battle.enabled&(debuff.colossus_smash.up||player.rage.deficit<50)&(!talent.focused_rage.enabled||buff.battle_cry_deadly_calm.up||buff.cleave.up)
@@ -148,7 +148,7 @@ local Execute = {
 	--actions.execute+=/colossus_smash,if=buff.shattered_defenses.down
 	{'Colossus Smash', '!player.buff(Shattered Defenses)'},
 	--actions.execute+=/warbreaker,if=buff.shattered_defenses.down&player.rage<=30
-	{'Warbreaker', '!player.buff(Shattered Defenses)&player.rage<=30'},
+	{'Warbreaker', 'artifact(Warbreaker).equipped&!player.buff(Shattered Defenses)&player.rage<=30'},
 	--actions.execute+=/execute,if=buff.shattered_defenses.up&player.rage>22||buff.shattered_defenses.down
 	{'Execute', '{player.buff(Shattered Defenses)&player.rage>22}||!player.buff(Shattered Defenses)'}
 }
@@ -159,7 +159,7 @@ local ST = {
 	--actions.single+=/colossus_smash,if=buff.shattered_defenses.down
 	{'Colossus Smash', '!player.buff(Shattered Defenses)'},
 	--actions.single+=/warbreaker,if=buff.shattered_defenses.down&cooldown.mortal_strike.remains<gcd
-	{'Warbreaker', '!player.buff(Shattered Defenses)&spell(Mortal Strike).cooldown<gcd'},
+	{'Warbreaker', 'artifact(Warbreaker).equipped&!player.buff(Shattered Defenses)&spell(Mortal Strike).cooldown<gcd'},
 	--actions.single+=/focused_rage,if=(((!buff.focused_rage.react&prev_gcd.mortal_strike)|!prev_gcd.mortal_strike)&buff.focused_rage.stack<3&(buff.shattered_defenses.up|cooldown.colossus_smash.remains))&player.rage>60
 	{'Focused Rage', '{{{!player.buff(Focused Rage)&prev_gcd(Mortal Strike)}||!prev_gcd(Mortal Strike)}&player.buff(Focused Rage).stack<3&{player.buff(Shattered Defenses)||cooldown(Colossus Smash).remains>gcd}}&player.rage>60'},
 	--actions.single+=/mortal_strike
@@ -183,24 +183,25 @@ local Keybinds = {
 }
 
 local Interrupts = {
-	{'Pummel'}
+	{'Pummel'},
+	{'Arcane Torrent', 'target.range<=8&spell(Pummel).cooldown>gcd&!prev_gcd(Pummel)'},
 }
 
 local inCombat = {
 	{Keybinds},
-	{Interrupts, 'target.interruptAt(40)'},
-	{_Xeer},
+	{Interrupts, 'target.interruptAt(50)&toggle(interrupts)&target.infront&target.range<=8'},
+	--{_Xeer},
 	--{Survival, 'player.health < 100'},
-	--{Cooldowns, 'toggle(cooldowns)'},
+	--{Cooldowns, 'toggle(cooldowns)&target.range<8'},
 	{Util, 'target.range<8'},
 	--actions+=/run_action_list,name=cleave,if=spell_targets.whirlwind>=2&talent.sweeping_strikes.enabled
-	{Cleave, 'player.area(8).enemies>=2&talent(1,3)'},
+	{Cleave, 'toggle(aoe)&player.area(8).enemies>=2&talent(1,3)'},
 	--actions+=/run_action_list,name=aoe,if=spell_targets.whirlwind>=2&!talent.sweeping_strikes.enabled
-	{AoE, 'player.area(8).enemies>=2&!talent(1,3)'},
+	{AoE, 'toggle(aoe)&player.area(8).enemies>=2&!talent(1,3)'},
 	--actions+=/run_action_list,name=execute,if=target.health.pct<=20
-	{Execute, {'target.range < 8', 'target.infront', 'target.health<=20'}},
+	{Execute, 'target.range<8&target.infront&target.health<=20'},
 	--actions+=/run_action_list,name=single,if=target.health.pct>20
-	{ST, {'target.range<8', 'target.infront', 'target.health>20'}}
+	{ST, 'target.range<8&target.infront&target.health>20'}
 }
 
 

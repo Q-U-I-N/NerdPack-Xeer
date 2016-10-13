@@ -1,6 +1,6 @@
 Xeer = {
-		Version = 1.51,
-		Branch = 'BETA',
+		Version = 1.52,
+		Branch = 'RELEASE',
 		Name = 'NerdPack- Xeer Routines',
 		Author = 'Xeer',
 		Interface = {

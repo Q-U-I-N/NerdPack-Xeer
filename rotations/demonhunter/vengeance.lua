@@ -95,7 +95,7 @@ local Ranged = {
 
 local inCombat = {
 	{Keybinds},
-	{Interrupts, 'target.interruptAt(40)'},
+	{Interrupts, 'target.interruptAt(50)&toggle(interrupts)&target.infront&target.range<=8'},
 	{Ranged, 'target.range>8&target.range<=30'},
 	{ST, 'target.infront&target.range<=8'}
 }

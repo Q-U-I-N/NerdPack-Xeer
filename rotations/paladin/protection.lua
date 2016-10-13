@@ -50,8 +50,10 @@ local Keybinds = {
 
 local Interrupts = {
 	{'Rebuke'},
-	{'Hammer of Justice', 'spell(Rebuke).cooldown>gcd'}
+	{'Hammer of Justice', 'spell(Rebuke).cooldown>gcd'},
+	{'Arcane Torrent', 'target.range<=8&spell(Rebuke).cooldown>gcd&!prev_gcd(Rebuke)'},
 }
+
 
 PreCombat = {
 	--# Executed before combat begins. Accepts non-harmful actions only.
@@ -134,11 +136,11 @@ local ST = {
 
 local inCombat = {
 	{Keybinds},
-	{_Xeer},
+	--{_Xeer},
 --{Survival, 'player.health < 100'},
-	{Interrupts, {'target.interruptAt(50)', 'toggle(Interrupts)', 'target.infront', 'target.range<8'}},
+	{Interrupts, 'target.interruptAt(50)&toggle(interrupts)&target.infront&target.range<=8'},
 	{Cooldowns, 'toggle(Cooldowns)'},
-	{AoE, {'toggle(AoE)', 'player.area(8).enemies>=3'}},
+	{AoE, 'toggle(AoE)&player.area(8).enemies>=3'},
 	{ST, 'target.infront'}
 }
 

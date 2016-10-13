@@ -66,6 +66,9 @@ local Survival = {
 
 }
 
+local Interrupts = {
+	{'Counter Shot'},
+}
 
 local Cooldowns = {
  	--actions..cooldowns=potion,name=deadly_grace,if=(buff.trueshot.react&buff.bloodlust.react)||buff.bullseye.react>=23
@@ -157,6 +160,7 @@ local inCombat = {
 	--{Keybinds},	--{Survival, 'player.health < 100'},
 	--{Cooldowns, 'toggle(cooldowns)'},
 	--{xCombat, {'target.range < 40', 'target.infront', '!channeling(Barrage)'}}
+	{Interrupts, 'target.interruptAt(50)&toggle(interrupts)&target.infront&target.range<=30'},
 	{xCombat, {'target.range < 40', 'target.infront'}}
 }
 

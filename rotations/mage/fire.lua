@@ -16,7 +16,7 @@ local exeOnLoad = function()
 end
 
 local _Xeer = { -- some non-SiMC stuffs
-	{'@Xeer.Targeting()', {'!target.alive', 'toggle(AutoTarget)'}},
+	{'@Xeer.Targeting()', {'!target.alive&toggle(AutoTarget)'}},
 
 
 --[[
@@ -186,11 +186,11 @@ local Moving = {
 
 local inCombat = {
 	{Keybinds},
-	{Interrupts, {'target.interruptAt(50)', 'toggle(Interrupts)', 'target.infront', 'target.range<40'}},
+	{Interrupts, 'target.interruptAt(50)&toggle(interrupts)&target.infront&target.range<40'},
 	--{Cooldowns, 'toggle(cooldowns)'},
 	--{Survival, 'player.health < 100'},
 	{Moving, 'xmoving=1'},
-	{xCombat, {'target.range<40', 'target.infront'}}
+	{xCombat, 'target.range<40&target.infront'}
 }
 
 local outCombat = {

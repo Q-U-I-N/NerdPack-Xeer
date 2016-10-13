@@ -96,7 +96,7 @@ local Something = {
 local AoE = {
 	{Something},
 	--actions.prot_aoe+=/neltharions_fury,if=buff.battle_cry.up
-	{'Neltharion\'s Fury', 'player.buff(Battle Cry)'},
+	{'Neltharion\'s Fury', 'artifact(Neltharion\'s Fury).equipped&player.buff(Battle Cry)'},
 	--actions.prot_aoe+=/shield_slam,if=!(cooldown.shield_block.remains<=gcd.max*2&!buff.shield_block.up&talent.heavy_repercussions.enabled)
 	{'Shield Slam', '!{spell(Shield Block).cooldown<=gcd*2&!player.buff(Shield Block)&talent(7,2)}'},
 	--actions.prot_aoe+=/revenge
@@ -122,10 +122,10 @@ local ST = {
 	{'Last Stand', 'player.incdmg(2.5)>player.health.max*0.50&!spell(Shield Wall).cooldown=0'},
 	--actions.prot+=/potion,name=unbending_potion,if=(incoming_damage_2500ms>player.health.max*0.15&!buff.potion.up)||target.time_to_die<=25
 	--actions.prot+=/call_action_list,name=prot_aoe,if=spell_targets.neltharions_fury>=2
-	{AoE, 'player.area(8).enemies>=2'},
+	{AoE, 'toggle(aoe)&player.area(8).enemies>=2'},
 	{Something},
 	--actions.prot+=/neltharions_fury,if=incoming_damage_2500ms>player.health.max*0.20&!buff.shield_block.up
-	{'Neltharion\'s Fury', 'player.incdmg(2.5)>player.health.max*0.20&!player.buff(Shield Block)'},
+	{'Neltharion\'s Fury', 'artifact(Neltharion\'s Fury).equipped&player.incdmg(2.5)>player.health.max*0.20&!player.buff(Shield Block)'},
 	--actions.prot+=/shield_slam,if=!(cooldown.shield_block.remains<=gcd.max*2&!buff.shield_block.up&talent.heavy_repercussions.enabled)
 	{'Shield Slam', '!{spell(Shield Block).cooldown<=gcd&!player.buff(Shield Block)&talent(7,2)}||{player.buff(Vengeance: Ignore Pain)&player.buff(Ignore Pain).duration<=gcd*2&player.rage<13}||{!player.buff(Vengeance: Ignore Pain)&player.buff(Ignore Pain).duration<=gcd*2&player.rage<20}||'},
 	{'Shield Slam', '!talent(7,2)'},
@@ -137,10 +137,10 @@ local ST = {
 
 local inCombat = {
 	{Keybinds},
-	{Interrupts, 'target.interruptAt(40)'},
+	{Interrupts, 'target.interruptAt(50)&toggle(interrupts)&target.infront&target.range<=8'},
 	--{Cooldowns},
-	{_Xeer},
-	{ST, {'target.range<8', 'target.infront'}}
+	--{_Xeer},
+	{ST, 'target.range<8&target.infront'}
 }
 
 local outCombat = {
