@@ -1,5 +1,5 @@
 Xeer = {
-		Version = 1.52,
+		Version = '1.5.3',
 		Branch = 'RELEASE',
 		Name = 'NerdPack- Xeer Routines',
 		Author = 'Xeer',
@@ -275,11 +275,11 @@ Xeer.getIgnorePain = function()
     local currentRank = 0
     local loaded = true
     if loaded then
-        artifactID = NeP.DSL:Get['artifact.active_id']()
+        artifactID = NeP.DSL:Get('artifact.active_id')()
         if not artifactID then
             NeP.DSL:Get['artifact.force_update']()
         end
-        local _, traits = NeP.DSL:Get['artifact.traits'](artifactID)
+        local _, traits = NeP.DSL:Get('artifact.traits')(artifactID)
         if traits then
             for _,v in ipairs(traits) do
                 if v.spellID == 203225 then

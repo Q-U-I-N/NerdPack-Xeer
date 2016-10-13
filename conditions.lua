@@ -1,5 +1,103 @@
---/dump NeP.DSL:Get('equipped')('player','1212')
---/dump NeP.DSL:Get("spell.cooldown")(nil, 'Intercept')
+--------------------------------------------------------------------------------
+---------------------------------ARTIFACT---------------------------------------
+--------------------------------------------------------------------------------
+
+local LAD = LibStub("LibArtifactData-1.0")
+
+--/dump NeP.DSL:Get('artifact.force_update')()
+NeP.DSL:Register('artifact.force_update', function ()
+    return LAD.ForceUpdate()
+end)
+
+--/dump NeP.DSL:Get('artifact.acquired_power')('artifactID')
+NeP.DSL:Register('artifact.acquired_power', function (artifactID)
+		local amount_power_acquired = LAD.GetAcquiredArtifactPower(artifactID)
+  	return LAD.GetAcquiredArtifactPower(artifactID)
+end)
+
+--/dump NeP.DSL:Get('artifact.activeid')()
+NeP.DSL:Register('artifact.active_id', function ()
+		local artifactID = LAD.GetActiveArtifactID(artifactID)
+    return LAD.GetActiveArtifactID()
+end)
+
+--/dump NeP.DSL:Get('artifact.get_all_info')()
+NeP.DSL:Register('artifact.get_all_info', function ()
+    return LAD.GetAllArtifactsInfo()
+end)
+
+--/dump NeP.DSL:Get('artifact.info')('artifactID')
+NeP.DSL:Register('artifact.info', function (artifactID)
+		local artifactID, data = LAD.GetArtifactInfo(artifactID)
+    return LAD.GetArtifactInfo(artifactID)
+end)
+
+--/dump NeP.DSL:Get('artifact.knowledge')()
+NeP.DSL:Register('artifact.knowledge', function ()
+		local knowledge_level, knowledge_multiplier = LAD.GetArtifactKnowledge()
+		return LAD.GetArtifactKnowledge()
+end)
+
+--/dump NeP.DSL:Get('artifact.power')('artifactID')
+NeP.DSL:Register('artifact.power', function (artifactID)
+    local artifact_id, unspent_power, power, max_power, power_for_next_rank, num_ranks_purchased, num_ranks_purchaseable = LAD.GetArtifactPower(artifactID)
+		return LAD.GetArtifactPower(artifactID)
+end)
+
+--/dump NeP.DSL:Get('artifact.relics')('artifactID')
+NeP.DSL:Register('artifact.relics', function (artifactID)
+		local artifactID, data = LAD.GetArtifactRelics(artifactID)
+    return LAD.GetArtifactRelics(artifactID)
+end)
+
+--/dump NeP.DSL:Get('artifact.traits')(NeP.DSL:Get('artifact.activeid'))
+NeP.DSL:Register('artifact.traits', function (artifactID)
+		local artifactID, data = LAD.GetArtifactTraits(artifactID)
+    return LAD.GetArtifactTraits(artifactID)
+end)
+
+--/dump NeP.DSL:Get('artifact.num_obtained')()
+NeP.DSL:Register('artifact.num_obtained', function ()
+		local numObtained = LAD.GetArtifactKnowledge()
+		return LAD.GetNumObtainedArtifacts()
+end)
+
+--/dump NeP.DSL:Get('artifact.trait_info')('player', 'Warbreaker')
+--/dump NeP.DSL:Get('artifact.trait_info')('player', 'Thoradin\'s Might')
+NeP.DSL:Register('artifact.trait_info', function(_, spell)
+	local currentRank = 0
+			artifactID = NeP.DSL:Get('artifact.active_id')()
+			if not artifactID then
+					NeP.DSL:Get('artifact.force_update')()
+			end
+			local _, traits = NeP.DSL:Get('artifact.traits')(artifactID)
+			if traits then
+					for _,v in ipairs(traits) do
+							if v.name == spell then
+								return v.isGold, v.bonusRanks, v.maxRank, v.traitID, v.isStart, v.icon, v.isFinal, v.name, v.currentRank, v.spellID
+							end
+					end
+			end
+end)
+
+--/dump NeP.DSL:Get('artifact.enabled')('player', 'Warbreaker')
+--/dump NeP.DSL:Get('artifact.enabled')('player', 'Thoradin\'s Might')
+NeP.DSL:Register('artifact.enabled', function(_, spell)
+		if select(10,NeP.DSL:Get('artifact.trait_info')(_, spell)) then
+			return true
+		else
+			return false
+		end
+end)
+
+NeP.DSL:Register('artifact.equipped', function(_, spell)
+	return NeP.DSL:Get('spell.exists')(_, spell)
+end)
+
+--------------------------------------------------------------------------------
+-----------------------------------MISC-----------------------------------------
+--------------------------------------------------------------------------------
+
 --NeP.DSL:Register('equipped', function(target, item)
 --	if IsEquippedItem(item) == true then return true else return false end
 --end)
@@ -13,25 +111,9 @@ NeP.DSL:Register('casting.left', function(target, spell)
 return 0
 end)
 
---[[
---/dump NeP.DSL:Get('xinfront.enemies')('10','30')
-NeP.DSL:Register('xinfront.enemies', function(unit, distance)
-	local total = 0
-	if not UnitExists(unit) then return total end
-	for i=1, #NeP.OM['unitEnemie'] do
-		local Obj = NeP.OM['unitEnemie'][i]
-		if UnitExists(Obj.key) and (UnitAffectingCombat(Obj.key) or isDummy(Obj.key))
-		and NeP.Engine.Distance(unit, Obj.key) <= tonumber(distance) then
-			if NeP.Engine.Infront('player', Obj.key) then
-				total = total +1
-			end
-		end
-	end
-	return total
-end)
-
---]]
------------------------------------SIMC STUFFS----------------------------------
+--------------------------------------------------------------------------------
+--------------------------------SIMC STUFFS-------------------------------------
+--------------------------------------------------------------------------------
 
 NeP.DSL:Register('xmoving', function()
 	local speed, _ = GetUnitSpeed('player')
@@ -52,7 +134,6 @@ end)
 		[12] = 'Torment'
 	}
 --]]
-
 
 local PowerT = {
 	[0] = ('^.-Mana'),
@@ -79,67 +160,6 @@ NeP.DSL:Register('action.cost', function(spell)
 			return 0
 		end
 end)
-
-
---UnitBuff(Unit,GetSpellInfo(SpellID))
---/dump GetSpellInfo(190456)
---/dump UnitBuff('player',GetSpellInfo(190456))
-
---/dump NeP.DSL:Get('ignorepain_cost')()
-NeP.DSL:Register('ignorepain_cost', function()
-	return Xeer.Scan_IgnorePain()
-end)
-
---/dump NeP.DSL:Get['ignorepain_max')()
-NeP.DSL:Register('ignorepain_max', function()
-	local ss = NeP.DSL:Get('health.max')('player')
-	if hasTalent(5,2) == true then
-		return NeP.Core.Round((((77.86412474516502 * 1.70) * ss) / 100))
-	else
-		return NeP.Core.Round(((77.86412474516502 * ss) / 100))
-	end
-end)
-
---/dump NeP.Core:GetSpellID('Rip')
---/dump select(8, UnitDebuff('target', GetSpellInfo(NeP.Core:GetSpellID(NeP.Core:GetSpellName('Rip')))))
---/dump select(6, UnitDebuff('target', GetSpellInfo(NeP.Core:GetSpellID(NeP.Core:GetSpellName('Rip')))))
-
---------------------------------------FERAL-------------------------------------
---/dump NeP.DSL:Get('gcd')()
---/dump NeP.DSL:Get('dot.x')('target', 'Moonfire')
---/dump NeP.DSL:Get('dot.tick_time')('Moonfire')
-
-
-local DotTicks = {
-    [1] = {
-        [1822] = 3,
-        [1079] = 2,
-        [106832] = 3,
-    },
-    [2] = {
-				[8921] = 2,
-        [155625] = 2,
-    }
-}
-
-NeP.DSL:Register('dot.tick_time', function(_,spell)
-    local spell = NeP.Core:GetSpellID(spell)
-    local class = select(3,UnitClass('player'))
-    if class == 11 and GetSpecialization() == 2 then
-        if NeP.DSL:Get('talent')(nil, '6,2') and DotTicks[1][spell] then
-            return DotTicks[1][spell] * 0.67
-        else
-            if DotTicks[1][spell] then
-                return DotTicks[1][spell]
-            else
-                local tick = DotTicks[2][spell]
-                return math.floor((tick / ((GetHaste() / 100) + 1)) * 10^3 ) / 10^3
-            end
-        end
-    end
-end)
-
---------------------------------------FERAL-------------------------------------
 
 --/dump NeP.DSL:Get('dot.duration')('target','Rip')
 NeP.DSL:Register('dot.duration', function(target, spell)
@@ -179,17 +199,6 @@ end)
 
 NeP.DSL:Register('dot.active_dot', function(target, spell)
 end)
-
-
---/dump NeP.DSL:Get('cooldown.remains')('player','Combustion')
---/dump NeP.DSL:Get('buff.stack')('player','Incanter\'s Flow')
---/dump NeP.DSL:Get('spell_haste')('player')
---/dump NeP.DSL:Get('talent.enabled')('player','6,2')
---/dump NeP.DSL:Get('cast_regen')('player','Fireball')
---/dump NeP.DSL:Get('cast_time')('player','Cinderstorm')
-
-
---/dump NeP.DSL:Get('ignorepain_max')('player')
 
 
 --/dump NeP.DSL:Get('buff.react')('player','Incanter\'s Flow')
@@ -293,7 +302,6 @@ NeP.DSL:Register('spell_haste', function()
 	return math.floor((100 / ( 100 + shaste )) * 10^3 ) / 10^3
 end)
 
-
 --/dump NeP.DSL:Get('action.execute_time')('player','Fireball')
 NeP.DSL:Register('action.execute_time', function(_, spell)
 	return NeP.DSL:Get('execute_time')(_, spell)
@@ -384,6 +392,12 @@ end)
 NeP.DSL:Register('rage.deficit', function()
 	return NeP.DSL:Get('deficit')('player')
 end)
+
+--/dump NeP.DSL:Get('runic_power')()
+NeP.DSL:Register('runic_power', function()
+	return NeP.DSL:Get('runicpower')('player')
+end)
+
 --/dump NeP.DSL:Get('action.cast_time')('player','Revenge')
 NeP.DSL:Register('action.cast_time', function(_, spell)
 	if NeP.DSL:Get('spell.exists')(_, spell) == true then
@@ -402,11 +416,67 @@ NeP.DSL:Register('active_enemies', function(unit, distance)
 	return NeP.DSL:Get('area.enemies')(unit, distance)
 end)
 
---TODO: this is just fake one atm:P dont have real artifact traits check yet
-NeP.DSL:Register('artifact.enabled', function(_, spell)
-	return NeP.DSL:Get('spell.exists')(_, spell)
+--------------------------------------------------------------------------------
+---------------------------------PROT WAR---------------------------------------
+--------------------------------------------------------------------------------
+
+--UnitBuff(Unit,GetSpellInfo(SpellID))
+--/dump GetSpellInfo(190456)
+--/dump UnitBuff('player',GetSpellInfo(190456))
+
+--/dump NeP.DSL:Get('ignorepain_cost')()
+NeP.DSL:Register('ignorepain_cost', function()
+	return Xeer.Scan_IgnorePain()
 end)
 
-NeP.DSL:Register('artifact.equipped', function(_, spell)
-	return NeP.DSL:Get('spell.exists')(_, spell)
+--/dump NeP.DSL:Get['ignorepain_max')()
+NeP.DSL:Register('ignorepain_max', function()
+	local ss = NeP.DSL:Get('health.max')('player')
+	if hasTalent(5,2) == true then
+		return NeP.Core.Round((((77.86412474516502 * 1.70) * ss) / 100))
+	else
+		return NeP.Core.Round(((77.86412474516502 * ss) / 100))
+	end
 end)
+
+
+--------------------------------------------------------------------------------
+---------------------------------FERAL------------------------------------------
+--------------------------------------------------------------------------------
+
+local DotTicks = {
+    [1] = {
+        [1822] = 3,
+        [1079] = 2,
+        [106832] = 3,
+    },
+    [2] = {
+				[8921] = 2,
+        [155625] = 2,
+    }
+}
+
+NeP.DSL:Register('dot.tick_time', function(_,spell)
+    local spell = NeP.Core:GetSpellID(spell)
+    local class = select(3,UnitClass('player'))
+    if class == 11 and GetSpecialization() == 2 then
+        if NeP.DSL:Get('talent')(nil, '6,2') and DotTicks[1][spell] then
+            return DotTicks[1][spell] * 0.67
+        else
+            if DotTicks[1][spell] then
+                return DotTicks[1][spell]
+            else
+                local tick = DotTicks[2][spell]
+                return math.floor((tick / ((GetHaste() / 100) + 1)) * 10^3 ) / 10^3
+            end
+        end
+    end
+end)
+
+--/dump NeP.DSL:Get('gcd')()
+--/dump NeP.DSL:Get('dot.x')('target', 'Moonfire')
+--/dump NeP.DSL:Get('dot.tick_time')('Moonfire')
+
+--/dump NeP.Core:GetSpellID('Rip')
+--/dump select(8, UnitDebuff('target', GetSpellInfo(NeP.Core:GetSpellID(NeP.Core:GetSpellName('Rip')))))
+--/dump select(6, UnitDebuff('target', GetSpellInfo(NeP.Core:GetSpellID(NeP.Core:GetSpellName('Rip')))))

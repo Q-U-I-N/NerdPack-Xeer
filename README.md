@@ -36,11 +36,11 @@ Druid - Feral
 
 Demon Hunter - Vengeance
 
+Death Knight - Frost
+
 ------------------------------------
 
 Future routines + WIP (do not use them even if you see them on github):
-
-Death Knight - Frost
 
 Death Knight - Unholy
 

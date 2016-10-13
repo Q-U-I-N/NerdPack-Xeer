@@ -92,7 +92,7 @@ local ST = {
 	--actions.single_target=bloodthirst,if=buff.fujiedas_fury.up&buff.fujiedas_fury.remains<2
 	{'Bloodthirst', 'player.buff(Fujieda\'s Fury)&player.buff(Fujieda\'s Fury).stack<2'},
 	--actions.single_target+=/execute,if=(artifact.juggernaut.enabled&(!buff.juggernaut.up||buff.juggernaut.remains<2))||buff.stone_heart.react
-	{'Execute', '{player.buff(Juggernaut)||player.buff(Juggernaut).stack<2}||player.buff(Stone Heart)'},
+	{'Execute', '{artifact(Juggernaut).enabled&{!player.buff(Juggernaut)||player.buff(Juggernaut).remains<2}}||player.buff(Stone Heart).react'},
 	--actions.single_target+=/rampage,if=player.rage=100&(target.health.pct>20||target.health.pct<20&!talent.massacre.enabled)||buff.massacre.react&buff.enrage.remains<1
 	{'Rampage', 'player.rage=100&{target.health>20||{target.health<20&!talent(5,1)}||{player.buff(Massacre)&player.buff(Enrage).remains<1}}'},
 	--actions.single_target+=/berserker_rage,if=talent.outburst.enabled&cooldown.odyns_fury.remains=0&buff.enrage.down
