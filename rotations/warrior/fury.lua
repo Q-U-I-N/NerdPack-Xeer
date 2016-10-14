@@ -9,7 +9,7 @@ local exeOnLoad = function()
 end
 
 local _Xeer = {
-	--{'@Xeer.Targeting()', {'!target.alive', 'toggle(AutoTarget)'}},
+	{'@Xeer.Targeting()', {'!target.alive', 'toggle(AutoTarget)'}},
 --{'Charge', 'target.range>8&target.range<=25&target.infront'},
 
 --[[

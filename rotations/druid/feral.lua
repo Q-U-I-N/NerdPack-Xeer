@@ -70,10 +70,49 @@ local PreCombat = {
 	--{'', ''},
 }
 
+------------------ POOLING ------------------
+--106830 - trash
+--106785 - swipe
+--155625 - moonfire
+
+local Moonfire = {
+	--actions.generator+=/Moonfire_cat,cycle_targets=1,if=combo_points<5&remains<=4.2&target.time_to_die-remains>tick_time*2
+	{'Moonfire', 'combo_points<5&target.dot(Moonfire).remains<=4.2&target.time_to_die-target.dot(Moonfire).remains>dot(Moonfire).tick_time*2'},
+}
+
+local Healing_Touch = {
+	{'Healing Touch'},
+}
+local Elunes_Guidance = {
+	{'Elune\'s Guidance'},
+}
+
+local Rip = {
+	{'Rip'},
+}
+
+local Savage_Roar = {
+	{'Savage Roar'},
+}
+
+local Ferocious_Bite = {
+	{'Ferocious Bite'},
+}
+
+local Thrash = {
+	{'Thrash'},
+}
+
+local Swipe = {
+	{'Swipe'},
+}
+
+------------------ POOLING ------------------
+
 local SBT_Opener = {
 	--# Hard-cast a Healing Touch for Bloodtalons buff. Use Dash to re-enter Cat Form.
 	--actions.sbt_opener=healing_touch,if=talent.bloodtalons.enabled&combo_points=5&!buff.bloodtalons.up&!dot.rip.ticking
-	{'Healing Touch', 'talent(7,2)&combo_points=5&!player.buff(Bloodtalons)&!target.dot(Rip).ticking'},
+	{Healing_Touch, 'talent(7,2)&combo_points=5&!player.buff(Bloodtalons)&!target.dot(Rip).ticking'},
 	--# Force use of Tiger's Fury before applying Rip.
 	--actions.sbt_opener+=/tigers_fury,if=!dot.rip.ticking&combo_points=5
 	{'Tiger\'s Fury', '!target.dot(Rip).ticking&combo_points=5'},
@@ -107,48 +146,50 @@ local Cooldowns = {
 	{'Incarnation: King of the Jungle', 'talent(5,2)&{energy.time_to_max>1&energy>=35}'},
 	--# Keep Rip from falling off during execute range.
 	--actions.=/ferocious_bite,cycle_targets=1,if=dot.rip.ticking&dot.rip.remains<3&target.time_to_die>3&(target.health.pct<25||talent.sabertooth.enabled)
-	{'Ferocious Bite', 'target.dot(Rip).ticking&target.dot(Rip)remains<3&target.time_to_die>3&{target.health<25||talent(6,1)}'},
+	{Ferocious_Bite, 'target.dot(Rip).ticking&target.dot(Rip)remains<3&target.time_to_die>3&{target.health<25||talent(6,1)}'},
 	--# Use Healing Touch at 5 Combo Points, if Predatory Swiftness is about to fall off, at 2 Combo Points before Ashamane's Frenzy, before Elune's Guidance is cast or before the Elune's Guidance buff gives you a 5th Combo Point.
 	--actions.=/healing_touch,if=talent.bloodtalons.enabled&buff.predatory_swiftness.up&(combo_points>=5||buff.predatory_swiftness.remains<1.5||(talent.bloodtalons.enabled&combo_points=2&buff.bloodtalons.down&cooldown.ashamanes_frenzy.remains<gcd)||(talent.elunes_guidance.enabled&((cooldown.elunes_guidance.remains<gcd&combo_points=0)||(buff.elunes_guidance.up&combo_points>=4))))
-	{'Healing Touch', 'talent(7,2)&player.buff(Predatory Swiftness)&{combo_points>=5||player.buff(Predatory Swiftness).remains<1.5||{talent(7,2)&combo_points=2&!player.buff(Bloodtalons)&cooldown(Ashamane\'s Frenzy).remains<gcd}||{talent(6,3)&{{cooldown(Elune\'s Guidance).remains<gcd&combo_points=0}}}}'},
+	{Healing_Touch, 'talent(7,2)&player.buff(Predatory Swiftness)&{combo_points>=5||player.buff(Predatory Swiftness).remains<1.5||{talent(7,2)&combo_points=2&!player.buff(Bloodtalons)&cooldown(Ashamane\'s Frenzy).remains<gcd}||{talent(6,3)&{{cooldown(Elune\'s Guidance).remains<gcd&combo_points=0}}}}'},
 	--actions.=/call_action_list,name=sbt_opener,if=talent.sabertooth.enabled&time<20
 	{SBT_Opener, 'talent(6,1)&player.combat.time<20'},
 	--# Special logic for Ailuro Pouncers legendary.
 	--actions.=/healing_touch,if=equipped.ailuro_pouncers&talent.bloodtalons.enabled&buff.predatory_swiftness.stack>1&buff.bloodtalons.down
-	{'Healing Touch', 'equipped(137024)&talent(7,2)&player.buff(Predatory Swiftness).stack>1&!player.buff(Bloodtalons)'},
+	{Healing_Touch, 'equipped(137024)&talent(7,2)&player.buff(Predatory Swiftness).stack>1&!player.buff(Bloodtalons)'},
 }
 
 local Finisher = {
 	--# Use Savage Roar if it's expired and you're at 5 combo points or are about to use Brutal Slash
 	--actions.finisher=pool_resource,for_next=1
 	--actions.finisher+=/savage_roar,if=!buff.savage_roar.up&(combo_points=5||(talent.brutal_slash.enabled&spell_targets.brutal_slash>desired_targets&action.brutal_slash.charges>0))
-	{'Savage Roar', 'talent(5,3)&{!player.buff(Savage Roar)&{combo_points=5||talent(7,1)&action(Brutal Slash).charges>0}}'},
+	--{Savage_Roar, 'talent(5,3)&{!player.buff(Savage Roar)&{combo_points=5||talent(7,1)&action(Brutal Slash).charges>0}}'},
+	{Savage_Roar, '{!player.buff(Savage Roar)&player.combo_points=5}||!player.buff(Savage Roar)&{talent(7,1)&action(Brutal Slash).charges>0}&talent(5,2)}}'},
 	--# Thrash has higher priority than finishers at 5 targets
 	--actions.finisher+=/pool_resource,for_next=1
-	--actions.finisher+=/thrash_cat,cycle_targets=1,if=remains<=duration*0.3&spell_targets.thrash_cat>=5
-	{'Thrash', 'target.dot(Thrash).remains<=target.dot(Thrash).duration*0.3&player.area(8).enemies>=5'},
+	--actions.finisher+=/Thrash_cat,cycle_targets=1,if=remains<=duration*0.3&spell_targets.Thrash_cat>=5
+	{Thrash, 'target.dot(Thrash).remains<=target.dot(Thrash).duration*0.3&player.area(8).enemies>=5'},
 	--# Replace Rip with Swipe at 8 targets
 	--actions.finisher+=/pool_resource,for_next=1
-	--actions.finisher+=/swipe_cat,if=spell_targets.swipe_cat>=8
-	{'Swipe', 'player.area(8).enemies>=6'},
+	--actions.finisher+=/Swipe_cat,if=spell_targets.Swipe_cat>=8
+	{Swipe, 'player.area(8).enemies>=6'},
 	--# Refresh Rip at 8 seconds or for a stronger Rip
-	--actions.finisher+=/rip,cycle_targets=1,if=(!ticking||(remains<8&target.health.pct>25&!talent.sabertooth.enabled)||persistent_multiplier>dot.rip.pmultiplier)&target.time_to_die-remains>tick_time*4&combo_points=5&(energy.time_to_max<1||buff.berserk.up||buff.incarnation.up||buff.elunes_guidance.up||cooldown.tigers_fury.remains<3||set_bonus.tier18_4pc||buff.clearcasting.react||talent.soul_of_the_forest.enabled||!dot.rip.ticking||(dot.rake.remains<1.5&spell_targets.swipe_cat<6))
-	{'Rip', '{!target.dot(Rip).ticking||{target.dot(Rip).remains<8&target.health>25&!talent(6,1)}}&target.time_to_die-target.dot(Rip).remains>dot(Rip).tick_time*4&&combo_points=5&{energy.time_to_max<1||player.buff(Berserk)||player.buff(Incarnation: King of the Jungle)||cooldown(Tiger\'s Fury).remains<3||{talent(7,3)&player.buff(Clearcasting).react}||talent(5,1)||!target.dot(Rip).ticking||{target.dot(Rake).remains<1.5&player.area(8).enemies<6}}'},
+	--actions.finisher+=/rip,cycle_targets=1,if=(!ticking||(remains<8&target.health.pct>25&!talent.sabertooth.enabled)||persistent_multiplier>dot.rip.pmultiplier)&target.time_to_die-remains>tick_time*4&combo_points=5&(energy.time_to_max<1||buff.berserk.up||buff.incarnation.up||buff.elunes_guidance.up||cooldown.tigers_fury.remains<3||set_bonus.tier18_4pc||buff.clearcasting.react||talent.soul_of_the_forest.enabled||!dot.rip.ticking||(dot.rake.remains<1.5&spell_targets.Swipe_cat<6))
+	--{Rip, '{!target.dot(Rip).ticking||{target.dot(Rip).remains<8&target.health>25&!talent(6,1)}}&target.time_to_die-target.dot(Rip).remains>dot(Rip).tick_time*4&&combo_points=5&{energy.time_to_max<1||player.buff(Berserk)||player.buff(Incarnation: King of the Jungle)||cooldown(Tiger\'s Fury).remains<3||{talent(7,3)&player.buff(Clearcasting).react}||talent(5,1)||!target.dot(Rip).ticking||{target.dot(Rake).remains<1.5&player.area(8).enemies<6}}'},
+	{Rip, '{!target.debuff(Rip)||{target.debuff(Rip).duration<8&target.health>25&!talent(6,1)}}&{target.ttd>8&player.combo_points=5}&{player.energydiff<20||player.buff(Berserk)||player.buff(Incarnation: King of the Jungle)||player.buff(Elune\'s Guidance)||spell(Tiger\'s Fury).cooldown<3||player.buff(Clearcasting)||talent(5,1)||!target.debuff(Rip)||{target.debuff(Rake).duration<1.5}}'},
 	--# Refresh Savage Roar early with Jagged Wounds
-	--actions.finisher+=/savage_roar,if=(buff.savage_roar.remains<=10.5||(buff.savage_roar.remains<=7.2&!talent.jagged_wounds.enabled))&combo_points=5&(energy.time_to_max<1||buff.berserk.up||buff.incarnation.up||buff.elunes_guidance.up||cooldown.tigers_fury.remains<3||set_bonus.tier18_4pc||buff.clearcasting.react||talent.soul_of_the_forest.enabled||!dot.rip.ticking||(dot.rake.remains<1.5&spell_targets.swipe_cat<6))
-	{'Savage Roar', 'talent(5,3)&{{player.buff(Savage Roar).remains<=10.5||{player.buff(Savage Roar).remains<=7.2&!talent(6,2)}}&combo_points=5&{energy.time_to_max<1||player.buff(Berserk)||player.buff(Incarnation: King of the Jungle)||cooldown(Tiger\'s Fury).remains<3||{talent(7,3)&player.buff(Clearcasting).react}||!target.dot(Rip).ticking||{target.dot(Rake).remains<1.5&player.area(8).enemies<6}}}'},
+	--actions.finisher+=/savage_roar,if=(buff.savage_roar.remains<=10.5||(buff.savage_roar.remains<=7.2&!talent.jagged_wounds.enabled))&combo_points=5&(energy.time_to_max<1||buff.berserk.up||buff.incarnation.up||buff.elunes_guidance.up||cooldown.tigers_fury.remains<3||set_bonus.tier18_4pc||buff.clearcasting.react||talent.soul_of_the_forest.enabled||!dot.rip.ticking||(dot.rake.remains<1.5&spell_targets.Swipe_cat<6))
+	--{Savage_Roar, 'talent(5,3)&{player.buff(Savage Roar).remains<=7.2&combo_points=5&{combo_points=5||energy.time_to_max<1||player.buff(Berserk)||player.buff(Incarnation: King of the Jungle)||cooldown(Tiger\'s Fury).remains<3||{talent(7,3)&player.buff(Clearcasting).react}||!target.dot(Rip).ticking||{target.dot(Rake).remains<1.5&player.area(8).enemies<6}}}'},
+	{Savage_Roar, '{{player.buff(Savage Roar).duration<=10.5&talent(6,2)}||{player.buff(Savage Roar).duration<=7.2&!talent(6,2)}}&{player.combo_points>=5}&{player.energydiff<20||player.buff(Berserk)||player.buff(Incarnation: King of the Jungle)||player.buff(Elune\'s Guidance)||spell(Tiger\'s Fury).cooldown<3||player.buff(Clearcasting)||talent(5,1)||!target.debuff(Rip)||{target.debuff(Rake).duration<1.5}}'},
 	--# Replace FB with Swipe at 6 targets for Bloodtalons or 3 targets otherwise.
-	--actions.finisher+=/swipe_cat,if=combo_points=5&(spell_targets.swipe_cat>=6||(spell_targets.swipe_cat>=3&!talent.bloodtalons.enabled))&combo_points=5&(energy.time_to_max<1||buff.berserk.up||buff.incarnation.up||buff.elunes_guidance.up||cooldown.tigers_fury.remains<3||set_bonus.tier18_4pc||(talent.moment_of_clarity.enabled&buff.clearcasting.react))
-	{'Swipe', 'combo_points=5&{player.area(8).enemies>=6||{player.area(8).enemies>=3&!talent(7,2)}}&combo_points=5&{energy.time_to_max<1||player.buff(Berserk)||player.buff(Incarnation: King of the Jungle)||cooldown(Tiger\'s Fury).remains<3||{talent(7,3)&player.buff(Clearcasting).react}}'},
+	--actions.finisher+=/Swipe_cat,if=combo_points=5&(spell_targets.Swipe_cat>=6||(spell_targets.Swipe_cat>=3&!talent.bloodtalons.enabled))&combo_points=5&(energy.time_to_max<1||buff.berserk.up||buff.incarnation.up||buff.elunes_guidance.up||cooldown.tigers_fury.remains<3||set_bonus.tier18_4pc||(talent.moment_of_clarity.enabled&buff.clearcasting.react))
+	{Swipe, 'combo_points=5&{player.area(8).enemies>=6||{player.area(8).enemies>=3&!talent(7,2)}}&combo_points=5&{energy.time_to_max<1||player.buff(Berserk)||player.buff(Incarnation: King of the Jungle)||cooldown(Tiger\'s Fury).remains<3||{talent(7,3)&player.buff(Clearcasting).react}}'},
+	-- custom FB
+	{Ferocious_Bite, 'combo_points=5&{player.buff(Savage Roar).remains>=17.2&target.dot(Rip).remains>=18}'},
 	--actions.finisher+=/ferocious_bite,player.max_energy=1,cycle_targets=1,if=combo_points=5&(energy.time_to_max<1||buff.berserk.up||buff.incarnation.up||buff.elunes_guidance.up||cooldown.tigers_fury.remains<3||set_bonus.tier18_4pc||(talent.moment_of_clarity.enabled&buff.clearcasting.react))
-	{'Ferocious Bite', 'combo_points=5&{energy.time_to_max<1||player.buff(Berserk)||player.buff(Incarnation: King of the Jungle)||cooldown(Tiger\'s Fury).remains<3||{talent(7,3)&player.buff(Clearcasting).react}}'},
+	{Ferocious_Bite, 'combo_points=5&{energy.time_to_max<1||player.buff(Berserk)||player.buff(Incarnation: King of the Jungle)||cooldown(Tiger\'s Fury).remains<3||{talent(7,3)&player.buff(Clearcasting).react}}'},
 	--TODO: set_bonus.tier18_4pc
 }
 
-local Moonfire = {
-	--actions.generator+=/moonfire_cat,cycle_targets=1,if=combo_points<5&remains<=4.2&target.time_to_die-remains>tick_time*2
-	{'Moonfire', 'combo_points<5&target.dot(Moonfire).remains<=4.2&target.time_to_die-target.dot(Moonfire).remains>dot(Moonfire).tick_time*2'},
-}
+
 
 local Generator = {
 	--# Brutal Slash if there's adds up
@@ -158,14 +199,14 @@ local Generator = {
 	{'Ashamane\'s Frenzy', 'combo_points<=2&{player.buff(Bloodtalons)||!talent(7,2)}&{player.buff(Savage Roar)||!talent(5,3)}'},
 	--# Pool energy for Elune's Guidance when it's coming off cooldown.
 	--actions.generator+=/pool_resource,if=talent.elunes_guidance.enabled&combo_points=0&energy<action.ferocious_bite.cost+25-energy.regen*cooldown.elunes_guidance.remains
-	{'Elune\'s Guidance', 'talent(6,3)&combo_points=0&energy>=action(Ferocious Bite).cost+25-energy.regen*cooldown(Elune\'s Guidance).remains'},
+	{'Elune\'s Guidance', 'talent(6,3)&{combo_points=0&energy>=action(Ferocious Bite).cost+25-energy.regen*cooldown(Elune\'s Guidance).remains}'},
 	--actions.generator+=/elunes_guidance,if=talent.elunes_guidance.enabled&combo_points=0&energy>=action.ferocious_bite.cost+25
-	{'Elune\'s Guidance', 'talent(6,3)&combo_points=0&energy>=action(Ferocious Bite).cost+25'},
+	{'Elune\'s Guidance', 'talent(6,3)&{combo_points=0&energy>=action(Ferocious Bite).cost+25}'},
 	--# Spam Thrash over Rake or Moonfire at 9 targets with Brutal Slash talent.
-	--actions.generator+=/thrash_cat,if=talent.brutal_slash.enabled&spell_targets.thrash_cat>=9
+	--actions.generator+=/Thrash_cat,if=talent.brutal_slash.enabled&spell_targets.Thrash_cat>=9
 	{'Thrash', 'talent(7,1)&player.area(8).enemies>=9'},
 	--# Use Swipe over Rake or Moonfire at 6 targets.
-	--actions.generator+=/swipe_cat,if=spell_targets.swipe_cat>=6
+	--actions.generator+=/Swipe_cat,if=spell_targets.Swipe_cat>=6
 	{'Swipe', 'player.area(8).enemies>=6'},
 	--# Shadowmeld to buff Rake
 	--actions.generator+=/shadowmeld,if=combo_points<5&energy>=action.rake.cost&dot.rake.pmultiplier<2.1&buff.tigers_fury.up&(buff.bloodtalons.up||!talent.bloodtalons.enabled)&(!talent.incarnation.enabled||cooldown.incarnation.remains>18)&!buff.incarnation.up
@@ -174,14 +215,14 @@ local Generator = {
 	--actions.generator+=/rake,if=combo_points<5&(!ticking||(!talent.bloodtalons.enabled&remains<duration*0.3)||(talent.bloodtalons.enabled&buff.bloodtalons.up&(!talent.soul_of_the_forest.enabled&remains<=7||remains<=5)))&target.time_to_die-remains>tick_time
 	{'Rake', 'combo_points<5&{!target.dot(Rake).ticking||{!talent(7,2)&target.dot(Rake).remains<target.dot(Rake).duration*0.3}||{talent(7,2)&player.buff(Bloodtalons)&{!talent(5,1)&target.dot(Rake).remains<=7||target.dot(Rake).remains<=5}}}&target.time_to_die-target.dot(Rake).remains>dot(Rake).tick_time'},
 	{Moonfire, 'talent(1,3)&!prev_gcd(Moonfire)'},
-	--actions.generator+=/thrash_cat,cycle_targets=1,if=remains<=duration*0.3&spell_targets.swipe_cat>=2
+	--actions.generator+=/Thrash_cat,cycle_targets=1,if=remains<=duration*0.3&spell_targets.Swipe_cat>=2
 	{'Thrash', 'target.dot(Thrash).remains<=target.dot(Thrash).duration*0.3&player.area(8).enemies>=2'},
 	--# Brutal Slash if you would cap out charges before the next adds spawn
 	--actions.generator+=/brutal_slash,if=combo_points<5&((raid_event.adds.exists&raid_event.adds.in>(1+max_charges-charges_fractional)*15)||(!raid_event.adds.exists&(charges_fractional>2.66&time>10)))
 	--{'Brutal Slash', 'combo_points<5&{{}}'},
-	--actions.generator+=/swipe_cat,if=combo_points<5&spell_targets.swipe_cat>=3
+	--actions.generator+=/Swipe_cat,if=combo_points<5&spell_targets.Swipe_cat>=3
 	{'Swipe', 'combo_points<5&player.area(8).enemies>=3'},
-	--actions.generator+=/shred,if=combo_points<5&(spell_targets.swipe_cat<3||talent.brutal_slash.enabled)
+	--actions.generator+=/shred,if=combo_points<5&(spell_targets.Swipe_cat<3||talent.brutal_slash.enabled)
 	{'Shred', 'combo_points<5&{player.area(8).enemies<3||talent(7,1)}'},
 }
 

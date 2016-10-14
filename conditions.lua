@@ -163,7 +163,7 @@ end)
 
 --/dump NeP.DSL:Get('dot.duration')('target','Rip')
 NeP.DSL:Register('dot.duration', function(target, spell)
-	local debuff,_,duration,expires,caster = Xeer.UnitDot(target, spell)
+	local debuff,_,duration,expires,caster = Xeer.UnitDot(target, spell, _)
 	if debuff and (caster == 'player' or caster == 'pet') then
 		return duration
 	end
@@ -396,6 +396,11 @@ end)
 --/dump NeP.DSL:Get('runic_power')()
 NeP.DSL:Register('runic_power', function()
 	return NeP.DSL:Get('runicpower')('player')
+end)
+
+--/dump NeP.DSL:Get('holy_power')()
+NeP.DSL:Register('holy_power', function()
+	return NeP.DSL:Get('holypower')('player')
 end)
 
 --/dump NeP.DSL:Get('action.cast_time')('player','Revenge')

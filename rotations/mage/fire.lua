@@ -16,7 +16,7 @@ local exeOnLoad = function()
 end
 
 local _Xeer = { -- some non-SiMC stuffs
-	{'@Xeer.Targeting()', {'!target.alive&toggle(AutoTarget)'}},
+	--{'@Xeer.Targeting()', {'!target.alive&toggle(AutoTarget)'}},
 
 
 --[[
@@ -98,7 +98,7 @@ local Combustion = {
 	--actions.combustion_phase+=/call_action_list,name=active_talents
 	{Talents},
 	--actions.combustion_phase+=/combustion
-	{'Combustion'},
+	{'Combustion', 'player.buff(Rune of Power)||player.casting(Rune of Power).percent>90'},
 	--actions.combustion_phase+=/potion,name=deadly_grace
 	--actions.combustion_phase+=/blood_fury
 	{'Blood Fury'},
@@ -126,7 +126,7 @@ local RoP = {
 	--actions.rop_phase+=/pyroblast,if=buff.kaelthas_ultimate_ability.react
 	{'Pyroblast', 'player.buff(Kael\'thas\'s Ultimate Ability).react'},
 	--actions.rop_phase+=/fire_blast,if=!prev_off_gcd.fire_blast
-	{'&Fire Blast', '!prev_off_gcd(Fire Blast)'},
+	{'&Fire Blast', '!player.lastcast(Fire Blast)'},
 	--actions.rop_phase+=/phoenixs_flames,if=!prev_gcd.phoenixs_flames
 	{'Phoenix\'s Flames', 'artifact(Phoenix\'s Flames).equipped&!prev_gcd(Phoenix\'s Flames)'},
 	--actions.rop_phase+=/scorch,if=target.health.pct<=25&equipped.132454
@@ -170,7 +170,7 @@ local xCombat = {
 	{'Rune of Power', 'toggle(cooldowns)&xmoving=0&{{cooldown(Combustion).remains>40||!toggle(xCombustion)}&!player.buff(Combustion)&{cooldown(Flame On).remains<5||cooldown(Flame On).remains>30}&!talent(7,1)||target.time_to_die.remains<11||talent(7,1)&{action(Rune of Power).charges>1.8||player.combat.time<40}&{cooldown(Combustion).remains>40||!toggle(xCombustion)}}'},
 	{'Ice Barrier', '!player.buff(Ice Barrier)&!player.buff(Combustion)&!player.buff(Rune of Power)'},
 	--actions+=/call_action_list,name=combustion_phase,if=cooldown.combustion.remains<=action.rune_of_power.cast_time+(!talent.kindling.enabled*gcd)||buff.combustion.up
-	{Combustion, 'toggle(xCombustion)&{cooldown(Combustion).remains<=action(Rune of Power).cast_time||player.buff(Combustion)}'},
+	{Combustion, 'toggle(xCombustion)&xmoving=0&{cooldown(Combustion).remains<=action(Rune of Power).cast_time+gcd||player.buff(Combustion)}'},
 	--actions+=/call_action_list,name=rop_phase,if=buff.rune_of_power.up&buff.combustion.down
 	{RoP, 'player.buff(Rune of Power)&!player.buff(Combustion)&xmoving=0'},
 	--actions+=/call_action_list,name=single_target
@@ -191,6 +191,7 @@ local inCombat = {
 	--{Survival, 'player.health < 100'},
 	{Moving, 'xmoving=1'},
 	{xCombat, 'target.range<40&target.infront'}
+
 }
 
 local outCombat = {

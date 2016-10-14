@@ -8,8 +8,9 @@ local exeOnLoad = function()
 
 end
 
-local _Xeer = {
-	--{'@Xeer.Targeting()', {'!target.alive', 'toggle(AutoTarget)'}},
+local XeerX = {
+	{'@Xeer.Targeting', '!target.alive'},
+
 --{'Charge', 'target.range>8&target.range<=25&target.infront'},
 
 --[[
@@ -190,7 +191,7 @@ local Interrupts = {
 local inCombat = {
 	{Keybinds},
 	{Interrupts, 'target.interruptAt(50)&toggle(interrupts)&target.infront&target.range<=8'},
-	--{_Xeer},
+	--{XeerX},
 	--{Survival, 'player.health < 100'},
 	--{Cooldowns, 'toggle(cooldowns)&target.range<8'},
 	{Util, 'target.range<8'},
