@@ -64,8 +64,6 @@ local Survival = {
 
 local Cooldowns = {
 	--# Executed every time the actor is available.
- 	--actions+=/pillar_of_frost
-	{'Pillar of Frost'},
  	--actions+=/blood_fury,if=!talent.breath_of_sindragosa.enabled||dot.breath_of_sindragosa.ticking
 	{'Blood Fury', '!talent(7,2)||target.dot(Breath of Sindragosa).ticking'},
  	--actions+=/berserking,if=buff.pillar_of_frost.up
@@ -77,11 +75,12 @@ local Cooldowns = {
  	--actions+=/potion,name=old_war
 	--{'', ''},
  	--actions+=/sindragosas_fury,if=buff.pillar_of_frost.up
-	{'Sindragosa\'s Fury ', 'player.buff(Pillar of Frost)'},
+	{'Sindragosa\'s Fury', 'player.buff(Pillar of Frost)'},
  	--actions+=/obliteration
 	{'Obliteration'},
  	--actions+=/breath_of_sindragosa,if=runic_power>=50
 	{'Breath of Sindragosa', 'talent(7,2)&runic_power>=50'},
+	{BoS_check},
 }
 
 local BoS_check = {
@@ -182,6 +181,8 @@ local Shatter = {
 }
 
 local MACHINEGUN = {
+	--actions+=/pillar_of_frost
+	{'Pillar of Frost'},
  	--actions.icytalons=frost_strike,if=buff.icy_talons.remains<1.5
 	{'Frost Strike', 'player.buff(Icy Talons).remains<1.5'},
  	--actions.icytalons+=/howling_blast,target_if=!dot.frost_fever.ticking
@@ -208,7 +209,6 @@ local MACHINEGUN = {
 	{'Obliterate', 'talent(6,1)&!player.buff(Killing Machine).react'},
  	--actions.core+=/frostscythe,if=talent.frozen_pulse.enabled
 	{'Frostscythe', 'talent(6,1)&talent(2,2)'},
-	{BoS_check},
 }
 
 local xCombat = {
