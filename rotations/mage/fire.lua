@@ -178,7 +178,7 @@ local xCombat = {
 }
 
 local Moving = {
-	{'Ice Floes', '!player.buff(Ice Floes)'},
+	{'Ice Floes', '!prev_gcd(Ice Floes)&!player.buff(Ice Floes)'},
 	{xCombat, 'player.buff(Ice Floes)'},
 	--Scorch as a filler spell when moving.
 	{'Scorch', '!player.buff(Ice Floes)'}
