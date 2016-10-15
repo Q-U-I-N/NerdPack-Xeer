@@ -2,6 +2,8 @@ local GUI = {
 
 }
 
+local _, Xeer = ...
+
 local exeOnLoad = function()
 
 	 Xeer.ExeOnLoad()

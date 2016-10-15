@@ -1,13 +1,13 @@
-Xeer = {
-		Version = '1.5.6',
-		Branch = 'RELEASE',
-		Name = 'NerdPack- Xeer Routines',
-		Author = 'Xeer',
-		Interface = {
-			addonColor = 'ADFF2F',
-			Logo = 'Interface\\AddOns\\NerdPack-Xeer\\media\\logo.blp',
-			Splash = 'Interface\\AddOns\\NerdPack-Xeer\\media\\splash.blp'
-		},
+local n_mame, Xeer = ...
+
+Xeer.Version = '1.5.6'
+Xeer.Branch = 'RELEASE'
+Xeer.Name = n_mame..' Routines'
+Xeer.Author = 'Xeer'
+Xeer.Interface = {
+	addonColor = 'ADFF2F',
+	Logo = 'Interface\\AddOns\\'..n_mame..'\\media\\logo.blp',
+	Splash = 'Interface\\AddOns\\'..n_mame..'\\media\\splash.blp'
 }
 
 local frame = CreateFrame('GameTooltip', 'NeP_ScanningTooltip', UIParent, 'GameTooltipTemplate')
