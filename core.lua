@@ -36,15 +36,6 @@ function Xeer.ExeOnLoad()
 --]]
 end
 
-function Xeer.ClassSetting(key)
-		local name = '|cff'..NeP.Core.classColor('player')..'Class Settings'
-		NeP.Interface.CreateSetting(name, function() NeP.Interface.ShowGUI(key) end)
-end
---[[
-	Xeer.dynEval(condition, spell)
-		return Parse(condition, spell or '')
-	end
---]]
 function Xeer.Taunt(eval, args)
 	local spell = NeP.Engine:Spell(args)
 	if not spell then return end
