@@ -1,3 +1,5 @@
+local _, Xeer = ... 
+
 local exeOnLoad = function()
 
 	 Xeer.ExeOnLoad()
@@ -84,8 +86,8 @@ local Barrage = {
 
 local xCombat = {
 	--# Executed every time the actor is available.
- 	--actions.+=/arcane_torrent,if=player.focus.deficit>=30
-	{'Arcane Torrent', 'player.focus.deficit>=30'},
+ 	--actions.+=/arcane_torrent,if=focus.deficit>=30
+	{'Arcane Torrent', 'focus.deficit>=30'},
  	--actions.+=/blood_fury
 	{'Blood Fury'},
  	--actions.+=/berserking
@@ -147,8 +149,8 @@ local xCombat = {
 	{'Multi-Shot', 'player.area(40).enemies>1&{!target.debuff(Hunter\'s Mark)&player.buff(Marking Targets)||focus.time_to_max>=2}'},
  	--actions.+=/arcane_shot,if=spell_targets.barrage=1&(debuff.hunters_mark.down&buff.marking_targets.react||focus.time_to_max>=2)
 	{'Arcane Shot', 'player.area(40).enemies<2&{!target.debuff(Hunter\'s Mark)&player.buff(Marking Targets)||focus.time_to_max>=2}'},
- 	--actions.+=/arcane_shot,if=player.focus.deficit<10
-	{'Arcane Shot', 'player.focus.deficit<10'}
+ 	--actions.+=/arcane_shot,if=focus.deficit<10
+	{'Arcane Shot', 'focus.deficit<10'}
 }
 
 local Keybinds = {
@@ -169,4 +171,4 @@ local outCombat = {
 	--{PreCombat}
 }
 
-NeP.CR:Add(254, '[|cff'..Xeer.Interface.addonColor..'Xeer|r] HUNTER - Marksmanship', inCombat, outCombat, exeOnLoad)
+NeP.CR:Add(254, '[|cff'..Xeer.addonColor..'Xeer|r] HUNTER - Marksmanship', inCombat, outCombat, exeOnLoad)

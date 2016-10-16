@@ -1,3 +1,5 @@
+local _, Xeer = ...
+
 local exeOnLoad = function()
 
 	 Xeer.ExeOnLoad()
@@ -69,8 +71,8 @@ local Interrupts = {
 
 local xCombat = {
 	{'Mend Pet', 'pet.exists&pet.alive&pet.health<100'},
- 	--actions+=/arcane_torrent,if=player.focus.deficit>=30
-	--{'Arcane Torrent', 'player.focus.deficit>=30'},
+ 	--actions+=/arcane_torrent,if=focus.deficit>=30
+	--{'Arcane Torrent', 'focus.deficit>=30'},
  	--actions+=/blood_fury
 	{'Blood Fury'},
  	--actions+=/berserking
@@ -123,4 +125,4 @@ local outCombat = {
 	{Keybinds},
 }
 
-NeP.CR:Add(253, '[|cff'..Xeer.Interface.addonColor..'Xeer|r] HUNTER - Beast Mastery', inCombat, outCombat, exeOnLoad)
+NeP.CR:Add(253, '[|cff'..Xeer.addonColor..'Xeer|r] HUNTER - Beast Mastery', inCombat, outCombat, exeOnLoad)

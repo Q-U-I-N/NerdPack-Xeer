@@ -1,3 +1,5 @@
+local _, Xeer = ... 
+
 local exeOnLoad = function()
 	-- Xeer.ExeOnLoad()
 end
@@ -35,4 +37,4 @@ local outCombat = {
 	{Keybinds},
 }
 
-NeP.CR:Add(62, '[|cff'..Xeer.Interface.addonColor..'Xeer|r] Mage - Arcane', inCombat, outCombat, exeOnLoad)
+NeP.CR:Add(62, '[|cff'..Xeer.addonColor..'Xeer|r] Mage - Arcane', inCombat, outCombat, exeOnLoad)

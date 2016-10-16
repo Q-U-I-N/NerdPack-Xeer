@@ -2,6 +2,8 @@ local GUI = {
 
 }
 
+local _, Xeer = ... 
+
 local exeOnLoad = function()
 	-- Xeer.ExeOnLoad()
 end
@@ -46,4 +48,4 @@ local outCombat = {
 	{Keybinds},
 }
 
-NeP.CR:Add(261, '[|cff'..Xeer.Interface.addonColor..'Xeer|r] Rogue - Subtlely', inCombat, outCombat, exeOnLoad)
+NeP.CR:Add(261, '[|cff'..Xeer.addonColor..'Xeer|r] Rogue - Subtlely', inCombat, outCombat, exeOnLoad)

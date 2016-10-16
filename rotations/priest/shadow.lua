@@ -1,3 +1,5 @@
+local _, Xeer = ... 
+
 local exeOnLoad = function()
 	-- Xeer.ExeOnLoad()
 end
@@ -37,4 +39,4 @@ local outCombat = {
 
 }
 
-NeP.CR:Add(258, '[|cff'..Xeer.Interface.addonColor..'Xeer|r] Priest - Shadow', inCombat, outCombat, exeOnLoad)
+NeP.CR:Add(258, '[|cff'..Xeer.addonColor..'Xeer|r] Priest - Shadow', inCombat, outCombat, exeOnLoad)

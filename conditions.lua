@@ -1,3 +1,5 @@
+local _, Xeer = ...
+
 --------------------------------------------------------------------------------
 ---------------------------------ARTIFACT---------------------------------------
 --------------------------------------------------------------------------------
@@ -85,6 +87,15 @@ end)
 NeP.DSL:Register('artifact.enabled', function(_, spell)
 		if select(10,NeP.DSL:Get('artifact.trait_info')(_, spell)) then
 			return true
+		else
+			return false
+		end
+end)
+
+NeP.DSL:Register('artifact.rank', function(_, spell)
+  local rank = select(9,NeP.DSL:Get('artifact.trait_info')(_, spell))
+		if rank then
+			return rank
 		else
 			return false
 		end
@@ -302,7 +313,9 @@ NeP.DSL:Register('spell_haste', function()
 	return math.floor((100 / ( 100 + shaste )) * 10^3 ) / 10^3
 end)
 
---/dump NeP.DSL:Get('action.execute_time')('player','Fireball')
+--/dump NeP.DSL:Get('action.execute_time')('player','Demonbolt')
+--/dump NeP.DSL:Get('action.execute_time')('player','Shadow Bolt')
+
 NeP.DSL:Register('action.execute_time', function(_, spell)
 	return NeP.DSL:Get('execute_time')(_, spell)
 end)
@@ -332,10 +345,10 @@ NeP.DSL:Register('cast_regen', function(target, spell)
 	return math.floor(((regen * cast_time) / 1000) * 10^3 ) / 10^3
 end)
 
---/dump NeP.DSL:Get('deficit')('player')
-NeP.DSL:Register('deficit', function(target)
-	local max = UnitPowerMax(target)
-	local curr = UnitPower(target)
+--/dump NeP.DSL:Get('deficit')()
+NeP.DSL:Register('deficit', function()
+	local max = UnitPowerMax('player')
+	local curr = UnitPower('player')
 	return (max - curr)
 end)
 
@@ -351,30 +364,30 @@ NeP.DSL:Register('max_energy', function()
 	 end
 end)
 
---/dump NeP.DSL:Get('energy.deficit')('player')
+--/dump NeP.DSL:Get('energy.deficit')()
 NeP.DSL:Register('energy.deficit', function()
-	return NeP.DSL:Get('deficit')('player')
+	return NeP.DSL:Get('deficit')()
 end)
 
---/dump NeP.DSL:Get('energy.regen')('player')
+--/dump NeP.DSL:Get('energy.regen')()
 NeP.DSL:Register('energy.regen', function()
 	local eregen = select(2, GetPowerRegen('player'))
 	return eregen
 end)
 
---/dump NeP.DSL:Get('energy.time_to_max')('player')
+--/dump NeP.DSL:Get('energy.time_to_max')()
 NeP.DSL:Register('energy.time_to_max', function()
-	local deficit = NeP.DSL:Get('deficit')('player')
-	local eregen = NeP.DSL:Get('energy.regen')('player')
+	local deficit = NeP.DSL:Get('deficit')()
+	local eregen = NeP.DSL:Get('energy.regen')()
 	return deficit / eregen
 end)
 
---/dump NeP.DSL:Get('focus.deficit')('player')
+--/dump NeP.DSL:Get('focus.deficit')()
 NeP.DSL:Register('focus.deficit', function()
-	return NeP.DSL:Get('deficit')('player')
+	return NeP.DSL:Get('deficit')()
 end)
 
---/dump NeP.DSL:Get('focus.regen')('player')
+--/dump NeP.DSL:Get('focus.regen')()
 NeP.DSL:Register('focus.regen', function()
 	local fregen = select(2, GetPowerRegen('player'))
 	return fregen
@@ -382,15 +395,15 @@ end)
 
 --/dump NeP.DSL:Get('focus.time_to_max')()
 NeP.DSL:Register('focus.time_to_max', function()
-	local deficit = NeP.DSL:Get('deficit')('player')
+	local deficit = NeP.DSL:Get('deficit')()
 	local fregen = NeP.DSL:Get('focus.regen')('player')
 	return deficit / fregen
 end)
 
 
---/dump NeP.DSL:Get('rage.deficit')('player')
+--/dump NeP.DSL:Get('rage.deficit')()
 NeP.DSL:Register('rage.deficit', function()
-	return NeP.DSL:Get('deficit')('player')
+	return NeP.DSL:Get('deficit')()
 end)
 
 --/dump NeP.DSL:Get('runic_power')()
@@ -461,7 +474,7 @@ local DotTicks = {
     }
 }
 
-NeP.DSL:Register('dot.tick_time', function(_,spell)
+NeP.DSL:Register('dot.tick_time', function(_, spell)
     local spell = NeP.Core:GetSpellID(spell)
     local class = select(3,UnitClass('player'))
     if class == 11 and GetSpecialization() == 2 then
@@ -485,3 +498,76 @@ end)
 --/dump NeP.Core:GetSpellID('Rip')
 --/dump select(8, UnitDebuff('target', GetSpellInfo(NeP.Core:GetSpellID(NeP.Core:GetSpellName('Rip')))))
 --/dump select(6, UnitDebuff('target', GetSpellInfo(NeP.Core:GetSpellID(NeP.Core:GetSpellName('Rip')))))
+
+
+--------------------------------------------------------------------------------
+--------------------------------WARLOCK-----------------------------------------
+--------------------------------------------------------------------------------
+
+--GetNotDemonicEmpoweredDemonsCount
+
+--/dump NeP.DSL:Get('warlock.pets')()
+NeP.DSL:Register('warlock.active_pets_count', function()
+    return Xeer.get_active_demon_count()
+end)
+
+--/dump NeP.DSL:Get('warlock.active_pets_list')()
+NeP.DSL:Register('warlock.active_pets_list', function()
+    return Xeer.active_demons
+end)
+
+--/dump NeP.DSL:Get('warlock.sorted_pets')()
+NeP.DSL:Register('warlock.sorted_pets_list', function()
+    return Xeer.demons_sorted
+end)
+
+--/dump NeP.DSL:Get('warlock.no_de')()
+NeP.DSL:Register('warlock.no_de', function(demon)
+    return Xeer.Empower_no_de(demon)
+end)
+
+--/dump NeP.DSL:Get('warlock.remaining_duration')('Dreadstalker')
+--/dump NeP.DSL:Get('warlock.remaining_duration')('Wild Imp')
+NeP.DSL:Register('warlock.remaining_duration', function(demon)
+	return Xeer.remaining_duration(demon)
+end)
+
+--/dump NeP.DSL:Get('warlock.empower')()
+NeP.DSL:Register('warlock.empower', function()
+  return Xeer.Empower()
+end)
+
+--/dump NeP.DSL:Get('warlock.count')('Wild Imp')
+NeP.DSL:Register('warlock.count', function(demon)
+    return Xeer.count_active_demon_type(demon)
+end)
+
+--/dump NeP.DSL:Get('soul_shard')()
+NeP.DSL:Register('soul_shard', function()
+	return NeP.DSL:Get('soulshards')('player')
+end)
+
+--------------------------------------------------------------------------------
+---------------------------------- WIP -----------------------------------------
+--------------------------------------------------------------------------------
+
+--/dump NeP.DSL:Get('travel_time')('target','Lava Burst')
+NeP.DSL:Register('travel_time', function(_, spell)
+    local spellID = NeP.Core:GetSpellID(spell)
+    return Xeer.TravelTime(spellID)
+end)
+
+--/dump NeP.DSL:Get('tttlz')()
+NeP.DSL:Register('tttlz', function()
+    return Xeer.TTTL_table
+end)
+
+--/dump NeP.DSL:Get('dist')('player', 'target')
+NeP.DSL:Register('dist', function(unit1, unit2)
+    return Xeer.ComputeDistance(unit1, unit2)
+end)
+
+--/dump NeP.DSL:Get('tttlz.wipe')()
+NeP.DSL:Register('tttlz.wipe', function()
+    return wipe(Xeer.TTTL_table)
+end)

@@ -1,3 +1,5 @@
+local _, Xeer = ... 
+
 local exeOnLoad = function()
 	 Xeer.ExeOnLoad()
 
@@ -104,4 +106,4 @@ local outCombat = {
 	{Keybinds},
 }
 
-NeP.CR:Add(581, '[|cff'..Xeer.Interface.addonColor..'Xeer|r] DEMON HUNTER - Vengeance', inCombat, outCombat, exeOnLoad)
+NeP.CR:Add(581, '[|cff'..Xeer.addonColor..'Xeer|r] DEMON HUNTER - Vengeance', inCombat, outCombat, exeOnLoad)

@@ -1,3 +1,5 @@
+local _, Xeer = ...
+
 local exeOnLoad = function()
 	Xeer.ExeOnLoad()
 
@@ -184,7 +186,7 @@ local Finisher = {
 	{Swipe, 'combo_points=5&{player.area(8).enemies>=6||{player.area(8).enemies>=3&!talent(7,2)}}&combo_points=5&{energy.time_to_max<1||player.buff(Berserk)||player.buff(Incarnation: King of the Jungle)||cooldown(Tiger\'s Fury).remains<3||{talent(7,3)&player.buff(Clearcasting).react}}'},
 	-- custom FB
 	{Ferocious_Bite, 'combo_points=5&{player.buff(Savage Roar).remains>=17.2&target.dot(Rip).remains>=18}'},
-	--actions.finisher+=/ferocious_bite,player.max_energy=1,cycle_targets=1,if=combo_points=5&(energy.time_to_max<1||buff.berserk.up||buff.incarnation.up||buff.elunes_guidance.up||cooldown.tigers_fury.remains<3||set_bonus.tier18_4pc||(talent.moment_of_clarity.enabled&buff.clearcasting.react))
+	--actions.finisher+=/ferocious_bite,max_energy=1,cycle_targets=1,if=combo_points=5&(energy.time_to_max<1||buff.berserk.up||buff.incarnation.up||buff.elunes_guidance.up||cooldown.tigers_fury.remains<3||set_bonus.tier18_4pc||(talent.moment_of_clarity.enabled&buff.clearcasting.react))
 	{Ferocious_Bite, 'combo_points=5&{energy.time_to_max<1||player.buff(Berserk)||player.buff(Incarnation: King of the Jungle)||cooldown(Tiger\'s Fury).remains<3||{talent(7,3)&player.buff(Clearcasting).react}}'},
 	--TODO: set_bonus.tier18_4pc
 }
@@ -252,4 +254,4 @@ local outCombat = {
 	{Keybinds},
 }
 
-NeP.CR:Add(103, '[|cff'..Xeer.Interface.addonColor..'Xeer|r] Druid - Feral', inCombat, outCombat,exeOnLoad)
+NeP.CR:Add(103, '[|cff'..Xeer.addonColor..'Xeer|r] Druid - Feral', inCombat, outCombat,exeOnLoad)

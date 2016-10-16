@@ -1,3 +1,5 @@
+local _, Xeer = ...
+
 local exeOnLoad = function()
 	 Xeer.ExeOnLoad()
 
@@ -56,8 +58,8 @@ local Cooldowns = {
 	{'Blood Fury', 'player.buff(Battle Cry)'},
 	--actions+=/berserking,if=buff.battle_cry.up||target.time_to_die<=11
 	{'Berserking', 'player.buff(Battle Cry)'},
-	--actions+=/arcane_torrent,if=buff.battle_cry_deadly_calm.down&player.rage.deficit>40
-	--{'Arcane Torrent', 'player.buff(Battle Cry)&talent(6,1)&player.rage.deficit>40'},
+	--actions+=/arcane_torrent,if=buff.battle_cry_deadly_calm.down&rage.deficit>40
+	--{'Arcane Torrent', 'player.buff(Battle Cry)&talent(6,1)&rage.deficit>40'},
 	--actions+=/battle_cry,if=(buff.bloodlust.up||time>=1)&!gcd.remains&(buff.shattered_defenses.up||(cooldown.colossus_smash.remains&cooldown.warbreaker.remains))||target.time_to_die<=10
 	{'Battle Cry', '{player.buff(Bloodlust)||player.combat.time>=1}&{player.buff(Shattered Defenses)||{spell(Colossus Smash).cooldown>gcd&spell(Warbreaker).cooldown>gcd}}'},
 	--actions+=/avatar,if=(buff.bloodlust.up||time>=1)
@@ -98,8 +100,8 @@ local AoE = {
 	{'Colossus Smash', '!player.buff(Shattered Defenses)&!player.buff(Precise Strikes)'},
 	--actions.aoe+=/warbreaker,if=buff.shattered_defenses.down
 	{'Warbreaker', 'artifact(Warbreaker).equipped&!player.buff(Shattered Defenses)'},
-	--actions.aoe+=/whirlwind,if=talent.fervor_of_battle.enabled&(debuff.colossus_smash.up||player.rage.deficit<50)&(!talent.focused_rage.enabled||buff.battle_cry_deadly_calm.up||buff.cleave.up)
-	{'Whirlwind', 'talent(3,1)&{target.debuff(Colossus Smash)||player.rage.deficit<50}&{!talent(5,3)||{player.buff(Battle Cry)&talent(6,1)}||player.buff(Cleave)}'},
+	--actions.aoe+=/whirlwind,if=talent.fervor_of_battle.enabled&(debuff.colossus_smash.up||rage.deficit<50)&(!talent.focused_rage.enabled||buff.battle_cry_deadly_calm.up||buff.cleave.up)
+	{'Whirlwind', 'talent(3,1)&{target.debuff(Colossus Smash)||rage.deficit<50}&{!talent(5,3)||{player.buff(Battle Cry)&talent(6,1)}||player.buff(Cleave)}'},
 	--actions.aoe+=/rend,if=remains<=duration*0.3
 	{'Rend', 'talent(3,2)&target.debuff(Rend).remains<=4.5'},
 	--actions.aoe+=/bladestorm
@@ -125,8 +127,8 @@ local Cleave = {
 	{'Warbreaker', 'artifact(Warbreaker).equipped&!player.buff(Shattered Defenses)'},
 	--actions.cleave+=/focused_rage,if=buff.shattered_defenses.down
 	{'Focused Rage', '!player.buff(Shattered Defenses)'},
-	--actions.cleave+=/whirlwind,if=talent.fervor_of_battle.enabled&(debuff.colossus_smash.up||player.rage.deficit<50)&(!talent.focused_rage.enabled||buff.battle_cry_deadly_calm.up||buff.cleave.up)
-	{'Whirlwind', 'talent(3,1)&{target.debuff(Colossus Smash)||player.rage.deficit<50}&{!talent(5,3)||{player.buff(Battle Cry)&talent(6,1)}||player.buff(Cleave)}'},
+	--actions.cleave+=/whirlwind,if=talent.fervor_of_battle.enabled&(debuff.colossus_smash.up||rage.deficit<50)&(!talent.focused_rage.enabled||buff.battle_cry_deadly_calm.up||buff.cleave.up)
+	{'Whirlwind', 'talent(3,1)&{target.debuff(Colossus Smash)||rage.deficit<50}&{!talent(5,3)||{player.buff(Battle Cry)&talent(6,1)}||player.buff(Cleave)}'},
 	--actions.cleave+=/rend,if=remains<=duration*0.3
 	{'Rend', 'talent(3,2)&target.debuff(Rend).remains<=4.5'},
 	--actions.cleave+=/bladestorm
@@ -167,10 +169,12 @@ local ST = {
 	{'Mortal Strike'},
 	--actions.single+=/execute,if=buff.stone_heart.react
 	{'Execute', 'player.buff(Ayala\'s Stone Heart)'},
+	--actions.single+=/slam,if=buff.battle_cry_deadly_calm.up||buff.focused_rage.stack=3||rage.deficit<=30
+	{'Slam', '!talent(3,1)&{{player.buff(Battle Cry)&talent(6,1)}||player.buff(Focused Rage).stack=3||rage.deficit<=30}'},
 	--actions.single+=/slam
-	{'Slam'},
+	--{'Slam'},
 	--Whirlwind instead Slam if "Fevor of Battle" is picked
-	{'Whirlwind', 'talent(3,1)&{{player.buff(Battle Cry)&talent(6,1)}||player.buff(Focused Rage).stack=3||player.rage.deficit<=30}'},
+	{'Whirlwind', 'talent(3,1)&{{player.buff(Battle Cry)&talent(6,1)}||player.buff(Focused Rage).stack=3||rage.deficit<=30}'},
 	--actions.single+=/execute,if=equipped.archavons_heavy_hand
 	{'Execute', 'equipped(137060)'},
 	--actions.single+=/focused_rage,if=equipped.archavons_heavy_hand
@@ -211,4 +215,4 @@ local outCombat = {
 	{PreCombat}
 }
 
-NeP.CR:Add(71, '[|cff'..Xeer.Interface.addonColor..'Xeer|r] WARRIOR - Arms', inCombat, outCombat, exeOnLoad)
+NeP.CR:Add(71, '[|cff'..Xeer.addonColor..'Xeer|r] WARRIOR - Arms', inCombat, outCombat, exeOnLoad)

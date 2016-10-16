@@ -1,3 +1,5 @@
+local _, Xeer = ...
+
 -- Splash stuff
 local Splash_Frame = CreateFrame("Frame", "Xeer_SPLASH", UIParent)
 Splash_Frame:SetBackdrop({bgFile = "Interface/Tooltips/UI-Tooltip-Background",
@@ -30,9 +32,9 @@ C_Timer.NewTicker(0.01, (function()
 	end
 end), nil)
 
-local AddonInfo = '|cff'..Xeer.Interface.addonColor..Xeer.Name..' V:'..Xeer.Version
+local AddonInfo = '|cff'..Xeer.addonColor..Xeer.Name..' V:'..Xeer.Version
 
-function Xeer:Splash()
+function Xeer.Splash()
 	Splash_Frame:SetAlpha(1)
 	Splash_Frame:Show()
 	--PlaySound('LEVELUP', 'SFX')

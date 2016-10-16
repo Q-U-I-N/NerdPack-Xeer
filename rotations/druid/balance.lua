@@ -1,3 +1,5 @@
+local _, Xeer = ... 
+
 local exeOnLoad = function()
 	-- Xeer.ExeOnLoad()
 end
@@ -51,4 +53,4 @@ local outCombat = {
 	{Keybinds},
 }
 
-NeP.CR:Add(102, '[|cff'..Xeer.Interface.addonColor..'Xeer|r] Druid - Balance', inCombat, outCombat, exeOnLoad)
+NeP.CR:Add(102, '[|cff'..Xeer.addonColor..'Xeer|r] Druid - Balance', inCombat, outCombat, exeOnLoad)
