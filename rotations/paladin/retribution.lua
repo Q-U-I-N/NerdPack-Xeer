@@ -1,4 +1,4 @@
-local _, Xeer = ... 
+local _, Xeer = ...
 
 local exeOnLoad = function()
 	 Xeer.ExeOnLoad()
@@ -92,61 +92,61 @@ local Cooldowns = {
 
 local VB = {
 	--actions.VB=divine_storm,if=debuff.judgment.up&spell_targets.divine_storm>=2&buff.divine_purpose.up&buff.divine_purpose.remains<gcd*2
-	{'Divine Storm', 'player.area(6).enemies>=2&player.buff(Divine Purpose).remains<gcd*2'},
+	{'Divine Storm', 'target.debuff(Judgment)&player.area(6).enemies>=2&player.buff(Divine Purpose).remains<gcd*2'},
 	--actions.VB+=/divine_storm,if=debuff.judgment.up&spell_targets.divine_storm>=2&holy_power>=5&buff.divine_purpose.react
 	{'Divine Storm', 'target.debuff(Judgment)&player.area(6).enemies>=2&holy_power>=5&player.buff(Divine Purpose).react'},
 	--actions.VB+=/divine_storm,if=debuff.judgment.up&spell_targets.divine_storm>=2&holy_power>=5&(!talent.crusade.enabled||cooldown.crusade.remains>gcd*3)
-	{'Divine Storm', 'holy_power>=5&!talent(7,2)||cooldown(Crusade).remains>gcd*3'},
+	{'Divine Storm', 'target.debuff(Judgment)&player.area(6).enemies>=2holy_power>=5&{!talent(7,2)||cooldown(Crusade).remains>gcd*3}'},
 	--actions.VB+=/justicars_vengeance,if=debuff.judgment.up&buff.divine_purpose.up&buff.divine_purpose.remains<gcd*2&!equipped.whisper_of_the_nathrezim
-	{'Justicar\'s Vengeance', 'player.buff(Divine Purpose)&!equipped(Whisper of the Nathrezim)'},
+	{'Justicar\'s Vengeance', 'target.debuff(Judgment)&player.buff(Divine Purpose)<gcd*2&!equipped(Whisper of the Nathrezim)'},
 	--actions.VB+=/justicars_vengeance,if=debuff.judgment.up&holy_power>=5&buff.divine_purpose.react&!equipped.whisper_of_the_nathrezim
-	-- NOT NEEDED!
+	{'Justicar\'s Vengeance', 'target.debuff(Judgment)&holy_power>=5&player.buff(Divine Purpose).react&!equipped(Whisper of the Nathrezim)'},
 	--actions.VB+=/templars_verdict,if=debuff.judgment.up&buff.divine_purpose.up&buff.divine_purpose.remains<gcd*2
-	{'Templar\'s Verdict', 'player.buff(Divine Purpose).remains<gcd*2'},
+	{'Templar\'s Verdict', 'target.debuff(Judgment)&player.buff(Divine Purpose).remains<gcd*2'},
 	--actions.VB+=/templars_verdict,if=debuff.judgment.up&holy_power>=5&buff.divine_purpose.react
-	{'Templar\'s Verdict', 'holy_power>=5&player.buff(Divine Purpose)'},
+	{'Templar\'s Verdict', 'target.debuff(Judgment)&holy_power>=5&player.buff(Divine Purpose).react'},
 	--actions.VB+=/templars_verdict,if=debuff.judgment.up&holy_power>=5&(!talent.crusade.enabled||cooldown.crusade.remains>gcd*3)
-	{'Templar\'s Verdict', 'holy_power>=5&!talent(7,2)&cooldown(Crusade).remains>gcd*3'},
+	{'Templar\'s Verdict', 'target.debuff(Judgment)&holy_power>=5&{!talent(7,2)&cooldown(Crusade).remains>gcd*3}'},
 	--actions.VB+=/divine_storm,if=debuff.judgment.up&holy_power>=3&spell_targets.divine_storm>=2&(cooldown.wake_of_ashes.remains<gcd*2&artifact.wake_of_ashes.enabled||buff.whisper_of_the_nathrezim.up&buff.whisper_of_the_nathrezim.remains<gcd)&(!talent.crusade.enabled||cooldown.crusade.remains>gcd*4)
-	{'Divine Storm', 'player.area(6).enemies>=2&cooldown(Wake of Ashes).remains<gcd*2||player.buff(Whisper of the Nathrezim).remains<gcd&!talent(7,2)||cooldown(Crusade).remains>gcd*4'},
+	{'Divine Storm', 'target.debuff(Judgment)&holy_power>=3&player.area(6).enemies>=2&{cooldown(Wake of Ashes).remains<gcd*2&artifact(Wake of Ashes).eneabled||player.buff(Whisper of the Nathrezim).remains<gcd}&{!talent(7,2)||cooldown(Crusade).remains>gcd*4}'},
 	--actions.VB+=/justicars_vengeance,if=debuff.judgment.up&holy_power>=3&buff.divine_purpose.up&cooldown.wake_of_ashes.remains<gcd*2&artifact.wake_of_ashes.enabled&!equipped.whisper_of_the_nathrezim
-	{'Justicar\'s Vengeance', 'cooldown(Wake of Ashes).remains<gcd*2&!equipped(Whisper of the Nathrezim)'},
+	{'Justicar\'s Vengeance', 'target.debuff(Judgment)&holy_power>=3&player.buff(Divine Purpose)&cooldown(Wake of Ashes).remains<gcd*2&artifact(Wake of Ashes).eneabled&!equipped(Whisper of the Nathrezim)'},
 	--actions.VB+=/templars_verdict,if=debuff.judgment.up&holy_power>=3&(cooldown.wake_of_ashes.remains<gcd*2&artifact.wake_of_ashes.enabled||buff.whisper_of_the_nathrezim.up&buff.whisper_of_the_nathrezim.remains<gcd)&(!talent.crusade.enabled||cooldown.crusade.remains>gcd*4)
-	{'Templar\'s Verdict', 'cooldown(Wake of Ashes).remains<gcd*2||player.buff(Whisper of the Nathrezim).remains<gcd&!talent(7,2)||cooldown(Crusade).remains>gcd*4&holy_power>=3&target.debuff(Judgment)'},
+	{'Templar\'s Verdict', 'target.debuff(Judgment)&holy_power>=3&{cooldown(Wake of Ashes).remains<gcd*2artifact(Wake of Ashes).eneabled&||player.buff(Whisper of the Nathrezim).remains<gcd}&{!talent(7,2)||cooldown(Crusade).remains>gcd*4}'},
 	--actions.VB+=/wake_of_ashes,if=holy_power=0||holy_power=1&cooldown.blade_of_justice.remains>gcd||holy_power=2&(cooldown.zeal.charges_fractional<=0.34||cooldown.crusader_strike.charges_fractional<=0.34)
-	{'Wake of Ashes', 'holy_power=0||holy_power=1&cooldown(Blade of Justice).remains>gcd||holy_power=2&cooldown(Zeal).charges<=0.34||cooldown(Crusader Strike).charges<=0.34'},
+	{'Wake of Ashes', 'holy_power=0||holy_power=1&cooldown(Blade of Justice).remains>gcd||holy_power=2&{cooldown(Zeal).charges<=0.34||cooldown(Crusader Strike).charges<=0.34}'},
 	--actions.VB+=/zeal,if=charges=2&holy_power<=4
-	{'Zeal', 'spell.charges=2&holy_power<=4'},
+	{'Zeal', 'talent(2,2)&action(Zeal).charges=2&holy_power<=4'},
 	--actions.VB+=/crusader_strike,if=charges=2&holy_power<=4
-	{'Crusader Strike', 'spell.charges=2&holy_power<=4'},
+	{'Crusader Strike', 'action(Crusader Strike).charges=2&holy_power<=4'},
 	--actions.VB+=/blade_of_justice,if=holy_power<=2||(holy_power<=3&(cooldown.zeal.charges_fractional<=1.34||cooldown.crusader_strike.charges_fractional<=1.34))
-	{'Blade of Justice', 'holy_power<=2||holy_power<=3&cooldown(Zeal).charges<=1.34||cooldown(Crusader Strike).charges<=1.34'},
+	{'Blade of Justice', 'holy_power<=2||holy_power<=3&{cooldown(Zeal).charges<=1.34||cooldown(Crusader Strike).charges<=1.34}'},
 	--actions.VB+=/judgment,if=holy_power>=3||((cooldown.zeal.charges_fractional<=1.67||cooldown.crusader_strike.charges_fractional<=1.67)&cooldown.blade_of_justice.remains>gcd)||(talent.greater_judgment.enabled&target.health.pct>50)
-	{'Judgment', 'holy_power>=3||cooldown(Zeal).charges<=1.67||cooldown(Crusader Strike).charges<=1.67&cooldown(Blade of Justice).remains>gcd||talent(2,3)&target.health>50'},
+	{'Judgment', 'holy_power>=3||{{cooldown(Zeal).charges<=1.67||cooldown(Crusader Strike).charges<=1.67}&cooldown(Blade of Justice).remains>gcd}||{talent(2,3)&target.health>50}'},
 	--actions.VB+=/consecration
-	{'Consecration'},
+	{'Consecration', 'talent(1,3)'},
 	--actions.VB+=/divine_storm,if=debuff.judgment.up&spell_targets.divine_storm>=2&buff.divine_purpose.react
-	{'Divine Storm', 'player.area(6).enemies>=2&player.buff(Divine Purpose).react'},
+	{'Divine Storm', 'target.debuff(Judgment)&player.area(6).enemies>=2&player.buff(Divine Purpose).react'},
 	--actions.VB+=/divine_storm,if=debuff.judgment.up&spell_targets.divine_storm>=2&buff.the_fires_of_justice.react&(!talent.crusade.enabled||cooldown.crusade.remains>gcd*3)
-	{'Divine Storm', 'player.area(6).enemies>=2&player.buff(The Fires of Justice)&!talent(7,2)||cooldown(Crusade).remains>gcd*3'},
+	{'Divine Storm', 'target.debuff(Judgment)&player.area(6).enemies>=2&player.buff(The Fires of Justice)&{!talent(7,2)||cooldown(Crusade).remains>gcd*3}'},
 	--actions.VB+=/divine_storm,if=debuff.judgment.up&spell_targets.divine_storm>=2&holy_power>=4&(!talent.crusade.enabled||cooldown.crusade.remains>gcd*4)
-	{'Divine Storm', 'player.area(6).enemies>=2&holy_power>=4&!talent(7,2)||cooldown(Crusade).remains>gcd*4'},
+	{'Divine Storm', 'target.debuff(Judgment)&player.area(6).enemies>=2&holy_power>=4&{!talent(7,2)||cooldown(Crusade).remains>gcd*4}'},
 	--actions.VB+=/justicars_vengeance,if=debuff.judgment.up&buff.divine_purpose.react&!equipped.whisper_of_the_nathrezim
-	{'Justicar\'s Vengeance', 'player.buff(Divine Purpose)&!equipped(Whisper of the Nathrezim)'},
+	{'Justicar\'s Vengeance', 'target.debuff(Judgment)&player.buff(Divine Purpose).react&!equipped(Whisper of the Nathrezim)'},
 	--actions.VB+=/templars_verdict,if=debuff.judgment.up&buff.divine_purpose.react
-	{'Templar\'s Verdict', 'player.buff(Divine Purpose)'},
+	{'Templar\'s Verdict', 'target.debuff(Judgment)&player.buff(Divine Purpose).react'},
 	--actions.VB+=/templars_verdict,if=debuff.judgment.up&buff.the_fires_of_justice.react&(!talent.crusade.enabled||cooldown.crusade.remains>gcd*3)
-	{'Templar\'s Verdict', 'player.buff(The Fires of Justice)&!talent(7,2)||cooldown(Crusade).remains>gcd*3'},
+	{'Templar\'s Verdict', 'target.debuff(Judgment)&player.buff(The Fires of Justice).react&{!talent(7,2)||cooldown(Crusade).remains>gcd*3}'},
 	--actions.VB+=/templars_verdict,if=debuff.judgment.up&holy_power>=4&(!talent.crusade.enabled||cooldown.crusade.remains>gcd*4)
-	{'Templar\'s Verdict', 'holy_power>=4&!talent(7,2)||cooldown(Crusade).remains>gcd*4&target.debuff(Judment)'},
+	{'Templar\'s Verdict', 'target.debuff(Judgment)&holy_power>=4&{!talent(7,2)||cooldown(Crusade).remains>gcd*4}'},
 	--actions.VB+=/zeal,if=holy_power<=4
-	{'Zeal', 'holy_power<=4'},
+	{'Zeal', 'talent(2,2)&holy_power<=4'},
 	--actions.VB+=/crusader_strike,if=holy_power<=4
 	{'Crusader Strike', 'holy_power<=4'},
 	--actions.VB+=/divine_storm,if=debuff.judgment.up&holy_power>=3&spell_targets.divine_storm>=2&(!talent.crusade.enabled||cooldown.crusade.remains>gcd*5)
-	{'Divine Storm', 'player.area(6).enemies>=2'},
+	{'Divine Storm', 'target.debuff(Judgment)&holy_power>=3&player.area(6).enemies>=2&{!talent(7,2)||cooldown(Crusade).remains>gcd*5}'},
 	--actions.VB+=/templars_verdict,if=debuff.judgment.up&holy_power>=3&(!talent.crusade.enabled||cooldown.crusade.remains>gcd*5)
-	{'Templar\'s Verdict', 'target.debuff(Judgment)&holy_power>=3&!talent(7,2)||cooldown(Crusade).remains>gcd*5'},
+	{'Templar\'s Verdict', 'target.debuff(Judgment)&holy_power>=3&{!talent(7,2)||cooldown(Crusade).remains>gcd*5}'},
 }
 
 local BoW = {

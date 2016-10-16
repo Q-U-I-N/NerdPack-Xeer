@@ -298,6 +298,15 @@ NeP.DSL:Register('action.charges', function(_, spell)
 	end
 end)
 
+--/dump NeP.DSL:Get('cooldown.charges')('player','Phoenix\'s Flames')
+NeP.DSL:Register('cooldown.charges', function(_, spell)
+	if NeP.DSL:Get('spell.exists')(_, spell) == true then
+		return NeP.DSL:Get('spell.charges')(_, spell)
+	else
+		return 0
+	end
+end)
+
 --/dump NeP.DSL:Get('charges_fractional')('player','Phoenix\'s Flames')
 NeP.DSL:Register('charges_fractional', function(_, spell)
 	if NeP.DSL:Get('spell.exists')(_, spell) == true then
