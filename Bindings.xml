@@ -1,20 +1,5 @@
 <Bindings>
-    <Binding name="MasterToggle" description="Toggle ON/OFF" header="NEP_XEER" category="NerdPack-Xeer">
-        NeP.Interface.toggleToggle('MasterToggle', rest)
-    </Binding>
-    <Binding name="Interrupts" description="Toggle ON/OFF" header="NEP_XEER" category="NerdPack-Xeer">
-        NeP.Interface.toggleToggle('interrupts', rest)
-    </Binding>
-    <Binding name="Cooldowns" description="Toggle ON/OFF" header="NEP_XEER" category="NerdPack-Xeer">
-        NeP.Interface.toggleToggle('cooldowns', rest)
-    </Binding>
-    <Binding name="AoE" description="Toggle ON/OFF" header="NEP_XEER" category="NerdPack-Xeer">
-        NeP.Interface.toggleToggle('aoe', rest)
-    </Binding>
-    <Binding name="AutoTarget" description="Toggle ON/OFF" header="NEP_XEER" category="NerdPack-Xeer">
-        NeP.Interface.toggleToggle('AutoTarget', rest)
-    </Binding>
-    <Binding name="AutoTaunt" description="Toggle ON/OFF" header="NEP_XEER" category="NerdPack-Xeer">
-        NeP.Interface.toggleToggle('AutoTaunt', rest)
+    <Binding name="Opener" description="Toggle ON/OFF" header="NEP_XEER" category="NerdPack-Xeer">
+        NeP.Interface:toggleToggle('xopener')
     </Binding>
 </Bindings>

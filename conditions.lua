@@ -122,6 +122,11 @@ NeP.DSL:Register('casting.left', function(target, spell)
 return 0
 end)
 
+--/dump NeP.DSL:Get('pet_range')()
+NeP.DSL:Register('pet_range', function()
+    return NeP.DSL:Get('petrange')('target')
+end)
+
 --------------------------------------------------------------------------------
 --------------------------------SIMC STUFFS-------------------------------------
 --------------------------------------------------------------------------------
@@ -172,7 +177,7 @@ NeP.DSL:Register('action.cost', function(spell)
 		end
 end)
 
---/dump NeP.DSL:Get('dot.duration')('target','Rip')
+--/dump NeP.DSL:Get('dot.duration')('target','Doom')
 NeP.DSL:Register('dot.duration', function(target, spell)
 	local debuff,_,duration,expires,caster = Xeer.UnitDot(target, spell, _)
 	if debuff and (caster == 'player' or caster == 'pet') then
@@ -229,6 +234,7 @@ NeP.DSL:Register('buff.stack', function(target, spell)
 	return NeP.DSL:Get('buff.count')(target, spell)
 end)
 
+--/dump NeP.DSL:Get('buff.remains')('pet','Demonic Empowerment')
 NeP.DSL:Register('buff.remains', function(target, spell)
 	return NeP.DSL:Get('buff.duration')(target, spell)
 end)
@@ -359,6 +365,11 @@ NeP.DSL:Register('deficit', function()
 	local max = UnitPowerMax('player')
 	local curr = UnitPower('player')
 	return (max - curr)
+end)
+
+--/dump NeP.DSL:Get('mana.pct')()
+NeP.DSL:Register('mana.pct', function()
+	return NeP.DSL:Get('mana')('player')
 end)
 
 --max_energy=1, this means that u will get energy cap in less than one GCD
@@ -513,27 +524,7 @@ end)
 --------------------------------WARLOCK-----------------------------------------
 --------------------------------------------------------------------------------
 
---GetNotDemonicEmpoweredDemonsCount
 
---/dump NeP.DSL:Get('warlock.pets')()
-NeP.DSL:Register('warlock.active_pets_count', function()
-    return Xeer.get_active_demon_count()
-end)
-
---/dump NeP.DSL:Get('warlock.active_pets_list')()
-NeP.DSL:Register('warlock.active_pets_list', function()
-    return Xeer.active_demons
-end)
-
---/dump NeP.DSL:Get('warlock.sorted_pets')()
-NeP.DSL:Register('warlock.sorted_pets_list', function()
-    return Xeer.demons_sorted
-end)
-
---/dump NeP.DSL:Get('warlock.no_de')()
-NeP.DSL:Register('warlock.no_de', function(demon)
-    return Xeer.Empower_no_de(demon)
-end)
 
 --/dump NeP.DSL:Get('warlock.remaining_duration')('Dreadstalker')
 --/dump NeP.DSL:Get('warlock.remaining_duration')('Wild Imp')
@@ -551,21 +542,45 @@ NeP.DSL:Register('warlock.count', function(demon)
     return Xeer.count_active_demon_type(demon)
 end)
 
+--/dump NeP.DSL:Get('warlock.active_pets_list')()
+NeP.DSL:Register('warlock.active_pets_list', function()
+    return Xeer.active_demons
+end)
+
+--/dump NeP.DSL:Get('warlock.sorted_pets_list')()
+NeP.DSL:Register('warlock.sorted_pets_list', function()
+    return Xeer.demons_sorted
+end)
+
+--/dump NeP.DSL:Get('warlock.demon_count')()
+NeP.DSL:Register('warlock.demon_count', function()
+    return Xeer.demon_count
+end)
+
+--GetNotDemonicEmpoweredDemonsCount
+--/dump NeP.DSL:Get('warlock.no_de')()
+--NeP.DSL:Register('warlock.no_de', function(demon)
+--    return Xeer.Empower_no_de(demon)
+--end)
+
 --/dump NeP.DSL:Get('soul_shard')()
 NeP.DSL:Register('soul_shard', function()
 	return NeP.DSL:Get('soulshards')('player')
 end)
 
+
+
 --------------------------------------------------------------------------------
 ---------------------------------- WIP -----------------------------------------
 --------------------------------------------------------------------------------
 
---/dump NeP.DSL:Get('travel_time')('target','Lava Burst')
+--/dump NeP.DSL:Get('travel_time')('target','Shadowflame')
 NeP.DSL:Register('travel_time', function(_, spell)
     local spellID = NeP.Core:GetSpellID(spell)
     return Xeer.TravelTime(spellID)
 end)
 
+--[[
 --/dump NeP.DSL:Get('tttlz')()
 NeP.DSL:Register('tttlz', function()
     return Xeer.TTTL_table
@@ -580,3 +595,4 @@ end)
 NeP.DSL:Register('tttlz.wipe', function()
     return wipe(Xeer.TTTL_table)
 end)
+--]]

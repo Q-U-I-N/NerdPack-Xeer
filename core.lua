@@ -1,6 +1,6 @@
 local _, Xeer = ...
 
-Xeer.Version = '1.6.1'
+Xeer.Version = '1.6.2'
 Xeer.Branch = 'RELEASE'
 Xeer.Name = 'NerdPack - Xeer Routines'
 Xeer.Author = 'Xeer'
@@ -28,6 +28,13 @@ Xeer.class = select(3,UnitClass("player"))
 	-- Temp Hack
 function Xeer.ExeOnLoad()
 		Xeer.Splash()
+
+		NeP.Interface:AddToggle({
+			key = 'xopener',
+			name = 'Opener rotation',
+			text = 'Start opener rotation',
+			icon = 'Interface\\Icons\\Ability_warrior_charge',
+		})
 --[[
 		NeP.Interface:AddToggle({
 			key = 'AutoTarget',
@@ -357,6 +364,29 @@ Xeer.sets = {
 -------------------------------- WARLOCK ---------------------------------------
 --------------------------------------------------------------------------------
 
+--[[
+Xeer.pets = {
+        ["Wild Imp"] = {55659, 99737, 113266},
+				["Dreadstalker"] = {98035, 99738, 99736, 91907},
+				["Imp"] = {416},
+				["Felhunter"] = {417},
+				["Succubus"] = {1863},
+				["Felguard"] = {103673},
+				["Darkglare"] = {103673},
+				["Doomguard"] = {78158, 11859},
+				["Infernal"] = {78217, 89},
+				["Voidwalker"] = {1860},
+}
+Xeer.perma2 = {}
+Xeer.perma2[416] = "Imp"
+Xeer.perma2[417] = "Felhunter"
+Xeer.perma2[1863] = "Succubus"
+Xeer.perma2[17252] = "Felguard"
+Xeer.perma2[78158] = "Doomguard"
+Xeer.perma2[78217] = "Infernal"
+Xeer.perma2[1860] = "Voidwalker"
+--]]
+
 Xeer.durations = {}
 Xeer.durations["Wild Imp"] = 12
 Xeer.durations["Dreadstalker"] = 12
@@ -367,7 +397,7 @@ Xeer.durations["Felguard"] = 25
 Xeer.durations["Darkglare"] = 12
 Xeer.durations["Doomguard"] = 25
 Xeer.durations["Infernal"] = 25
-Xeer.durations["Empower"] = 12
+Xeer.durations["Voidwalker"] = 25
 
 Xeer.active_demons = {}
 Xeer.demons_sorted = {}
@@ -375,43 +405,56 @@ Xeer.demon_count = 0
 Xeer.sorted_demon_count = 0
 Xeer.empower = 0
 
-Xeer.minions = {"Wild Imp", "Dreadstalker", "Imp", "Felhunter", "Succubus", "Felguard", "Darkglare", "Doomguard", "Infernal"}
+Xeer.minions = {"Wild Imp", "Dreadstalker", "Imp", "Felhunter", "Succubus", "Felguard", "Darkglare", "Doomguard", "Infernal", "Voidwalker"}
 
 function Xeer.update_demons()
+	--print('Xeer.update_demons')
     for key,value in pairs(Xeer.active_demons) do
         if (Xeer.is_demon_dead(Xeer.active_demons[key].name, Xeer.active_demons[key].time)) then
             Xeer.active_demons[key] = nil
             Xeer.demon_count = Xeer.demon_count - 1
-
             Xeer.sort_demons()
-
         end
     end
 end
 
 function Xeer.is_demon_empowered(guid)
-    if(Xeer.active_demons[guid].empower_time ~= 0 and GetTime() -  Xeer.active_demons[guid].empower_time <= 12) then
+	--print('Xeer.is_demon_empowered')
+    if (Xeer.active_demons[guid].empower_time ~= 0 and GetTime() -  Xeer.active_demons[guid].empower_time <= 12) then
         return true
     end
     return false
 end
 
 function Xeer.Empower()
+	--print('Xeer.Empower')
+	if Xeer.demon_count == 0 and UnitExists("pet") then
+		Xeer.empower = NeP.DSL:Get('buff.remains')('pet','Demonic Empowerment')
+		return Xeer.empower
+	end
+	if Xeer.demon_count > 0 then
 		for _,v in pairs(Xeer.active_demons) do
 			if Xeer.is_demon_empowered(v.guid) then
-					Xeer.empower = Xeer.get_remaining_time('Empower', v.empower_time)
+					emp1 = Xeer.get_remaining_time('Empower', v.empower_time)
+					emp2 = NeP.DSL:Get('buff.remains')('pet','Demonic Empowerment')
+					if emp1 < emp2 then
+						Xeer.empower = emp1
+					else
+						Xeer.empower = emp2
+					end
 			else
-					return 0
+				Xeer.empower = 0
 			end
 		end
-		return Xeer.empower
+	end
+return Xeer.empower
 end
 
-
 function Xeer.count_active_demon_type(demon)
+	--print('Xeer.count_active_demon_type')
 	local count = 0
     for key,v in pairs(Xeer.active_demons) do
-        if(Xeer.active_demons[key].name == demon) then
+        if (Xeer.active_demons[key].name == demon) then
           count = count + 1
         end
     end
@@ -419,38 +462,49 @@ function Xeer.count_active_demon_type(demon)
 end
 
 function Xeer.implosion_cast()
+	--print('Xeer.implosion_cast')
     for key,v in pairs(Xeer.active_demons) do
-        if(Xeer.active_demons[key].name == "Wild Imp") then
+        if (Xeer.active_demons[key].name == "Wild Imp") then
             Xeer.active_demons[key] = nil
             Xeer.demon_count = Xeer.demon_count - 1
-
             Xeer.sort_demons()
         end
     end
 end
 
 function Xeer.is_demon_dead(name, spawn)
-    if(Xeer.get_remaining_time(name, spawn) <= 0) then
+	--print('Xeer.is_demon_dead')
+    if (Xeer.get_remaining_time(name, spawn) <= 0) then
         return true
     end
     return false
 end
 
 function Xeer.get_remaining_time(name, spawn)
+	--print('Xeer.get_remaining_time')
+	if name == 'Empower' then
+		 return 12 - (GetTime() - spawn)
+	else
     return Xeer.durations[name] - (GetTime() - spawn)
+	end
 end
 
+--[[
 function Xeer.get_active_demon_count()
+	--print('Xeer.get_active_demon_count')
     if(IsPetActive()) then
         return Xeer.demon_count + 1
     else
         return Xeer.demon_count
     end
 end
+--]]
+
 
 function Xeer.IsMinion(name)
+	--print('Xeer.IsMinion')
     for i = 1, #Xeer.minions do
-        if(name == Xeer.minions[i]) then
+        if (name == Xeer.minions[i]) then
             return true
         end
     end
@@ -458,11 +512,12 @@ function Xeer.IsMinion(name)
 end
 
 function Xeer.sort_demons()
+	--print('Xeer.sort_demons')
     Xeer.demons_sorted = {}
     local counter = 1
     for i, v in Xeer.SPairs(Xeer.active_demons, Xeer.SortComperator) do
         if (v ~= nil) then
-            if (Xeer.sort_contains(v) == -1) then
+            if (Xeer.sort_contains(v) == - 1) then
                 Xeer.demons_sorted[counter] = {}
                 Xeer.demons_sorted[counter].name = v.name
                 Xeer.demons_sorted[counter].time = v.time
@@ -478,17 +533,19 @@ function Xeer.sort_demons()
 end
 
 function Xeer.sort_contains(demon)
+	--print('Xeer.sort_contains')
     for key,v in pairs(Xeer.demons_sorted) do
-        if(v.name == demon.name and v.time == demon.time) then
+        if (v.name == demon.name and v.time == demon.time) then
             return key
         end
     end
-    return -1
+    return - 1
 end
 
 function Xeer.SPairs(t, order)
+	--print('Xeer.SPairs')
     local keys = {}
-    for k in pairs(t) do keys[#keys+1] = k end
+    for k in pairs(t) do keys[#keys + 1] = k end
 
     if order then
         table.sort(keys, function(a,b) return order(t, a, b) end)
@@ -506,10 +563,12 @@ function Xeer.SPairs(t, order)
 end
 
 function Xeer.SortComperator(t,a,b)
+	--print('Xeer.SortComperator')
     return Xeer.get_remaining_time(t[b].name, t[b].time) > Xeer.get_remaining_time(t[a].name, t[a].time)
 end
 
 function Xeer.remaining_duration(demon)
+	--print('Xeer.remaining_duration')
 		for _,v in pairs(Xeer.demons_sorted) do
         if v.name == demon then
 				  return Xeer.get_remaining_time(v.name, v.time)
@@ -524,11 +583,9 @@ end
 -- List of know spells travel speed. Non charted spells will be considered traveling 40 yards/s
 -- To recover travel speed, open up /eventtrace, calculate difference between SPELL_CAST_SUCCESS and SPELL_DAMAGE events
 
-Xeer.TTTL_table = {}
---Travel Time Track Listener--
-Xeer.TTTL_enable = false
 
-local TravelSpeedChart = {
+
+local Travel_Chart = {
 	[116] = 25, -- Frostbolt
 	[11366] = 52, -- Pyroblast
 	[29722] = 18, -- Incinerate
@@ -539,14 +596,22 @@ local TravelSpeedChart = {
 	[127632] = 19, -- Cascade
 	[210714] = 38, -- Icefury
 	[51505] = 38.0902, -- Lava Burst
+	[205181] = 32.737266, -- Shadowflame
 --...etc
 };
 
 -- Return the time a spell will need to travel to the current target
 function Xeer.TravelTime(spellID)
-	TravelSpeed = TravelSpeedChart[spellID] or 40
+	TravelSpeed = Travel_Chart[spellID] or 40
 	return NeP.DSL:Get("distance")('target') / TravelSpeed
 end
+
+--[[
+
+--Travel Time Track Listener--
+Xeer.TTTL_table = {}
+Xeer.TTTL_enable = false
+
 
 --/dump NeP.DSL:Get('tttlz')()
 function Xeer.TTTL_calc_tt()
@@ -557,27 +622,13 @@ function Xeer.TTTL_calc_tt()
 							v.travel_speed = v.distance / v.travel_time
 							local write_it = "["..v.spellID.."] = "..v.travel_speed..", -- "..v.name.."\n"
 							print(write_it)
-							WriteFile('testwrite.lua', write_it, true)
+							--WriteFile('testwrite.lua', write_it, true)
 						end
 						wipe(Xeer.TTTL_table)
 	        end
 			end
 end
-
-function Xeer.TTTL_calc_tt2()
-			for k,v in pairs(Xeer.TTTL_table) do
-	        if k and v.finish then
-					  v.travel_time = v.finish - v.start
-						if v.travel_time ~= 0 then
-							v.travel_speed = v.distance / v.travel_time
-							local write_it = "["..v.spellID.."] = "..v.travel_speed..", -- "..v.name.."\n"
-							print(write_it)
-							--WriteFile('testwrite.lua', write_it, true)
-						end
-						--wipe(Xeer.TTTL_table)
-	        end
-			end
-end
+--]]
 
 --------------------------------------------------------------------------------
 -------------------------------- LISTENER --------------------------------------
@@ -587,7 +638,7 @@ NeP.Listener:Add('Xeer_Listener', 'COMBAT_LOG_EVENT_UNFILTERED', function(timest
 
 	if Xeer.class == 9 then
     if (combatevent == "SPELL_SUMMON" and sourceName == UnitName("player")) then
-        if(Xeer.IsMinion(destName)) then
+			if (Xeer.IsMinion(destName)) then
             Xeer.active_demons[destGUID] = {}
             Xeer.active_demons[destGUID].guid = destGUID
             Xeer.active_demons[destGUID].name = destName
@@ -600,18 +651,23 @@ NeP.Listener:Add('Xeer_Listener', 'COMBAT_LOG_EVENT_UNFILTERED', function(timest
     end
 
     if ((combatevent == "SPELL_AURA_APPLIED" or combatevent == "SPELL_AURA_REFRESH") and spellName == "Demonic Empowerment" and sourceName == UnitName("player")) then
-        if(Xeer.IsMinion(destName)) then
+			--print('Demonic Empowerment')
+				if(Xeer.IsMinion(destName)) then
             Xeer.active_demons[destGUID].empower_time = GetTime()
         end
     end
 
     if (combatevent == "SPELL_CAST_SUCCESS" and spellName == "Implosion" and sourceName == UnitName("player")) then
-        Xeer.implosion_cast()
+			--print('Implosion')
+				Xeer.implosion_cast()
     end
-    Xeer.update_demons()
-    return true
+	Xeer.update_demons()
+	return true
 	end
+end)
 
+--[[
+NeP.Listener:Add('Xeer_Listener2', 'COMBAT_LOG_EVENT_UNFILTERED', function(timestamp, combatevent, hideCaster, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, spellID, spellName, spellSchool, amount, ...)
 	if Xeer.TTTL_enable == true then
 		if (combatevent == "SPELL_CAST_SUCCESS" and sourceName == UnitName("player")) then
 			if uniqID == nil then uniqID = 0 end
@@ -630,7 +686,7 @@ NeP.Listener:Add('Xeer_Listener', 'COMBAT_LOG_EVENT_UNFILTERED', function(timest
 			Xeer.TTTL_calc_tt()
     end
 	end
-
 end)
+--]]
 
 NeP.Library:Add('Xeer', Xeer)

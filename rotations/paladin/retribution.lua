@@ -208,11 +208,6 @@ local DH = {
 	--actions.DH+=/crusader_strike,if=holy_power<=4
 }
 
-local Keybinds = {
-	-- Pause
-	{'%pause', 'keybind(alt)'},
-}
-
 local xCombat = {
 		--actions+=/call_action_list,name=VB,if=talent.virtues_blade.enabled
 		{VB, 'talent(4,1)'},

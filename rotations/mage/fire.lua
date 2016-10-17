@@ -109,7 +109,7 @@ local Combustion = {
 	--actions.combustion_phase+=/pyroblast,if=buff.hot_streak.up
 	{'Pyroblast', 'player.buff(Hot Streak!)'},
 	--actions.combustion_phase+=/fire_blast,if=buff.heating_up.up
-	{'&Fire Blast', 'player.buff(Heating Up)&!prev_off_gcd(Fire Blast)'},
+	{'&Fire Blast', 'player.buff(Heating Up)&!prev_off_gcd(Fire Blast)&player.buff(Combustion)'},
 	--actions.combustion_phase+=/phoenixs_flames
 	{'Phoenix\'s Flames', 'artifact(Phoenix\'s Flames).equipped'},
 	--actions.combustion_phase+=/scorch,if=buff.combustion.remains>cast_time
@@ -128,7 +128,7 @@ local RoP = {
 	--actions.rop_phase+=/pyroblast,if=buff.kaelthas_ultimate_ability.react
 	{'Pyroblast', 'player.buff(Kael\'thas\'s Ultimate Ability).react'},
 	--actions.rop_phase+=/fire_blast,if=!prev_off_gcd.fire_blast
-	{'&Fire Blast', '!prev_off_gcd(Fire Blast)'},
+	{'&Fire Blast', 'player.buff(Heating Up)&!prev_off_gcd(Fire Blast)'},
 	--actions.rop_phase+=/phoenixs_flames,if=!prev_gcd.phoenixs_flames
 	{'Phoenix\'s Flames', 'artifact(Phoenix\'s Flames).equipped&!prev_gcd(Phoenix\'s Flames)'},
 	--actions.rop_phase+=/scorch,if=target.health.pct<=25&equipped.132454
@@ -166,16 +166,16 @@ local MainRotation = {
 	{'Scorch', 'target.health<=25&equipped(132454)'},
 	--actions.single_target+=/fireball
 	{'Fireball', 'xmoving=0||player.buff(Ice Floes)'},
+	{'Ice Barrier', '!player.buff(Ice Barrier)&!player.buff(Combustion)&!player.buff(Rune of Power)'},
 	--Scorch as a filler spell when moving.
 	{'Scorch', 'xmoving=1&!player.buff(Ice Floes)'}
 }
 
 local xCombat = {
 	--actions+=/rune_of_power,if=cooldown.combustion.remains>40&buff.combustion.down&(cooldown.flame_on.remains<5||cooldown.flame_on.remains>30)&!talent.kindling.enabled||target.time_to_die.remains<11||talent.kindling.enabled&(charges_fractional>1.8||time<40)&cooldown.combustion.remains>40
-	{'Rune of Power', 'toggle(cooldowns)&xmoving=0&{{cooldown(Combustion).remains>40||!toggle(xCombustion)}&!player.buff(Combustion)&{cooldown(Flame On).remains<5||cooldown(Flame On).remains>30}&!talent(7,1)||target.time_to_die.remains<11||talent(7,1)&{action(Rune of Power).charges>1.8||player.combat.time<40}&{cooldown(Combustion).remains>40||!toggle(xCombustion)}}'},
-	{'Ice Barrier', '!player.buff(Ice Barrier)&!player.buff(Combustion)&!player.buff(Rune of Power)'},
+	{'Rune of Power', 'toggle(cooldowns)&xmoving=0&{cooldown(Combustion).remains>40||!toggle(xCombustion)}&{!player.buff(Combustion)&{cooldown(Flame On).remains<5||cooldown(Flame On).remains>30}&!talent(7,1)||target.time_to_die.remains<11||talent(7,1)&{action(Rune of Power).charges>1.8||player.combat.time<40}&{cooldown(Combustion).remains>40||!toggle(xCombustion)}}'},
 	--actions+=/call_action_list,name=combustion_phase,if=cooldown.combustion.remains<=action.rune_of_power.cast_time+(!talent.kindling.enabled*gcd)||buff.combustion.up
-	{Combustion, 'toggle(xCombustion)&xmoving=0&{cooldown(Combustion).remains<=action(Rune of Power).cast_time+gcd||player.buff(Combustion)}'},
+	{Combustion, 'toggle(xCombustion)&toggle(cooldowns)&xmoving=0&{cooldown(Combustion).remains<=action(Rune of Power).cast_time+gcd||player.buff(Combustion)}'},
 	--actions+=/call_action_list,name=rop_phase,if=buff.rune_of_power.up&buff.combustion.down
 	{RoP, 'xmoving=0&player.buff(Rune of Power)&!player.buff(Combustion)'},
 	--actions+=/call_action_list,name=single_target

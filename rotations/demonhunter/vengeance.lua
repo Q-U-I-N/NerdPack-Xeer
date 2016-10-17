@@ -1,4 +1,4 @@
-local _, Xeer = ... 
+local _, Xeer = ...
 
 local exeOnLoad = function()
 	 Xeer.ExeOnLoad()
@@ -38,7 +38,7 @@ spec=vengeance
 
 local Keybinds = {
 	{'Sigil of Flame', 'keybind(alt)', 'mouseover.target'},
-	{'%pause', 'keybind(lshift)', 'mouseover.target'},
+	{'%pause', 'keybind(lshift)'},
 	--{'Metamorphosis', 'keybind(lcontrol)', 'mouseover.target'},
 	{'Infernal Strike', 'keybind(lcontrol)', 'mouseover.ground'}
 }
