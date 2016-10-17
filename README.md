@@ -1,4 +1,4 @@
-# NerdPack 1.5 - Xeer Routines
+# NerdPack 1.6 - Xeer Routines
 
 Routines are supported (should work...) with every language clients now.
 
@@ -38,6 +38,8 @@ Demon Hunter - Vengeance
 
 Death Knight - Frost
 
+Warlock - Demonology
+
 ------------------------------------
 
 Future routines + WIP (do not use them even if you see them on github):
@@ -69,7 +71,5 @@ Rogue - Outlaw
 Rogue - Subtlety
 
 Warlock - Affliction
-
-Warlock - Demonology
 
 Warlock - Destruction
