@@ -1,5 +1,5 @@
-## Title: |r[|cffADFF2FXeer|r] Combat Routines - 1.5
-## Notes: Custom Combat Routines for NerdPack - 1.5.
+## Title: |r[|cffADFF2FXeer|r] Combat Routines
+## Notes: Custom Combat Routines for NerdPack
 ## Interface: 70000
 ## Author: Xeer
 

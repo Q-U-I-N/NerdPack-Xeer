@@ -1,7 +1,5 @@
 local _, Xeer = ...
 
-local _, Xeer = ...
-
 local exeOnLoad = function()
 
 	 Xeer.ExeOnLoad()
@@ -66,8 +64,8 @@ local xCombat = {
  	--actions+=/implosion,if=prev_gcd.hand_of_guldan&wild_imp_remaining_duration<=4&spell_targets.implosion>2
 	{'Implosion', 'talent(2,3)&{prev_gcd(Hand of Gul\'dan)&warlock(Wild Imp).remaining_duration<=4&target.area(8).enemies>2}'},
  	--actions+=/shadowflame,if=debuff.shadowflame.stack>0&remains<action.shadow_bolt.cast_time+travel_time
-	{'Shadowflame', 'talent(2,1)&{target.debuff(Shadowflame)react<action(Shadow Bolt).cast_time+travel_time(Shadow Flame)}'},
- 	--actions+=/service_pet,if=cooldown.summon_doomguard.remains<=gcd&soul_shard>=2
+	{'Shadowflame', 'talent(2,1)&{target.debuff(Shadowflame)stack>0&target.debuff(Shadowflame)remains<action(Shadow Bolt).cast_time+travel_time(Shadow Flame)}'},
+	--actions+=/service_pet,if=cooldown.summon_doomguard.remains<=gcd&soul_shard>=2
 	{'Grimoire: Felguard', 'talent(6,2)&{cooldown(Summon Doomguard).remains<=gcd&soul_shard>=2}'},
  	--actions+=/service_pet,if=cooldown.summon_doomguard.remains>25
 	{'Grimoire: Felguard', 'talent(6,2)&{cooldown(Summon Doomguard).remains>25}'},

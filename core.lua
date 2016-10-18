@@ -364,28 +364,6 @@ Xeer.sets = {
 -------------------------------- WARLOCK ---------------------------------------
 --------------------------------------------------------------------------------
 
---[[
-Xeer.pets = {
-        ["Wild Imp"] = {55659, 99737, 113266},
-				["Dreadstalker"] = {98035, 99738, 99736, 91907},
-				["Imp"] = {416},
-				["Felhunter"] = {417},
-				["Succubus"] = {1863},
-				["Felguard"] = {103673},
-				["Darkglare"] = {103673},
-				["Doomguard"] = {78158, 11859},
-				["Infernal"] = {78217, 89},
-				["Voidwalker"] = {1860},
-}
-Xeer.perma2 = {}
-Xeer.perma2[416] = "Imp"
-Xeer.perma2[417] = "Felhunter"
-Xeer.perma2[1863] = "Succubus"
-Xeer.perma2[17252] = "Felguard"
-Xeer.perma2[78158] = "Doomguard"
-Xeer.perma2[78217] = "Infernal"
-Xeer.perma2[1860] = "Voidwalker"
---]]
 
 Xeer.durations = {}
 Xeer.durations["Wild Imp"] = 12
@@ -400,10 +378,8 @@ Xeer.durations["Infernal"] = 25
 Xeer.durations["Voidwalker"] = 25
 
 Xeer.active_demons = {}
-Xeer.demons_sorted = {}
-Xeer.demon_count = 0
-Xeer.sorted_demon_count = 0
 Xeer.empower = 0
+Xeer.demon_count = 0
 
 Xeer.minions = {"Wild Imp", "Dreadstalker", "Imp", "Felhunter", "Succubus", "Felguard", "Darkglare", "Doomguard", "Infernal", "Voidwalker"}
 
@@ -413,7 +389,7 @@ function Xeer.update_demons()
         if (Xeer.is_demon_dead(Xeer.active_demons[key].name, Xeer.active_demons[key].time)) then
             Xeer.active_demons[key] = nil
             Xeer.demon_count = Xeer.demon_count - 1
-            Xeer.sort_demons()
+            --Xeer.sort_demons()
         end
     end
 end
@@ -453,21 +429,31 @@ end
 function Xeer.count_active_demon_type(demon)
 	--print('Xeer.count_active_demon_type')
 	local count = 0
-    for key,v in pairs(Xeer.active_demons) do
-        if (Xeer.active_demons[key].name == demon) then
+    for _,v in pairs(Xeer.active_demons) do
+        if v.name == demon then
           count = count + 1
         end
     end
 		return count
 end
 
+function Xeer.remaining_duration(demon)
+	--print('Xeer.remaining_duration')
+		for _,v in pairs(Xeer.active_demons) do
+        if v.name == demon then
+				  return Xeer.get_remaining_time(v.name, v.time)
+        end
+		end
+end
+
 function Xeer.implosion_cast()
 	--print('Xeer.implosion_cast')
     for key,v in pairs(Xeer.active_demons) do
-        if (Xeer.active_demons[key].name == "Wild Imp") then
+			if (Xeer.active_demons[key].name == "Wild Imp") then
+      --  if (Xeer.active_demons[key].name == "Дикие бесы") then
             Xeer.active_demons[key] = nil
             Xeer.demon_count = Xeer.demon_count - 1
-            Xeer.sort_demons()
+            --Xeer.sort_demons()
         end
     end
 end
@@ -489,17 +475,6 @@ function Xeer.get_remaining_time(name, spawn)
 	end
 end
 
---[[
-function Xeer.get_active_demon_count()
-	--print('Xeer.get_active_demon_count')
-    if(IsPetActive()) then
-        return Xeer.demon_count + 1
-    else
-        return Xeer.demon_count
-    end
-end
---]]
-
 
 function Xeer.IsMinion(name)
 	--print('Xeer.IsMinion')
@@ -509,71 +484,6 @@ function Xeer.IsMinion(name)
         end
     end
     return false
-end
-
-function Xeer.sort_demons()
-	--print('Xeer.sort_demons')
-    Xeer.demons_sorted = {}
-    local counter = 1
-    for i, v in Xeer.SPairs(Xeer.active_demons, Xeer.SortComperator) do
-        if (v ~= nil) then
-            if (Xeer.sort_contains(v) == - 1) then
-                Xeer.demons_sorted[counter] = {}
-                Xeer.demons_sorted[counter].name = v.name
-                Xeer.demons_sorted[counter].time = v.time
-                Xeer.demons_sorted[counter].guid = v.guid
-                Xeer.demons_sorted[counter].counter = 1
-                counter = counter + 1
-            else
-                Xeer.demons_sorted[Xeer.sort_contains(v)].counter = Xeer.demons_sorted[Xeer.sort_contains(v)].counter + 1
-            end
-        end
-    end
-    Xeer.sorted_demon_count = #Xeer.demons_sorted
-end
-
-function Xeer.sort_contains(demon)
-	--print('Xeer.sort_contains')
-    for key,v in pairs(Xeer.demons_sorted) do
-        if (v.name == demon.name and v.time == demon.time) then
-            return key
-        end
-    end
-    return - 1
-end
-
-function Xeer.SPairs(t, order)
-	--print('Xeer.SPairs')
-    local keys = {}
-    for k in pairs(t) do keys[#keys + 1] = k end
-
-    if order then
-        table.sort(keys, function(a,b) return order(t, a, b) end)
-    else
-        table.sort(keys)
-    end
-
-    local i = 0
-    return function()
-        i = i + 1
-        if keys[i] then
-            return keys[i], t[keys[i]]
-        end
-    end
-end
-
-function Xeer.SortComperator(t,a,b)
-	--print('Xeer.SortComperator')
-    return Xeer.get_remaining_time(t[b].name, t[b].time) > Xeer.get_remaining_time(t[a].name, t[a].time)
-end
-
-function Xeer.remaining_duration(demon)
-	--print('Xeer.remaining_duration')
-		for _,v in pairs(Xeer.demons_sorted) do
-        if v.name == demon then
-				  return Xeer.get_remaining_time(v.name, v.time)
-        end
-		end
 end
 
 --------------------------------------------------------------------------------
@@ -646,19 +556,19 @@ NeP.Listener:Add('Xeer_Listener', 'COMBAT_LOG_EVENT_UNFILTERED', function(timest
             Xeer.active_demons[destGUID].empower_time = 0
             Xeer.active_demons[destGUID].duration = Xeer.durations[destName]
             Xeer.demon_count = Xeer.demon_count + 1
-            Xeer.sort_demons()
+            --Xeer.sort_demons()
         end
     end
 
-    if ((combatevent == "SPELL_AURA_APPLIED" or combatevent == "SPELL_AURA_REFRESH") and spellName == "Demonic Empowerment" and sourceName == UnitName("player")) then
-			--print('Demonic Empowerment')
+    if ((combatevent == "SPELL_AURA_APPLIED" or combatevent == "SPELL_AURA_REFRESH") and spellID == 193396 and sourceName == UnitName("player")) then
+			print('Demonic Empowerment')
 				if(Xeer.IsMinion(destName)) then
             Xeer.active_demons[destGUID].empower_time = GetTime()
         end
     end
 
-    if (combatevent == "SPELL_CAST_SUCCESS" and spellName == "Implosion" and sourceName == UnitName("player")) then
-			--print('Implosion')
+    if (combatevent == "SPELL_CAST_SUCCESS" and spellID == 196277 and sourceName == UnitName("player")) then
+			print('Implosion')
 				Xeer.implosion_cast()
     end
 	Xeer.update_demons()

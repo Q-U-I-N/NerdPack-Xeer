@@ -542,6 +542,8 @@ NeP.DSL:Register('warlock.count', function(demon)
     return Xeer.count_active_demon_type(demon)
 end)
 
+--------------------------------------------------------------------------------
+
 --/dump NeP.DSL:Get('warlock.active_pets_list')()
 NeP.DSL:Register('warlock.active_pets_list', function()
     return Xeer.active_demons

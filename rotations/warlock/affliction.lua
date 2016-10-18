@@ -1,23 +1,24 @@
-local _, Xeer = ... 
+local _, Xeer = ...
 
 local exeOnLoad = function()
-	-- Xeer.ExeOnLoad()
+
+	 Xeer.ExeOnLoad()
+
+	print('|cffADFF2F ----------------------------------------------------------------------|r')
+	print("|cffADFF2F --- |rWARLOCK |cffADFF2FAffliction |r")
+	print("|cffADFF2F --- |rRecommended Talents: 1/2 - 2/2 - 3/1 - 4/1 - 5/3 - 6/3 - 7/2")
+	print('|cffADFF2F ----------------------------------------------------------------------|r')
+
 end
 
-local Survival = {
+local _Xeer = {
 
+	{'@Xeer.Targeting()', {'!target.alive', 'toggle(AutoTarget)'}},
 }
 
-local Cooldowns = {
-
-}
-
-local AoE = {
-
-}
-
-
-local ST = {
+local xCombat = {
+{'Corruption', '!target.dot(Corruption).ticking'},
+{'Drain Life'},
 
 }
 
@@ -26,16 +27,32 @@ local Keybinds = {
 	{'%pause', 'keybind(alt)'},
 }
 
+local Survival = {
+	{'#5512', 'player.health<80'},
+}
+
+local Cooldowns = {
+	--actions+=/berserking
+	--{'Berserking'},
+ 	--actions+=/blood_fury
+	--{'Blood Fury'},
+ 	--actions+=/soul_harvest
+	{'Soul Harvest', 'talent(4,3)'},
+ 	--actions+=/potion,name=deadly_grace,if=buff.soul_harvest.remains|target.time_to_die<=45|trinket.proc.any.react
+	--{'', ''},
+}
+
 local inCombat = {
 	{Keybinds},
-	{Survival, 'player.health < 100'},
+	--{Survival, 'player.health < 100'},
 	{Cooldowns, 'toggle(cooldowns)'},
-	{AoE, {'toggle(AoE)', 'player.area(8).enemies >= 3'}},
-	{ST, {'target.range < 40', 'target.infront'}}
+ 	--actions+=/call_action_list,name=single_target
+	{xCombat, {'target.range<40', 'target.infront'}}
 }
 
 local outCombat = {
 	{Keybinds},
+	--{PreCombat},
 }
 
-NeP.CR:Add(265, '[|cff'..Xeer.addonColor..'Xeer|r] Warlock - Affliction', inCombat, outCombat, exeOnLoad)
+NeP.CR:Add(265, '[|cff'..Xeer.addonColor..'Xeer|r] WARLOCK - Affliction', inCombat, outCombat, exeOnLoad)
