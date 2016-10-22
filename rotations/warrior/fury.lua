@@ -1,4 +1,4 @@
-local _, Xeer = ... 
+local _, Xeer = ...
 
 local exeOnLoad = function()
 	 Xeer.ExeOnLoad()
@@ -171,7 +171,7 @@ local inCombat = {
 	--{Survival, 'player.health < 100'},
 	{Cooldowns, 'toggle(cooldowns)&target.range<8'},
 	--actions+=/call_action_list,name=two_targets,if=spell_targets.whirlwind=2||spell_targets.whirlwind=3
-	{TwoTargets, 'toggle(aoe)&player.area(8).enemies=2||player.area(8).enemies=3'},
+	{TwoTargets, 'toggle(aoe)&{player.area(8).enemies=2||player.area(8).enemies=3}'},
 	--actions+=/call_action_list,name=aoe,if=spell_targets.whirlwind>3
 	{AoE, 'toggle(aoe)&player.area(8).enemies>3'},
 	--actions+=/call_action_list,name=single_target

@@ -1,6 +1,6 @@
 local _, Xeer = ...
 
-Xeer.Version = '1.6.4'
+Xeer.Version = '1.7.1'
 Xeer.Branch = 'RELEASE'
 Xeer.Name = 'NerdPack - Xeer Routines'
 Xeer.Author = 'Xeer'
@@ -43,11 +43,6 @@ function Xeer.ExeOnLoad()
 			icon = 'Interface\\Icons\\ability_hunter_snipershot',
 		})
 --]]
-end
-
-function Xeer.ClassSetting(key)
-		local name = '|cff'..NeP.Core.classColor('player')..'Class Settings'
-		NeP.Interface.CreateSetting(name, function() NeP.Interface.ShowGUI(key) end)
 end
 
 function Xeer.Taunt(eval, args)

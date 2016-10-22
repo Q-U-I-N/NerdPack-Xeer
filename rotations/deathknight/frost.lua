@@ -64,6 +64,25 @@ local Survival = {
  {'Death Strike', 'player.health<=75&player.buff(Dark Succor)'},
 }
 
+local BoS_check = {
+	--actions.generic+=/horn_of_winter,if=talent.breath_of_sindragosa.enabled&cooldown.breath_of_sindragosa.remains>15
+	{'Horn of Winter', 'talent(2,2)&talent(7,2)&cooldown(Breath of Sindragosa).remains>15'},
+ 	--actions.generic+=/horn_of_winter,if=!talent.breath_of_sindragosa.enabled
+	{'Horn of Winter', 'talent(2,2)&!talent(7,2)'},
+ 	--actions.generic+=/frost_strike,if=talent.breath_of_sindragosa.enabled&cooldown.breath_of_sindragosa.remains>15
+	{'Frost Strike', 'talent(7,2)&cooldown(Breath of Sindragosa).remains>15'},
+ 	--actions.generic+=/frost_strike,if=!talent.breath_of_sindragosa.enabled
+	{'Frost Strike', '!talent(7,2)'},
+ 	--actions.generic+=/empower_rune_weapon,if=talent.breath_of_sindragosa.enabled&cooldown.breath_of_sindragosa.remains>15
+	{'Empower Rune Weapon', 'talent(7,2)&cooldown(Breath of Sindragosa).remains>15'},
+ 	--actions.generic+=/empower_rune_weapon,if=!talent.breath_of_sindragosa.enabled
+	{'Empower Rune Weapon', '!talent(7,2)'},
+	--actions.generic+=/hungering_rune_weapon,if=talent.breath_of_sindragosa.enabled&cooldown.breath_of_sindragosa.remains>15
+	{'Hungering Rune Weapon', 'talent(3,2)&talent(7,2)&cooldown(Breath of Sindragosa).remains>15'},
+ 	--actions.generic+=/hungering_rune_weapon,if=!talent.breath_of_sindragosa.enabled
+	{'Hungering Rune Weapon', 'talent(3,2)&!talent(7,2)'},
+}
+
 local Cooldowns = {
 	--# Executed every time the actor is available.
  	--actions+=/blood_fury,if=!talent.breath_of_sindragosa.enabled||dot.breath_of_sindragosa.ticking
@@ -83,25 +102,6 @@ local Cooldowns = {
  	--actions+=/breath_of_sindragosa,if=runic_power>=50
 	{'Breath of Sindragosa', 'talent(7,2)&runic_power>=50'},
 	{BoS_check},
-}
-
-local BoS_check = {
-	--actions.generic+=/horn_of_winter,if=talent.breath_of_sindragosa.enabled&cooldown.breath_of_sindragosa.remains>15
-	{'Horn of Winter', 'talent(2,2)&talent(7,2)&cooldown(Breath of Sindragosa).remains>15'},
- 	--actions.generic+=/horn_of_winter,if=!talent.breath_of_sindragosa.enabled
-	{'Horn of Winter', 'talent(2,2)&!talent(7,2)'},
- 	--actions.generic+=/frost_strike,if=talent.breath_of_sindragosa.enabled&cooldown.breath_of_sindragosa.remains>15
-	{'Frost Strike', 'talent(7,2)&cooldown(Breath of Sindragosa).remains>15'},
- 	--actions.generic+=/frost_strike,if=!talent.breath_of_sindragosa.enabled
-	{'Frost Strike', '!talent(7,2)'},
- 	--actions.generic+=/empower_rune_weapon,if=talent.breath_of_sindragosa.enabled&cooldown.breath_of_sindragosa.remains>15
-	{'Empower Rune Weapon', 'talent(7,2)&cooldown(Breath of Sindragosa).remains>15'},
- 	--actions.generic+=/empower_rune_weapon,if=!talent.breath_of_sindragosa.enabled
-	{'Empower Rune Weapon', '!talent(7,2)'},
-	--actions.generic+=/hungering_rune_weapon,if=talent.breath_of_sindragosa.enabled&cooldown.breath_of_sindragosa.remains>15
-	{'Hungering Rune Weapon', 'talent(3,2)&talent(7,2)&cooldown(Breath of Sindragosa).remains>15'},
- 	--actions.generic+=/hungering_rune_weapon,if=!talent.breath_of_sindragosa.enabled
-	{'Hungering Rune Weapon', 'talent(3,2)&!talent(7,2)'},
 }
 
 local Core = {

@@ -261,19 +261,22 @@ end)
 
 --TODO: work out off gcd/gcd only skills now all of this is just like SiMC 'prev'
 
---/dump NeP.DSL:Get('prev_off_gcd')('player', 'Thrash')
+--/dump NeP.DSL:Get('prev_off_gcd')('player', 'Scorch')
 NeP.DSL:Register('prev_off_gcd', function(_, Spell)
 	return NeP.DSL:Get('lastcast')('player', Spell)
 end)
 
 --/dump NeP.DSL:Get('prev_gcd')('player', 'Thrash')
+--/dump NeP.DSL:Get('lastcast')('player', 'Fireball')
 NeP.DSL:Register('prev_gcd', function(_, Spell)
-	return NeP.DSL:Get('lastcast')('player', Spell)
+	return NeP.DSL:Get('lastgcd')('player', Spell)
 end)
 
 --/dump NeP.DSL:Get('prev')('player', 'Thrash')
 NeP.DSL:Register('prev', function(_, Spell)
-	return NeP.DSL:Get('lastcast')('player', Spell)
+  --if  select(1, GetSpellCooldown(61304)) == 0 and NeP.DSL:Get('lastcast')('player', Spell) then
+	   return NeP.DSL:Get('lastcast')('player', Spell)
+  --end
 end)
 
 --/dump NeP.DSL:Get('time_to_die')('target')
@@ -281,21 +284,51 @@ NeP.DSL:Register('time_to_die', function(target)
 	return NeP.DSL:Get('deathin')(target)
 end)
 
+--[[
 --/dump NeP.DSL:Get('time')('player')
 NeP.DSL:Register('time', function(target)
 	return NeP.DSL:Get('combat.time')(target)
 end)
+--]]
 
---/dump NeP.DSL:Get('cooldown.remains')('player','Combustion')
+--/dump NeP.DSL:Get('spell.cooldown')('player', '61304')
+--/dump NeP.DSL:Get('cooldown.remains')('player','Frost Nova')
 NeP.DSL:Register('cooldown.remains', function(_, spell)
 	if NeP.DSL:Get('spell.exists')(_, spell) == true then
 		return NeP.DSL:Get('spell.cooldown')(_, spell)
 	else
 		return 0
 	end
+
 end)
 
---/dump NeP.DSL:Get('action.charges')('player','Phoenix\'s Flames')
+--/dump GetSpellCooldown(61304)
+--/dump GetSpellCharges(108853)
+--/dump GetSpellCharges(116011)
+--/dump NeP.DSL:Get('action.cooldown_to_max')('player','Fire Blast')
+--/dump NeP.DSL:Get('action.cooldown_to_max')('player','Rune of Power')
+--/dump NeP.DSL:Get('action.cooldown_to_max')('player','Frost Nova')
+--/dump NeP.DSL:Get('spell.recharge')('player','Fire Blast')
+--/dump NeP.DSL:Get('spell.charges')('player','Fire Blast')
+NeP.DSL:Register('action.cooldown_to_max', function(_, spell)
+  local charges, maxCharges, start, duration = GetSpellCharges(spell)
+	if duration and charges ~= maxCharges then
+		charges_to_max = maxCharges - ( charges + ((GetTime() - start) / duration))
+    cooldown = duration * charges_to_max
+	   return cooldown
+  else
+    return 0
+  end
+end)
+
+
+--/dump GetSpellBaseCooldown(61304)
+--/dump NeP.DSL:Get('action.cooldown')('player','Fire Blast')
+NeP.DSL:Register('action.cooldown', function(_, spell)
+	return  GetSpellBaseCooldown(spellID) / 1000
+end)
+
+--/dump NeP.DSL:Get('action.charges')('player','Fire Blast')
 NeP.DSL:Register('action.charges', function(_, spell)
 	if NeP.DSL:Get('spell.exists')(_, spell) == true then
 		return NeP.DSL:Get('spell.charges')(_, spell)
@@ -304,10 +337,19 @@ NeP.DSL:Register('action.charges', function(_, spell)
 	end
 end)
 
---/dump NeP.DSL:Get('cooldown.charges')('player','Phoenix\'s Flames')
+--/dump NeP.DSL:Get('cooldown.charges')('player','Fire Blast')
 NeP.DSL:Register('cooldown.charges', function(_, spell)
 	if NeP.DSL:Get('spell.exists')(_, spell) == true then
 		return NeP.DSL:Get('spell.charges')(_, spell)
+	else
+		return 0
+	end
+end)
+
+--/dump NeP.DSL:Get('cooldown.recharge_time')('player','Fire Blast')
+NeP.DSL:Register('cooldown.recharge_time', function(_, spell)
+	if NeP.DSL:Get('spell.exists')(_, spell) == true then
+		return NeP.DSL:Get('spell.recharge')(_, spell)
 	else
 		return 0
 	end
@@ -326,6 +368,16 @@ end)
 NeP.DSL:Register('spell_haste', function()
 	local shaste = NeP.DSL:Get('haste')('player')
 	return math.floor((100 / ( 100 + shaste )) * 10^3 ) / 10^3
+end)
+
+--/dump NeP.DSL:Get('gcd.remains')()
+NeP.DSL:Register('gcd.remains', function()
+	return NeP.DSL:Get('spell.cooldown')('player', '61304')
+end)
+
+--/dump NeP.DSL:Get('gcd.max')()
+NeP.DSL:Register('gcd.max', function()
+	return NeP.DSL:Get('gcd')()
 end)
 
 --/dump NeP.DSL:Get('action.execute_time')('player','Demonbolt')
@@ -348,6 +400,38 @@ NeP.DSL:Register('execute_time', function(_, spell)
 	return false
 end)
 
+--/dump NeP.DSL:Get('deficit')()
+NeP.DSL:Register('deficit', function()
+	local max = UnitPowerMax('player')
+	local curr = UnitPower('player')
+	return (max - curr)
+end)
+
+--/dump NeP.DSL:Get('energy.deficit')()
+NeP.DSL:Register('energy.deficit', function()
+	return NeP.DSL:Get('deficit')()
+end)
+
+--/dump NeP.DSL:Get('focus.deficit')()
+NeP.DSL:Register('focus.deficit', function()
+	return NeP.DSL:Get('deficit')()
+end)
+
+--/dump NeP.DSL:Get('rage.deficit')()
+NeP.DSL:Register('rage.deficit', function()
+	return NeP.DSL:Get('deficit')()
+end)
+
+--/dump NeP.DSL:Get('astral_power.deficit')()
+NeP.DSL:Register('astral_power.deficit', function()
+	return NeP.DSL:Get('deficit')()
+end)
+
+--/dump NeP.DSL:Get('combo_points.deficit')()
+NeP.DSL:Register('combo_points.deficit', function(target)
+	return (UnitPowerMax('player', SPELL_POWER_COMBO_POINTS)) - (UnitPower('player', SPELL_POWER_COMBO_POINTS))
+end)
+
 --/dump NeP.DSL:Get('combo_points')()
 NeP.DSL:Register('combo_points', function()
 	return GetComboPoints('player', 'target')
@@ -358,13 +442,6 @@ NeP.DSL:Register('cast_regen', function(target, spell)
 	local regen = select(2, GetPowerRegen(target))
 	local _, _, _, cast_time = GetSpellInfo(spell)
 	return math.floor(((regen * cast_time) / 1000) * 10^3 ) / 10^3
-end)
-
---/dump NeP.DSL:Get('deficit')()
-NeP.DSL:Register('deficit', function()
-	local max = UnitPowerMax('player')
-	local curr = UnitPower('player')
-	return (max - curr)
 end)
 
 --/dump NeP.DSL:Get('mana.pct')()
@@ -384,10 +461,6 @@ NeP.DSL:Register('max_energy', function()
 	 end
 end)
 
---/dump NeP.DSL:Get('energy.deficit')()
-NeP.DSL:Register('energy.deficit', function()
-	return NeP.DSL:Get('deficit')()
-end)
 
 --/dump NeP.DSL:Get('energy.regen')()
 NeP.DSL:Register('energy.regen', function()
@@ -400,11 +473,6 @@ NeP.DSL:Register('energy.time_to_max', function()
 	local deficit = NeP.DSL:Get('deficit')()
 	local eregen = NeP.DSL:Get('energy.regen')()
 	return deficit / eregen
-end)
-
---/dump NeP.DSL:Get('focus.deficit')()
-NeP.DSL:Register('focus.deficit', function()
-	return NeP.DSL:Get('deficit')()
 end)
 
 --/dump NeP.DSL:Get('focus.regen')()
@@ -421,9 +489,9 @@ NeP.DSL:Register('focus.time_to_max', function()
 end)
 
 
---/dump NeP.DSL:Get('rage.deficit')()
-NeP.DSL:Register('rage.deficit', function()
-	return NeP.DSL:Get('deficit')()
+--/dump NeP.DSL:Get('astral_power')()
+NeP.DSL:Register('astral_power', function()
+	return NeP.DSL:Get('lunarpower')('player')
 end)
 
 --/dump NeP.DSL:Get('runic_power')()
@@ -436,7 +504,7 @@ NeP.DSL:Register('holy_power', function()
 	return NeP.DSL:Get('holypower')('player')
 end)
 
---/dump NeP.DSL:Get('action.cast_time')('player','Revenge')
+--/dump NeP.DSL:Get('action.cast_time')('player','Solar Wrath')
 NeP.DSL:Register('action.cast_time', function(_, spell)
 	if NeP.DSL:Get('spell.exists')(_, spell) == true then
 		return NeP.DSL:Get('spell.casttime')(_, spell)

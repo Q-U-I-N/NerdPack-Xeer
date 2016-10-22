@@ -1,4 +1,4 @@
-local _, Xeer = ... 
+local _, Xeer = ...
 
 local exeOnLoad = function()
 	 Xeer.ExeOnLoad()
@@ -60,26 +60,41 @@ local Interrupts = {
 
 local xCombat = {
 	--# Executed every time the actor is available.
-	--actions=wind_shear
 	--# Bloodlust casting behavior mirrors the simulator settings for proxy bloodlust. See options 'bloodlust_percent', and 'bloodlust_time'.
 	--actions+=/bloodlust,if=target.health.pct<25||time>0.500
 	--actions+=/feral_spirit
 	{'Feral Spirit'},
-	--actions+=/potion,name=old_war,if=pet.feral_spirit.remains>10||pet.frost_wolf.remains>5||pet.fiery_wolf.remains>5||pet.lightning_wolf.remains>5||target.time_to_die<=30
+	--actions+=/crash_lightning,if=artifact.alpha_wolf.rank&prev_gcd.feral_spirit
+	{'Crash Lightning', 'artifact(Alpha Wolf).enabled&prev_gcd(Feral Spirit)'},
+	--actions+=/potion,name=old_war,if=feral_spirit.remains>5|target.time_to_die<=30
 	--actions+=/berserking,if=buff.ascendance.up||!talent.ascendance.enabled||level<100
 	{'Berserking', 'player.buff(Ascendance)||!talent(7,1)||player.level<100'},
 	--actions+=/blood_fury
 	{'Blood Fury'},
-	--actions+=/boulderfist,if=buff.boulderfist.remains<gcd||charges_fractional>1.75
-	{'Boulderfist', 'player.buff(Boulderfist).duration<gcd||spell(Boulderfist).charges>1.75'},
+	--actions+=/crash_lightning,if=talent.crashing_storm.enabled&active_enemies>=3
+	{'Crash Lightning', 'talent(6,1)&player.buff(Crash Lightning).remains<gcd&player.area(8).enemies>=3'},
+	--actions+=/boulderfist,if=buff.boulderfist.remains<gcd&maelstrom>=50&active_enemies>=3
+	{'Boulderfist', 'player.buff(Boulderfist).remains<gcd&player.maelstrom<=50&player.area(8).enemies>=3'},
+	--actions+=/boulderfist,if=buff.boulderfist.remains<gcd||(charges_fractional>1.75&maelstrom<=100&active_enemies<=2)
+	{'Boulderfist', 'player.buff(Boulderfist).remains<gcd||{spell(Boulderfist).charges>1.75&player.maelstrom<=100&player.area(8).enemies<=2}'},
+	--actions+=/crash_lightning,if=buff.crash_lightning.remains<gcd&active_enemies>=2
+	{'Crash Lightning', 'player.buff(Crash Lightning).remains<gcd&player.area(8).enemies>=2'},
+	--actions+=/windstrike,if=active_enemies>=3&!talent.hailstorm.enabled
+	{'Windstrike', '!talent(4,3)&player.area(8).enemies>=3'},
+	--actions+=/stormstrike,if=active_enemies>=3&!talent.hailstorm.enabled
+	{'Stormstrike', '!talent(4,3)&player.area(8).enemies>=3'},
+	--actions+=/windstrike,if=buff.stormbringer.react
+	{'Windstrike', 'player.buff(Stormbringer).react'},
+	--actions+=/stormstrike,if=buff.stormbringer.react
+	{'Stormstrike', 'player.buff(Stormbringer).react'},
 	--actions+=/frostbrand,if=talent.hailstorm.enabled&buff.frostbrand.remains<gcd
-	{'Frostbrand', 'talent(4,3)&player.buff(Frostbrand).duration<gcd'},
+	{'Frostbrand', 'talent(4,3)&player.buff(Frostbrand).remains<gcd'},
 	--actions+=/flametongue,if=buff.flametongue.remains<gcd
-	{'Flametongue', 'player.buff(Flametongue).duration<gcd'},
+	{'Flametongue', 'player.buff(Flametongue).remains<gcd'},
 	--actions+=/windsong
-	{'Windsong', 'talent(1,1)'},
+	{'Windsong'},
 	--actions+=/ascendance
-	{'Ascendance', 'talent(7,1)'},
+	{'Ascendance'},
 	--actions+=/fury_of_air,if=!ticking
 	{'Fury of Air', 'talent(6,2)&!player.buff(Fury of Air)'},
 	--actions+=/doom_winds
@@ -87,21 +102,21 @@ local xCombat = {
 	--actions+=/crash_lightning,if=active_enemies>=3
 	{'Crash Lightning', 'player.area(8).enemies>=3'},
 	--actions+=/windstrike
-	--{'', ''},
+	{'Windstrike'},
 	--actions+=/stormstrike
-	{'StormStrike'},
-	--actions+=/frostbrand,if=talent.hailstorm.enabled&buff.frostbrand.remains<4.8
-	{'Frostbrand', 'talent(4,3)&player.buff(Frostbrand).duration<4.8'},
-	--actions+=/flametongue,if=buff.flametongue.remains<4.8
-	{'Flametongue', 'target.debuff(Flametongue).duration < 4.8'},
+	{'Stormstrike'},
 	--actions+=/lightning_bolt,if=talent.overcharge.enabled&maelstrom>=60
 	{'Lightning Bolt', 'talent(5,2)&player.maelstrom>=60'},
 	--actions+=/lava_lash,if=buff.hot_hand.react
-	{'Lava Lash', 'player.buff(Hot Hand)'},
+	{'Lava Lash', 'player.buff(Hot Hand).react'},
 	--actions+=/earthen_spike
 	{'Earthen Spike'},
 	--actions+=/crash_lightning,if=active_enemies>1||talent.crashing_storm.enabled||(pet.feral_spirit.remains>5||pet.frost_wolf.remains>5||pet.fiery_wolf.remains>5||pet.lightning_wolf.remains>5)
 	{'Crash Lightning', 'player.area(8).enemies>1||talent(6,1)||spell(Feral Spirit).cooldown>110'},
+	--actions+=/frostbrand,if=talent.hailstorm.enabled&buff.frostbrand.remains<4.8
+	{'Frostbrand', 'talent(4,3)&player.buff(Frostbrand).remains<4.8'},
+	--actions+=/flametongue,if=buff.flametongue.remains<4.8
+	{'Flametongue', 'player.buff(Flametongue).remains<4.8'},
 	--actions+=/sundering
 	{'Sundering'},
 	--actions+=/lava_lash,if=maelstrom>=90
