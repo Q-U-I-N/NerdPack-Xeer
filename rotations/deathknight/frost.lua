@@ -95,8 +95,10 @@ local Cooldowns = {
 	--{'', ''},
  	--actions+=/potion,name=old_war
 	--{'', ''},
+	--actions+=/pillar_of_frost
+	{'Pillar of Frost'},
  	--actions+=/sindragosas_fury,if=buff.pillar_of_frost.up
-	{'Sindragosa\'s Fury', 'player.buff(Pillar of Frost)'},
+	{'Sindragosa\'s Fury', 'player.buff(Pillar of Frost)&target.debuff(Rune of Razorice).count=>5'},
  	--actions+=/obliteration
 	{'Obliteration'},
  	--actions+=/breath_of_sindragosa,if=runic_power>=50
@@ -116,9 +118,9 @@ local Core = {
  	--actions.core+=/remorseless_winter,if=spell_targets.remorseless_winter>=2||talent.gathering_storm.enabled
 	{'Remorseless Winter', 'player.area(8).enemies>=2||talent(6,3)'},
  	--actions.core+=/obliterate,if=buff.killing_machine.react
-	{'Obliterate', '!talent(6,1)&player.buff(Killing Machine).react'},
+	{'Obliterate', 'player.buff(Killing Machine).react'},
  	--actions.core+=/obliterate
-	{'Obliterate', 'talent(6,1)&!player.buff(Killing Machine).react'},
+	{'Obliterate'},
  	--actions.core+=/remorseless_winter
 	{'Remorseless Winter'},
  	--actions.core+=/frostscythe,if=talent.frozen_pulse.enabled
@@ -183,8 +185,6 @@ local Shatter = {
 }
 
 local MACHINEGUN = {
-	--actions+=/pillar_of_frost
-	{'Pillar of Frost'},
  	--actions.icytalons=frost_strike,if=buff.icy_talons.remains<1.5
 	{'Frost Strike', 'player.buff(Icy Talons).remains<1.5'},
  	--actions.icytalons+=/howling_blast,target_if=!dot.frost_fever.ticking

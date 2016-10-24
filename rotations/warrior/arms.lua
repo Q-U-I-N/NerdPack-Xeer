@@ -93,7 +93,7 @@ local Util = {
 
 local AoE = {
 	--actions.aoe=mortal_strike
-	{'Mortal Strike'},
+	{'Mortal Strike', 'player.buff(Focused Rage).stack>=2'},
 	--actions.aoe+=/execute,if=buff.stone_heart.react
 	{'Execute', 'player.buff(Ayala\'s Stone Heart)'},
 	--actions.aoe+=/colossus_smash,if=buff.shattered_defenses.down&buff.precise_strikes.down
@@ -118,7 +118,7 @@ local AoE = {
 
 local Cleave = {
 	--actions.cleave=mortal_strike
-	{'Mortal Strike'},
+	{'Mortal Strike', 'player.buff(Focused Rage).stack>=2'},
 	--actions.cleave+=/execute,if=buff.stone_heart.react
 	{'Execute', 'player.buff(Ayala\'s Stone Heart)'},
 	--actions.cleave+=/colossus_smash,if=buff.shattered_defenses.down&buff.precise_strikes.down
@@ -158,7 +158,7 @@ local Execute = {
 
 local ST = {
 	--actions.single=mortal_strike,if=buff.battle_cry.up&buff.focused_rage.stack>=1&buff.battle_cry.remains<gcd
-	{'Mortal Strike', 'player.buff(Battle Cry)&player.buff(Focused Rage).stack>=1&spell(Battle Cry).cooldown<gcd'},
+	{'Mortal Strike', 'player.buff(Battle Cry)&player.buff(Focused Rage).stack>=2&spell(Battle Cry).cooldown<gcd'},
 	--actions.single+=/colossus_smash,if=buff.shattered_defenses.down
 	{'Colossus Smash', '!player.buff(Shattered Defenses)'},
 	--actions.single+=/warbreaker,if=buff.shattered_defenses.down&cooldown.mortal_strike.remains<gcd
@@ -166,7 +166,7 @@ local ST = {
 	--actions.single+=/focused_rage,if=(((!buff.focused_rage.react&prev_gcd.mortal_strike)|!prev_gcd.mortal_strike)&buff.focused_rage.stack<3&(buff.shattered_defenses.up|cooldown.colossus_smash.remains))&player.rage>60
 	{'Focused Rage', '{{{!player.buff(Focused Rage)&prev_gcd(Mortal Strike)}||!prev_gcd(Mortal Strike)}&player.buff(Focused Rage).stack<3&{player.buff(Shattered Defenses)||cooldown(Colossus Smash).remains>gcd}}&player.rage>60'},
 	--actions.single+=/mortal_strike
-	{'Mortal Strike'},
+	{'Mortal Strike', 'player.buff(Focused Rage).stack>=2'},
 	--actions.single+=/execute,if=buff.stone_heart.react
 	{'Execute', 'player.buff(Ayala\'s Stone Heart)'},
 	--actions.single+=/slam,if=buff.battle_cry_deadly_calm.up||buff.focused_rage.stack=3||rage.deficit<=30

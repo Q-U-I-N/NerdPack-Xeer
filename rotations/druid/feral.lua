@@ -63,8 +63,9 @@ local PreCombat = {
 	--actions.precombat+=/healing_touch,if=talent.bloodtalons.enabled
 	--{'', ''},
 	--actions.precombat+=/cat_form
-	--{'', ''},
+	{'Cat Form', 'form~=2'},
 	--actions.precombat+=/prowl
+ 	{'Prowl', '!player.buff(Prowl)'},
 	--# Snapshot raid buffed stats before combat begins and pre-potting is done.
 	--actions.precombat+=/snapshot_stats
 	--{'', ''},
@@ -243,15 +244,18 @@ local Keybinds = {
 local inCombat = {
 	{Keybinds},
 	--{_Xeer},
+
 	{Interrupts, 'target.interruptAt(50)&toggle(interrupts)&target.infront&target.range<=8'},
   {Survival, 'player.health<100'},
 	{'Cat Form', 'form~=2'},
 	{Cooldowns, 'toggle(cooldowns)'},
+	{Moonfire, 'target.range<=40&target.infront&!player.buff(Prowl)'},
 	{xCombat, 'target.range<8&target.infront'},
 }
 
 local outCombat = {
 	{Keybinds},
+	{PreCombat},
 }
 
-NeP.CR:Add(103, '[|cff'..Xeer.addonColor..'Xeer|r] Druid - Feral', inCombat, outCombat,exeOnLoad)
+NeP.CR:Add(103, '[|cff'..Xeer.addonColor..'Xeer|r] DRUID - Feral', inCombat, outCombat,exeOnLoad)
