@@ -71,7 +71,7 @@ local Interrupts = {
 
 local xCombat = {
 	--actions+=/kill_command
-	{'!Kill Command', 'target.petrange<=25'},
+	{'!Kill Command'},
 	--actions+=/mend_pet
 	{'Mend Pet', 'pet.exists&pet.alive&pet.health<100&!pet.buff(Mend Pet)'},
  	--actions+=/arcane_torrent,if=focus.deficit>=30
