@@ -98,7 +98,7 @@ local Cooldowns = {
 	--actions+=/pillar_of_frost
 	{'Pillar of Frost'},
  	--actions+=/sindragosas_fury,if=buff.pillar_of_frost.up
-	{'Sindragosa\'s Fury', 'player.buff(Pillar of Frost)&target.debuff(Razorice).count=>5'},
+	{'Sindragosa\'s Fury', 'player.buff(Pillar of Frost)&target.debuff(Razorice).count>=5'},
  	--actions+=/obliteration
 	{'Obliteration'},
  	--actions+=/breath_of_sindragosa,if=runic_power>=50
