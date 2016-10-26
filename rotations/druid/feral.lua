@@ -63,9 +63,9 @@ local PreCombat = {
 	--actions.precombat+=/Regrowth,if=talent.bloodtalons.enabled
 	--{'', ''},
 	--actions.precombat+=/cat_form
-	{'Cat Form', 'form~=2'},
+	{'Cat Form', '!player.buff(Cat Form)&!player.buff(Travel Form)'},
 	--actions.precombat+=/prowl
- 	{'Prowl', '!player.buff(Prowl)'},
+ 	{'Prowl', '!player.buff(Prowl)&player.buff(Cat Form)'},
 	--# Snapshot raid buffed stats before combat begins and pre-potting is done.
 	--actions.precombat+=/snapshot_stats
 	--{'', ''},

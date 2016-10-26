@@ -46,7 +46,7 @@ local PreCombat = {
  	--actions.precombat+=/augmentation,type=defiled
 	--{'', ''},
  	--actions.precombat+=/moonkin_form
-	{'Moonkin Form', '!player.buff(Moonkin Form)'},
+	{'Moonkin Form', '!player.buff(Moonkin Form)&!player.buff(Travel Form)'},
  	--actions.precombat+=/blessing_of_elune
 	{'Blessing of the Ancients', '!player.buff(Blessing of Elune)'},
 	--# Snapshot raid buffed stats before combat begins and pre-potting is done.
