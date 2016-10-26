@@ -40,7 +40,7 @@ local Keybinds = {
 	{'Sigil of Flame', 'keybind(alt)', 'mouseover.target'},
 	{'%pause', 'keybind(lshift)'},
 	--{'Metamorphosis', 'keybind(lcontrol)', 'mouseover.target'},
-	{'Infernal Strike', 'keybind(lcontrol)', 'mouseover.ground'}
+	{'Infernal Strike', 'keybind(lcontrol)', 'cursor.ground'}
 }
 
 local Interrupts = {

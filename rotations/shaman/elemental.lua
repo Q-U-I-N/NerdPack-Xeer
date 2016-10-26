@@ -1,4 +1,4 @@
-local _, Xeer = ... 
+local _, Xeer = ...
 
 local exeOnLoad = function()
 	 Xeer.ExeOnLoad()
@@ -57,7 +57,7 @@ local PreCombat = {
  	--actions.precombat+=/stormkeeper
 	{'Stormkeeper'},
  	--actions.precombat+=/totem_mastery
-	{'Totem Mastery', '!player.buff(Tailwind Totem)||!player.buff(Storm Totem)||!player.buff(Resonance Totem)||!player.buff(Ember Totem)'}
+	{'Totem Mastery', '!player.buff(Tailwind Totem)||!player.buff(Storm Totem)||!player.buff(Resonance Totem)||!player.buff(Ember Totem)'},
 }
 
 local Cooldowns = {
@@ -69,7 +69,8 @@ local Cooldowns = {
  	--actions+=/potion,name=deadly_grace,if=buff.ascendance.up||target.time_to_die<=30
 	--{'', ''},
  	--actions+=/totem_mastery,if=buff.resonance_totem.remains<2
-	{'Totem Mastery', 'totem(Totem Mastery).duration<1'},
+	--{'Totem Mastery', 'totem(Totem Mastery).duration<1'},
+	{'Totem Mastery', '!player.buff(Tailwind Totem)||!player.buff(Storm Totem)||!player.buff(Resonance Totem)||!player.buff(Ember Totem)'},
  	--actions+=/fire_elemental
 	{'Fire Elemental', '!talent(6,2)'},
  	--actions+=/storm_elemental
@@ -95,8 +96,8 @@ local AoE = {
 	{'Liquid Magma Totem', 'talent(7,3)'},
  	--actions.aoe+=/flame_shock,if=spell_targets.chain_lightning=3&maelstrom>=20,target_if=refreshable
 	{'Flame Shock', 'player.maelstrom>=20&target.debuff(Flame Shock).duration<gcd'},
- 	--actions.aoe+=/earthquake_totem
-	{'Earthquake Totem', 'totem(Earthquake Totem).duration<1', 'target.ground'},
+ 	--actions.aoe+=/earthquake
+	{'Earthquake', 'player.maelstrom>=50', 'cursor.ground'},
  	--actions.aoe+=/lava_burst,if=buff.lava_surge.up&spell_targets.chain_lightning=3
 	{'Lava Burst', '!player.buff(Lava Surge)'},
  	--actions.aoe+=/lava_beam

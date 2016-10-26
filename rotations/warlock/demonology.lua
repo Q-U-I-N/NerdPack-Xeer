@@ -90,7 +90,7 @@ local xCombat = {
  	--actions+=/summon_darkglare,if=cooldown.call_dreadstalkers.remains<=action.summon_darkglare.cast_time&soul_shard>=3
 	{'Summon Darkglare', 'talent(7,1)&{cooldown(Call Dreadstalkers).remains<=action(Summon Darkglare).cast_time&soul_shard>=3}'},
  	--actions+=/summon_darkglare,if=cooldown.call_dreadstalkers.remains<=action.summon_darkglare.cast_time&soul_shard>=1&buff.demonic_calling.react
-	{'Summon Darkglare', 'talent(7,1)&{cooldown(Call Dreadstalkers).remains<=action(Summon Darkglare).cast_time&soul_shard>=1&player.buff(Demonic Calling).react}'},
+	{'Summon Darkglare', 'talent(7,1)&{cooldown(Call Dreadstalkers).remains<=action(Summon Darkglare).cast_time&soul_shard>=1&player.buff(Demonic Calling)}'},
  	--actions+=/call_dreadstalkers,if=talent.summon_darkglare.enabled&(spell_targets.implosion<3|!talent.implosion.enabled)&cooldown.summon_darkglare.remains>2
 	{'Call Dreadstalkers', 'talent(7,1)&{target.area(8).enemies<3||!talent(2,3)}&cooldown(Summon Darkglare).remains>2'},
  	--actions+=/call_dreadstalkers,if=talent.summon_darkglare.enabled&(spell_targets.implosion<3|!talent.implosion.enabled)&prev_gcd.summon_darkglare
@@ -98,7 +98,7 @@ local xCombat = {
  	--actions+=/call_dreadstalkers,if=talent.summon_darkglare.enabled&(spell_targets.implosion<3|!talent.implosion.enabled)&cooldown.summon_darkglare.remains<=action.call_dreadstalkers.cast_time&soul_shard>=3
 	{'Call Dreadstalkers', 'talent(7,1)&{target.area(8).enemies<3||!talent(2,3)}&cooldown(Summon Darkglare).remains<=action(Call Dreadstalkers.cast_time)&soul_shard>=3'},
  	--actions+=/call_dreadstalkers,if=talent.summon_darkglare.enabled&(spell_targets.implosion<3|!talent.implosion.enabled)&cooldown.summon_darkglare.remains<=action.call_dreadstalkers.cast_time&soul_shard>=1&buff.demonic_calling.react
-	{'Call Dreadstalkers', 'talent(7,1)&{target.area(8).enemies<3||!talent(2,3)}&cooldown(Summon Darkglare).remains<=action(Call Dreadstalkers.cast_time)&soul_shard>=1&player.buff(Demonic Calling).react'},
+	{'Call Dreadstalkers', 'talent(7,1)&{target.area(8).enemies<3||!talent(2,3)}&cooldown(Summon Darkglare).remains<=action(Call Dreadstalkers.cast_time)&soul_shard>=1&player.buff(Demonic Calling)'},
  	--actions+=/hand_of_guldan,if=soul_shard>=3&prev_gcd.call_dreadstalkers
 	{'Hand of Gul\'dan', '!prev_gcd(Hand of Gul\'dan)&soul_shard>=3&prev_gcd(Call Dreadstalkers)'},
  	--actions+=/hand_of_guldan,if=soul_shard>=5&cooldown.summon_darkglare.remains<=action.hand_of_guldan.cast_time

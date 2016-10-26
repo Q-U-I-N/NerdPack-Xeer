@@ -59,6 +59,7 @@ local Interrupts = {
 }
 
 local xCombat = {
+		{'Healing Surge', 'player.health<=80&player.maelstrom>=20', 'player'},
 	--# Executed every time the actor is available.
 	--# Bloodlust casting behavior mirrors the simulator settings for proxy bloodlust. See options 'bloodlust_percent', and 'bloodlust_time'.
 	--actions+=/bloodlust,if=target.health.pct<25||time>0.500
@@ -84,9 +85,9 @@ local xCombat = {
 	--actions+=/stormstrike,if=active_enemies>=3&!talent.hailstorm.enabled
 	{'Stormstrike', '!talent(4,3)&player.area(8).enemies>=3'},
 	--actions+=/windstrike,if=buff.stormbringer.react
-	{'Windstrike', 'player.buff(Stormbringer).react'},
+	{'Windstrike', 'player.buff(Stormbringer)'},
 	--actions+=/stormstrike,if=buff.stormbringer.react
-	{'Stormstrike', 'player.buff(Stormbringer).react'},
+	{'Stormstrike', 'player.buff(Stormbringer)'},
 	--actions+=/frostbrand,if=talent.hailstorm.enabled&buff.frostbrand.remains<gcd
 	{'Frostbrand', 'talent(4,3)&player.buff(Frostbrand).remains<gcd'},
 	--actions+=/flametongue,if=buff.flametongue.remains<gcd
@@ -108,13 +109,13 @@ local xCombat = {
 	--actions+=/lightning_bolt,if=talent.overcharge.enabled&maelstrom>=60
 	{'Lightning Bolt', 'talent(5,2)&player.maelstrom>=60'},
 	--actions+=/lava_lash,if=buff.hot_hand.react
-	{'Lava Lash', 'player.buff(Hot Hand).react'},
+	{'Lava Lash', 'player.buff(Hot Hand)'},
 	--actions+=/earthen_spike
 	{'Earthen Spike'},
 	--actions+=/crash_lightning,if=active_enemies>1||talent.crashing_storm.enabled||(pet.feral_spirit.remains>5||pet.frost_wolf.remains>5||pet.fiery_wolf.remains>5||pet.lightning_wolf.remains>5)
 	{'Crash Lightning', 'player.area(8).enemies>1||talent(6,1)||spell(Feral Spirit).cooldown>110'},
 	--actions+=/frostbrand,if=talent.hailstorm.enabled&buff.frostbrand.remains<4.8
-	{'Frostbrand', 'talent(4,3)&player.buff(Frostbrand).remains<4.8'},
+	{'Frostbrand', 'talent(4,3)&player.buff(Frostbrand).remains<4.5'},
 	--actions+=/flametongue,if=buff.flametongue.remains<4.8
 	{'Flametongue', 'player.buff(Flametongue).remains<4.8'},
 	--actions+=/sundering
@@ -141,7 +142,7 @@ local Keybinds = {
 local inCombat = {
 	{Keybinds},
 	{Interrupts, 'target.interruptAt(50)&toggle(interrupts)&target.infront&target.range<=30'},
-	--{Survival, 'player.health < 100'},
+	--{Survival, 'player.health<100'},
 	--{Cooldowns, 'toggle(cooldowns)'},
 	--{AoE, {'toggle(AoE)', 'player.area(8).enemies >= 3'}},
 	{xCombat, 'target.range<8&target.infront'},

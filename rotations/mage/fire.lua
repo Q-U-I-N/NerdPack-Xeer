@@ -126,7 +126,7 @@ local RoP = {
 	--actions.rop_phase+=/call_action_list,name=active_talents
 	{Talents},
 	--actions.rop_phase+=/pyroblast,if=buff.kaelthas_ultimate_ability.react
-	{'Pyroblast', 'player.buff(Kael\'thas\'s Ultimate Ability).react'},
+	{'Pyroblast', 'player.buff(Kael\'thas\'s Ultimate Ability)'},
 	--actions.rop_phase+=/fire_blast,if=!prev_off_gcd.fire_blast
 	{'&Fire Blast', 'player.buff(Heating Up)&!prev_off_gcd(Fire Blast)'},
 	--actions.rop_phase+=/phoenixs_flames,if=!prev_gcd.phoenixs_flames
@@ -147,9 +147,9 @@ local MainRotation = {
 	--actions.single_target+=/pyroblast,if=buff.hot_streak.up&!prev_gcd.pyroblast
 	{'Pyroblast', 'player.buff(Hot Streak!)&!prev_gcd(Pyroblast)'},
 	--actions.single_target+=/pyroblast,if=buff.hot_streak.react&target.health.pct<=25&equipped.132454
-	{'Pyroblast', 'player.buff(Hot Streak!).react&target.health<=25&equipped(132454)'},
+	{'Pyroblast', 'player.buff(Hot Streak!)&target.health<=25&equipped(132454)'},
 	--actions.single_target+=/pyroblast,if=buff.kaelthas_ultimate_ability.react
-	{'Pyroblast', 'player.buff(Kael\'thas\'s Ultimate Ability).react'},
+	{'Pyroblast', 'player.buff(Kael\'thas\'s Ultimate Ability)'},
 	--actions.single_target+=/call_action_list,name=active_talents
 	{Talents},
 	--{'&Fire Blast', 'player.buff(Heating Up)&!prev_off_gcd(Fire Blast)&action(Fire Blast).charges>0&cooldown(Combustion).remains<action(Fire Blast).cooldown_to_max'},

@@ -50,7 +50,7 @@ spec=protection
 local Keybinds = {
 	-- Pause
 	{'%pause', 'keybind(alt)'},
-	{'Heroic Leap', 'keybind(lcontrol)' , 'mouseover.ground'}
+	{'Heroic Leap', 'keybind(lcontrol)' , 'cursor.ground'}
 }
 
 local Interrupts = {

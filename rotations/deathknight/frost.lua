@@ -108,17 +108,17 @@ local Cooldowns = {
 
 local Core = {
 	--actions.core+=/frostscythe,if=!talent.breath_of_sindragosa.enabled&(buff.killing_machine.react||spell_targets.frostscythe>=4)
-	{'Frostscythe', 'talent(6,1)&!talent(7,2)&{player.buff(Killing Machine).react||player.area(8).enemies>=4}'},
+	{'Frostscythe', 'talent(6,1)&!talent(7,2)&{player.buff(Killing Machine)||player.area(8).enemies>=4}'},
  	--actions.core=remorseless_winter,if=artifact.frozen_soul.enabled
 	{'Remorseless Winter', 'artifact(Frozen Soul).enabled'},
  	--actions.core+=/glacial_advance
 	{'Glacial Advance', 'talent(7,3)'},
  	--actions.core+=/frost_strike,if=buff.obliteration.up&!buff.killing_machine.react
-	{'Frost Strike', 'player.buff(Obliteration)&!player.buff(Killing Machine).react'},
+	{'Frost Strike', 'player.buff(Obliteration)&!player.buff(Killing Machine)'},
  	--actions.core+=/remorseless_winter,if=spell_targets.remorseless_winter>=2||talent.gathering_storm.enabled
 	{'Remorseless Winter', 'player.area(8).enemies>=2||talent(6,3)'},
  	--actions.core+=/obliterate,if=buff.killing_machine.react
-	{'Obliterate', 'player.buff(Killing Machine).react'},
+	{'Obliterate', 'player.buff(Killing Machine)'},
  	--actions.core+=/obliterate
 	{'Obliterate'},
  	--actions.core+=/remorseless_winter
@@ -135,7 +135,7 @@ local IcyTalons = {
  	--actions.icytalons+=/howling_blast,target_if=!dot.frost_fever.ticking
 	{'Howling Blast', '!target.dot(Frost Fever).ticking'},
  	--actions.icytalons+=/howling_blast,if=buff.rime.react
-	{'Howling Blast', 'player.buff(Rime).react'},
+	{'Howling Blast', 'player.buff(Rime)'},
  	--actions.icytalons+=/frost_strike,if=runic_power>=80||buff.icy_talons.stack<3
 	{'Frost Strike', 'runic_power>=80||player.buff(Icy Talons).stack<3'},
  	--actions.icytalons+=/call_action_list,name=core
@@ -155,14 +155,14 @@ local BoS = {
  	--actions.bos+=/hungering_rune_weapon
 	{'Hungering Rune Weapon', 'talent(3,2)'},
  	--actions.bos+=/howling_blast,if=buff.rime.react
-	{'Howling Blast', 'player.buff(Rime).react'},
+	{'Howling Blast', 'player.buff(Rime)'},
 }
 
 local Generic = {
  	--actions.generic=howling_blast,target_if=!dot.frost_fever.ticking
 	{'Howling Blast', '!target.dot(Frost Fever).ticking'},
  	--actions.generic+=/howling_blast,if=buff.rime.react
-	{'Howling Blast', 'player.buff(Rime).react'},
+	{'Howling Blast', 'player.buff(Rime)'},
  	--actions.generic+=/frost_strike,if=runic_power>=80
 	{'Frost Strike', 'runic_power>=80'},
  	--actions.generic+=/call_action_list,name=core
@@ -190,25 +190,25 @@ local MACHINEGUN = {
  	--actions.icytalons+=/howling_blast,target_if=!dot.frost_fever.ticking
 	{'Howling Blast', '!target.dot(Frost Fever).ticking'},
  	--actions.icytalons+=/howling_blast,if=buff.rime.react
-	{'Howling Blast', 'player.buff(Rime).react'},
+	{'Howling Blast', 'player.buff(Rime)'},
  	--actions.icytalons+=/frost_strike,if=runic_power>=80||buff.icy_talons.stack<3
 	{'Frost Strike', 'runic_power>=80||player.buff(Icy Talons).stack<3'},
 	--actions.core+=/frostscythe,if=!talent.breath_of_sindragosa.enabled&(buff.killing_machine.react||spell_targets.frostscythe>=4)
-	{'Frostscythe', 'talent(6,1)&!talent(7,2)&{player.buff(Killing Machine).react||player.area(8).enemies>=4}'},
+	{'Frostscythe', 'talent(6,1)&!talent(7,2)&{player.buff(Killing Machine)||player.area(8).enemies>=4}'},
  	--actions.core=remorseless_winter,if=artifact.frozen_soul.enabled
 	{'Remorseless Winter', 'artifact(Frozen Soul).enabled'},
  	--actions.core+=/glacial_advance
 	{'Glacial Advance', 'talent(7,3)'},
  	--actions.core+=/frost_strike,if=buff.obliteration.up&!buff.killing_machine.react
-	{'Frost Strike', 'player.buff(Obliteration)&!player.buff(Killing Machine).react'},
+	{'Frost Strike', 'player.buff(Obliteration)&!player.buff(Killing Machine)'},
  	--actions.core+=/remorseless_winter,if=spell_targets.remorseless_winter>=2||talent.gathering_storm.enabled
 	{'Remorseless Winter', 'player.area(8).enemies>=2||talent(6,3)'},
 	--actions.core+=/remorseless_winter
 	{'Remorseless Winter'},
  	--actions.core+=/obliterate,if=buff.killing_machine.react
-	{'Obliterate', '!talent(6,1)&player.buff(Killing Machine).react'},
+	{'Obliterate', '!talent(6,1)&player.buff(Killing Machine)'},
  	--actions.core+=/obliterate
-	{'Obliterate', 'talent(6,1)&!player.buff(Killing Machine).react'},
+	{'Obliterate', 'talent(6,1)&!player.buff(Killing Machine)'},
  	--actions.core+=/frostscythe,if=talent.frozen_pulse.enabled
 	{'Frostscythe', 'talent(6,1)&talent(2,2)'},
 }

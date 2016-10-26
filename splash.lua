@@ -32,7 +32,7 @@ C_Timer.NewTicker(0.01, (function()
 	end
 end), nil)
 
-local AddonInfo = '|cff'..Xeer.addonColor..Xeer.Name..' V:'..Xeer.Version
+local AddonInfo = '|cff'..Xeer.addonColor..Xeer.Name
 
 function Xeer.Splash()
 	Splash_Frame:SetAlpha(1)
@@ -43,7 +43,7 @@ function Xeer.Splash()
 	local _, SpecName, _, icon, background = GetSpecializationInfo(currentSpec)
 	local class = UnitClass('player')
 	texture:SetTexture(icon)
-	text:SetText(AddonInfo..'\n|cff'..color..class..' - '..SpecName..' \n|rBy: '..Xeer.Author)
+	text:SetText(AddonInfo..'\n|cff'..color..class..' - '..SpecName..' \n|cffC2012F--- Version: '..Xeer.Version..' ---')
 	callTime = GetTime()
 	local Width = text:GetStringWidth()+texture:GetWidth()+8
 	Splash_Frame:SetSize(Width,100)

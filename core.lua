@@ -1,6 +1,6 @@
 local _, Xeer = ...
 
-Xeer.Version = '1.7.6'
+Xeer.Version = '1.7.7'
 Xeer.Branch = 'RELEASE'
 Xeer.Name = 'NerdPack - Xeer Routines'
 Xeer.Author = 'Xeer'
@@ -28,14 +28,14 @@ Xeer.class = select(3,UnitClass("player"))
 	-- Temp Hack
 function Xeer.ExeOnLoad()
 		Xeer.Splash()
-
+--[[
 		NeP.Interface:AddToggle({
 			key = 'xopener',
 			name = 'Opener rotation',
 			text = 'Start opener rotation',
 			icon = 'Interface\\Icons\\Ability_warrior_charge',
 		})
---[[
+
 		NeP.Interface:AddToggle({
 			key = 'AutoTarget',
 			name = 'Auto Target',
@@ -494,14 +494,14 @@ local Travel_Chart = {
 	[116] = 25, -- Frostbolt
 	[11366] = 52, -- Pyroblast
 	[29722] = 18, -- Incinerate
-	[30455] = 39, -- Ice Lance
+	[30455] = 25.588, -- Ice Lance
 	[105174] = 33, -- Hand of Gul'dan
 	[120644] = 10, -- Halo
 	[122121] = 25, -- Divine Star
 	[127632] = 19, -- Cascade
 	[210714] = 38, -- Icefury
-	[51505] = 38.0902, -- Lava Burst
-	[205181] = 32.737266, -- Shadowflame
+	[51505] = 38.090, -- Lava Burst
+	[205181] = 32.737, -- Shadowflame
 --...etc
 };
 
@@ -511,8 +511,8 @@ function Xeer.TravelTime(spellID)
 	return NeP.DSL:Get("distance")('target') / TravelSpeed
 end
 
---[[
 
+--[[
 --Travel Time Track Listener--
 Xeer.TTTL_table = {}
 Xeer.TTTL_enable = false
@@ -539,7 +539,7 @@ end
 -------------------------------- LISTENER --------------------------------------
 --------------------------------------------------------------------------------
 
-NeP.Listener:Add('Xeer_Listener', 'COMBAT_LOG_EVENT_UNFILTERED', function(timestamp, combatevent, hideCaster, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, spellID, spellName, spellSchool, amount, ...)
+NeP.Listener:Add('Xeer_Listener1', 'COMBAT_LOG_EVENT_UNFILTERED', function(timestamp, combatevent, hideCaster, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, spellID, spellName, spellSchool, amount, ...)
 
 	if Xeer.class == 9 then
     if (combatevent == "SPELL_SUMMON" and sourceName == UnitName("player")) then
@@ -570,11 +570,11 @@ NeP.Listener:Add('Xeer_Listener', 'COMBAT_LOG_EVENT_UNFILTERED', function(timest
 	return true
 	end
 end)
-
 --[[
 NeP.Listener:Add('Xeer_Listener2', 'COMBAT_LOG_EVENT_UNFILTERED', function(timestamp, combatevent, hideCaster, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, spellID, spellName, spellSchool, amount, ...)
 	if Xeer.TTTL_enable == true then
 		if (combatevent == "SPELL_CAST_SUCCESS" and sourceName == UnitName("player")) then
+			--print('SPELL_CAST_SUCCESS')
 			if uniqID == nil then uniqID = 0 end
 				uniqID = uniqID + 1
 				Xeer.TTTL_table[uniqID] = {}
@@ -585,6 +585,7 @@ NeP.Listener:Add('Xeer_Listener2', 'COMBAT_LOG_EVENT_UNFILTERED', function(times
 				mirror_name = spellName
     end
 		if (combatevent == "SPELL_DAMAGE" and spellName == mirror_name and sourceName == UnitName("player")) then
+			--print('SPELL_DAMAGE')
 			Xeer.TTTL_table[uniqID].finish = GetTime()
 			Xeer.TTTL_table[uniqID].travel_time = 0
 			Xeer.TTTL_table[uniqID].travel_speed = 0

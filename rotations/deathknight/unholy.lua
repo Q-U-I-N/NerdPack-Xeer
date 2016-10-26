@@ -39,7 +39,7 @@ local inCombat = {
 
 local Keybinds = {
 	{'%pause', 'keybind(alt)'},
-	{'Death and Decay', 'keybind(shift)', 'mouseover.ground'},
+	{'Death and Decay', 'keybind(shift)', 'cursor.ground'},
 }
 
 local outCombat = {

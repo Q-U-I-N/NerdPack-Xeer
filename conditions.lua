@@ -82,13 +82,13 @@ NeP.DSL:Register('artifact.trait_info', function(_, spell)
 			end
 end)
 
---/dump NeP.DSL:Get('artifact.enabled')('player', 'Warbreaker')
+--/dump NeP.DSL:Get('artifact.enabled')('player', 'Shredder Fangs')
 --/dump NeP.DSL:Get('artifact.enabled')('player', 'Thoradin\'s Might')
 NeP.DSL:Register('artifact.enabled', function(_, spell)
 		if select(10,NeP.DSL:Get('artifact.trait_info')(_, spell)) then
-			return true
+			return 1
 		else
-			return false
+			return 0
 		end
 end)
 
@@ -261,7 +261,7 @@ end)
 
 --TODO: work out off gcd/gcd only skills now all of this is just like SiMC 'prev'
 
---/dump NeP.DSL:Get('prev_off_gcd')('player', 'Scorch')
+--/dump NeP.DSL:Get('prev_off_gcd')('player', 'Water Jet')
 NeP.DSL:Register('prev_off_gcd', function(_, Spell)
 	return NeP.DSL:Get('lastcast')('player', Spell)
 end)
@@ -269,7 +269,7 @@ end)
 --/dump NeP.DSL:Get('prev_gcd')('player', 'Thrash')
 --/dump NeP.DSL:Get('lastcast')('player', 'Fireball')
 NeP.DSL:Register('prev_gcd', function(_, Spell)
-	return NeP.DSL:Get('lastgcd')('player', Spell)
+	return  NeP.DSL:Get('lastgcd')('player', Spell)
 end)
 
 --/dump NeP.DSL:Get('prev')('player', 'Thrash')
@@ -299,7 +299,6 @@ NeP.DSL:Register('cooldown.remains', function(_, spell)
 	else
 		return 0
 	end
-
 end)
 
 --/dump GetSpellCooldown(61304)
@@ -323,10 +322,16 @@ end)
 
 
 --/dump GetSpellBaseCooldown(61304)
+  --return  GetSpellBaseCooldown(spellID) / 1000
 --/dump NeP.DSL:Get('action.cooldown')('player','Fire Blast')
 NeP.DSL:Register('action.cooldown', function(_, spell)
-	return  GetSpellBaseCooldown(spellID) / 1000
+  if NeP.DSL:Get('spell.exists')(_, spell) == true then
+		return NeP.DSL:Get('spell.cooldown')(_, spell)
+	else
+		return 0
+	end
 end)
+
 
 --/dump NeP.DSL:Get('action.charges')('player','Fire Blast')
 NeP.DSL:Register('action.charges', function(_, spell)
@@ -504,7 +509,7 @@ NeP.DSL:Register('holy_power', function()
 	return NeP.DSL:Get('holypower')('player')
 end)
 
---/dump NeP.DSL:Get('action.cast_time')('player','Solar Wrath')
+--/dump NeP.DSL:Get('action.cast_time')('player','Frostbolt')
 NeP.DSL:Register('action.cast_time', function(_, spell)
 	if NeP.DSL:Get('spell.exists')(_, spell) == true then
 		return NeP.DSL:Get('spell.casttime')(_, spell)
