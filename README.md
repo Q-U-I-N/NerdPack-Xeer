@@ -8,7 +8,6 @@ https://github.com/MrTheSoulz/NerdPack
 
 im using new features so if you don't have newest, it won't work :P
 
-
 ------------------------------------
 
 Working rotations:
@@ -43,6 +42,8 @@ Druid - Balance
 
 Paladin - Retribution
 
+Mage - Frost
+
 ------------------------------------
 
 Future routines + WIP (do not use them even if you see them on github):
@@ -56,8 +57,6 @@ Druid - Guardian
 Hunter - Survival
 
 Mage - Arcane
-
-Mage - Frost
 
 Monk - Windwalker
 

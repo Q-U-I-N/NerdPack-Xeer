@@ -71,10 +71,12 @@ local PreCombat = {
 	--actions.precombat+=/food,type=azshari_salad
 	--actions.precombat+=/augmentation,type=defiled
 	--actions.precombat+=/water_elemental
+	{'Summon Water Elemental', '!pet.exists'},
 	--actions.precombat+=/snapshot_stats
 	--actions.precombat+=/mirror_image
 	--actions.precombat+=/potion,name=deadly_grace
 	--actions.precombat+=/frostbolt
+
 }
 
 local Interrupts = {
@@ -140,6 +142,7 @@ local xCombat = {
 	{'Ebonbolt', 'player.buff(Fingers of Frost).stack<={0+artifact(Icy Hand).enabled}'},
 	{'Ice Barrier', '!player.buff(Ice Barrier)&!player.buff(Rune of Power)'},
 	{'Ice Floes', 'gcd.remains<0.2&xmoving=1&!prev_gcd(Ice Floes)&!player.buff(Ice Floes)'},
+	{'Summon Water Elemental', '!pet.exists'},
  	--actions+=/frostbolt
 	{'Frostbolt', 'xmoving=0||player.buff(Ice Floes)'},
 }

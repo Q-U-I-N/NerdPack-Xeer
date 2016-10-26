@@ -74,9 +74,9 @@ local BoS_check = {
  	--actions.generic+=/frost_strike,if=!talent.breath_of_sindragosa.enabled
 	{'Frost Strike', '!talent(7,2)'},
  	--actions.generic+=/empower_rune_weapon,if=talent.breath_of_sindragosa.enabled&cooldown.breath_of_sindragosa.remains>15
-	{'Empower Rune Weapon', 'talent(7,2)&cooldown(Breath of Sindragosa).remains>15'},
+	{'Empower Rune Weapon', 'talent(7,2)&cooldown(Breath of Sindragosa).remains>15&runes<1'},
  	--actions.generic+=/empower_rune_weapon,if=!talent.breath_of_sindragosa.enabled
-	{'Empower Rune Weapon', '!talent(7,2)'},
+	{'Empower Rune Weapon', '!talent(7,2)&runes<1'},
 	--actions.generic+=/hungering_rune_weapon,if=talent.breath_of_sindragosa.enabled&cooldown.breath_of_sindragosa.remains>15
 	{'Hungering Rune Weapon', 'talent(3,2)&talent(7,2)&cooldown(Breath of Sindragosa).remains>15'},
  	--actions.generic+=/hungering_rune_weapon,if=!talent.breath_of_sindragosa.enabled
@@ -206,9 +206,9 @@ local MACHINEGUN = {
 	--actions.core+=/remorseless_winter
 	{'Remorseless Winter'},
  	--actions.core+=/obliterate,if=buff.killing_machine.react
-	{'Obliterate', '!talent(6,1)&player.buff(Killing Machine)'},
+	--{'Obliterate', '!talent(6,1)&player.buff(Killing Machine)'},
  	--actions.core+=/obliterate
-	{'Obliterate', 'talent(6,1)&!player.buff(Killing Machine)'},
+	--{'Obliterate', 'talent(6,1)&!player.buff(Killing Machine)'},
  	--actions.core+=/frostscythe,if=talent.frozen_pulse.enabled
 	{'Frostscythe', 'talent(6,1)&talent(2,2)'},
 }
