@@ -86,9 +86,9 @@ end)
 --/dump NeP.DSL:Get('artifact.enabled')('player', 'Thoradin\'s Might')
 NeP.DSL:Register('artifact.enabled', function(_, spell)
 		if select(10,NeP.DSL:Get('artifact.trait_info')(_, spell)) then
-			return 1
+			return true and 1
 		else
-			return 0
+			return false or 0
 		end
 end)
 
