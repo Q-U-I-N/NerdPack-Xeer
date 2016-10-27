@@ -1,6 +1,6 @@
 local _, Xeer = ...
 
-Xeer.Version = '1.7.10'
+Xeer.Version = '1.7.11'
 Xeer.Branch = 'RELEASE'
 Xeer.Name = 'NerdPack - Xeer Routines'
 Xeer.Author = 'Xeer'
@@ -359,7 +359,6 @@ Xeer.sets = {
 -------------------------------- WARLOCK ---------------------------------------
 --------------------------------------------------------------------------------
 
-
 Xeer.durations = {}
 Xeer.durations["Wild Imp"] = 12
 Xeer.durations["Dreadstalker"] = 12
@@ -470,7 +469,6 @@ function Xeer.get_remaining_time(name, spawn)
 	end
 end
 
-
 function Xeer.IsMinion(name)
 	--print('Xeer.IsMinion')
     for i = 1, #Xeer.minions do
@@ -482,13 +480,22 @@ function Xeer.IsMinion(name)
 end
 
 --------------------------------------------------------------------------------
+---------------------------------PRIEST-----------------------------------------
+--------------------------------------------------------------------------------
+
+Xeer.Voidform_Summary = true
+Xeer.S2M_Summary = true
+
+Xeer.Voidform_Drain_Stacks = 0
+Xeer.Voidform_Current_Drain_Rate = 0
+Xeer.SA_TOTAL = 0
+
+--------------------------------------------------------------------------------
 -------------------------------- TRAVEL SPEED-----------------------------------
 --------------------------------------------------------------------------------
 
 -- List of know spells travel speed. Non charted spells will be considered traveling 40 yards/s
 -- To recover travel speed, open up /eventtrace, calculate difference between SPELL_CAST_SUCCESS and SPELL_DAMAGE events
-
-
 
 local Travel_Chart = {
 	[116] = 25, -- Frostbolt
@@ -502,8 +509,7 @@ local Travel_Chart = {
 	[210714] = 38, -- Icefury
 	[51505] = 38.090, -- Lava Burst
 	[205181] = 32.737, -- Shadowflame
---...etc
-};
+}
 
 -- Return the time a spell will need to travel to the current target
 function Xeer.TravelTime(spellID)
@@ -511,12 +517,11 @@ function Xeer.TravelTime(spellID)
 	return NeP.DSL:Get("distance")('target') / TravelSpeed
 end
 
-
 --[[
---Travel Time Track Listener--
+--Travel Time Track Listener
+
 Xeer.TTTL_table = {}
 Xeer.TTTL_enable = false
-
 
 --/dump NeP.DSL:Get('tttlz')()
 function Xeer.TTTL_calc_tt()
@@ -540,7 +545,6 @@ end
 --------------------------------------------------------------------------------
 
 NeP.Listener:Add('Xeer_Listener1', 'COMBAT_LOG_EVENT_UNFILTERED', function(timestamp, combatevent, hideCaster, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, spellID, spellName, spellSchool, amount, ...)
-
 	if Xeer.class == 9 then
     if (combatevent == "SPELL_SUMMON" and sourceName == UnitName("player")) then
 			if (Xeer.IsMinion(destName)) then
@@ -570,8 +574,229 @@ NeP.Listener:Add('Xeer_Listener1', 'COMBAT_LOG_EVENT_UNFILTERED', function(times
 	return true
 	end
 end)
+
+NeP.Listener:Add('Xeer_Listener2', 'COMBAT_LOG_EVENT_UNFILTERED', function(time,type,_,sourceGUID,sourcename,_,_,destGUID,destname,_,_,spellid,spellname,_,_,_,_,_,_,_,spellcritical,_,_,_,spellmultistrike)
+	if Xeer.class == 5 then
+		    local CurrentTime = GetTime()
+		    WA_SA_NUM_UNITS = WA_SA_NUM_UNITS or 0
+		    Xeer.SA_TOTAL = Xeer.SA_TOTAL or 0
+		    -- Stats buffer
+		    WA_SA_STATS = WA_SA_STATS or {}
+		    WA_SA_DEAD = WA_SA_DEAD or {}
+		    WA_LAST_CONTINUITY_CHECK = WA_LAST_CONTINUITY_CHECK or GetTime()
+		    WA_SA_Cleanup = WA_SA_Cleanup or function(guid)
+		        if WA_SA_STATS[guid] then
+		            Xeer.SA_TOTAL = Xeer.SA_TOTAL - WA_SA_STATS[guid].Count
+		            if Xeer.SA_TOTAL < 0 then
+		                Xeer.SA_TOTAL = 0
+		            end
+		            WA_SA_STATS[guid].Count = nil
+		            WA_SA_STATS[guid].LastUpdate = nil
+		            WA_SA_STATS[guid] = nil
+		            WA_SA_NUM_UNITS = WA_SA_NUM_UNITS - 1
+		            if WA_SA_NUM_UNITS < 0 then
+		                WA_SA_NUM_UNITS = 0
+		            end
+		        end
+		    end
+		    if sourceGUID == UnitGUID("player") then
+		        if spellid == 147193 and type == "SPELL_CAST_SUCCESS" then -- Shadowy Apparition Spawned
+		            if not WA_SA_STATS[destGUID] or WA_SA_STATS[destGUID] == nil then
+		                WA_SA_STATS[destGUID] = {}
+		                WA_SA_STATS[destGUID].Count = 0
+		                WA_SA_NUM_UNITS = WA_SA_NUM_UNITS + 1
+		            end
+		            Xeer.SA_TOTAL = Xeer.SA_TOTAL + 1
+								--print('SA spawn :'..Xeer.SA_TOTAL..' remaining SA')
+		            WA_SA_STATS[destGUID].Count = WA_SA_STATS[destGUID].Count + 1
+		            WA_SA_STATS[destGUID].LastUpdate = CurrentTime
+		        elseif spellid == 148859 and type == "SPELL_DAMAGE" then --Auspicious Spirit Hit
+								Xeer.SA_TOTAL = Xeer.SA_TOTAL - 1
+								--print('SA hit :'..Xeer.SA_TOTAL..' remaining SA')
+		            if WA_SA_STATS[destGUID] and WA_SA_STATS[destGUID].Count > 0 then
+		                WA_SA_STATS[destGUID].Count = WA_SA_STATS[destGUID].Count - 1
+		                WA_SA_STATS[destGUID].LastUpdate = CurrentTime
+		                if WA_SA_STATS[destGUID].Count <= 0 then
+		                    WA_SA_Cleanup(destGUID)
+		                end
+		            end
+		        end
+		    end
+		    if Xeer.SA_TOTAL < 0 then
+		        Xeer.SA_TOTAL = 0
+		    end
+		    for guid,count in pairs(WA_SA_STATS) do
+		        if (CurrentTime - WA_SA_STATS[guid].LastUpdate) > 10 then
+		            --If we haven't had a new SA spawn in 10sec, that means all SAs that are out have hit the target (usually), or, the target disappeared.
+		            WA_SA_Cleanup(guid)
+		        end
+		    end
+		    if (type == "UNIT_DIED" or type == "UNIT_DESTROYED" or type == "SPELL_INSTAKILL") then -- Unit Died, remove them from the target list.
+		        WA_SA_Cleanup(destGUID)
+		    end
+
+		    if UnitIsDeadOrGhost("player") or not UnitAffectingCombat("player") or not InCombatLockdown() then -- We died, or, exited combat, go ahead and purge the list
+		        for guid,count in pairs(WA_SA_STATS) do
+		            WA_SA_Cleanup(guid)
+		        end
+		        WA_SA_STATS = {}
+		        WA_SA_NUM_UNITS = 0
+		        Xeer.SA_TOTAL = 0
+		    end
+		    if CurrentTime - WA_LAST_CONTINUITY_CHECK > 10 then --Force check of unit count every 10sec
+		        local newUnits = 0
+		        for guid,count in pairs(WA_SA_STATS) do
+		            newUnits = newUnits + 1
+		        end
+		        WA_SA_NUM_UNITS = newUnits
+		        WA_LAST_CONTINUITY_CHECK = CurrentTime
+		    end
+		    if WA_SA_NUM_UNITS > 0 then
+		        local totalSAs = 0
+		        for guid,count in pairs(WA_SA_STATS) do
+		            if WA_SA_STATS[guid].Count <= 0 or (UnitIsDeadOrGhost(guid)) then
+		                WA_SA_DEAD[guid] = true
+		            else
+		                totalSAs = totalSAs + WA_SA_STATS[guid].Count
+		            end
+		        end
+		        if totalSAs > 0 and Xeer.SA_TOTAL > 0 then
+		            return true
+		        end
+		    end
+		    return false
+		end
+end)
+
+NeP.Listener:Add('Xeer_Listener3', 'COMBAT_LOG_EVENT_UNFILTERED', function(time,type,_,sourceGUID,sourcename,_,_,destGUID,destname,_,_,spellid,spellname,_,_,_,_,_,_,_,spellcritical,_,_,_,spellmultistrike)
+	if Xeer.class == 5 then
+    local CurrentTime = GetTime()
+        WA_Voidform_Total_Stacks = WA_Voidform_Total_Stacks or 0
+        WA_Voidform_Previous_Stack_Time = WA_Voidform_Previous_Stack_Time or 0
+        Xeer.Voidform_Drain_Stacks = Xeer.Voidform_Drain_Stacks or 0
+        WA_Voidform_VoidTorrent_Stacks = WA_Voidform_VoidTorrent_Stacks or 0
+        WA_Voidform_Dispersion_Stacks = WA_Voidform_Dispersion_Stacks or 0
+				Xeer.Voidform_Current_Drain_Rate =  Xeer.Voidform_Current_Drain_Rate or 0
+
+        if WA_Voidform_Total_Stacks >= 100 then
+            if (CurrentTime - WA_Voidform_Previous_Stack_Time) >= 1 then
+                WA_Voidform_Previous_Stack_Time = CurrentTime
+                WA_Voidform_Total_Stacks = WA_Voidform_Total_Stacks + 1
+                if WA_Voidform_VoidTorrent_Start == nil and WA_Voidform_Dispersion_Start == nil then
+                    Xeer.Voidform_Drain_Stacks = Xeer.Voidform_Drain_Stacks + 1
+										Xeer.Voidform_Current_Drain_Rate = 9.0 + ((Xeer.Voidform_Drain_Stacks - 1)/2)
+                elseif WA_Voidform_VoidTorrent_Start ~= nil then
+                    WA_Voidform_VoidTorrent_Stacks = WA_Voidform_VoidTorrent_Stacks + 1
+                else
+                    WA_Voidform_Dispersion_Stacks = WA_Voidform_Dispersion_Stacks + 1
+                end
+            end
+        end
+
+        if sourceGUID == UnitGUID("player") then
+            if spellid == 194249 then
+                if type == "SPELL_AURA_APPLIED" then -- Entered Voidform
+                    WA_Voidform_Previous_Stack_Time = CurrentTime
+                    WA_Voidform_VoidTorrent_Start = nil
+                    WA_Voidform_Dispersion_Start = nil
+                    Xeer.Voidform_Drain_Stacks = 1
+                    WA_Voidform_Start_Time = CurrentTime
+                    WA_Voidform_Total_Stacks = 1
+                    WA_Voidform_VoidTorrent_Stacks = 0
+                    WA_Voidform_Dispersion_Stacks = 0
+                elseif type == "SPELL_AURA_APPLIED_DOSE" then -- New Voidform Stack
+                    WA_Voidform_Previous_Stack_Time = CurrentTime
+                    WA_Voidform_Total_Stacks = WA_Voidform_Total_Stacks + 1
+                    if WA_Voidform_VoidTorrent_Start == nil and WA_Voidform_Dispersion_Start == nil then
+                        Xeer.Voidform_Drain_Stacks = Xeer.Voidform_Drain_Stacks + 1
+												Xeer.Voidform_Current_Drain_Rate = 9.0 + ((Xeer.Voidform_Drain_Stacks - 1)/2)
+                    elseif WA_Voidform_VoidTorrent_Start ~= nil then
+                        WA_Voidform_VoidTorrent_Stacks = WA_Voidform_VoidTorrent_Stacks + 1
+                    else
+                        WA_Voidform_Dispersion_Stacks = WA_Voidform_Dispersion_Stacks + 1
+                    end
+
+                elseif type == "SPELL_AURA_REMOVED" then -- Exited Voidform
+                    if Xeer.Voidform_Summary == true then
+                        print("Voidform Info:")
+                        print("--------------------------")
+                        print(string.format("Voidform Duration: %.2f seconds", (CurrentTime-WA_Voidform_Start_Time)))
+                        if WA_Voidform_Total_Stacks > 100 then
+                            print(string.format("Voidform Stacks: 100 (+%.0f)", (WA_Voidform_Total_Stacks-100)))
+                        else
+                            print(string.format("Voidform Stacks: %.0f", WA_Voidform_Total_Stacks))
+                        end
+                        print(string.format("Dispersion Stacks: %.0f", WA_Voidform_Dispersion_Stacks))
+                        print(string.format("Void Torrent Stacks: %.0f", WA_Voidform_VoidTorrent_Stacks))
+                        print("Final Drain: "..Xeer.Voidform_Drain_Stacks.." stacks, "..Xeer.Voidform_Current_Drain_Rate.." / sec")
+                    end
+
+                    WA_Voidform_VoidTorrent_Start = nil
+                    WA_Voidform_Dispersion_Start = nil
+                    Xeer.Voidform_Drain_Stacks = 0
+										Xeer.Voidform_Current_Drain_Rate = 0
+                    WA_Voidform_Start_Time = nil
+                    WA_Voidform_Total_Stacks = 0
+                    WA_Voidform_VoidTorrent_Stacks = 0
+                    WA_Voidform_Dispersion_Stacks = 0
+                end
+
+            elseif spellid == 205065 then
+                if type == "SPELL_AURA_APPLIED" then -- Started channeling Void Torrent
+                    WA_Voidform_VoidTorrent_Start = CurrentTime
+                elseif type == "SPELL_AURA_REMOVED" and WA_Voidform_VoidTorrent_Start ~= nil then -- Stopped channeling Void Torrent
+                    WA_Voidform_VoidTorrent_Start = nil
+                end
+
+            elseif spellid == 47585 then
+                if type == "SPELL_AURA_APPLIED" then -- Started channeling Dispersion
+                    WA_Voidform_Dispersion_Start = CurrentTime
+                elseif type == "SPELL_AURA_REMOVED" and WA_Voidform_Dispersion_Start ~= nil then -- Stopped channeling Dispersion
+                    WA_Voidform_Dispersion_Start = nil
+                end
+
+            elseif spellid == 212570 then
+                if type == "SPELL_AURA_APPLIED" then -- Gain Surrender to Madness
+                    WA_Voidform_S2M_Activated = true
+                    WA_Voidform_S2M_Start = CurrentTime
+                elseif type == "SPELL_AURA_REMOVED" then -- Lose Surrender to Madness
+                    WA_Voidform_S2M_Activated = false
+                end
+            end
+
+        elseif destGUID == UnitGUID("player") and (type == "UNIT_DIED" or type == "UNIT_DESTROYED" or type == "SPELL_INSTAKILL") and WA_Voidform_S2M_Activated == true then
+            WA_Voidform_S2M_Activated = false
+            if Xeer.S2M_Summary == true then
+                print("Surrender to Madness Info:")
+                print("--------------------------")
+                print(string.format("S2M Duration: %.2f seconds", (CurrentTime-WA_Voidform_S2M_Start)))
+                print(string.format("Voidform Duration: %.2f seconds", (CurrentTime-WA_Voidform_Start_Time)))
+                if WA_Voidform_Total_Stacks > 100 then
+                    print(string.format("Voidform Stacks: 100 (+%.0f)", (WA_Voidform_Total_Stacks-100)))
+                else
+                    print(string.format("Voidform Stacks: %.0f", WA_Voidform_Total_Stacks))
+                end
+                print(string.format("Dispersion Stacks: %.0f", WA_Voidform_Dispersion_Stacks))
+                print(string.format("Void Torrent Stacks: %.0f", WA_Voidform_VoidTorrent_Stacks))
+                print("Final Drain: "..Xeer.Voidform_Drain_Stacks.." stacks, "..Xeer.Voidform_Current_Drain_Rate.." / sec")
+            end
+
+            WA_Voidform_S2M_Start = nil
+            WA_Voidform_VoidTorrent_Start = nil
+            WA_Voidform_Dispersion_Start = nil
+            Xeer.Voidform_Drain_Stacks = 0
+						Xeer.Voidform_Current_Drain_Rate = 0
+            WA_Voidform_Start_Time = nil
+            WA_Voidform_Total_Stacks = 0
+            WA_Voidform_VoidTorrent_Stacks = 0
+            WA_Voidform_Dispersion_Stacks = 0
+        end
+    end
+end)
+
+
 --[[
-NeP.Listener:Add('Xeer_Listener2', 'COMBAT_LOG_EVENT_UNFILTERED', function(timestamp, combatevent, hideCaster, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, spellID, spellName, spellSchool, amount, ...)
+NeP.Listener:Add('Xeer_Listener666', 'COMBAT_LOG_EVENT_UNFILTERED', function(timestamp, combatevent, hideCaster, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, spellID, spellName, spellSchool, amount, ...)
 	if Xeer.TTTL_enable == true then
 		if (combatevent == "SPELL_CAST_SUCCESS" and sourceName == UnitName("player")) then
 			--print('SPELL_CAST_SUCCESS')

@@ -92,12 +92,13 @@ NeP.DSL:Register('artifact.enabled', function(_, spell)
 		end
 end)
 
+--/dump NeP.DSL:Get('artifact.rank')('player', 'Shredder Fangs')
 NeP.DSL:Register('artifact.rank', function(_, spell)
   local rank = select(9,NeP.DSL:Get('artifact.trait_info')(_, spell))
 		if rank then
 			return rank
 		else
-			return false
+			return 0
 		end
 end)
 
@@ -266,7 +267,7 @@ NeP.DSL:Register('prev_off_gcd', function(_, Spell)
 	return NeP.DSL:Get('lastcast')('player', Spell)
 end)
 
---/dump NeP.DSL:Get('prev_gcd')('player', 'Thrash')
+--/dump NeP.DSL:Get('prev_gcd')('player', 'Vampiric Touch')
 --/dump NeP.DSL:Get('lastcast')('player', 'Fireball')
 NeP.DSL:Register('prev_gcd', function(_, Spell)
 	return  NeP.DSL:Get('lastgcd')('player', Spell)
@@ -292,12 +293,25 @@ end)
 --]]
 
 --/dump NeP.DSL:Get('spell.cooldown')('player', '61304')
---/dump NeP.DSL:Get('cooldown.remains')('player','Frost Nova')
+--/dump NeP.DSL:Get('cooldown.remains')('player','Mind Blast')
 NeP.DSL:Register('cooldown.remains', function(_, spell)
 	if NeP.DSL:Get('spell.exists')(_, spell) == true then
 		return NeP.DSL:Get('spell.cooldown')(_, spell)
 	else
 		return 0
+	end
+end)
+
+--/dump NeP.DSL:Get('cooldown.up')('player','Mind Blast')
+NeP.DSL:Register('cooldown.up', function(_, spell)
+	if NeP.DSL:Get('spell.exists')(_, spell) == true then
+		if NeP.DSL:Get('spell.cooldown')(_, spell) == 0 then
+      return true
+    else
+      return false
+    end
+	else
+		return false
 	end
 end)
 
@@ -643,7 +657,85 @@ NeP.DSL:Register('soul_shard', function()
 	return NeP.DSL:Get('soulshards')('player')
 end)
 
+--------------------------------------------------------------------------------
+---------------------------------PRIEST-----------------------------------------
+--------------------------------------------------------------------------------
 
+--actions+=/variable,op=set,name=actors_fight_time_mod,value=0
+--actions+=/variable,op=set,name=actors_fight_time_mod,value=-((-(450)+(time+target.time_to_die))%10),if=time+target.time_to_die>450&time+target.time_to_die<600
+--actions+=/variable,op=set,name=actors_fight_time_mod,value=((450-(time+target.time_to_die))%5),if=time+target.time_to_die<=450
+--actions+=/variable,op=set,name=s2mcheck,value=0.8*(45+((raw_haste_pct*100)*(2+(1*talent.reaper_of_souls.enabled)+(2*artifact.mass_hysteria.rank)-(1*talent.sanlayn.enabled))))-(variable.actors_fight_time_mod*nonexecute_actors_pct)
+--actions+=/variable,op=min,name=s2mcheck,value=180
+
+NeP.DSL:Register('variable.actors_fight_time_mod', function()
+  local time = NeP.DSL:Get('combat.time')('player')
+  local target_time_to_die = NeP.DSL:Get('time_to_die')('target')
+  -- time+target.time_to_die>450&time+target.time_to_die<600
+  if time + target_time_to_die > 450 and time + target_time_to_die < 600 then
+        -- -((-(450)+(time+target.time_to_die))%10)
+    return -(( -(450) +( time + target_time_to_die)) / 10)
+        -- time+target.time_to_die<=450
+  elseif time + target_time_to_die <= 450 then
+      -- ((450-(time+target.time_to_die))%5)
+  return ((450 - (time + target_time_to_die)) / 5)
+  else
+    return 0
+  end
+end)
+
+NeP.DSL:Register('variable.s2mcheck_min', function()
+	return 180
+end)
+
+
+NeP.DSL:Register('variable.s2mcheck_value', function()
+ local sanlayn = 0
+ local reaper_of_souls = 0
+ local actors_fight_time_mod = NeP.DSL:Get('variable.actors_fight_time_mod')()
+ local raw_haste_pct = UnitSpellHaste('player')
+ local mass_hysteria = NeP.DSL:Get('artifact.rank')('player', 'Mass Hysteria')
+
+ if NeP.DSL:Get('talent')(nil, '5,1') then
+   sanlayn = 1
+ else
+   sanlayn = 0
+ end
+
+ if NeP.DSL:Get('talent')(nil, '4,2') then
+   reaper_of_souls = 1
+ else
+   reaper_of_souls = 0
+ end
+
+--local value = 0.8*(45+((raw_haste_pct*100)*(2+(1*talent.reaper_of_souls.enabled)+(2*artifact.mass_hysteria.rank)-(1*talent.sanlayn.enabled))))-(variable.actors_fight_time_mod*nonexecute_actors_pct)
+  local value = 0.8 * (45 + ((raw_haste_pct * 100) * (2 + (1 * reaper_of_souls) + (2 * mass_hysteria) - (1 * sanlayn)))) - (actors_fight_time_mod * 0)
+--local value = 0.8 * { 45 + raw_haste_pct * 100 * { 2 + 1 * reaper_of_souls + 2 * mass_hysteria - 1 * sanlayn } } - actors_fight_time_mod * 0
+return value
+end)
+
+--/dump NeP.DSL:Get('variable.s2mcheck')()
+NeP.DSL:Register('variable.s2mcheck', function()
+	if NeP.DSL:Get('variable.s2mcheck_value')() > 180 then
+    return NeP.DSL:Get('variable.s2mcheck_value')()
+	else
+    return 180
+  end
+end)
+
+--/dump NeP.DSL:Get('shadowy_apparitions_in_flight')()
+NeP.DSL:Register('shadowy_apparitions_in_flight', function()
+	return Xeer.SA_TOTAL
+end)
+
+--/dump NeP.DSL:Get('insanity_drain_stacks')()
+NeP.DSL:Register('insanity_drain_stacks', function()
+  return Xeer.Voidform_Drain_Stacks
+end)
+
+--/dump NeP.DSL:Get('current_insanity_drain')()
+NeP.DSL:Register('current_insanity_drain', function()
+  return Xeer.Voidform_Current_Drain_Rate
+end)
 
 --------------------------------------------------------------------------------
 ---------------------------------- WIP -----------------------------------------

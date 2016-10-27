@@ -60,10 +60,6 @@ spec=frost
 
 }
 
-local Keybinds = {
-	-- Pause
-	{'%pause', 'keybind(alt)'}
-}
 
 
 local PreCombat = {
@@ -79,14 +75,6 @@ local PreCombat = {
 
 }
 
-local Interrupts = {
-	{'Counterspell'},
-	{'Arcane Torrent', 'target.range<=8&spell(Counterspell).cooldown>gcd&!prev_gcd(Counterspell)'},
-}
-
-local Survival = {
-
-}
 
 local Cooldowns = {
 	--actions+=/time_warp,if=(time=0&buff.bloodlust.down)|(buff.bloodlust.down&equipped.132410)
@@ -145,6 +133,21 @@ local xCombat = {
 	{'Summon Water Elemental', '!pet.exists'},
  	--actions+=/frostbolt
 	{'Frostbolt', 'xmoving=0||player.buff(Ice Floes)'},
+}
+
+
+local Keybinds = {
+	-- Pause
+	{'%pause', 'keybind(alt)'}
+}
+
+local Interrupts = {
+	{'Counterspell'},
+	{'Arcane Torrent', 'target.range<=8&spell(Counterspell).cooldown>gcd&!prev_gcd(Counterspell)'},
+}
+
+local Survival = {
+
 }
 
 local inCombat = {
