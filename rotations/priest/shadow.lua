@@ -55,7 +55,7 @@ local PreCombat = {
 }
 
 local Void_Eruption = {
- {'Void Eruption'},
+ {'!Void Eruption'},
 }
 
 local Mind_Blast = {
@@ -72,11 +72,11 @@ local Mind_Blast_Clip = {
 
 local MainRotation_Clip = {
 	--actions.main=surrender_to_madness,if=talent.surrender_to_madness.enabled&target.time_to_die<=variable.s2mcheck
-	{'!Surrender to Madness', 'talent(7,3)&target.time_to_die<=variable.s2mcheck'},
+	{'!Surrender to Madness', 'toggle(cooldowns)&talent(7,3)&target.time_to_die<=variable.s2mcheck'},
  	--actions.main+=/mindbender,if=talent.mindbender.enabled&!talent.surrender_to_madness.enabled
-	{'!Mindbender', 'talent(6,3)&!talent(7,3)'},
+	{'!Mindbender', 'toggle(cooldowns)&talent(6,3)&!talent(7,3)'},
  	--actions.main+=/mindbender,if=talent.mindbender.enabled&talent.surrender_to_madness.enabled&target.time_to_die>variable.s2mcheck+60
-	{'!Mindbender', 'talent(6,3)&talent(7,3)&target.time_to_die>variable.s2mcheck+60'},
+	{'!Mindbender', 'toggle(cooldowns)&talent(6,3)&talent(7,3)&target.time_to_die>variable.s2mcheck+60'},
  	--actions.main+=/shadow_word_pain,if=dot.shadow_word_pain.remains<{3+{4%3}}*gcd
 	{'!Shadow Word: Pain', 'target.dot(Shadow Word: Pain).remains<{3+{4/3}}*gcd'},
  	--actions.main+=/vampiric_touch,if=dot.vampiric_touch.remains<{4+{4%3}}*gcd
@@ -112,17 +112,17 @@ local MainRotation_Clip = {
 local MainRotation = {
 	{MainRotation_Clip, 'player.channeling(Mind Sear)||player.channeling(Mind Flay)'},
  	--actions.main=surrender_to_madness,if=talent.surrender_to_madness.enabled&target.time_to_die<=variable.s2mcheck
-	{'Surrender to Madness', 'talent(7,3)&target.time_to_die<=variable.s2mcheck'},
+	{'Surrender to Madness', 'toggle(cooldowns)&talent(7,3)&target.time_to_die<=variable.s2mcheck'},
  	--actions.main+=/mindbender,if=talent.mindbender.enabled&!talent.surrender_to_madness.enabled
-	{'Mindbender', 'talent(6,3)&!talent(7,3)'},
+	{'Mindbender', 'toggle(cooldowns)&talent(6,3)&!talent(7,3)'},
  	--actions.main+=/mindbender,if=talent.mindbender.enabled&talent.surrender_to_madness.enabled&target.time_to_die>variable.s2mcheck+60
-	{'Mindbender', 'talent(6,3)&talent(7,3)&target.time_to_die>variable.s2mcheck+60'},
+	{'Mindbender', 'toggle(cooldowns)&talent(6,3)&talent(7,3)&target.time_to_die>variable.s2mcheck+60'},
  	--actions.main+=/shadow_word_pain,if=dot.shadow_word_pain.remains<{3+{4%3}}*gcd
 	{'Shadow Word: Pain', 'target.dot(Shadow Word: Pain).remains<{3+{4/3}}*gcd'},
  	--actions.main+=/vampiric_touch,if=dot.vampiric_touch.remains<{4+{4%3}}*gcd
 	{'Vampiric Touch', '!prev_gcd(Vampiric Touch)&target.dot(Vampiric Touch).remains<{4+{4/3}}*gcd'},
  	--actions.main+=/void_eruption,if=insanity>=85||{talent.auspicious_spirits.enabled&insanity>={80-shadowy_apparitions_in_flight*4}}
-	{'Void Eruption', 'player.insanity>=85||{talent(5,2)&player.insanity>={80-shadowy_apparitions_in_flight*4}}'},
+	{'!Void Eruption', 'player.insanity>=85||{talent(5,2)&player.insanity>={80-shadowy_apparitions_in_flight*4}}'},
  	--actions.main+=/shadow_crash,if=talent.shadow_crash.enabled
 	{'Shadow Crash', 'talent(6,2)'},
  	--actions.main+=/mindbender,if=talent.mindbender.enabled&set_bonus.tier18_2pc
@@ -161,13 +161,13 @@ local S2M_Clip = {
  	--actions.s2m=shadow_crash,if=talent.shadow_crash.enabled
 	{'!Shadow Crash', 'talent(6,2)'},
  	--actions.s2m+=/mindbender,if=talent.mindbender.enabled
-	{'!Mind Bender', 'talent(6,3)'},
+	{'!Mindbender', 'toggle(cooldowns)&talent(6,3)'},
  	--actions.s2m+=/dispersion,if=!buff.power_infusion.up&!buff.berserking.up&!buff.bloodlust.up
 	{'!Dispersion', '!player.buff(Power Infusion)&!player.buff(Berserking)&!player.buff(Bloodlust)'},
  	--actions.s2m+=/power_infusion,if=buff.insanity_drain_stacks.stack>=85
-	{'!Power Infusion', 'insanity_drain_stacks>=85'},
+	{'!Power Infusion', 'toggle(cooldowns)&insanity_drain_stacks>=85'},
  	--actions.s2m+=/berserking,if=buff.voidform.stack>=90
-	{'!Berserking', 'player.buff(Voidform).stack>=90'},
+	{'!Berserking', 'toggle(cooldowns)&player.buff(Voidform).stack>=90'},
  	--actions.s2m+=/void_bolt,if=dot.shadow_word_pain.remains<3.5*gcd&dot.vampiric_touch.remains<3.5*gcd&target.time_to_die>10
 	{'!Void Eruption', 'target.dot(Shadow Word: Pain).remains<3.5*gcd&target.dot(Vampiric Touch).remains<3.5*gcd&target.time_to_die>10'},
  	--actions.s2m+=/void_bolt,if=dot.shadow_word_pain.remains<3.5*gcd&{talent.auspicious_spirits.enabled||talent.shadowy_insight.enabled}&target.time_to_die>10
@@ -185,15 +185,15 @@ local S2M_Clip = {
  	--actions.s2m+=/shadow_word_death,if=talent.reaper_of_souls.enabled&current_insanity_drain*gcd.max>insanity&{insanity-{current_insanity_drain*gcd.max}+90}<100
 	{'!Shadow Word: Death', 'talent(4,2)&current_insanity_drain*gcd.max>player.insanity&{player.insanity-{current_insanity_drain*gcd.max}+90}<100'},
  	--actions.s2m+=/wait,sec=action.void_bolt.usable_in,if=action.void_bolt.usable_in<gcd.max*0.25
-	{Void_Eruption_Clip, 'action(Void Eruption).cooldown<gcd.max*0.25'},
+--	{Void_Eruption_Clip, 'action(Void Eruption).cooldown<gcd.max*0.25'},
  	--actions.s2m+=/mind_blast
 	{'!Mind Blast'},
  	--actions.s2m+=/wait,sec=action.mind_blast.usable_in,if=action.mind_blast.usable_in<gcd.max*0.25
-	{Mind_Blast_Clip, 'action(Mind Blast).cooldown<gcd.max*0.25'},
+--	{Mind_Blast_Clip, 'action(Mind Blast).cooldown<gcd.max*0.25'},
  	--actions.s2m+=/shadow_word_death,if=cooldown.shadow_word_death.charges=2
 	{'!Shadow Word: Death', 'cooldown(Shadow Word: Death).charges=2'},
  	--actions.s2m+=/shadowfiend,if=!talent.mindbender.enabled,if=buff.voidform.stack>15
-	{'!Shadowfiend', '!talent(6,3)&player.buff(Voidform).stack>15'},
+	{'!Shadowfiend', 'toggle(cooldowns)&!talent(6,3)&player.buff(Voidform).stack>15'},
  	--actions.s2m+=/shadow_word_void,if={insanity-{current_insanity_drain*gcd.max}+75}<100
 	{'!Shadow Word: Void', '{player.insanity-{current_insanity_drain*gcd.max}+75}<100'},
  	--actions.s2m+=/shadow_word_pain,if=!ticking&{active_enemies<5||talent.auspicious_spirits.enabled||talent.shadowy_insight.enabled||artifact.sphere_of_insanity.rank}
@@ -207,7 +207,7 @@ local S2M_Clip = {
  	--actions.s2m+=/shadow_word_pain,if=!ticking&target.time_to_die>10&{active_enemies<5&artifact.sphere_of_insanity.rank}
 	{'!Shadow Word: Pain', '!target.dot(Shadow Word: Pain).ticking&target.time_to_die>10&{player.area(40).enemies<5&artifact(Sphere of Insanity).rank>0}'},
  	--actions.s2m+=/wait,sec=action.void_bolt.usable_in,if=action.void_bolt.usable||action.void_bolt.usable_in<gcd.max*0.8
-	{Void_Eruption_Clip, 'action(Void Eruption).cooldown<gcd.max*0.8'},
+--	{Void_Eruption_Clip, 'action(Void Eruption).cooldown<gcd.max*0.8'},
 }
 
 local S2M = {
@@ -215,39 +215,39 @@ local S2M = {
  	--actions.s2m=shadow_crash,if=talent.shadow_crash.enabled
 	{'Shadow Crash', 'talent(6,2)'},
  	--actions.s2m+=/mindbender,if=talent.mindbender.enabled
-	{'Mind Bender', 'talent(6,3)'},
+	{'Mindbender', 'toggle(cooldowns)&talent(6,3)'},
  	--actions.s2m+=/dispersion,if=!buff.power_infusion.up&!buff.berserking.up&!buff.bloodlust.up
-	{'Dispersion', '!player.buff(Power Infusion)&!player.buff(Berserking)&!player.buff(Bloodlust)'},
+	{'Dispersion', 'toggle(cooldowns)&!player.buff(Power Infusion)&!player.buff(Berserking)&!player.buff(Bloodlust)'},
  	--actions.s2m+=/power_infusion,if=buff.insanity_drain_stacks.stack>=85
-	{'Power Infusion', 'insanity_drain_stacks>=85'},
+	{'Power Infusion', 'toggle(cooldowns)&insanity_drain_stacks>=85'},
  	--actions.s2m+=/berserking,if=buff.voidform.stack>=90
-	{'Berserking', 'player.buff(Voidform).stack>=90'},
+	{'Berserking', 'toggle(cooldowns)&player.buff(Voidform).stack>=90'},
  	--actions.s2m+=/void_bolt,if=dot.shadow_word_pain.remains<3.5*gcd&dot.vampiric_touch.remains<3.5*gcd&target.time_to_die>10
-	{'Void Eruption', 'target.dot(Shadow Word: Pain).remains<3.5*gcd&target.dot(Vampiric Touch).remains<3.5*gcd&target.time_to_die>10'},
+	{'!Void Eruption', 'target.dot(Shadow Word: Pain).remains<3.5*gcd&target.dot(Vampiric Touch).remains<3.5*gcd&target.time_to_die>10'},
  	--actions.s2m+=/void_bolt,if=dot.shadow_word_pain.remains<3.5*gcd&{talent.auspicious_spirits.enabled||talent.shadowy_insight.enabled}&target.time_to_die>10
-	{'Void Eruption', 'target.dot(Shadow Word: Pain).remains<3.5*gcd&{talent(5,2)||talent(5,3)}&target.time_to_die>10'},
+	{'!Void Eruption', 'target.dot(Shadow Word: Pain).remains<3.5*gcd&{talent(5,2)||talent(5,3)}&target.time_to_die>10'},
  	--actions.s2m+=/void_bolt,if=dot.vampiric_touch.remains<3.5*gcd&{talent.sanlayn.enabled||{talent.auspicious_spirits.enabled&artifact.unleash_the_shadows.rank}}&target.time_to_die>10
-	{'Void Eruption', 'target.dot(Vampiric Touch).remains<3.5*gcd&{talent(5,1)||{talent(5,2)&artifact(Unleash the Shadows).rank>0}}&target.time_to_die>10'},
+	{'!Void Eruption', 'target.dot(Vampiric Touch).remains<3.5*gcd&{talent(5,1)||{talent(5,2)&artifact(Unleash the Shadows).rank>0}}&target.time_to_die>10'},
  	--actions.s2m+=/void_bolt,if=dot.shadow_word_pain.remains<3.5*gcd&artifact.sphere_of_insanity.rank&target.time_to_die>10
-	{'Void Eruption', 'target.dot(Shadow Word: Pain).remains<3.5*gcd&artifact(Sphere of Insanity).rank>0&target.time_to_die>10'},
+	{'!Void Eruption', 'target.dot(Shadow Word: Pain).remains<3.5*gcd&artifact(Sphere of Insanity).rank>0&target.time_to_die>10'},
  	--actions.s2m+=/void_bolt
-	{'Void Eruption'},
+	{'!Void Eruption'},
  	--actions.s2m+=/void_torrent
-	{'Void Torrent'},
+	{'Void Torrent', 'toggle(cooldowns)'},
  	--actions.s2m+=/shadow_word_death,if=!talent.reaper_of_souls.enabled&current_insanity_drain*gcd.max>insanity&{insanity-{current_insanity_drain*gcd.max}+30}<100
 	{'Shadow Word: Death', '!talent(4,2)&current_insanity_drain*gcd.max>player.insanity&{player.insanity-{current_insanity_drain*gcd.max}+30}<100'},
  	--actions.s2m+=/shadow_word_death,if=talent.reaper_of_souls.enabled&current_insanity_drain*gcd.max>insanity&{insanity-{current_insanity_drain*gcd.max}+90}<100
 	{'Shadow Word: Death', 'talent(4,2)&current_insanity_drain*gcd.max>player.insanity&{player.insanity-{current_insanity_drain*gcd.max}+90}<100'},
  	--actions.s2m+=/wait,sec=action.void_bolt.usable_in,if=action.void_bolt.usable_in<gcd.max*0.25
-	{Void_Eruption, 'action(Void Eruption).cooldown<gcd.max*0.25'},
+--	{Void_Eruption, 'action(Void Eruption).cooldown<gcd.max*0.25'},
  	--actions.s2m+=/mind_blast
 	{'Mind Blast'},
  	--actions.s2m+=/wait,sec=action.mind_blast.usable_in,if=action.mind_blast.usable_in<gcd.max*0.25
-	{Mind_Blast, 'action(Mind Blast).cooldown<gcd.max*0.25'},
+--	{Mind_Blast, 'action(Mind Blast).cooldown<gcd.max*0.25'},
  	--actions.s2m+=/shadow_word_death,if=cooldown.shadow_word_death.charges=2
 	{'Shadow Word: Death', 'cooldown(Shadow Word: Death).charges=2'},
  	--actions.s2m+=/shadowfiend,if=!talent.mindbender.enabled,if=buff.voidform.stack>15
-	{'Shadowfiend', '!talent(6,3)&player.buff(Voidform).stack>15'},
+	{'Shadowfiend', 'toggle(cooldowns)&!talent(6,3)&player.buff(Voidform).stack>15'},
  	--actions.s2m+=/shadow_word_void,if={insanity-{current_insanity_drain*gcd.max}+75}<100
 	{'Shadow Word: Void', '{player.insanity-{current_insanity_drain*gcd.max}+75}<100'},
  	--actions.s2m+=/shadow_word_pain,if=!ticking&{active_enemies<5||talent.auspicious_spirits.enabled||talent.shadowy_insight.enabled||artifact.sphere_of_insanity.rank}
@@ -261,7 +261,7 @@ local S2M = {
  	--actions.s2m+=/shadow_word_pain,if=!ticking&target.time_to_die>10&{active_enemies<5&artifact.sphere_of_insanity.rank}
 	{'Shadow Word: Pain', '!target.dot(Shadow Word: Pain).ticking&target.time_to_die>10&{player.area(40).enemies<5&artifact(Sphere of Insanity).rank>0}'},
  	--actions.s2m+=/wait,sec=action.void_bolt.usable_in,if=action.void_bolt.usable||action.void_bolt.usable_in<gcd.max*0.8
-	{Void_Eruption, 'action(Void Eruption).cooldown<gcd.max*0.8'},
+--	{Void_Eruption, 'action(Void Eruption).cooldown<gcd.max*0.8'},
  	--actions.s2m+=/mind_sear,if=active_enemies>=3,interrupt=1
 	{'Mind Sear', 'target.area(10).enemies>=3'},
  	--actions.s2m+=/mind_flay,if=!talent.mind_spike.enabled,chain=1,interrupt_immediate=1,interrupt_if=action.void_bolt.usable
@@ -272,21 +272,21 @@ local S2M = {
 
 local VF_Clip = {
  	--actions.vf=surrender_to_madness,if=talent.surrender_to_madness.enabled&insanity>=25&{cooldown.void_bolt.up||cooldown.void_torrent.up||cooldown.shadow_word_death.up||buff.shadowy_insight.up}&target.time_to_die<=variable.s2mcheck-{buff.insanity_drain_stacks.stack}
-	{'!Surrender to Madness', 'talent(7,3)&player.insanity>=25&{cooldown(Void Eruption).up||cooldown(Void Torrent).up||cooldown(Shadow Word: Death).up||player.buff(Shadowy Insight)}&target.time_to_die<=variable.s2mcheck-insanity_drain_stacks'},
+	{'!Surrender to Madness', 'toggle(cooldowns)&talent(7,3)&player.insanity>=25&{cooldown(Void Eruption).up||cooldown(Void Torrent).up||cooldown(Shadow Word: Death).up||player.buff(Shadowy Insight)}&target.time_to_die<=variable.s2mcheck-insanity_drain_stacks'},
  	--actions.vf+=/shadow_crash,if=talent.shadow_crash.enabled
 	{'!Shadow Crash', 'talent(6,2)'},
  	--actions.vf+=/mindbender,if=talent.mindbender.enabled&!talent.surrender_to_madness.enabled
-	{'!Mindbender', 'talent(6,3)&!talent(7,3)'},
+	{'!Mindbender', 'toggle(cooldowns)&talent(6,3)&!talent(7,3)'},
  	--actions.vf+=/mindbender,if=talent.mindbender.enabled&talent.surrender_to_madness.enabled&target.time_to_die>variable.s2mcheck-{buff.insanity_drain_stacks.stack}+30
-	{'!Mindbender', 'talent(6,3)&talent(7,3)&target.time_to_die>variable.s2mcheck-insanity_drain_stacks+30'},
+	{'!Mindbender', 'toggle(cooldowns)&talent(6,3)&talent(7,3)&target.time_to_die>variable.s2mcheck-insanity_drain_stacks+30'},
  	--actions.vf+=/power_infusion,if=buff.voidform.stack>=10&buff.insanity_drain_stacks.stack<=30&!talent.surrender_to_madness.enabled
-	{'!Power Infusion', 'player.buff(Voidform).stack>=10&insanity_drain_stacks<=30&!talent(7,3)'},
+	{'!Power Infusion', 'toggle(cooldowns)&player.buff(Voidform).stack>=10&insanity_drain_stacks<=30&!talent(7,3)'},
  	--actions.vf+=/power_infusion,if=buff.voidform.stack>=10&talent.surrender_to_madness.enabled&target.time_to_die>variable.s2mcheck-{buff.insanity_drain_stacks.stack}+15
-	{'!Power Infusion', 'player.buff(Voidform).stack>10&talent(7,3)&target.time_to_die>variable.s2mcheck-insanity_drain_stacks+15'},
+	{'!Power Infusion', 'toggle(cooldowns)&player.buff(Voidform).stack>10&talent(7,3)&target.time_to_die>variable.s2mcheck-insanity_drain_stacks+15'},
  	--actions.vf+=/berserking,if=buff.voidform.stack>=10&buff.insanity_drain_stacks.stack<=20&!talent.surrender_to_madness.enabled
-	{'!Berserking', 'player.buff(Voidform).stack>=10&insanity_drain_stacks<=20&!talent(7,3)'},
+	{'!Berserking', 'toggle(cooldowns)&player.buff(Voidform).stack>=10&insanity_drain_stacks<=20&!talent(7,3)'},
  	--actions.vf+=/berserking,if=buff.voidform.stack>=10&talent.surrender_to_madness.enabled&target.time_to_die>variable.s2mcheck-{buff.insanity_drain_stacks.stack}+70
-	{'!Berserking', 'player.buff(Voidform).stack>10&talent(7,3)&target.time_to_die>variable.s2mcheck-insanity_drain_stacks+70'},
+	{'!Berserking', 'toggle(cooldowns)&player.buff(Voidform).stack>10&talent(7,3)&target.time_to_die>variable.s2mcheck-insanity_drain_stacks+70'},
  	--actions.vf+=/void_bolt,if=dot.shadow_word_pain.remains<3.5*gcd&dot.vampiric_touch.remains<3.5*gcd&target.time_to_die>10
 	{'!Void Eruption', 'target.dot(Shadow Word: Pain).remains<3.5*gcd&target.dot(Vampiric Touch).remains<3.5*gcd&target.time_to_die>10'},
  	--actions.vf+=/void_bolt,if=dot.shadow_word_pain.remains<3.5*gcd&{talent.auspicious_spirits.enabled||talent.shadowy_insight.enabled}&target.time_to_die>10
@@ -298,23 +298,23 @@ local VF_Clip = {
  	--actions.vf+=/void_bolt
 	{'!Void Eruption'},
  	--actions.vf+=/void_torrent,if=!talent.surrender_to_madness.enabled
-	{'!Void Torrent', '!talent(7,3)'},
+	{'!Void Torrent', 'toggle(cooldowns)&!talent(7,3)'},
  	--actions.vf+=/void_torrent,if=talent.surrender_to_madness.enabled&target.time_to_die>variable.s2mcheck-{buff.insanity_drain_stacks.stack}+60
-	{'!Void Torrent', 'talent(7,3)&target.time_to_die>variable.s2mcheck-insanity_drain_stacks+60'},
+	{'!Void Torrent', 'toggle(cooldowns)&talent(7,3)&target.time_to_die>variable.s2mcheck-insanity_drain_stacks+60'},
  	--actions.vf+=/shadow_word_death,if=!talent.reaper_of_souls.enabled&current_insanity_drain*gcd.max>insanity&{insanity-{current_insanity_drain*gcd.max}+10}<100
 	{'!Shadow Word: Death', '!talent(4,2)&current_insanity_drain*gcd.max>player.insanity&{player.insanity-{current_insanity_drain*gcd.max}+10}<100'},
  	--actions.vf+=/shadow_word_death,if=talent.reaper_of_souls.enabled&current_insanity_drain*gcd.max>insanity&{insanity-{current_insanity_drain*gcd.max}+30}<100
 	{'!Shadow Word: Death', 'talent(4,2)&current_insanity_drain*gcd.max>player.insanity&{player.insanity-{current_insanity_drain*gcd.max}+30}<100'},
  	--actions.vf+=/wait,sec=action.void_bolt.usable_in,if=action.void_bolt.usable_in<gcd.max*0.25
-	{Void_Eruption_Clip, 'action(Void Eruption).cooldown<gcd.max*0.25'},
+--	{Void_Eruption_Clip, 'action(Void Eruption).cooldown<gcd.max*0.25'},
  	--actions.vf+=/mind_blast
 	{'!Mind Blast'},
  	--actions.vf+=/wait,sec=action.mind_blast.usable_in,if=action.mind_blast.usable_in<gcd.max*0.25
-	{Mind_Blast_Clip, 'action(Mind Blast).cooldown<gcd.max*0.25'},
+--	{Mind_Blast_Clip, 'action(Mind Blast).cooldown<gcd.max*0.25'},
  	--actions.vf+=/shadow_word_death,if=cooldown.shadow_word_death.charges=2
 	{'!Shadow Word: Death', 'cooldown(Shadow Word: Death).charges=2'},
  	--actions.vf+=/shadowfiend,if=!talent.mindbender.enabled,if=buff.voidform.stack>15
-	{'!Shadowfiend', '!talent(6,3)&player.buff(Voidform).stack>15'},
+	{'!Shadowfiend', 'toggle(cooldowns)&!talent(6,3)&player.buff(Voidform).stack>15'},
  	--actions.vf+=/shadow_word_void,if={insanity-{current_insanity_drain*gcd.max}+25}<100
 	{'!Shadow Word: Void', '{player.insanity-{current_insanity_drain*gcd.max}+25}<100'},
  	--actions.vf+=/shadow_word_pain,if=!ticking&{active_enemies<5||talent.auspicious_spirits.enabled||talent.shadowy_insight.enabled||artifact.sphere_of_insanity.rank}
@@ -328,55 +328,55 @@ local VF_Clip = {
  	--actions.vf+=/shadow_word_pain,if=!ticking&target.time_to_die>10&{active_enemies<5&artifact.sphere_of_insanity.rank}
 	{'!Shadow Word: Pain', '!target.dot(Shadow Word: Pain).ticking&target.time_to_die>10&{player.area(40).enemies<5&artifact(Sphere of Insanity).rank>0}'},
  	--actions.vf+=/wait,sec=action.void_bolt.usable_in,if=action.void_bolt.usable||action.void_bolt.usable_in<gcd.max*0.8
-	{Void_Eruption_Clip, 'action(Void Eruption).cooldown<gcd.max*0.8'},
+--	{Void_Eruption_Clip, 'action(Void Eruption).cooldown<gcd.max*0.8'},
 }
 
 local VF = {
 	{VF_Clip, 'player.channeling(Mind Sear)||player.channeling(Mind Flay)'},
  	--actions.vf=surrender_to_madness,if=talent.surrender_to_madness.enabled&insanity>=25&{cooldown.void_bolt.up||cooldown.void_torrent.up||cooldown.shadow_word_death.up||buff.shadowy_insight.up}&target.time_to_die<=variable.s2mcheck-{buff.insanity_drain_stacks.stack}
-	{'Surrender to Madness', 'talent(7,3)&player.insanity>=25&{cooldown(Void Eruption).up||cooldown(Void Torrent).up||cooldown(Shadow Word: Death).up||player.buff(Shadowy Insight)}&target.time_to_die<=variable.s2mcheck-insanity_drain_stacks'},
+	{'Surrender to Madness', 'toggle(cooldowns)&talent(7,3)&player.insanity>=25&{cooldown(Void Eruption).up||cooldown(Void Torrent).up||cooldown(Shadow Word: Death).up||player.buff(Shadowy Insight)}&target.time_to_die<=variable.s2mcheck-insanity_drain_stacks'},
  	--actions.vf+=/shadow_crash,if=talent.shadow_crash.enabled
 	{'Shadow Crash', 'talent(6,2)'},
  	--actions.vf+=/mindbender,if=talent.mindbender.enabled&!talent.surrender_to_madness.enabled
-	{'Mindbender', 'talent(6,3)&!talent(7,3)'},
+	{'Mindbender', 'toggle(cooldowns)&talent(6,3)&!talent(7,3)'},
  	--actions.vf+=/mindbender,if=talent.mindbender.enabled&talent.surrender_to_madness.enabled&target.time_to_die>variable.s2mcheck-{buff.insanity_drain_stacks.stack}+30
-	{'Mindbender', 'talent(6,3)&talent(7,3)&target.time_to_die>variable.s2mcheck-insanity_drain_stacks+30'},
+	{'Mindbender', 'toggle(cooldowns)&talent(6,3)&talent(7,3)&target.time_to_die>variable.s2mcheck-insanity_drain_stacks+30'},
  	--actions.vf+=/power_infusion,if=buff.voidform.stack>=10&buff.insanity_drain_stacks.stack<=30&!talent.surrender_to_madness.enabled
-	{'Power Infusion', 'player.buff(Voidform).stack>=10&insanity_drain_stacks<=30&!talent(7,3)'},
+	{'Power Infusion', 'toggle(cooldowns)&player.buff(Voidform).stack>=10&insanity_drain_stacks<=30&!talent(7,3)'},
  	--actions.vf+=/power_infusion,if=buff.voidform.stack>=10&talent.surrender_to_madness.enabled&target.time_to_die>variable.s2mcheck-{buff.insanity_drain_stacks.stack}+15
-	{'Power Infusion', 'player.buff(Voidform).stack>10&talent(7,3)&target.time_to_die>variable.s2mcheck-insanity_drain_stacks+15'},
+	{'Power Infusion', 'toggle(cooldowns)&player.buff(Voidform).stack>10&talent(7,3)&target.time_to_die>variable.s2mcheck-insanity_drain_stacks+15'},
  	--actions.vf+=/berserking,if=buff.voidform.stack>=10&buff.insanity_drain_stacks.stack<=20&!talent.surrender_to_madness.enabled
-	{'Berserking', 'player.buff(Voidform).stack>=10&insanity_drain_stacks<=20&!talent(7,3)'},
+	{'Berserking', 'toggle(cooldowns)&player.buff(Voidform).stack>=10&insanity_drain_stacks<=20&!talent(7,3)'},
  	--actions.vf+=/berserking,if=buff.voidform.stack>=10&talent.surrender_to_madness.enabled&target.time_to_die>variable.s2mcheck-{buff.insanity_drain_stacks.stack}+70
-	{'Berserking', 'player.buff(Voidform).stack>10&talent(7,3)&target.time_to_die>variable.s2mcheck-insanity_drain_stacks+70'},
+	{'Berserking', 'toggle(cooldowns)&player.buff(Voidform).stack>10&talent(7,3)&target.time_to_die>variable.s2mcheck-insanity_drain_stacks+70'},
  	--actions.vf+=/void_bolt,if=dot.shadow_word_pain.remains<3.5*gcd&dot.vampiric_touch.remains<3.5*gcd&target.time_to_die>10
-	{'Void Eruption', 'target.dot(Shadow Word: Pain).remains<3.5*gcd&target.dot(Vampiric Touch).remains<3.5*gcd&target.time_to_die>10'},
+	{'!Void Eruption', 'target.dot(Shadow Word: Pain).remains<3.5*gcd&target.dot(Vampiric Touch).remains<3.5*gcd&target.time_to_die>10'},
  	--actions.vf+=/void_bolt,if=dot.shadow_word_pain.remains<3.5*gcd&{talent.auspicious_spirits.enabled||talent.shadowy_insight.enabled}&target.time_to_die>10
-	{'Void Eruption', 'target.dot(Shadow Word: Pain).remains<3.5*gcd&{talent(5,2)||talent(5,3)}&target.time_to_die>10'},
+	{'!Void Eruption', 'target.dot(Shadow Word: Pain).remains<3.5*gcd&{talent(5,2)||talent(5,3)}&target.time_to_die>10'},
  	--actions.vf+=/void_bolt,if=dot.vampiric_touch.remains<3.5*gcd&{talent.sanlayn.enabled||{talent.auspicious_spirits.enabled&artifact.unleash_the_shadows.rank}}&target.time_to_die>10
-	{'Void Eruption', 'target.dot(Vampiric Touch).remains<3.5*gcd&{talent(5,1)||{talent(5,2)&artifact(Unleash the Shadows).rank>0}}&target.time_to_die>10'},
+	{'!Void Eruption', 'target.dot(Vampiric Touch).remains<3.5*gcd&{talent(5,1)||{talent(5,2)&artifact(Unleash the Shadows).rank>0}}&target.time_to_die>10'},
  	--actions.vf+=/void_bolt,if=dot.shadow_word_pain.remains<3.5*gcd&artifact.sphere_of_insanity.rank&target.time_to_die>10
-	{'Void Eruption', 'target.dot(Shadow Word: Pain).remains<3.5*gcd&artifact(Sphere of Insanity).rank>0&target.time_to_die>10'},
+	{'!Void Eruption', 'target.dot(Shadow Word: Pain).remains<3.5*gcd&artifact(Sphere of Insanity).rank>0&target.time_to_die>10'},
  	--actions.vf+=/void_bolt
-	{'Void Eruption'},
+	{'!Void Eruption'},
  	--actions.vf+=/void_torrent,if=!talent.surrender_to_madness.enabled
-	{'Void Torrent', '!talent(7,3)'},
+	{'Void Torrent', 'toggle(cooldowns)&!talent(7,3)'},
  	--actions.vf+=/void_torrent,if=talent.surrender_to_madness.enabled&target.time_to_die>variable.s2mcheck-{buff.insanity_drain_stacks.stack}+60
-	{'Void Torrent', 'talent(7,3)&target.time_to_die>variable.s2mcheck-insanity_drain_stacks+60'},
+	{'Void Torrent', 'toggle(cooldowns)&talent(7,3)&target.time_to_die>variable.s2mcheck-insanity_drain_stacks+60'},
  	--actions.vf+=/shadow_word_death,if=!talent.reaper_of_souls.enabled&current_insanity_drain*gcd.max>insanity&{insanity-{current_insanity_drain*gcd.max}+10}<100
 	{'Shadow Word: Death', '!talent(4,2)&current_insanity_drain*gcd.max>player.insanity&{player.insanity-{current_insanity_drain*gcd.max}+10}<100'},
  	--actions.vf+=/shadow_word_death,if=talent.reaper_of_souls.enabled&current_insanity_drain*gcd.max>insanity&{insanity-{current_insanity_drain*gcd.max}+30}<100
 	{'Shadow Word: Death', 'talent(4,2)&current_insanity_drain*gcd.max>player.insanity&{player.insanity-{current_insanity_drain*gcd.max}+30}<100'},
  	--actions.vf+=/wait,sec=action.void_bolt.usable_in,if=action.void_bolt.usable_in<gcd.max*0.25
-	{Void_Eruption, 'action(Void Eruption).cooldown<gcd.max*0.25'},
+--	{Void_Eruption, 'action(Void Eruption).cooldown<gcd.max*0.25'},
  	--actions.vf+=/mind_blast
 	{'Mind Blast'},
  	--actions.vf+=/wait,sec=action.mind_blast.usable_in,if=action.mind_blast.usable_in<gcd.max*0.25
-	{Mind_Blast, 'action(Mind Blast).cooldown<gcd.max*0.25'},
+--	{Mind_Blast, 'action(Mind Blast).cooldown<gcd.max*0.25'},
  	--actions.vf+=/shadow_word_death,if=cooldown.shadow_word_death.charges=2
 	{'Shadow Word: Death', 'cooldown(Shadow Word: Death).charges=2'},
  	--actions.vf+=/shadowfiend,if=!talent.mindbender.enabled,if=buff.voidform.stack>15
-	{'Shadowfiend', '!talent(6,3)&player.buff(Voidform).stack>15'},
+	{'Shadowfiend', 'toggle(cooldowns)&!talent(6,3)&player.buff(Voidform).stack>15'},
  	--actions.vf+=/shadow_word_void,if={insanity-{current_insanity_drain*gcd.max}+25}<100
 	{'Shadow Word: Void', '{player.insanity-{current_insanity_drain*gcd.max}+25}<100'},
  	--actions.vf+=/shadow_word_pain,if=!ticking&{active_enemies<5||talent.auspicious_spirits.enabled||talent.shadowy_insight.enabled||artifact.sphere_of_insanity.rank}
@@ -390,7 +390,7 @@ local VF = {
  	--actions.vf+=/shadow_word_pain,if=!ticking&target.time_to_die>10&{active_enemies<5&artifact.sphere_of_insanity.rank}
 	{'Shadow Word: Pain', '!target.dot(Shadow Word: Pain).ticking&target.time_to_die>10&{player.area(40).enemies<5&artifact(Sphere of Insanity).rank>0}'},
  	--actions.vf+=/wait,sec=action.void_bolt.usable_in,if=action.void_bolt.usable||action.void_bolt.usable_in<gcd.max*0.8
-	{Void_Eruption, 'action(Void Eruption).cooldown<gcd.max*0.8'},
+--	{Void_Eruption, 'action(Void Eruption).cooldown<gcd.max*0.8'},
  	--actions.vf+=/mind_sear,if=active_enemies>=3,interrupt=1
 	{'Mind Sear', 'target.area(10).enemies>=3'},
  	--actions.vf+=/mind_flay,if=!talent.mind_spike.enabled,chain=1,interrupt_immediate=1,interrupt_if=action.void_bolt.usable

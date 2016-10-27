@@ -667,11 +667,12 @@ end)
 --actions+=/variable,op=set,name=s2mcheck,value=0.8*(45+((raw_haste_pct*100)*(2+(1*talent.reaper_of_souls.enabled)+(2*artifact.mass_hysteria.rank)-(1*talent.sanlayn.enabled))))-(variable.actors_fight_time_mod*nonexecute_actors_pct)
 --actions+=/variable,op=min,name=s2mcheck,value=180
 
+--/dump NeP.DSL:Get('variable.actors_fight_time_mod')()
 NeP.DSL:Register('variable.actors_fight_time_mod', function()
   local time = NeP.DSL:Get('combat.time')('player')
   local target_time_to_die = NeP.DSL:Get('time_to_die')('target')
   -- time+target.time_to_die>450&time+target.time_to_die<600
-  if time + target_time_to_die > 450 and time + target_time_to_die < 600 then
+  if (time + target_time_to_die) > 450 and (time + target_time_to_die) < 600 then
         -- -((-(450)+(time+target.time_to_die))%10)
     return -(( -(450) +( time + target_time_to_die)) / 10)
         -- time+target.time_to_die<=450
