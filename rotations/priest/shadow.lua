@@ -59,6 +59,7 @@ local PreCombat = {
 	{'Shadowform', '!player.buff(Shadowform)&!player.buff(Voidform)'},
  	--actions.precombat+=/mind_blast
 	--{'', ''},
+	{'Power Word: Shield', 'talent(2,2)&player.moving'},
 }
 
 local Void_Eruption = {
@@ -433,10 +434,25 @@ local Interrupts = {
 	{'Arcane Torrent', 'target.range<=8&spell(Silence).cooldown>gcd&!prev_gcd(Silence)'},
 }
 
+local Survival = { -- copy&pasta from MTS core,thx :P
+	--Healthstone at or below 20% health. Active when NOT channeling Void Torrent.
+	{'#Healthstone', 'player.health<=20&!player.channeling(Void Torrent)'},
+	--Ancient Healing Potion at or below 20% health. Active when NOT channeling Void Torrent.
+	{'#Ancient Healing Potion', 'player.health<=20&!player.channeling(Void Torrent)'},
+	--Gift of the Naaru at or below 40% health. Active when NOT channeling Void Torrent.
+	{'Gift of the Naaru', 'player.health<=40&!player.channeling(Void Torrent)'},
+	--Power Word: Shield at or below 40% health. Active when NOT in Surrender to Madness or channeling Void Torrent.
+	{'Power Word: Shield', 'player.health<=40&!player.buff(Surrender to Madness)&!player.channeling(Void Torrent)'},
+	--Dispersion at or below 15% health. Last attempt at survival.
+	{'!Dispersion', 'player.health<=15'},
+	--Power Word: Shield for Body and Soul to gain increased movement speed if moving. Active when NOT in Surrender to Madness or channeling Void Torrent.
+	{'Power Word: Shield', 'talent(2,2)&player.moving&!player.buff(Surrender to Madness)'},
+}
+
 local inCombat = {
 	{Keybinds},
 	{Interrupts, 'target.interruptAt(50)&toggle(interrupts)&target.infront&target.range<40'},
-	--{Survival, 'player.health < 100'},
+	{Survival, 'player.health<100'},
 	{xCombat, 'target.range<40&target.infront'},
 }
 
