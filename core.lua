@@ -1,6 +1,6 @@
 local _, Xeer = ...
 
-Xeer.Version = '1.7.15'
+Xeer.Version = '1.7.16'
 Xeer.Branch = 'RELEASE'
 Xeer.Name = 'NerdPack - Xeer Routines'
 Xeer.Author = 'Xeer'
@@ -483,8 +483,8 @@ end
 ---------------------------------PRIEST-----------------------------------------
 --------------------------------------------------------------------------------
 
-Xeer.Voidform_Summary = false
-Xeer.S2M_Summary = false
+Xeer.Voidform_Summary = true
+Xeer.S2M_Summary = true
 
 --Xeer.Voidform_Drain_Stacks = 0
 --Xeer.Voidform_Current_Drain_Rate = 0
@@ -575,14 +575,14 @@ NeP.Listener:Add('Xeer_Listener1', 'COMBAT_LOG_EVENT_UNFILTERED', function(times
     end
 
     if ((combatevent == "SPELL_AURA_APPLIED" or combatevent == "SPELL_AURA_REFRESH") and spellID == 193396 and sourceName == UnitName("player")) then
-			print('Demonic Empowerment')
+			--print('Demonic Empowerment')
 				if(Xeer.IsMinion(destName)) then
             Xeer.active_demons[destGUID].empower_time = GetTime()
         end
     end
 
     if (combatevent == "SPELL_CAST_SUCCESS" and spellID == 196277 and sourceName == UnitName("player")) then
-			print('Implosion')
+			--print('Implosion')
 				Xeer.implosion_cast()
     end
 	Xeer.update_demons()
@@ -607,7 +607,7 @@ NeP.Listener:Add('Xeer_Listener2', 'COMBAT_LOG_EVENT_UNFILTERED', function(time,
 		                Xeer_SA_NUM_UNITS = Xeer_SA_NUM_UNITS + 1
 		            end
 		            Xeer.SA_TOTAL = Xeer.SA_TOTAL + 1
-								print('SA spawn :'..Xeer.SA_TOTAL..' remaining SA')
+								--print('SA spawn :'..Xeer.SA_TOTAL..' remaining SA')
 		            Xeer_SA_STATS[destGUID].Count = Xeer_SA_STATS[destGUID].Count + 1
 		            Xeer_SA_STATS[destGUID].LastUpdate = CurrentTime
 		        elseif spellid == 148859 and type == "SPELL_DAMAGE" then --Auspicious Spirit Hit
@@ -616,7 +616,7 @@ NeP.Listener:Add('Xeer_Listener2', 'COMBAT_LOG_EVENT_UNFILTERED', function(time,
 								else
 									Xeer.SA_TOTAL = Xeer.SA_TOTAL - 1
 								end
-								print('SA hit :'..Xeer.SA_TOTAL..' remaining SA')
+								--print('SA hit :'..Xeer.SA_TOTAL..' remaining SA')
 		            if Xeer_SA_STATS[destGUID] and Xeer_SA_STATS[destGUID].Count > 0 then
 		                Xeer_SA_STATS[destGUID].Count = Xeer_SA_STATS[destGUID].Count - 1
 		                Xeer_SA_STATS[destGUID].LastUpdate = CurrentTime
@@ -687,9 +687,9 @@ NeP.Listener:Add('Xeer_Listener3', 'COMBAT_LOG_EVENT_UNFILTERED', function(time,
                 Xeer.Voidform_Total_Stacks = Xeer.Voidform_Total_Stacks + 1
                 if Xeer.Voidform_VoidTorrent_Start == nil and Xeer.Voidform_Dispersion_Start == nil then
 									Xeer.Voidform_Drain_Stacks = Xeer.Voidform_Drain_Stacks + 1
-								 	print('Xeer.Voidform_Drain_Stacks1: '..Xeer.Voidform_Drain_Stacks)
+								 --	print('Xeer.Voidform_Drain_Stacks1: '..Xeer.Voidform_Drain_Stacks)
 								 	Xeer.Voidform_Current_Drain_Rate = (9.0 + ((Xeer.Voidform_Drain_Stacks - 1) / 2))
-								 	print('Xeer.Voidform_Current_Drain_Rate1: '..Xeer.Voidform_Current_Drain_Rate)
+								 --	print('Xeer.Voidform_Current_Drain_Rate1: '..Xeer.Voidform_Current_Drain_Rate)
                 elseif Xeer.Voidform_VoidTorrent_Start ~= nil then
                     Xeer.Voidform_VoidTorrent_Stacks = Xeer.Voidform_VoidTorrent_Stacks + 1
                 else
@@ -713,9 +713,9 @@ NeP.Listener:Add('Xeer_Listener3', 'COMBAT_LOG_EVENT_UNFILTERED', function(time,
                     Xeer.Voidform_Total_Stacks = Xeer.Voidform_Total_Stacks + 1
                     if Xeer.Voidform_VoidTorrent_Start == nil and Xeer.Voidform_Dispersion_Start == nil then
                         Xeer.Voidform_Drain_Stacks = Xeer.Voidform_Drain_Stacks + 1
-												print('Xeer.Voidform_Drain_Stacks2: '..Xeer.Voidform_Drain_Stacks)
+											--	print('Xeer.Voidform_Drain_Stacks2: '..Xeer.Voidform_Drain_Stacks)
 												Xeer.Voidform_Current_Drain_Rate = (9.0 + ((Xeer.Voidform_Drain_Stacks - 1) / 2))
-												print('Xeer.Voidform_Current_Drain_Rate2: '..Xeer.Voidform_Current_Drain_Rate)
+											--	print('Xeer.Voidform_Current_Drain_Rate2: '..Xeer.Voidform_Current_Drain_Rate)
                     elseif Xeer.Voidform_VoidTorrent_Start ~= nil then
                         Xeer.Voidform_VoidTorrent_Stacks = Xeer.Voidform_VoidTorrent_Stacks + 1
                     else
