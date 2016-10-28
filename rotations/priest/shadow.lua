@@ -59,7 +59,6 @@ local PreCombat = {
 	{'Shadowform', '!player.buff(Shadowform)&!player.buff(Voidform)'},
  	--actions.precombat+=/mind_blast
 	--{'', ''},
-	{'Power Word: Shield', 'talent(2,2)&player.moving'},
 }
 
 local Void_Eruption = {
@@ -189,22 +188,22 @@ local S2M_Clip = {
 	{'!Void Eruption'},
  	--actions.s2m+=/void_torrent
 	{'!Void Torrent'},
- 	--actions.s2m+=/shadow_word_death,if=!talent.reaper_of_souls.enabled&current_insanity_drain*gcd.max>insanity&{insanity-{current_insanity_drain*gcd.max}+30}<100
-	{'!Shadow Word: Death', '!talent(4,2)&current_insanity_drain*gcd.max>player.insanity&{player.insanity-{current_insanity_drain*gcd.max}+30}<100'},
- 	--actions.s2m+=/shadow_word_death,if=talent.reaper_of_souls.enabled&current_insanity_drain*gcd.max>insanity&{insanity-{current_insanity_drain*gcd.max}+90}<100
-	{'!Shadow Word: Death', 'talent(4,2)&current_insanity_drain*gcd.max>player.insanity&{player.insanity-{current_insanity_drain*gcd.max}+90}<100'},
+ 	--actions.s2m+=/shadow_word_death,if=!talent.reaper_of_souls.enabled&current_insanity_drain*gcd.max>insanity&{insanity-current_insanity_drain*gcd.max+30}<100
+	{'!Shadow Word: Death', '!talent(4,2)&current_insanity_drain*gcd.max>player.insanity&{parser_bypass1+30}<100'},
+ 	--actions.s2m+=/shadow_word_death,if=talent.reaper_of_souls.enabled&current_insanity_drain*gcd.max>insanity&{insanity-current_insanity_drain*gcd.max+90}<100
+	{'!Shadow Word: Death', 'talent(4,2)&current_insanity_drain*gcd.max>player.insanity&{parser_bypass1+90}<100'},
  	--actions.s2m+=/wait,sec=action.void_bolt.usable_in,if=action.void_bolt.usable_in<gcd.max*0.25
---	{Void_Eruption_Clip, 'action(Void Eruption).cooldown<gcd.max*0.25'},
+	{Void_Eruption_Clip, 'action(Void Eruption).cooldown<gcd.max*0.25'},
  	--actions.s2m+=/mind_blast
 	{'!Mind Blast'},
  	--actions.s2m+=/wait,sec=action.mind_blast.usable_in,if=action.mind_blast.usable_in<gcd.max*0.25
---	{Mind_Blast_Clip, 'action(Mind Blast).cooldown<gcd.max*0.25'},
+	{Mind_Blast_Clip, 'action(Mind Blast).cooldown<gcd.max*0.25'},
  	--actions.s2m+=/shadow_word_death,if=cooldown.shadow_word_death.charges=2
 	{'!Shadow Word: Death', 'cooldown(Shadow Word: Death).charges=2'},
  	--actions.s2m+=/shadowfiend,if=!talent.mindbender.enabled,if=buff.voidform.stack>15
 	{'!Shadowfiend', 'toggle(cooldowns)&!talent(6,3)&player.buff(Voidform).stack>15'},
- 	--actions.s2m+=/shadow_word_void,if={insanity-{current_insanity_drain*gcd.max}+75}<100
-	{'!Shadow Word: Void', '{player.insanity-{current_insanity_drain*gcd.max}+75}<100'},
+ 	--actions.s2m+=/shadow_word_void,if={insanity-current_insanity_drain*gcd.max+75}<100
+	{'!Shadow Word: Void', '{parser_bypass1+75}<100'},
  	--actions.s2m+=/shadow_word_pain,if=!ticking&{active_enemies<5||talent.auspicious_spirits.enabled||talent.shadowy_insight.enabled||artifact.sphere_of_insanity.rank}
 	{'!Shadow Word: Pain', '!target.dot(Shadow Word: Pain).ticking&{player.area(40).enemies<5||talent(5,2)||talent(5,3)||artifact(Sphere of Insanity).rank>0}'},
  	--actions.s2m+=/vampiric_touch,if=!ticking&{active_enemies<4||talent.sanlayn.enabled||{talent.auspicious_spirits.enabled&artifact.unleash_the_shadows.rank}}
@@ -244,22 +243,22 @@ local S2M = {
 	{'!Void Eruption'},
  	--actions.s2m+=/void_torrent
 	{'Void Torrent', 'toggle(cooldowns)'},
- 	--actions.s2m+=/shadow_word_death,if=!talent.reaper_of_souls.enabled&current_insanity_drain*gcd.max>insanity&{insanity-{current_insanity_drain*gcd.max}+30}<100
-	{'Shadow Word: Death', '!talent(4,2)&current_insanity_drain*gcd.max>player.insanity&{player.insanity-{current_insanity_drain*gcd.max}+30}<100'},
- 	--actions.s2m+=/shadow_word_death,if=talent.reaper_of_souls.enabled&current_insanity_drain*gcd.max>insanity&{insanity-{current_insanity_drain*gcd.max}+90}<100
-	{'Shadow Word: Death', 'talent(4,2)&current_insanity_drain*gcd.max>player.insanity&{player.insanity-{current_insanity_drain*gcd.max}+90}<100'},
+ 	--actions.s2m+=/shadow_word_death,if=!talent.reaper_of_souls.enabled&current_insanity_drain*gcd.max>insanity&{insanity-current_insanity_drain*gcd.max+30}<100
+	{'Shadow Word: Death', '!talent(4,2)&current_insanity_drain*gcd.max>player.insanity&{parser_bypass1+30}<100'},
+ 	--actions.s2m+=/shadow_word_death,if=talent.reaper_of_souls.enabled&current_insanity_drain*gcd.max>insanity&{insanity-current_insanity_drain*gcd.max+90}<100
+	{'Shadow Word: Death', 'talent(4,2)&current_insanity_drain*gcd.max>player.insanity&{parser_bypass1+90}<100'},
  	--actions.s2m+=/wait,sec=action.void_bolt.usable_in,if=action.void_bolt.usable_in<gcd.max*0.25
---	{Void_Eruption, 'action(Void Eruption).cooldown<gcd.max*0.25'},
+	{Void_Eruption, 'action(Void Eruption).cooldown<gcd.max*0.25'},
  	--actions.s2m+=/mind_blast
 	{'Mind Blast'},
  	--actions.s2m+=/wait,sec=action.mind_blast.usable_in,if=action.mind_blast.usable_in<gcd.max*0.25
---	{Mind_Blast, 'action(Mind Blast).cooldown<gcd.max*0.25'},
+	{Mind_Blast, 'action(Mind Blast).cooldown<gcd.max*0.25'},
  	--actions.s2m+=/shadow_word_death,if=cooldown.shadow_word_death.charges=2
 	{'Shadow Word: Death', 'cooldown(Shadow Word: Death).charges=2'},
  	--actions.s2m+=/shadowfiend,if=!talent.mindbender.enabled,if=buff.voidform.stack>15
 	{'Shadowfiend', 'toggle(cooldowns)&!talent(6,3)&player.buff(Voidform).stack>15'},
- 	--actions.s2m+=/shadow_word_void,if={insanity-{current_insanity_drain*gcd.max}+75}<100
-	{'Shadow Word: Void', '{player.insanity-{current_insanity_drain*gcd.max}+75}<100'},
+ 	--actions.s2m+=/shadow_word_void,if={insanity-current_insanity_drain*gcd.max+75}<100
+	{'Shadow Word: Void', '{parser_bypass1+75}<100'},
  	--actions.s2m+=/shadow_word_pain,if=!ticking&{active_enemies<5||talent.auspicious_spirits.enabled||talent.shadowy_insight.enabled||artifact.sphere_of_insanity.rank}
 	{'Shadow Word: Pain', '!target.dot(Shadow Word: Pain).ticking&{player.area(40).enemies<5||talent(5,2)||talent(5,3)||artifact(Sphere of Insanity).rank>0}'},
  	--actions.s2m+=/vampiric_touch,if=!ticking&{active_enemies<4||talent.sanlayn.enabled||{talent.auspicious_spirits.enabled&artifact.unleash_the_shadows.rank}}
@@ -312,22 +311,22 @@ local VF_Clip = {
 	{'!Void Torrent', 'toggle(cooldowns)&!talent(7,3)'},
  	--actions.vf+=/void_torrent,if=talent.surrender_to_madness.enabled&target.time_to_die>variable.s2mcheck-{buff.insanity_drain_stacks.stack}+60
 	{'!Void Torrent', 'toggle(cooldowns)&talent(7,3)&target.time_to_die>variable.s2mcheck-insanity_drain_stacks+60'},
- 	--actions.vf+=/shadow_word_death,if=!talent.reaper_of_souls.enabled&current_insanity_drain*gcd.max>insanity&{insanity-{current_insanity_drain*gcd.max}+10}<100
-	{'!Shadow Word: Death', '!talent(4,2)&current_insanity_drain*gcd.max>player.insanity&{player.insanity-{current_insanity_drain*gcd.max}+10}<100'},
- 	--actions.vf+=/shadow_word_death,if=talent.reaper_of_souls.enabled&current_insanity_drain*gcd.max>insanity&{insanity-{current_insanity_drain*gcd.max}+30}<100
-	{'!Shadow Word: Death', 'talent(4,2)&current_insanity_drain*gcd.max>player.insanity&{player.insanity-{current_insanity_drain*gcd.max}+30}<100'},
+ 	--actions.vf+=/shadow_word_death,if=!talent.reaper_of_souls.enabled&current_insanity_drain*gcd.max>insanity&{insanity-current_insanity_drain*gcd.max+10}<100
+	{'!Shadow Word: Death', '!talent(4,2)&current_insanity_drain*gcd.max>player.insanity&{parser_bypass1+10}<100'},
+ 	--actions.vf+=/shadow_word_death,if=talent.reaper_of_souls.enabled&current_insanity_drain*gcd.max>insanity&{insanity-current_insanity_drain*gcd.max+30}<100
+	{'!Shadow Word: Death', 'talent(4,2)&current_insanity_drain*gcd.max>player.insanity&{parser_bypass1+30}<100'},
  	--actions.vf+=/wait,sec=action.void_bolt.usable_in,if=action.void_bolt.usable_in<gcd.max*0.25
---	{Void_Eruption_Clip, 'action(Void Eruption).cooldown<gcd.max*0.25'},
+	{Void_Eruption_Clip, 'action(Void Eruption).cooldown<gcd.max*0.25'},
  	--actions.vf+=/mind_blast
 	{'!Mind Blast'},
  	--actions.vf+=/wait,sec=action.mind_blast.usable_in,if=action.mind_blast.usable_in<gcd.max*0.25
---	{Mind_Blast_Clip, 'action(Mind Blast).cooldown<gcd.max*0.25'},
+	{Mind_Blast_Clip, 'action(Mind Blast).cooldown<gcd.max*0.25'},
  	--actions.vf+=/shadow_word_death,if=cooldown.shadow_word_death.charges=2
 	{'!Shadow Word: Death', 'cooldown(Shadow Word: Death).charges=2'},
  	--actions.vf+=/shadowfiend,if=!talent.mindbender.enabled,if=buff.voidform.stack>15
 	{'!Shadowfiend', 'toggle(cooldowns)&!talent(6,3)&player.buff(Voidform).stack>15'},
- 	--actions.vf+=/shadow_word_void,if={insanity-{current_insanity_drain*gcd.max}+25}<100
-	{'!Shadow Word: Void', '{player.insanity-{current_insanity_drain*gcd.max}+25}<100'},
+ 	--actions.vf+=/shadow_word_void,if={insanity-current_insanity_drain*gcd.max+25}<100
+	{'!Shadow Word: Void', '{parser_bypass1+25}<100'},
  	--actions.vf+=/shadow_word_pain,if=!ticking&{active_enemies<5||talent.auspicious_spirits.enabled||talent.shadowy_insight.enabled||artifact.sphere_of_insanity.rank}
 	{'!Shadow Word: Pain', '!target.dot(Shadow Word: Pain).ticking&{player.area(40).enemies<5||talent(5,2)||talent(5,3)||artifact(Sphere of Insanity).rank>0}'},
  	--actions.vf+=/vampiric_touch,if=!ticking&{active_enemies<4||talent.sanlayn.enabled||{talent.auspicious_spirits.enabled&artifact.unleash_the_shadows.rank}}
@@ -375,10 +374,10 @@ local VF = {
 	{'Void Torrent', 'toggle(cooldowns)&!talent(7,3)'},
  	--actions.vf+=/void_torrent,if=talent.surrender_to_madness.enabled&target.time_to_die>variable.s2mcheck-{buff.insanity_drain_stacks.stack}+60
 	{'Void Torrent', 'toggle(cooldowns)&talent(7,3)&target.time_to_die>variable.s2mcheck-insanity_drain_stacks+60'},
- 	--actions.vf+=/shadow_word_death,if=!talent.reaper_of_souls.enabled&current_insanity_drain*gcd.max>insanity&{insanity-{current_insanity_drain*gcd.max}+10}<100
-	{'Shadow Word: Death', '!talent(4,2)&current_insanity_drain*gcd.max>player.insanity&{player.insanity-{current_insanity_drain*gcd.max}+10}<100'},
- 	--actions.vf+=/shadow_word_death,if=talent.reaper_of_souls.enabled&current_insanity_drain*gcd.max>insanity&{insanity-{current_insanity_drain*gcd.max}+30}<100
-	{'Shadow Word: Death', 'talent(4,2)&current_insanity_drain*gcd.max>player.insanity&{player.insanity-{current_insanity_drain*gcd.max}+30}<100'},
+ 	--actions.vf+=/shadow_word_death,if=!talent.reaper_of_souls.enabled&current_insanity_drain*gcd.max>insanity&{insanity-current_insanity_drain*gcd.max+10}<100
+	{'Shadow Word: Death', '!talent(4,2)&current_insanity_drain*gcd.max>player.insanity&{parser_bypass1+10}<100'},
+ 	--actions.vf+=/shadow_word_death,if=talent.reaper_of_souls.enabled&current_insanity_drain*gcd.max>insanity&{insanity-current_insanity_drain*gcd.max+30}<100
+	{'Shadow Word: Death', 'talent(4,2)&current_insanity_drain*gcd.max>player.insanity&{parser_bypass1+30}<100'},
  	--actions.vf+=/wait,sec=action.void_bolt.usable_in,if=action.void_bolt.usable_in<gcd.max*0.25
 --	{Void_Eruption, 'action(Void Eruption).cooldown<gcd.max*0.25'},
  	--actions.vf+=/mind_blast
@@ -389,8 +388,8 @@ local VF = {
 	{'Shadow Word: Death', 'cooldown(Shadow Word: Death).charges=2'},
  	--actions.vf+=/shadowfiend,if=!talent.mindbender.enabled,if=buff.voidform.stack>15
 	{'Shadowfiend', 'toggle(cooldowns)&!talent(6,3)&player.buff(Voidform).stack>15'},
- 	--actions.vf+=/shadow_word_void,if={insanity-{current_insanity_drain*gcd.max}+25}<100
-	{'Shadow Word: Void', '{player.insanity-{current_insanity_drain*gcd.max}+25}<100'},
+ 	--actions.vf+=/shadow_word_void,if={insanity-current_insanity_drain*gcd.max+25}<100
+	{'Shadow Word: Void', '{parser_bypass1+25}<100'},
  	--actions.vf+=/shadow_word_pain,if=!ticking&{active_enemies<5||talent.auspicious_spirits.enabled||talent.shadowy_insight.enabled||artifact.sphere_of_insanity.rank}
 	{'Shadow Word: Pain', '!target.dot(Shadow Word: Pain).ticking&{player.area(40).enemies<5||talent(5,2)||talent(5,3)||artifact(Sphere of Insanity).rank>0}'},
  	--actions.vf+=/vampiric_touch,if=!ticking&{active_enemies<4||talent.sanlayn.enabled||{talent.auspicious_spirits.enabled&artifact.unleash_the_shadows.rank}}
@@ -434,26 +433,26 @@ local Interrupts = {
 	{'Arcane Torrent', 'target.range<=8&spell(Silence).cooldown>gcd&!prev_gcd(Silence)'},
 }
 
-local Survival = { -- copy&pasta from MTS core,thx :P
+local Survival = { -- copy&pasta from MTS core :P
 	--Healthstone at or below 20% health. Active when NOT channeling Void Torrent.
-	{'#Healthstone', 'player.health<=20&!player.channeling(Void Torrent)'},
+	{'#Healthstone', 'player.health <= 20 & !player.channeling(Void Torrent)'},
 	--Ancient Healing Potion at or below 20% health. Active when NOT channeling Void Torrent.
-	{'#Ancient Healing Potion', 'player.health<=20&!player.channeling(Void Torrent)'},
+	{'#Ancient Healing Potion', 'player.health <= 20 & !player.channeling(Void Torrent)'},
 	--Gift of the Naaru at or below 40% health. Active when NOT channeling Void Torrent.
-	{'Gift of the Naaru', 'player.health<=40&!player.channeling(Void Torrent)'},
+	{'Gift of the Naaru', 'player.health <= 40 & !player.channeling(Void Torrent)'},
 	--Power Word: Shield at or below 40% health. Active when NOT in Surrender to Madness or channeling Void Torrent.
-	{'Power Word: Shield', 'player.health<=40&!player.buff(Surrender to Madness)&!player.channeling(Void Torrent)'},
+	{'Power Word: Shield', 'player.health <= 40 & !player.buff(Surrender to Madness) & !player.channeling(Void Torrent)'},
 	--Dispersion at or below 15% health. Last attempt at survival.
-	{'!Dispersion', 'player.health<=15'},
+	{'!Dispersion', 'player.health <= 15'},
 	--Power Word: Shield for Body and Soul to gain increased movement speed if moving. Active when NOT in Surrender to Madness or channeling Void Torrent.
-	{'Power Word: Shield', 'talent(2,2)&player.moving&!player.buff(Surrender to Madness)'},
+	{'Power Word: Shield', 'talent(2,2) & player.moving & !player.buff(Surrender to Madness)'},
 }
 
 local inCombat = {
 	{Keybinds},
 	{Interrupts, 'target.interruptAt(50)&toggle(interrupts)&target.infront&target.range<40'},
-	{Survival, 'player.health<100'},
-	{xCombat, 'target.range<40&target.infront'},
+	--{Survival, 'player.health < 100'},
+	{xCombat, 'target.range<40&target.infront&!player.channeling(Void Torrent)'},
 }
 
 local outCombat = {

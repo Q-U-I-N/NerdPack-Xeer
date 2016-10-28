@@ -49,7 +49,7 @@ local PreCombat = {
 
 
 local Survival = {
--- {'', ''},
+	{'Victory Rush', 'player.health<=70'},
 }
 
 local Cooldowns = {
@@ -196,7 +196,7 @@ local inCombat = {
 	{Keybinds},
 	{Interrupts, 'target.interruptAt(50)&toggle(interrupts)&target.infront&target.range<=8'},
 	--{XeerX},
-	--{Survival, 'player.health < 100'},
+	{Survival, 'player.health<100'},
 	--{Cooldowns, 'toggle(cooldowns)&target.range<8'},
 	{Util, 'target.range<8'},
 	--actions+=/run_action_list,name=cleave,if=spell_targets.whirlwind>=2&talent.sweeping_strikes.enabled

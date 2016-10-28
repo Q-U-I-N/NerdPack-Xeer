@@ -725,19 +725,38 @@ end)
 
 --/dump NeP.DSL:Get('shadowy_apparitions_in_flight')()
 NeP.DSL:Register('shadowy_apparitions_in_flight', function()
-	return Xeer.SA_TOTAL
+  local x = Xeer.SA_TOTAL
+  return x
+end)
+
+NeP.DSL:Register('parser_bypass1', function()
+  --player.insanity-current_insanity_drain*gcd.max
+  local x = (NeP.DSL:Get('insanity')('player') - (NeP.DSL:Get('current_insanity_drain')() * NeP.DSL:Get('gcd.max')()))
+  return x
 end)
 
 --/dump NeP.DSL:Get('insanity_drain_stacks')()
 NeP.DSL:Register('insanity_drain_stacks', function()
-  return Xeer.Voidform_Drain_Stacks
+  local x = Xeer.Voidform_Drain_Stacks
+  return x
 end)
 
 --/dump NeP.DSL:Get('current_insanity_drain')()
 NeP.DSL:Register('current_insanity_drain', function()
-  return Xeer.Voidform_Current_Drain_Rate
+  local x = Xeer.Voidform_Current_Drain_Rate
+  return x
 end)
 
+--{current_insanity_drain*gcd.max>player.insanity}&{player.insanity-{current_insanity_drain*gcd.max}+90}<100
+--/dump (NeP.DSL:Get('current_insanity_drain')() * NeP.DSL:Get('gcd.max')()) > NeP.DSL:Get('insanity')('player')
+--/dump (NeP.DSL:Get('insanity')('player') - (NeP.DSL:Get('current_insanity_drain')() * NeP.DSL:Get('gcd.max')()) + 90) < 100
+--[[
+Locals:
+arg1 = "41.8895<100"
+arg2 = "Schattenwort: Tod"
+(*temporary) = nil
+(*temporary) = "attempt to perform arithmetic on local 'arg1' (a string value)"
+--]]
 --------------------------------------------------------------------------------
 ---------------------------------- WIP -----------------------------------------
 --------------------------------------------------------------------------------

@@ -49,7 +49,7 @@ local PreCombat = {
 
 
 local Survival = {
--- {'', ''},
+	{'Victory Rush', 'player.health<=70'},
 }
 
 local Cooldowns = {
@@ -118,7 +118,7 @@ local ST = {
 	--actions.single_target+=/raging_blow,if=buff.enrage.down
 	{'Raging Blow', '!player.buff(Enrage)'},
 	--actions.single_target+=/execute,if=artifact.juggernaut.enabled
-	--{'Execute', ''}, --not possible now ...?, because dont have artifact traits check function
+	{'Execute', 'artifact(Juggernaut).enabled'},
 	--actions.single_target+=/raging_blow
 	{'Raging Blow'},
 	--actions.single_target+=/bloodthirst
