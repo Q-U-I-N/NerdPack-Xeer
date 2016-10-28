@@ -9,6 +9,13 @@ local exeOnLoad = function()
 	print('|cffADFF2F --- |rRecommended Talents2: 1/1 - 2/2 - 3/1 - 4/2 - 5/2 - 6/1 - 7/3')
 	print('|cffADFF2F ----------------------------------------------------------------------|r')
 
+	NeP.Interface:AddToggle({
+		key = 'xS2M',
+		name = 'S2M',
+		text = 'ON/OFF using S2M in rotation',
+		icon = 'Interface\\Icons\\Achievement_boss_generalvezax_01',
+	})
+
 end
 
 local _Xeer = { -- some non-SiMC stuffs
@@ -72,7 +79,7 @@ local Mind_Blast_Clip = {
 
 local MainRotation_Clip = {
 	--actions.main=surrender_to_madness,if=talent.surrender_to_madness.enabled&target.time_to_die<=variable.s2mcheck
-	{'!Surrender to Madness', 'toggle(cooldowns)&talent(7,3)&target.time_to_die<=variable.s2mcheck'},
+	{'!Surrender to Madness', 'toggle(xS2M)&talent(7,3)&target.time_to_die<=variable.s2mcheck'},
  	--actions.main+=/mindbender,if=talent.mindbender.enabled&!talent.surrender_to_madness.enabled
 	{'!Mindbender', 'toggle(cooldowns)&talent(6,3)&!talent(7,3)'},
  	--actions.main+=/mindbender,if=talent.mindbender.enabled&talent.surrender_to_madness.enabled&target.time_to_die>variable.s2mcheck+60
@@ -112,7 +119,7 @@ local MainRotation_Clip = {
 local MainRotation = {
 	{MainRotation_Clip, 'player.channeling(Mind Sear)||player.channeling(Mind Flay)'},
  	--actions.main=surrender_to_madness,if=talent.surrender_to_madness.enabled&target.time_to_die<=variable.s2mcheck
-	{'Surrender to Madness', 'toggle(cooldowns)&talent(7,3)&target.time_to_die<=variable.s2mcheck'},
+	{'Surrender to Madness', 'toggle(xS2M)&talent(7,3)&target.time_to_die<=variable.s2mcheck'},
  	--actions.main+=/mindbender,if=talent.mindbender.enabled&!talent.surrender_to_madness.enabled
 	{'Mindbender', 'toggle(cooldowns)&talent(6,3)&!talent(7,3)'},
  	--actions.main+=/mindbender,if=talent.mindbender.enabled&talent.surrender_to_madness.enabled&target.time_to_die>variable.s2mcheck+60
@@ -158,6 +165,7 @@ local MainRotation = {
 }
 
 local S2M_Clip = {
+	{'!Void Eruption'},
  	--actions.s2m=shadow_crash,if=talent.shadow_crash.enabled
 	{'!Shadow Crash', 'talent(6,2)'},
  	--actions.s2m+=/mindbender,if=talent.mindbender.enabled
@@ -212,6 +220,7 @@ local S2M_Clip = {
 
 local S2M = {
 	{S2M_Clip, 'player.channeling(Mind Sear)||player.channeling(Mind Flay)'},
+	{'!Void Eruption'},
  	--actions.s2m=shadow_crash,if=talent.shadow_crash.enabled
 	{'Shadow Crash', 'talent(6,2)'},
  	--actions.s2m+=/mindbender,if=talent.mindbender.enabled
@@ -271,8 +280,9 @@ local S2M = {
 }
 
 local VF_Clip = {
+	{'!Void Eruption'},
  	--actions.vf=surrender_to_madness,if=talent.surrender_to_madness.enabled&insanity>=25&{cooldown.void_bolt.up||cooldown.void_torrent.up||cooldown.shadow_word_death.up||buff.shadowy_insight.up}&target.time_to_die<=variable.s2mcheck-{buff.insanity_drain_stacks.stack}
-	{'!Surrender to Madness', 'toggle(cooldowns)&talent(7,3)&player.insanity>=25&{cooldown(Void Eruption).up||cooldown(Void Torrent).up||cooldown(Shadow Word: Death).up||player.buff(Shadowy Insight)}&target.time_to_die<=variable.s2mcheck-insanity_drain_stacks'},
+	{'!Surrender to Madness', 'toggle(xS2M)&talent(7,3)&player.insanity>=25&{cooldown(Void Eruption).up||cooldown(Void Torrent).up||cooldown(Shadow Word: Death).up||player.buff(Shadowy Insight)}&target.time_to_die<=variable.s2mcheck-insanity_drain_stacks'},
  	--actions.vf+=/shadow_crash,if=talent.shadow_crash.enabled
 	{'!Shadow Crash', 'talent(6,2)'},
  	--actions.vf+=/mindbender,if=talent.mindbender.enabled&!talent.surrender_to_madness.enabled
@@ -333,8 +343,9 @@ local VF_Clip = {
 
 local VF = {
 	{VF_Clip, 'player.channeling(Mind Sear)||player.channeling(Mind Flay)'},
+	{'!Void Eruption'},
  	--actions.vf=surrender_to_madness,if=talent.surrender_to_madness.enabled&insanity>=25&{cooldown.void_bolt.up||cooldown.void_torrent.up||cooldown.shadow_word_death.up||buff.shadowy_insight.up}&target.time_to_die<=variable.s2mcheck-{buff.insanity_drain_stacks.stack}
-	{'Surrender to Madness', 'toggle(cooldowns)&talent(7,3)&player.insanity>=25&{cooldown(Void Eruption).up||cooldown(Void Torrent).up||cooldown(Shadow Word: Death).up||player.buff(Shadowy Insight)}&target.time_to_die<=variable.s2mcheck-insanity_drain_stacks'},
+	{'Surrender to Madness', 'toggle(xS2M)&talent(7,3)&player.insanity>=25&{cooldown(Void Eruption).up||cooldown(Void Torrent).up||cooldown(Shadow Word: Death).up||player.buff(Shadowy Insight)}&target.time_to_die<=variable.s2mcheck-insanity_drain_stacks'},
  	--actions.vf+=/shadow_crash,if=talent.shadow_crash.enabled
 	{'Shadow Crash', 'talent(6,2)'},
  	--actions.vf+=/mindbender,if=talent.mindbender.enabled&!talent.surrender_to_madness.enabled
