@@ -24,6 +24,8 @@
   <Script file="rotations\paladin\holy.lua" />
   <Script file="rotations\paladin\protection.lua" />
   <Script file="rotations\paladin\retribution.lua" />
+  <Script file="rotations\priest\holy.lua" />
+  <Script file="rotations\priest\discipline.lua" />
   <Script file="rotations\priest\shadow.lua" />
   <Script file="rotations\rogue\assassination.lua" />
   <Script file="rotations\rogue\outlaw.lua" />
