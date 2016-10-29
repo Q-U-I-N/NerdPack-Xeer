@@ -21,6 +21,7 @@
   <Script file="rotations\mage\fire.lua" />
   <Script file="rotations\mage\frost.lua" />
   <Script file="rotations\monk\windwalker.lua" />
+  <Script file="rotations\paladin\holy.lua" />
   <Script file="rotations\paladin\protection.lua" />
   <Script file="rotations\paladin\retribution.lua" />
   <Script file="rotations\priest\shadow.lua" />
