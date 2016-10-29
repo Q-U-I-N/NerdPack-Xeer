@@ -1,0 +1,49 @@
+Core:
+  ☐
+Conditions:
+  ☐ gcd % remaining
+Hunter - Marksmanship:
+  ☐  been checking around, when useing your MM rotation,  its the aim shoot that the rotation stops useing, all other abilitys seems to work ok, just aim shoot you need to use yourself sometimes, its like it stop the rotation and waits on cooldowns, insteed of useing aim shot
+  ☐ "Notice Xeer hunter rotation, sometimes stops DPS !"
+Hunter - Beast Mastery:
+  ☐ seems like BM hunter doesn't utilize cobra shot at all over multi-shot
+  ✔ notice in BM that it dosent use Kill command evertime it can, even that it almost full on focus, so you have to use it sometimes yourself @done(2016-10-23 11:14) @project(Hunter - Beast Mastery)
+  ✔ kill command for BM is our prioty spell, should allways be used, as soon is off cooldown @done(2016-10-23 11:14) @project(Hunter - Beast Mastery)
+Warlock:
+  ✔ turn off deon sorting @done(2016-10-20 16:33) @project(Warlock)
+  ☐ tweak empower remaining time for multiple type demon summon @Core function Xeer.Empower()
+Warrior - Fury:
+  ☐ fury CR seems to break in Maw of souls, stops attacking permanently when the mobs go ghosty
+Warrior - Protection:
+  ☐ impement my new ignore pain presice calculate functions instead SIMC way
+Warrior - Arms:
+  ☐
+Paladin - Protection:
+  ☐
+Shaman - Enhancement:
+  ☐
+Shaman - Elemental:
+  ☐
+Hunter - Marksmanship:
+  ☐
+Mage - Fire:
+  ☐ fireblast tweaks... need keep stacks before combustion
+  ☐ {'&Fire Blast', 'player.buff(Heating Up)&!prev_off_gcd(Fire Blast)&{action(Fire Blast).charges<=1&cooldown(Combustion).remains>20||action(Fire Blast).charges>1&cooldown(Combustion).remains>11}'},
+  ☐ {'&Fire Blast', 'player.buff(Heating Up)&!prev_off_gcd(Fire Blast)&cooldown(Combustion).remains>20'},
+  ✔ ice flow with gcd +90% when no instant proc viable @done(2016-10-20 16:33) @project(Mage - Fire)
+  ☐ Opener with Kindling:
+    ☐ Use Potion of Deadly Grace
+    ☐ Precast Fireball
+    ☐ Cast Rune of Power
+    ☐ Cast Combustion
+    ☐ Cast Phoenix's Flames
+    ☐ If your initial Fireball did not crit, cast Fire Blast
+    ☐ The opener from here is simply rotating Pyroblast and Fire Blast like so
+Druid - Feral:
+  ☐ fix low uptime of SR ... SIMC = SR+rip+rake => 95% !!!
+Demon Hunter - Vengeance:
+  ☐
+Paladin - Retribution:
+  ☐ partial release VB talent only
+Death Knight - Frost:
+  ☐
