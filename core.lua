@@ -1,6 +1,6 @@
 local _, Xeer = ...
 
-Xeer.Version = '1.7.19'
+Xeer.Version = '1.7.20'
 Xeer.Branch = 'RELEASE'
 Xeer.Name = 'NerdPack - Xeer Routines'
 Xeer.Author = 'Xeer'
