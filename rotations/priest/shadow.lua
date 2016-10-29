@@ -89,7 +89,7 @@ local MainRotation_Clip = {
  	--actions.main+=/vampiric_touch,if=dot.vampiric_touch.remains<{4+{4%3}}*gcd
 	{'!Vampiric Touch', '!prev_gcd(Vampiric Touch)&target.dot(Vampiric Touch).remains<{4+{4/3}}*gcd'},
  	--actions.main+=/void_eruption,if=insanity>=85||{talent.auspicious_spirits.enabled&insanity>={80-shadowy_apparitions_in_flight*4}}
-	{'!Void Eruption', 'player.insanity>=85||{talent(5,2)&player.insanity>={80-shadowy_apparitions_in_flight*4}}'},
+	{'!Void Eruption', '{talent(7,1)&player.insanity>=70}||player.insanity>=85||{talent(5,2)&player.insanity>={80-shadowy_apparitions_in_flight*4}}'},
  	--actions.main+=/shadow_crash,if=talent.shadow_crash.enabled
 	{'!Shadow Crash', 'talent(6,2)'},
  	--actions.main+=/mindbender,if=talent.mindbender.enabled&set_bonus.tier18_2pc
@@ -129,7 +129,7 @@ local MainRotation = {
  	--actions.main+=/vampiric_touch,if=dot.vampiric_touch.remains<{4+{4%3}}*gcd
 	{'Vampiric Touch', '!prev_gcd(Vampiric Touch)&target.dot(Vampiric Touch).remains<{4+{4/3}}*gcd'},
  	--actions.main+=/void_eruption,if=insanity>=85||{talent.auspicious_spirits.enabled&insanity>={80-shadowy_apparitions_in_flight*4}}
-	{'!Void Eruption', 'player.insanity>=85||{talent(5,2)&player.insanity>={80-shadowy_apparitions_in_flight*4}}'},
+	{'!Void Eruption', '{talent(7,1)&player.insanity>=70}||player.insanity>=85||{talent(5,2)&player.insanity>={80-shadowy_apparitions_in_flight*4}}'},
  	--actions.main+=/shadow_crash,if=talent.shadow_crash.enabled
 	{'Shadow Crash', 'talent(6,2)'},
  	--actions.main+=/mindbender,if=talent.mindbender.enabled&set_bonus.tier18_2pc
@@ -155,9 +155,9 @@ local MainRotation = {
  	--actions.main+=/shadow_word_void,if={insanity<=70&talent.legacy_of_the_void.enabled}||{insanity<=85&!talent.legacy_of_the_void.enabled}
 	{'Shadow Word: Void', '{player.insanity<=70&talent(7,1)}||{player.insanity<=85&!talent(7,1)}'},
  	--actions.main+=/mind_sear,if=active_enemies>=3,interrupt=1,chain=1
-	{'Mind Sear', 'target.area(10).enemies>=3'},
+	{'Mind Sear', 'target.area(10).enemies>=3', 'target'},
  	--actions.main+=/mind_flay,if=!talent.mind_spike.enabled,interrupt=1,chain=1
-	{'Mind Flay', '!talent(7,2)'},
+	{'Mind Flay', '!talent(7,2)', 'target'},
  	--actions.main+=/mind_spike,if=talent.mind_spike.enabled
 	{'Mind Spike', 'talent(7,2)'},
  	--actions.main+=/shadow_word_pain
@@ -215,7 +215,7 @@ local S2M_Clip = {
  	--actions.s2m+=/shadow_word_pain,if=!ticking&target.time_to_die>10&{active_enemies<5&artifact.sphere_of_insanity.rank}
 	{'!Shadow Word: Pain', '!target.dot(Shadow Word: Pain).ticking&target.time_to_die>10&{player.area(40).enemies<5&artifact(Sphere of Insanity).rank>0}'},
  	--actions.s2m+=/wait,sec=action.void_bolt.usable_in,if=action.void_bolt.usable||action.void_bolt.usable_in<gcd.max*0.8
---	{Void_Eruption_Clip, 'action(Void Eruption).cooldown<gcd.max*0.8'},
+	{Void_Eruption_Clip, 'action(Void Eruption).cooldown<gcd.max*0.8'},
 }
 
 local S2M = {
@@ -270,11 +270,11 @@ local S2M = {
  	--actions.s2m+=/shadow_word_pain,if=!ticking&target.time_to_die>10&{active_enemies<5&artifact.sphere_of_insanity.rank}
 	{'Shadow Word: Pain', '!target.dot(Shadow Word: Pain).ticking&target.time_to_die>10&{player.area(40).enemies<5&artifact(Sphere of Insanity).rank>0}'},
  	--actions.s2m+=/wait,sec=action.void_bolt.usable_in,if=action.void_bolt.usable||action.void_bolt.usable_in<gcd.max*0.8
---	{Void_Eruption, 'action(Void Eruption).cooldown<gcd.max*0.8'},
+	{Void_Eruption, 'action(Void Eruption).cooldown<gcd.max*0.8'},
  	--actions.s2m+=/mind_sear,if=active_enemies>=3,interrupt=1
-	{'Mind Sear', 'target.area(10).enemies>=3'},
+	{'Mind Sear', 'target.area(10).enemies>=3', 'target'},
  	--actions.s2m+=/mind_flay,if=!talent.mind_spike.enabled,chain=1,interrupt_immediate=1,interrupt_if=action.void_bolt.usable
-	{'Mind Flay', '!talent(7,2)'},
+	{'Mind Flay', '!talent(7,2)', 'target'},
  	--actions.s2m+=/mind_spike,if=talent.mind_spike.enabled
 	{'Mind Spike', 'talent(7,2)'},
 }
@@ -338,7 +338,7 @@ local VF_Clip = {
  	--actions.vf+=/shadow_word_pain,if=!ticking&target.time_to_die>10&{active_enemies<5&artifact.sphere_of_insanity.rank}
 	{'!Shadow Word: Pain', '!target.dot(Shadow Word: Pain).ticking&target.time_to_die>10&{player.area(40).enemies<5&artifact(Sphere of Insanity).rank>0}'},
  	--actions.vf+=/wait,sec=action.void_bolt.usable_in,if=action.void_bolt.usable||action.void_bolt.usable_in<gcd.max*0.8
---	{Void_Eruption_Clip, 'action(Void Eruption).cooldown<gcd.max*0.8'},
+	{Void_Eruption_Clip, 'action(Void Eruption).cooldown<gcd.max*0.8'},
 }
 
 local VF = {
@@ -379,11 +379,11 @@ local VF = {
  	--actions.vf+=/shadow_word_death,if=talent.reaper_of_souls.enabled&current_insanity_drain*gcd.max>insanity&{insanity-current_insanity_drain*gcd.max+30}<100
 	{'Shadow Word: Death', 'talent(4,2)&current_insanity_drain*gcd.max>player.insanity&{parser_bypass1+30}<100'},
  	--actions.vf+=/wait,sec=action.void_bolt.usable_in,if=action.void_bolt.usable_in<gcd.max*0.25
---	{Void_Eruption, 'action(Void Eruption).cooldown<gcd.max*0.25'},
+	{Void_Eruption, 'action(Void Eruption).cooldown<gcd.max*0.25'},
  	--actions.vf+=/mind_blast
 	{'Mind Blast'},
  	--actions.vf+=/wait,sec=action.mind_blast.usable_in,if=action.mind_blast.usable_in<gcd.max*0.25
---	{Mind_Blast, 'action(Mind Blast).cooldown<gcd.max*0.25'},
+	{Mind_Blast, 'action(Mind Blast).cooldown<gcd.max*0.25'},
  	--actions.vf+=/shadow_word_death,if=cooldown.shadow_word_death.charges=2
 	{'Shadow Word: Death', 'cooldown(Shadow Word: Death).charges=2'},
  	--actions.vf+=/shadowfiend,if=!talent.mindbender.enabled,if=buff.voidform.stack>15
@@ -401,11 +401,11 @@ local VF = {
  	--actions.vf+=/shadow_word_pain,if=!ticking&target.time_to_die>10&{active_enemies<5&artifact.sphere_of_insanity.rank}
 	{'Shadow Word: Pain', '!target.dot(Shadow Word: Pain).ticking&target.time_to_die>10&{player.area(40).enemies<5&artifact(Sphere of Insanity).rank>0}'},
  	--actions.vf+=/wait,sec=action.void_bolt.usable_in,if=action.void_bolt.usable||action.void_bolt.usable_in<gcd.max*0.8
---	{Void_Eruption, 'action(Void Eruption).cooldown<gcd.max*0.8'},
+	{Void_Eruption, 'action(Void Eruption).cooldown<gcd.max*0.8'},
  	--actions.vf+=/mind_sear,if=active_enemies>=3,interrupt=1
-	{'Mind Sear', 'target.area(10).enemies>=3'},
+	{'Mind Sear', 'target.area(10).enemies>=3', 'target'},
  	--actions.vf+=/mind_flay,if=!talent.mind_spike.enabled,chain=1,interrupt_immediate=1,interrupt_if=action.void_bolt.usable
-	{'Mind Flay', '!talet(7,2)'},
+	{'Mind Flay', '!talet(7,2)', 'target'},
  	--actions.vf+=/mind_spike,if=talent.mind_spike.enabled
 	{'Mind Spike', 'talent(7,2)'},
  	--actions.vf+=/shadow_word_pain
@@ -435,9 +435,9 @@ local Interrupts = {
 
 local Survival = { -- copy&pasta from MTS core :P
 	--Healthstone at or below 20% health. Active when NOT channeling Void Torrent.
-	{'#Healthstone', 'player.health <= 20 & !player.channeling(Void Torrent)'},
+	--{'#Healthstone', 'player.health <= 20 & !player.channeling(Void Torrent)'},
 	--Ancient Healing Potion at or below 20% health. Active when NOT channeling Void Torrent.
-	{'#Ancient Healing Potion', 'player.health <= 20 & !player.channeling(Void Torrent)'},
+	--{'#Ancient Healing Potion', 'player.health <= 20 & !player.channeling(Void Torrent)'},
 	--Gift of the Naaru at or below 40% health. Active when NOT channeling Void Torrent.
 	{'Gift of the Naaru', 'player.health <= 40 & !player.channeling(Void Torrent)'},
 	--Power Word: Shield at or below 40% health. Active when NOT in Surrender to Madness or channeling Void Torrent.
