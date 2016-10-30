@@ -45,6 +45,7 @@ Paladin - Retribution
 Mage - Frost
 
 Priest - Shadow
+
 ------------------------------------
 
 Future routines + WIP (do not use them even if you see them on github):
