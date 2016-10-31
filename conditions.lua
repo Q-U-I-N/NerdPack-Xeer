@@ -4,7 +4,7 @@ local _, Xeer = ...
 ---------------------------------ARTIFACT---------------------------------------
 --------------------------------------------------------------------------------
 
-local LAD = LibStub("LibArtifactData-1.0")
+local LAD = LibStub('LibArtifactData-1.0')
 
 --/dump NeP.DSL:Get('artifact.force_update')()
 NeP.DSL:Register('artifact.force_update', function ()
@@ -135,9 +135,9 @@ end)
 NeP.DSL:Register('xmoving', function()
 	local speed, _ = GetUnitSpeed('player')
 		if speed ~= 0 then
-			return 1
+			return true and 1
 		else
-			return 0
+			return false or 0
 		end
 end)
 
@@ -176,6 +176,18 @@ NeP.DSL:Register('action.cost', function(spell)
 		else
 			return 0
 		end
+end)
+
+--/dump NeP.DSL:Get('dot.refreshable')('target','Nightblade')
+NeP.DSL:Register('dot.refreshable', function(_, spell)
+  local _,_,_,_,_,duration,expires,_,_,_,spellID = UnitDebuff('target', spell, nil, 'PLAYER|HARMFUL')
+  if spellID and expires then
+    local time_left = expires - GetTime()
+    if time_left < (duration/3) then
+      return true
+    end
+  end
+  return false
 end)
 
 --/dump NeP.DSL:Get('dot.duration')('target','Doom')
@@ -302,13 +314,13 @@ NeP.DSL:Register('cooldown.remains', function(_, spell)
 	end
 end)
 
---/dump NeP.DSL:Get('cooldown.up')('player','Mind Blast')
+--/dump NeP.DSL:Get('spell.exists')('player','Vanish')
+--/dump NeP.DSL:Get('cooldown.up')('player','Vanish')
+--/dump NeP.DSL:Get('spell.cooldown')('player','Vanish')
 NeP.DSL:Register('cooldown.up', function(_, spell)
 	if NeP.DSL:Get('spell.exists')(_, spell) == true then
 		if NeP.DSL:Get('spell.cooldown')(_, spell) == 0 then
       return true
-    else
-      return false
     end
 	else
 		return false
@@ -541,6 +553,23 @@ NeP.DSL:Register('active_enemies', function(unit, distance)
 	return NeP.DSL:Get('area.enemies')(unit, distance)
 end)
 
+--/dump NeP.DSL:Get('talent.enabled')(nil, '4,2')
+NeP.DSL:Register('talent.enabled', function(_, x,y)
+  if NeP.DSL:Get('talent')(_, x,y) then
+    return true and 1
+  else
+    return false or 0
+  end
+end)
+
+--/dump NeP.DSL:Get('xequipped')(2575)
+NeP.DSL:Register('xequipped', function(item)
+	if IsEquippedItem(item) == true then
+    return true and 1
+  else
+    return false or 0
+  end
+end)
 --------------------------------------------------------------------------------
 ---------------------------------PROT WAR---------------------------------------
 --------------------------------------------------------------------------------
@@ -578,9 +607,13 @@ local DotTicks = {
     [2] = {
 				[8921] = 2,
         [155625] = 2,
-    }
+    },
+    [3] = {
+        [195452] = 2,
+    },
 }
 
+--/dump NeP.DSL:Get('dot.tick_time')(_, 'Nightblade')
 NeP.DSL:Register('dot.tick_time', function(_, spell)
     local spell = NeP.Core:GetSpellID(spell)
     local class = select(3,UnitClass('player'))
@@ -595,6 +628,8 @@ NeP.DSL:Register('dot.tick_time', function(_, spell)
                 return math.floor((tick / ((GetHaste() / 100) + 1)) * 10^3 ) / 10^3
             end
         end
+    else
+      return DotTicks[3][spell]
     end
 end)
 
@@ -658,7 +693,7 @@ NeP.DSL:Register('soul_shard', function()
 end)
 
 --------------------------------------------------------------------------------
----------------------------------PRIEST-----------------------------------------
+-------------------------------- PRIEST ----------------------------------------
 --------------------------------------------------------------------------------
 
 --actions+=/variable,op=set,name=actors_fight_time_mod,value=0
@@ -708,9 +743,9 @@ NeP.DSL:Register('variable.s2mcheck_value', function()
    reaper_of_souls = 0
  end
 
---local value = 0.8*(45+((raw_haste_pct*100)*(2+(1*talent.reaper_of_souls.enabled)+(2*artifact.mass_hysteria.rank)-(1*talent.sanlayn.enabled))))-(variable.actors_fight_time_mod*nonexecute_actors_pct)
-  local value = 0.8 * (45 + ((raw_haste_pct * 100) * (2 + (1 * reaper_of_souls) + (2 * mass_hysteria) - (1 * sanlayn)))) - (actors_fight_time_mod * 0)
---local value = 0.8 * { 45 + raw_haste_pct * 100 * { 2 + 1 * reaper_of_souls + 2 * mass_hysteria - 1 * sanlayn } } - actors_fight_time_mod * 0
+--local value = 0.8*(105+((raw_haste_pct*50)*(2+(1*talent.reaper_of_souls.enabled)+(2*artifact.mass_hysteria.rank)-(1*talent.sanlayn.enabled))))-(variable.actors_fight_time_mod*nonexecute_actors_pct)
+  local value = 0.8 * (105 + ((raw_haste_pct * 50) * (2 + (1 * reaper_of_souls) + (2 * mass_hysteria) - (1 * sanlayn)))) - (actors_fight_time_mod * 0)
+--local value = 0.8 * { 105 + raw_haste_pct * 50 * { 2 + 1 * reaper_of_souls + 2 * mass_hysteria - 1 * sanlayn } } - actors_fight_time_mod * 0
 return value
 end)
 
@@ -750,13 +785,30 @@ end)
 --{current_insanity_drain*gcd.max>player.insanity}&{player.insanity-{current_insanity_drain*gcd.max}+90}<100
 --/dump (NeP.DSL:Get('current_insanity_drain')() * NeP.DSL:Get('gcd.max')()) > NeP.DSL:Get('insanity')('player')
 --/dump (NeP.DSL:Get('insanity')('player') - (NeP.DSL:Get('current_insanity_drain')() * NeP.DSL:Get('gcd.max')()) + 90) < 100
---[[
-Locals:
-arg1 = "41.8895<100"
-arg2 = "Schattenwort: Tod"
-(*temporary) = nil
-(*temporary) = "attempt to perform arithmetic on local 'arg1' (a string value)"
---]]
+
+--------------------------------------------------------------------------------
+--------------------------------- ROGUE ----------------------------------------
+--------------------------------------------------------------------------------
+--/dump NeP.DSL:Get('variable.ssw_er')()
+NeP.DSL:Register('variable.ssw_er', function()
+  --actions=variable,name=ssw_er,value=equipped.shadow_satyrs_walk*(10-floor(target.distance*0.5))
+local range_check
+  if NeP.DSL:Get('range')('target') then
+   range_check = NeP.DSL:Get('range')('target')
+  else
+    range_check = 0
+  end
+  local x = (NeP.DSL:Get('xequipped')('137032') * (10 - (range_check * 0.5)))
+  return x
+end)
+
+--/dump NeP.DSL:Get('variable.ed_threshold')()
+NeP.DSL:Register('variable.ed_threshold', function()
+  --actions+=/variable,name=ed_threshold,value=energy.deficit<=(20+talent.vigor.enabled*35+talent.master_of_shadows.enabled*25+variable.ssw_er)
+    local x = (NeP.DSL:Get('energy.deficit')() <= ((20 + NeP.DSL:Get('talent.enabled')(nil, '3,3')) * (35 + NeP.DSL:Get('talent.enabled')(nil, '7,1')) * (25 + NeP.DSL:Get('variable.ssw_er')())))
+    return x
+end)
+
 --------------------------------------------------------------------------------
 ---------------------------------- WIP -----------------------------------------
 --------------------------------------------------------------------------------
