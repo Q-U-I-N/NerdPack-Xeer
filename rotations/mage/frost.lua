@@ -10,7 +10,7 @@ local exeOnLoad = function()
 	print('|cffADFF2F --- |rRecommended Talents: 1/1 - 2/1 - 3/2 - 4/1 - 5/1 - 6/1 - 7/3')
 	print('|cffADFF2F ----------------------------------------------------------------------|r')
 	print('|cffADFF2F --- |cffADFF2FVERSION 2 : BC+FT+TV |r')
-	print('|cffADFF2F --- |rRecommended Talents: 1/3 - 2/X - 3/2 - 4/2 - 5/X - 6/1 - 7/1')
+	print('|cffADFF2F --- |rRecommended Talents: 1/3 - 2/1 - 3/2 - 4/2 - 5/1 - 6/1 - 7/1')
 	print('|cffADFF2F ----------------------------------------------------------------------|r')
 
 --[[
@@ -41,7 +41,7 @@ race=orc
 role=spell
 position=back
 v1:talents=1121113
-v2:talents=3022011
+v3:talents=3122111
 artifact=53:132791:133030:132791:0:783:1:786:3:788:6:789:3:790:3:792:3:793:1:795:1:796:1:1296:1
 spec=frost
 
@@ -79,7 +79,7 @@ local PreCombat = {
 local Cooldowns = {
 	--actions+=/time_warp,if=(time=0&buff.bloodlust.down)|(buff.bloodlust.down&equipped.132410)
 	--{'Time Warp', '{combat.time=0&!player.buff(Bloodlust)}||{!player.buff(Bloodlust)&equipped(132410)}'},
- 	--actions.cooldowns=rune_of_power,if=cooldown.icy_veins.remains<cast_time|charges_fractional>1.9&cooldown.icy_veins.remains>10|buff.icy_veins.up|target.time_to_die.remains+5<charges_fractional*10
+	--actions.cooldowns=rune_of_power,if=cooldown.icy_veins.remains<cast_time|charges_fractional>1.9&cooldown.icy_veins.remains>10|buff.icy_veins.up|target.time_to_die.remains+5<charges_fractional*10
 	{'Rune of Power', '!player.buff(Rune of Power)&{cooldown(Icy Veins).remains<cooldown(Rune of Power).cast_time||cooldown(Rune of Power).charges<1.9&cooldown(Icy Veins).remains>10||player.buff(Icy Veins)||{target.time_to_die+5<cooldown(Rune of Power).charges*10}}'},
  	--actions.cooldowns+=/icy_veins,if=buff.icy_veins.down
 	{'Icy Veins', '!player.buff(Icy Veins)'},
@@ -113,7 +113,7 @@ local xCombat = {
  	--actions+=/glacial_spike
 	{'Glacial Spike'},
  	--actions+=/frozen_touch,if=buff.fingers_of_frost.stack<=(0+artifact.icy_hand.enabled)
-	{'Frozen Touch', 'player.buff(Fingers of Frost)<={0+artifact(Icy Hand).enabled}'},
+	{'Frozen Touch', 'player.buff(Fingers of Frost).stack<={0+artifact(Icy Hand).enabled}'},
  	--actions+=/frost_bomb,if=debuff.frost_bomb.remains<action.ice_lance.travel_time&buff.fingers_of_frost.stack>0
 	{'Frost Bomb', 'target.debuff(Frost Bomb).remains<action(Ice Lance).travel_time&player.buff(Fingers of Frost).stack>0'},
  	--actions+=/ice_lance,if=buff.fingers_of_frost.stack>0&cooldown.icy_veins.remains>10|buff.fingers_of_frost.stack>2
