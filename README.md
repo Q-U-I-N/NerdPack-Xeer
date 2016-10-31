@@ -46,6 +46,8 @@ Mage - Frost
 
 Priest - Shadow
 
+Rogue - Subtlety
+
 ------------------------------------
 
 Future routines + WIP (do not use them even if you see them on github):
@@ -65,8 +67,6 @@ Monk - Windwalker
 Rogue - Assassination
 
 Rogue - Outlaw
-
-Rogue - Subtlety
 
 Warlock - Affliction
 
