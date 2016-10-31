@@ -145,8 +145,8 @@ local Cooldowns = {
 	--{'', ''},
 	--actions.=/tigers_fury,if=(!buff.clearcasting.react&energy.deficit>=60)||energy.deficit>=80||(t18_class_trinket&buff.berserk.up&buff.tigers_fury.down)
 	{'Tiger\'s Fury', '{!player.buff(Clearcasting)&energy.deficit>=60}||energy.deficit>=80'},--t18_class_trinket ?
-	--actions.=/incarnation,if=energy.time_to_max>1&energy>=35
-	{'Incarnation: King of the Jungle', 'talent(5,2)&{energy.time_to_max>1&energy>=35}'},
+	--actions.=/incarnation,if=energy.time_to_max>1&player.energy>=35
+	{'Incarnation: King of the Jungle', 'talent(5,2)&{energy.time_to_max>1&player.energy>=35}'},
 	--# Keep Rip from falling off during execute range.
 	--actions.=/ferocious_bite,cycle_targets=1,if=dot.rip.ticking&dot.rip.remains<3&target.time_to_die>3&(target.health.pct<25||talent.sabertooth.enabled)
 	{Ferocious_Bite, 'target.dot(Rip).ticking&target.dot(Rip)remains<3&target.time_to_die>3&{target.health<25||talent(6,1)}'},
@@ -202,9 +202,9 @@ local Generator = {
 	{'Ashamane\'s Frenzy', 'combo_points<=2&{player.buff(Bloodtalons)||!talent(7,2)}&{player.buff(Savage Roar)||!talent(5,3)}'},
 	--# Pool energy for Elune's Guidance when it's coming off cooldown.
 	--actions.generator+=/pool_resource,if=talent.elunes_guidance.enabled&combo_points=0&energy<action.ferocious_bite.cost+25-energy.regen*cooldown.elunes_guidance.remains
-	{'Elune\'s Guidance', 'talent(6,3)&{combo_points=0&energy>=action(Ferocious Bite).cost+25-energy.regen*cooldown(Elune\'s Guidance).remains}'},
-	--actions.generator+=/elunes_guidance,if=talent.elunes_guidance.enabled&combo_points=0&energy>=action.ferocious_bite.cost+25
-	{'Elune\'s Guidance', 'talent(6,3)&{combo_points=0&energy>=action(Ferocious Bite).cost+25}'},
+	{'Elune\'s Guidance', 'talent(6,3)&{combo_points=0&player.energy<action(Ferocious Bite).cost+25-energy.regen*cooldown(Elune\'s Guidance).remains}'},
+	--actions.generator+=/elunes_guidance,if=talent.elunes_guidance.enabled&combo_points=0&player.energy>=action.ferocious_bite.cost+25
+	{'Elune\'s Guidance', 'talent(6,3)&{combo_points=0&player.energy>=action(Ferocious Bite).cost+25}'},
 	--# Spam Thrash over Rake or Moonfire at 9 targets with Brutal Slash talent.
 	--actions.generator+=/Thrash_cat,if=talent.brutal_slash.enabled&spell_targets.Thrash_cat>=9
 	{'Thrash', 'talent(7,1)&player.area(8).enemies>=9'},
@@ -212,7 +212,7 @@ local Generator = {
 	--actions.generator+=/Swipe_cat,if=spell_targets.Swipe_cat>=6
 	{'Swipe', 'player.area(8).enemies>=6'},
 	--# Shadowmeld to buff Rake
-	--actions.generator+=/shadowmeld,if=combo_points<5&energy>=action.rake.cost&dot.rake.pmultiplier<2.1&buff.tigers_fury.up&(buff.bloodtalons.up||!talent.bloodtalons.enabled)&(!talent.incarnation.enabled||cooldown.incarnation.remains>18)&!buff.incarnation.up
+	--actions.generator+=/shadowmeld,if=combo_points<5&player.energy>=action.rake.cost&dot.rake.pmultiplier<2.1&buff.tigers_fury.up&(buff.bloodtalons.up||!talent.bloodtalons.enabled)&(!talent.incarnation.enabled||cooldown.incarnation.remains>18)&!buff.incarnation.up
 	--{'', ''},
 	--# Refresh Rake early with Bloodtalons
 	--actions.generator+=/rake,if=combo_points<5&(!ticking||(!talent.bloodtalons.enabled&remains<duration*0.3)||(talent.bloodtalons.enabled&buff.bloodtalons.up&(!talent.soul_of_the_forest.enabled&remains<=7||remains<=5)))&target.time_to_die-remains>tick_time

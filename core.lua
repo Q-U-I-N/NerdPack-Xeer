@@ -1,6 +1,6 @@
 local _, Xeer = ...
 
-Xeer.Version = '1.7.20'
+Xeer.Version = '1.7.21'
 Xeer.Branch = 'RELEASE'
 Xeer.Name = 'NerdPack - Xeer Routines'
 Xeer.Author = 'Xeer'
@@ -796,6 +796,7 @@ NeP.Listener:Add('Xeer_Listener3', 'COMBAT_LOG_EVENT_UNFILTERED', function(time,
         end
     end
 end)
+
 
 
 --[[

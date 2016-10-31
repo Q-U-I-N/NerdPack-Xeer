@@ -4,9 +4,8 @@ local exeOnLoad = function()
 	 Xeer.ExeOnLoad()
 
 	print("|cffFFFF00 ----------------------------------------------------------------------|r")
-	print("|cffFFFF00 --- |rCLASS NAME: |cffFFF569Outlaw |r")
-	print("|cffFFFF00 --- |rRecommended Talents: 1/1 - 2/3 - 3/1 - 4/0 - 5/1 - 6/2 - 7/2")
-	print("|cffFFFF00 --- |rRead the Readme avaiable at github.")
+	print("|cffFFFF00 --- |rCLASS NAME:ROGUE |cffFFF569Outlaw |r")
+	print("|cffFFFF00 --- |rRecommended Talents: 1/1 - 2/3 - 3/1 - 4/X - 5/1 - 6/2 - 7/2")
 	print("|cffFFFF00 ----------------------------------------------------------------------|r")
 
 end
@@ -112,6 +111,7 @@ local inCombat = {
 
 local outCombat = {
 	{'Stealth', '!player.buff(Stealth)'},
+	{'Ambush', 'target.range<5&target.infront&player.buff(Stealth)'},
 	{Keybinds},
 }
 
