@@ -1,6 +1,6 @@
 local _, Xeer = ...
 
-Xeer.Version = '1.7.22'
+Xeer.Version = '1.7.23'
 Xeer.Branch = 'RELEASE'
 Xeer.Name = 'NerdPack - Xeer Routines'
 Xeer.Author = 'Xeer'
@@ -505,6 +505,7 @@ function Xeer.SA_Cleanup(guid)
 				end
 		end
 end
+
 --------------------------------------------------------------------------------
 -------------------------------- TRAVEL SPEED-----------------------------------
 --------------------------------------------------------------------------------

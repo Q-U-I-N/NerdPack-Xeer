@@ -82,7 +82,7 @@ local Cooldowns = {
 	--actions+=/crusade,if=holy_power>=5
 	{'Crusade', 'holy_power>=5'},
 	--actions+=/wake_of_ashes,if=holy_power>=0&time<2
-	{'Wake of Ashes', 'holy_power>=0&combat.time<2'},
+	{'Wake of Ashes', 'holy_power>=0&xtime<2'},
 	--actions+=/execution_sentence,if=spell_targets.divine_storm<=3&(cooldown.judgment.remains<gcd*4.5||debuff.judgment.remains>gcd*4.67)&(!talent.crusade.enabled||cooldown.crusade.remains>gcd*2)
 	{'Execution Sentence','talent(1,2)&{player.area(6).enemies<=3&{cooldown(Judgment).remains<gcd*4.5||target.debuff(judgment).remains>gcd*4.67}&{!talent(7,2)||cooldown(Crusade).remains>gcd*2}}'},
 	--actions+=/blood_fury

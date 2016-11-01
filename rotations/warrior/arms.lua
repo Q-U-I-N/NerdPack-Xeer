@@ -61,9 +61,9 @@ local Cooldowns = {
 	--actions+=/arcane_torrent,if=buff.battle_cry_deadly_calm.down&rage.deficit>40
 	--{'Arcane Torrent', 'player.buff(Battle Cry)&talent(6,1)&rage.deficit>40'},
 	--actions+=/battle_cry,if=(buff.bloodlust.up||time>=1)&!gcd.remains&(buff.shattered_defenses.up||(cooldown.colossus_smash.remains&cooldown.warbreaker.remains))||target.time_to_die<=10
-	{'Battle Cry', '{player.buff(Bloodlust)||player.combat.time>=1}&{player.buff(Shattered Defenses)||{spell(Colossus Smash).cooldown>gcd&spell(Warbreaker).cooldown>gcd}}'},
+	{'Battle Cry', '{player.buff(Bloodlust)||xtime>=1}&{player.buff(Shattered Defenses)||{spell(Colossus Smash).cooldown>gcd&spell(Warbreaker).cooldown>gcd}}'},
 	--actions+=/avatar,if=(buff.bloodlust.up||time>=1)
-	{'Avatar', 'talent(3,3)&{player.buff(Bloodlust)||player.combat.time>=1}'},
+	{'Avatar', 'talent(3,3)&{player.buff(Bloodlust)||xtime>=1}'},
 	--actions+=/use_item,name=gift_of_radiance
 	--trinket...
 }

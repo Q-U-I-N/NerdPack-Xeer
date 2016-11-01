@@ -217,7 +217,7 @@ local TrueshotAoE = {
  	--actions+=/berserking
 	{'Berserking'},
  	--actions+=/call_action_list,name=open,if=time<=15&talent.sidewinders.enabled&active_enemies=1
-	{Opener, 'talent(7,1)&{combat.time<=15&player.area(40).enemies=1}'},
+	{Opener, 'talent(7,1)&{xtime<=15&player.area(40).enemies=1}'},
  	--actions+=/call_action_list,name=cooldowns
 	{Cooldowns, 'toggle(cooldowns)'},
  	--actions+=/a_murder_of_crows,if=debuff.hunters_mark.down

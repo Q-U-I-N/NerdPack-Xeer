@@ -78,7 +78,7 @@ local PreCombat = {
 
 local Cooldowns = {
 	--actions+=/time_warp,if=(time=0&buff.bloodlust.down)|(buff.bloodlust.down&equipped.132410)
-	--{'Time Warp', '{combat.time=0&!player.buff(Bloodlust)}||{!player.buff(Bloodlust)&equipped(132410)}'},
+	--{'Time Warp', '{xtime=0&!player.buff(Bloodlust)}||{!player.buff(Bloodlust)&equipped(132410)}'},
 	--actions.cooldowns=rune_of_power,if=cooldown.icy_veins.remains<cast_time|charges_fractional>1.9&cooldown.icy_veins.remains>10|buff.icy_veins.up|target.time_to_die.remains+5<charges_fractional*10
 	{'Rune of Power', '!player.buff(Rune of Power)&{cooldown(Icy Veins).remains<cooldown(Rune of Power).cast_time||cooldown(Rune of Power).charges<1.9&cooldown(Icy Veins).remains>10||player.buff(Icy Veins)||{target.time_to_die+5<cooldown(Rune of Power).charges*10}}'},
  	--actions.cooldowns+=/icy_veins,if=buff.icy_veins.down

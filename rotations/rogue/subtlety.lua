@@ -50,7 +50,7 @@ local PreCombat = {
 	--actions.PreCombat+=/snapshot_stats
 	--actions.PreCombat+=/stealth
 	{'Stealth', '!player.buff(Stealth)||!player.buff(Shadowmeld)'},
-	{'Shadowstrike', 'player.buff(Stealth)&target.range<=15&target.infront'},
+	{'Shadowstrike', 'stealthed&target.range<=15&target.infront'},
 	--actions.PreCombat+=/potion,name=old_war
 	--{'#Old War'},
 	--actions.PreCombat+=/marked_for_death,if=raid_event.adds.in>40
@@ -72,15 +72,15 @@ local Builders = {
 local Cooldowns ={
  	--Cooldowns=potion,name=old_war,if=buff.bloodlust.react||target.time_to_die<=25||buff.shadow_blades.up
 	--{'', ''},
- 	--Cooldowns+=/blood_fury,if=Stealthed
-	{'Blood Fury', 'player.buff(Stealth)'},
- 	--Cooldowns+=/berserking,if=Stealthed
-	{'Berserking', 'player.buff(Stealth)'},
+ 	--Cooldowns+=/blood_fury,if=stealthed
+	{'Blood Fury', 'stealthed'},
+ 	--Cooldowns+=/berserking,if=stealthed
+	{'Berserking', 'stealthed'},
  	--Cooldowns+=/shadow_blades,if=!{Stealthed||buff.shadowmeld.up}
-	{'Shadow Blades', '!player.buff(Stealth)||!player.buff(Shadowmeld)'},
+	{'Shadow Blades', '!stealthed||!player.buff(Shadowmeld)'},
  	--Cooldowns+=/goremaws_bite,if=!buff.shadow_dance.up&{{combo_points.deficit>=4-{time<10}*2&energy.deficit>50+talent.vigor.enabled*25-{time>=10}*15}||target.time_to_die<8}
-	{'Goremaw\'s Bite', '!player.buff(Shadow Dance)&{{combo_points.deficit>=4-{combat.time<10}*2&energy.deficit>50+talent(3,3).enabled*25-{combat.time>=10}*15}||target.time_to_die<8}'},
- 	--Cooldowns+=/marked_for_death,target_if=min:target.time_to_die,if=target.time_to_die<combo_points.deficit||{raid_event.adds.in>40&combo_points.deficit>=4+talent.deeper_strategem.enabled+talent.anticipation.enabled}
+	{'Goremaw\'s Bite', '!player.buff(Shadow Dance)&{{combo_points.deficit>={4-parser_bypass2}*2&energy.deficit>{50+talent(3,3).enabled*25-parser_bypass3}*15}||target.time_to_die<8}'},
+	--Cooldowns+=/marked_for_death,target_if=min:target.time_to_die,if=target.time_to_die<combo_points.deficit||{raid_event.adds.in>40&combo_points.deficit>=4+talent.deeper_strategem.enabled+talent.anticipation.enabled}
 	{'Marked for Death', 'target.time_to_die<combo_points.deficit||combo_points.deficit>=5'},
 }
 
@@ -99,16 +99,16 @@ local Finishers = {
 
 local Stealth_Cooldowns = {
  	--actions.Stealth_Cooldowns=shadow_dance,if=charges_fractional>=2.65
-	{'Shadow Dance', '!player.buff(Subterfuge)&!player.buff(Shadow Dance)&cooldown(Shadow Dance).charges>=2.65'},
+	{'Shadow Dance', '!stealthed&cooldown(Shadow Dance).charges>=2.65'},
  	--actions.Stealth_Cooldowns+=/vanish
-	{'Vanish', '!player.buff(Subterfuge)&!player.buff(Stealth)&!player.buff(Shadow Dance)'},
+	{'Vanish', '!stealthed'},
  	--actions.Stealth_Cooldowns+=/shadow_dance,if=charges>=2&combo_points<=1
-	{'Shadow Dance', '!player.buff(Subterfuge)&!player.buff(Shadow Dance)&cooldown(Shadow Dance).charges>=2&combo_points<=1'},
+	{'Shadow Dance', '!stealthed&cooldown(Shadow Dance).charges>=2&combo_points<=1'},
  	--actions.Stealth_Cooldowns+=/pool_resource,for_next=1,extra_amount=40-variable.ssw_er
  	--actions.Stealth_Cooldowns+=/shadowmeld,if=energy>=40-variable.ssw_er&energy.deficit>10
 	{'Shadowmeld', 'player.energy>=40-variable.ssw_er&energy.deficit>10'},
  	--actions.Stealth_Cooldowns+=/shadow_dance,if=combo_points<=1
-	--{'Shadow Dance', 'combo_points<=1'},
+	{'Shadow Dance', '!stealthed&combo_points<=1'},
 }
 
 local Stealthed = {
@@ -125,10 +125,10 @@ local Stealthed = {
 local xCombat = {
 	{Cooldowns, 'toggle(cooldowns)'},
 	--# Fully switch to the Stealthed Rotation {by doing so, it forces pooling if nothing is available}
- 	--actions+=/run_action_list,name=Stealthed,if=Stealthed||buff.shadowmeld.up
-	{Stealthed, 'player.buff(Stealth)||player.buff(Shadowmeld)'},
+ 	--actions+=/run_action_list,name=Stealthed,if=stealthed||buff.shadowmeld.up
+	{Stealthed, 'stealthed||player.buff(Shadowmeld)'},
  	--actions+=/call_action_list,name=Finishers,if=combo_points>=5||{combo_points>=4&spell_targets.shuriken_storm>=3&spell_targets.shuriken_storm<=4}
-	{Finishers, 'combo_points>=5||{combo_points>=4&player.area(10).enemies>=3&player.area(10).enemies>=4}'},
+	{Finishers, 'combo_points>=5||{combo_points>=4&player.area(10).enemies>=3&player.area(10).enemies<=4}'},
  	--actions+=/call_action_list,name=Stealth_Cooldowns,if=combo_points.deficit>=2+talent.premeditation.enabled&{variable.ed_threshold||{cooldown.shadowmeld.up&!cooldown.vanish.up&cooldown.shadow_dance.charges<=1}||target.time_to_die<12}
 	{Stealth_Cooldowns, 'combo_points.deficit>=2+talent(6,1).enabled&{variable.ed_threshold||{cooldown(Shadowmeld).up&!cooldown(Vanish).up&cooldown(Shadow Dance).charges<=1}||target.time_to_die<12}'},
  	--actions+=/call_action_list,name=Builders,if=variable.ed_threshold

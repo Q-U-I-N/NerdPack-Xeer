@@ -297,12 +297,12 @@ NeP.DSL:Register('time_to_die', function(target)
 	return NeP.DSL:Get('deathin')(target)
 end)
 
---[[
---/dump NeP.DSL:Get('time')('player')
-NeP.DSL:Register('time', function(target)
-	return NeP.DSL:Get('combat.time')(target)
+
+--/dump NeP.DSL:Get('xtime')()
+NeP.DSL:Register('xtime', function()
+	return NeP.DSL:Get('combat.time')('player')
 end)
---]]
+
 
 --/dump NeP.DSL:Get('spell.cooldown')('player', '61304')
 --/dump NeP.DSL:Get('cooldown.remains')('player','Mind Blast')
@@ -704,7 +704,7 @@ end)
 
 --/dump NeP.DSL:Get('variable.actors_fight_time_mod')()
 NeP.DSL:Register('variable.actors_fight_time_mod', function()
-  local time = NeP.DSL:Get('combat.time')('player')
+  local time = NeP.DSL:Get('xtime')()
   local target_time_to_die = NeP.DSL:Get('time_to_die')('target')
   -- time+target.time_to_die>450&time+target.time_to_die<600
   if (time + target_time_to_die) > 450 and (time + target_time_to_die) < 600 then
@@ -789,6 +789,31 @@ end)
 --------------------------------------------------------------------------------
 --------------------------------- ROGUE ----------------------------------------
 --------------------------------------------------------------------------------
+NeP.DSL:Register('parser_bypass2', function()
+  local x = NeP.DSL:Get('xtime')()
+  if x < 10 then
+    return true and 1
+  else
+    return false or 0
+  end
+end)
+
+NeP.DSL:Register('parser_bypass3', function()
+  local x = NeP.DSL:Get('xtime')()
+  if x >= 10 then
+    return true and 1
+  else
+    return false or 0
+  end
+end)
+
+NeP.DSL:Register('stealthed', function()
+  if NeP.DSL:Get('buff')('player', 'Shadow Dance') or NeP.DSL:Get('buff')('player', 'Stealth') or NeP.DSL:Get('buff')('player', 'Subterfuge') or NeP.DSL:Get('buff')('player', 'Shadowmeld') or NeP.DSL:Get('buff')('player', 'Prowl') then
+    return true
+  else
+    return false
+  end
+end)
 --/dump NeP.DSL:Get('variable.ssw_er')()
 NeP.DSL:Register('variable.ssw_er', function()
   --actions=variable,name=ssw_er,value=equipped.shadow_satyrs_walk*(10-floor(target.distance*0.5))
@@ -808,6 +833,65 @@ NeP.DSL:Register('variable.ed_threshold', function()
     local x = (NeP.DSL:Get('energy.deficit')() <= ((20 + NeP.DSL:Get('talent.enabled')(nil, '3,3')) * (35 + NeP.DSL:Get('talent.enabled')(nil, '7,1')) * (25 + NeP.DSL:Get('variable.ssw_er')())))
     return x
 end)
+
+NeP.DSL:Register('RtB', function()
+  local int = 0
+  local bearing = false
+  local shark = false
+
+  -- Shark Infested Waters
+  if UnitBuff('player', GetSpellInfo(193357)) then
+      shark = true
+      int = int + 1
+  end
+
+  -- True Bearing
+  if UnitBuff('player', GetSpellInfo(193359)) then
+      bearing = true
+      int = int + 1
+  end
+
+  -- Jolly Roger
+  if UnitBuff('player', GetSpellInfo(199603)) then
+      int = int + 1
+  end
+
+  -- Grand Melee
+  if UnitBuff('player', GetSpellInfo(193358)) then
+      int = int + 1
+  end
+
+  -- Buried Treasure
+  if UnitBuff('player', GetSpellInfo(199600)) then
+      int = int + 1
+  end
+
+  -- Broadsides
+  if UnitBuff('player', GetSpellInfo(193356)) then
+      int = int + 1
+  end
+
+  -- If all six buffs are active:
+  if int == 6 then
+      return true --"LEEEROY JENKINS!"
+
+      -- If two or Shark/Bearing and AR/Curse active:
+  elseif int == 2 or int == 3 or ((bearing or shark) and ((UnitBuff("player", GetSpellInfo(13750)) or UnitDebuff("player", GetSpellInfo(202665))))) then
+      return true --"Keep."
+
+      -- If only True Bearing
+  elseif bearing then
+      return true --"Keep. AR/Curse if ready."
+
+      -- If only Shark and CDs ready
+  elseif shark and ((GetSpellCooldown(13750) == 0) or (GetSpellCooldown(202665) == 0)) then
+      return true --"AR/Curse NOW and keep!"
+
+      -- If only one bad buff:
+  else return true --"Reroll now!"
+  end
+end)
+
 
 --------------------------------------------------------------------------------
 ---------------------------------- WIP -----------------------------------------

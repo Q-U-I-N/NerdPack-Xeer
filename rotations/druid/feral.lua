@@ -154,7 +154,7 @@ local Cooldowns = {
 	--actions.=/Regrowth,if=talent.bloodtalons.enabled&buff.predatory_swiftness.up&(combo_points>=5||buff.predatory_swiftness.remains<1.5||(talent.bloodtalons.enabled&combo_points=2&buff.bloodtalons.down&cooldown.ashamanes_frenzy.remains<gcd)||(talent.elunes_guidance.enabled&((cooldown.elunes_guidance.remains<gcd&combo_points=0)||(buff.elunes_guidance.up&combo_points>=4))))
 	{Regrowth, 'talent(7,2)&player.buff(Predatory Swiftness)&{combo_points>=5||player.buff(Predatory Swiftness).remains<1.5||{talent(7,2)&combo_points=2&!player.buff(Bloodtalons)&cooldown(Ashamane\'s Frenzy).remains<gcd}||{talent(6,3)&{{cooldown(Elune\'s Guidance).remains<gcd&combo_points=0}}}}'},
 	--actions.=/call_action_list,name=sbt_opener,if=talent.sabertooth.enabled&time<20
-	{SBT_Opener, 'talent(6,1)&player.combat.time<20'},
+	{SBT_Opener, 'talent(6,1)&xtime<20'},
 	--# Special logic for Ailuro Pouncers legendary.
 	--actions.=/Regrowth,if=equipped.ailuro_pouncers&talent.bloodtalons.enabled&buff.predatory_swiftness.stack>1&buff.bloodtalons.down
 	{Regrowth, 'equipped(137024)&talent(7,2)&player.buff(Predatory Swiftness).stack>1&!player.buff(Bloodtalons)'},
