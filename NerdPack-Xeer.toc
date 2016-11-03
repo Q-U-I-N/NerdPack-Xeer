@@ -2,5 +2,6 @@
 ## Notes: Custom Combat Routines for NerdPack
 ## Interface: 70100
 ## Author: Xeer
+## Dependencies: NerdPack
 
 Xeer.xml
