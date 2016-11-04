@@ -67,7 +67,7 @@ local PreCombat = {
 	--actions.precombat+=/cat_form
 	{'Cat Form', '!player.buff(Cat Form)&!player.buff(Travel Form)'},
 	--actions.precombat+=/prowl
- 	{'Prowl', '!player.buff(Prowl)&player.buff(Cat Form)'},
+ 	{'Prowl', '!player.buff(Prowl)&player.buff(Cat Form)&target.enemy'},
  	{'Rake', 'player.buff(Prowl)&target.range<5&target.infront'},
 	--# Snapshot raid buffed stats before combat begins and pre-potting is done.
 	--actions.precombat+=/snapshot_stats
