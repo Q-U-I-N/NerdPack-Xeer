@@ -1,8 +1,5 @@
 local _, Xeer = ...
-local GUI = {
-}
-
--- Splash stuff
+-- Splash stuff
 local Splash_Frame = CreateFrame("Frame", "Xeer_SPLASH", UIParent)
 Splash_Frame:SetBackdrop({bgFile = "Interface/Tooltips/UI-Tooltip-Background",
 	edgeFile = "Interface/Tooltips/UI-Tooltip-Border",
