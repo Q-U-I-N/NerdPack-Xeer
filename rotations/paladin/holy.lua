@@ -1,4 +1,6 @@
-local _, Xeer = ... 
+local _, Xeer = ...
+local GUI = {
+} 
 
 local GUI = {
 	{type = 'header', 	text = 'Keybinds', align = 'center'},

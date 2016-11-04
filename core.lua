@@ -1,6 +1,10 @@
 local _, Xeer = ...
 
-Xeer.Version = '1.7.23'
+local GUI = {
+
+}
+
+Xeer.Version = '1.8.1'
 Xeer.Branch = 'RELEASE'
 Xeer.Name = 'NerdPack - Xeer Routines'
 Xeer.Author = 'Xeer'
@@ -11,7 +15,7 @@ Xeer.Splash = 'Interface\\AddOns\\NerdPack-Xeer\\media\\splash.blp'
 local frame = CreateFrame('GameTooltip', 'NeP_ScanningTooltip', UIParent, 'GameTooltipTemplate')
 
 Xeer.class = select(3,UnitClass("player"))
-
+Xeer.spell_timers = {}
 
 
 --[[
@@ -798,7 +802,17 @@ NeP.Listener:Add('Xeer_Listener3', 'COMBAT_LOG_EVENT_UNFILTERED', function(time,
     end
 end)
 
-
+NeP.Listener:Add('Xeer_Listener4', 'COMBAT_LOG_EVENT_UNFILTERED', function(timestamp, combatevent, hideCaster, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, spellID, spellName, spellSchool, amount, ...)
+	if (combatevent == "SPELL_CAST_SUCCESS" and  sourceName == UnitName("player")) then
+		Xeer.spell_timers[spellID] = {}
+		Xeer.spell_timers[spellID].name = spellName
+		Xeer.spell_timers[spellID].id = spellID
+		Xeer.spell_timers[spellID].time = GetTime()
+	end
+	if UnitIsDeadOrGhost("player") or not UnitAffectingCombat("player") or not InCombatLockdown() then
+		Xeer.spell_timers = {}
+	end
+end)
 
 --[[
 NeP.Listener:Add('Xeer_Listener666', 'COMBAT_LOG_EVENT_UNFILTERED', function(timestamp, combatevent, hideCaster, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, spellID, spellName, spellSchool, amount, ...)

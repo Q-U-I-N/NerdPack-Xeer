@@ -1,4 +1,6 @@
 local _, Xeer = ...
+local GUI = {
+}
 
 local exeOnLoad = function()
 
@@ -89,7 +91,7 @@ local xCombat = {
 	{'Summon Darkglare', 'talent(7,1)&{cooldown(Call Dreadstalkers).remains>5&soul_shard<3}'},
  	--actions+=/summon_darkglare,if=cooldown.call_dreadstalkers.remains<=action.summon_darkglare.cast_time&soul_shard>=3
 	{'Summon Darkglare', 'talent(7,1)&{cooldown(Call Dreadstalkers).remains<=action(Summon Darkglare).cast_time&soul_shard>=3}'},
- 	--actions+=/summon_darkglare,if=cooldown.call_dreadstalkers.remains<=action.summon_darkglare.cast_time&soul_shard>=1&buff.demonic_calling.react
+ 	--actions+=/summon_darkglare,if=cooldown.call_dreadstalkers.remains<=action.summon_darkglare.cast_time&soul_shard>=1&buff.demonic_calling.up
 	{'Summon Darkglare', 'talent(7,1)&{cooldown(Call Dreadstalkers).remains<=action(Summon Darkglare).cast_time&soul_shard>=1&player.buff(Demonic Calling)}'},
  	--actions+=/call_dreadstalkers,if=talent.summon_darkglare.enabled&(spell_targets.implosion<3|!talent.implosion.enabled)&cooldown.summon_darkglare.remains>2
 	{'Call Dreadstalkers', 'talent(7,1)&{target.area(8).enemies<3||!talent(2,3)}&cooldown(Summon Darkglare).remains>2'},
@@ -97,7 +99,7 @@ local xCombat = {
 	{'Call Dreadstalkers', 'talent(7,1)&{target.area(8).enemies<3||!talent(2,3)}&prev_gcd(Summon Darkglare)'},
  	--actions+=/call_dreadstalkers,if=talent.summon_darkglare.enabled&(spell_targets.implosion<3|!talent.implosion.enabled)&cooldown.summon_darkglare.remains<=action.call_dreadstalkers.cast_time&soul_shard>=3
 	{'Call Dreadstalkers', 'talent(7,1)&{target.area(8).enemies<3||!talent(2,3)}&cooldown(Summon Darkglare).remains<=action(Call Dreadstalkers.cast_time)&soul_shard>=3'},
- 	--actions+=/call_dreadstalkers,if=talent.summon_darkglare.enabled&(spell_targets.implosion<3|!talent.implosion.enabled)&cooldown.summon_darkglare.remains<=action.call_dreadstalkers.cast_time&soul_shard>=1&buff.demonic_calling.react
+ 	--actions+=/call_dreadstalkers,if=talent.summon_darkglare.enabled&(spell_targets.implosion<3|!talent.implosion.enabled)&cooldown.summon_darkglare.remains<=action.call_dreadstalkers.cast_time&soul_shard>=1&buff.demonic_calling.up
 	{'Call Dreadstalkers', 'talent(7,1)&{target.area(8).enemies<3||!talent(2,3)}&cooldown(Summon Darkglare).remains<=action(Call Dreadstalkers.cast_time)&soul_shard>=1&player.buff(Demonic Calling)'},
  	--actions+=/hand_of_guldan,if=soul_shard>=3&prev_gcd.call_dreadstalkers
 	{'Hand of Gul\'dan', '!prev_gcd(Hand of Gul\'dan)&soul_shard>=3&prev_gcd(Call Dreadstalkers)'},
@@ -151,7 +153,7 @@ local Cooldowns = {
 	--{'Blood Fury'},
  	--actions+=/soul_harvest
 	{'Soul Harvest', 'talent(4,3)'},
- 	--actions+=/potion,name=deadly_grace,if=buff.soul_harvest.remains|target.time_to_die<=45|trinket.proc.any.react
+ 	--actions+=/potion,name=deadly_grace,if=buff.soul_harvest.remains|target.time_to_die<=45|trinket.proc.any.up
 	--{'', ''},
 }
 
@@ -169,4 +171,10 @@ local outCombat = {
 	{PreCombat},
 }
 
-NeP.CR:Add(266, '[|cff'..Xeer.addonColor..'Xeer|r] WARLOCK - Demonology', inCombat, outCombat, exeOnLoad)
+NeP.CR:Add(266, {
+	name = '[|cff'..Xeer.addonColor..'Xeer|r] WARLOCK - Demonology',
+	  ic = inCombat,
+	 ooc = outCombat,
+	 gui = GUI,
+	load = exeOnLoad
+})

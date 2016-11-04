@@ -1,4 +1,6 @@
 local _, Xeer = ...
+local GUI = {
+}
 
 local exeOnLoad = function()
 	Xeer.ExeOnLoad()
@@ -198,7 +200,7 @@ local xCombat = {
  	--actions+=/call_action_list,name=fury_of_elune,if=talent.fury_of_elune.enabled&cooldown.fury_of_elune.remains<target.time_to_die
 	{FoE, 'talent(7,1)&{cooldown(Fury of Elune).remains<target.time_to_die}'},
  	--actions+=/call_action_list,name=ed,if=equipped.the_emerald_dreamcatcher
-	{ED, 'equipped(137062)'},
+	{ED, 'xequipped(137062)'},
  	--actions+=/new_moon,if=(charges=2&recharge_time<5)||charges=3
 	{'New Moon', 'cooldown(New Moon).charges<3&cooldown(New Moon).recharge_time<5}||cooldown(New Moon).charges=3'},
  	--actions+=/half_moon,if=(charges=2&recharge_time<5)||charges=3||(target.time_to_die<15&charges=2)
@@ -264,4 +266,10 @@ local outCombat = {
 	{PreCombat},
 }
 
-NeP.CR:Add(102, '[|cff'..Xeer.addonColor..'Xeer|r] DRUID - Balance', inCombat, outCombat, exeOnLoad)
+NeP.CR:Add(102, {
+	name = '[|cff'..Xeer.addonColor..'Xeer|r] DRUID - Balance',
+	  ic = inCombat,
+	 ooc = outCombat,
+	 gui = GUI,
+	load = exeOnLoad
+})

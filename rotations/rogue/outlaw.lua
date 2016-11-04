@@ -1,4 +1,6 @@
 local _, Xeer = ...
+local GUI = {
+}
 
 local exeOnLoad = function()
 	 Xeer.ExeOnLoad()
@@ -49,8 +51,8 @@ local bf = {
 
 local cds = {
 --# Cooldowns
---actions.cds=potion,name=old_war,if=buff.bloodlust.react|target.time_to_die<=25|buff.adrenaline_rush.up
---actions.cds+=/use_item,slot=trinket2,if=buff.bloodlust.react|target.time_to_die<=20|combo_points.deficit<=2
+--actions.cds=potion,name=old_war,if=buff.bloodlust.up|target.time_to_die<=25|buff.adrenaline_rush.up
+--actions.cds+=/use_item,slot=trinket2,if=buff.bloodlust.up|target.time_to_die<=20|combo_points.deficit<=2
 --actions.cds+=/blood_fury
 --actions.cds+=/berserking
 --actions.cds+=/arcane_torrent,if=energy.deficit>40
@@ -74,6 +76,8 @@ local xCombat = {
 --	{'Roll the Bones', 'toggle(cooldowns)&player.combopoints >= 5&!player.talent(7,1)&player.spell(Adrenaline Rush).cooldown < 15&!player.buff(Shark Infested Waters)||toggle(Cooldowns)&player.combopoints >= 5&!player.talent(7,1)&player.spell(Curse of the Dreadblades).cooldown < 15&!player.buff(Shark Infested Waters)'},
 	--(This one is with the 2 buff combinations - Not sure its wrong yet) {'Roll the Bones', 'player.combopoints >= 5&!player.talent(7,1)&player.spell(Adrenaline Rush).cooldown > 15&player.spell(Curse of the Dreadblades).cooldown > 15&!player.talent(7,1)&player.buff(Broadsides)&!player.buff(Jolly Roger)&!player.buff(Grand Melee)&!player.buff(Shark Infested Waters)&!player.buff(True Bearing)&!player.buff(Buried Treasure)||player.combopoints >= 5&!player.talent(7,1)&player.spell(Adrenaline Rush).cooldown > 15&player.spell(Curse of the Dreadblades).cooldown > 15&!player.buff(Broadsides)&player.buff(Jolly Roger)&!player.buff(Grand Melee)&!player.buff(Shark Infested Waters)&!player.buff(True Bearing)&!player.buff(Buried Treasure)||player.combopoints >= 5&!player.talent(7,1)&player.spell(Adrenaline Rush).cooldown > 15&player.spell(Curse of the Dreadblades).cooldown > 15&!player.buff(Broadsides)&!player.buff(Jolly Roger)&player.buff(Grand Melee)&!player.buff(Shark Infested Waters)&!player.buff(True Bearing)&!player.buff(Buried Treasure)||player.combopoints >= 5&!player.talent(7,1)&player.spell(Adrenaline Rush).cooldown > 15&player.spell(Curse of the Dreadblades).cooldown > 15&!player.buff(Broadsides)&!player.buff(Jolly Roger)&!player.buff(Grand Melee)&player.buff(Shark Infested Waters)&!player.buff(True Bearing)&!player.buff(Buried Treasure)||player.combopoints >= 5&!player.talent(7,1)&player.spell(Adrenaline Rush).cooldown > 15&player.spell(Curse of the Dreadblades).cooldown > 15&!player.buff(Broadsides)&!player.buff(Jolly Roger)&!player.buff(Grand Melee)&!player.buff(Shark Infested Waters)&!player.buff(True Bearing)&player.buff(Buried Treasure)||player.combopoints >= 5&!player.talent(7,1)&player.spell(Adrenaline Rush).cooldown > 15&player.spell(Curse of the Dreadblades).cooldown > 15&player.buff(Broadsides)&player.buff(Jolly Roger)&!player.buff(Grand Melee)&!player.buff(Shark Infested Waters)&!player.buff(True Bearing)&!player.buff(Buried Treasure)||player.combopoints >= 5&!player.talent(7,1)&player.spell(Adrenaline Rush).cooldown > 15&player.spell(Curse of the Dreadblades).cooldown > 15&!player.buff(Broadsides)&player.buff(Jolly Roger)&player.buff(Grand Melee)&!player.buff(Shark Infested Waters)&!player.buff(True Bearing)&!player.buff(Buried Treasure)||player.combopoints >= 5&!player.talent(7,1)&player.spell(Adrenaline Rush).cooldown > 15&player.spell(Curse of the Dreadblades).cooldown > 15&!player.buff(Broadsides)&player.buff(Jolly Roger)&!player.buff(Grand Melee)&!player.buff(Shark Infested Waters)&!player.buff(True Bearing)&player.buff(Buried Treasure)||player.combopoints >= 5&!player.talent(7,1)&player.spell(Adrenaline Rush).cooldown > 15&player.spell(Curse of the Dreadblades).cooldown > 15&!player.buff(Broadsides)&!player.buff(Jolly Roger)&player.buff(Grand Melee)&!player.buff(Shark Infested Waters)&!player.buff(True Bearing)&player.buff(Buried Treasure)'},
 	{'Roll the Bones', 'player.combopoints >= 5&!player.talent(7,1)&player.spell(Adrenaline Rush).cooldown > 15&player.spell(Curse of the Dreadblades).cooldown > 15&!player.talent(7,1)&player.buff(Broadsides)&!player.buff(Jolly Roger)&!player.buff(Grand Melee)&!player.buff(Shark Infested Waters)&!player.buff(True Bearing)&!player.buff(Buried Treasure)||player.combopoints >= 5&!player.talent(7,1)&player.spell(Adrenaline Rush).cooldown > 15&player.spell(Curse of the Dreadblades).cooldown > 15&!player.buff(Broadsides)&player.buff(Jolly Roger)&!player.buff(Grand Melee)&!player.buff(Shark Infested Waters)&!player.buff(True Bearing)&!player.buff(Buried Treasure)||player.combopoints >= 5&!player.talent(7,1)&player.spell(Adrenaline Rush).cooldown > 15&player.spell(Curse of the Dreadblades).cooldown > 15&!player.buff(Broadsides)&!player.buff(Jolly Roger)&player.buff(Grand Melee)&!player.buff(Shark Infested Waters)&!player.buff(True Bearing)&!player.buff(Buried Treasure)||player.combopoints >= 5&!player.talent(7,1)&player.spell(Adrenaline Rush).cooldown > 15&player.spell(Curse of the Dreadblades).cooldown > 15&!player.buff(Broadsides)&!player.buff(Jolly Roger)&!player.buff(Grand Melee)&player.buff(Shark Infested Waters)&!player.buff(True Bearing)&!player.buff(Buried Treasure)||player.combopoints >= 5&!player.talent(7,1)&player.spell(Adrenaline Rush).cooldown > 15&player.spell(Curse of the Dreadblades).cooldown > 15&!player.buff(Broadsides)&!player.buff(Jolly Roger)&!player.buff(Grand Melee)&!player.buff(Shark Infested Waters)&!player.buff(True Bearing)&player.buff(Buried Treasure)'},
+{'Roll the Bones', '!RtB'},
+{Main_rotation, 'RtB'},
 --variable,name=ss_useable_noreroll,value=(combo_points<5+talent.deeper_stratagem.enabled-(buff.broadsides.up|buff.jolly_roger.up)-(talent.alacrity.enabled&buff.alacrity.stack<=4))
 --variable,name=ss_useable,value=(talent.anticipation.enabled&combo_points<4)|(!talent.anticipation.enabled&((variable.rtb_reroll&combo_points<4+talent.deeper_stratagem.enabled)|(!variable.rtb_reroll&variable.ss_useable_noreroll)))
 --call_action_list,name=bf
@@ -102,6 +106,9 @@ local Keybinds = {
 	{'%pause', 'keybind(alt)'},
 }
 
+
+
+
 local inCombat = {
 	{Keybinds},
 	{Interrupts, 'target.interruptAt(46)&toggle(interrupts)&target.infront&target.range<8'},
@@ -115,4 +122,10 @@ local outCombat = {
 	{Keybinds},
 }
 
-NeP.CR:Add(260, '[|cff'..Xeer.addonColor..'Xeer|r] ROGUE - Outlaw', inCombat, outCombat, exeOnLoad)
+NeP.CR:Add(260, {
+	name = '[|cff'..Xeer.addonColor..'Xeer|r] ROGUE - Outlaw',
+	  ic = inCombat,
+	 ooc = outCombat,
+	 gui = GUI,
+	load = exeOnLoad
+})

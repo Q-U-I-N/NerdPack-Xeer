@@ -1,4 +1,6 @@
 local _, Xeer = ...
+local GUI = {
+}
 
 local exeOnLoad = function()
 	 Xeer.ExeOnLoad()
@@ -93,9 +95,9 @@ local AoE = {
 local ST = {
 	--actions.single_target=bloodthirst,if=buff.fujiedas_fury.up&buff.fujiedas_fury.remains<2
 	{'Bloodthirst', 'player.buff(Fujieda\'s Fury)&player.buff(Fujieda\'s Fury).stack<2'},
-	--actions.single_target+=/execute,if=(artifact.juggernaut.enabled&(!buff.juggernaut.up||buff.juggernaut.remains<2))||buff.stone_heart.react
+	--actions.single_target+=/execute,if=(artifact.juggernaut.enabled&(!buff.juggernaut.up||buff.juggernaut.remains<2))||buff.stone_heart.up
 	{'Execute', '{artifact(Juggernaut).enabled&{!player.buff(Juggernaut)||player.buff(Juggernaut).remains<2}}||player.buff(Stone Heart)'},
-	--actions.single_target+=/rampage,if=player.rage=100&(target.health.pct>20||target.health.pct<20&!talent.massacre.enabled)||buff.massacre.react&buff.enrage.remains<1
+	--actions.single_target+=/rampage,if=player.rage=100&(target.health.pct>20||target.health.pct<20&!talent.massacre.enabled)||buff.massacre.up&buff.enrage.remains<1
 	{'Rampage', 'player.rage=100&{target.health>20||{target.health<20&!talent(5,1)}||{player.buff(Massacre)&player.buff(Enrage).remains<1}}'},
 	--actions.single_target+=/berserker_rage,if=talent.outburst.enabled&cooldown.odyns_fury.remains=0&buff.enrage.down
 	{'Berserker Rage', 'talent(3,2)&spell(Odyn\'s Fury).cooldown=0&!player.buff(Enrage)'},
@@ -109,7 +111,7 @@ local ST = {
 	{'Furious Slash', 'talent(6,2)&{!player.buff(Frenzy)||player.buff(Frenzy).stack<=3}'},
 	--actions.single_target+=/raging_blow,if=buff.juggernaut.down&buff.enrage.up
 	{'Raging Blow', '!player.buff(Juggernaut)&player.buff(Enrage)'},
-	--actions.single_target+=/whirlwind,if=buff.wrecking_ball.react&buff.enrage.up
+	--actions.single_target+=/whirlwind,if=buff.wrecking_ball.up&buff.enrage.up
 	{'Whirlwind', 'talent(3,1)&player.buff(Wrecking Ball)&player.buff(Enrage)'},
 	--actions.single_target+=/execute,if=talent.inner_rage.enabled||!talent.inner_rage.enabled&player.rage>50
 	{'Execute', 'talent(6,3)||{!talent(6,3)&player.rage>50}'},
@@ -183,4 +185,10 @@ local outCombat = {
 	--{PreCombat},
 }
 
-NeP.CR:Add(72, '[|cff'..Xeer.addonColor..'Xeer|r] WARRIOR - Fury', inCombat, outCombat, exeOnLoad)
+NeP.CR:Add(72, {
+	name = '[|cff'..Xeer.addonColor..'Xeer|r] WARRIOR - Fury',
+	  ic = inCombat,
+	 ooc = outCombat,
+	 gui = GUI,
+	load = exeOnLoad
+})

@@ -1,5 +1,9 @@
 local _, Xeer = ...
 
+local GUI = {
+
+}
+
 --------------------------------------------------------------------------------
 ---------------------------------ARTIFACT---------------------------------------
 --------------------------------------------------------------------------------
@@ -86,9 +90,9 @@ end)
 --/dump NeP.DSL:Get('artifact.enabled')('player', 'Thoradin\'s Might')
 NeP.DSL:Register('artifact.enabled', function(_, spell)
 		if select(10,NeP.DSL:Get('artifact.trait_info')(_, spell)) then
-			return true and 1
+			return 1
 		else
-			return false or 0
+			return 0
 		end
 end)
 
@@ -111,7 +115,7 @@ end)
 --------------------------------------------------------------------------------
 
 --NeP.DSL:Register('equipped', function(target, item)
---	if IsEquippedItem(item) == true then return true else return false end
+--	if IsEquippedItem(item) then return true else return false end
 --end)
 
 --/dump NeP.DSL:Get('casting.left')('player', 'Fireball')
@@ -133,11 +137,11 @@ end)
 --------------------------------------------------------------------------------
 
 NeP.DSL:Register('xmoving', function()
-	local speed, _ = GetUnitSpeed('player')
+	local speed = GetUnitSpeed('player')
 		if speed ~= 0 then
-			return true and 1
+			return 1
 		else
-			return false or 0
+			return 0
 		end
 end)
 
@@ -230,8 +234,8 @@ NeP.DSL:Register('dot.active_dot', function(target, spell)
 end)
 
 
---/dump NeP.DSL:Get('buff.react')('player','Incanter\'s Flow')
-NeP.DSL:Register('buff.react', function(target, spell)
+--/dump NeP.DSL:Get('buff.up')('player','Incanter\'s Flow')
+NeP.DSL:Register('buff.up', function(target, spell)
 	local x = NeP.DSL:Get('buff.count')(target, spell)
   if x == 1 then
     return true
@@ -252,7 +256,7 @@ NeP.DSL:Register('buff.remains', function(target, spell)
 	return NeP.DSL:Get('buff.duration')(target, spell)
 end)
 
-NeP.DSL:Register('debuff.react', function(target, spell)
+NeP.DSL:Register('debuff.up', function(target, spell)
 	local x = NeP.DSL:Get('debuff.count')(target, spell)
   if x == 1 then
     return true
@@ -307,7 +311,7 @@ end)
 --/dump NeP.DSL:Get('spell.cooldown')('player', '61304')
 --/dump NeP.DSL:Get('cooldown.remains')('player','Mind Blast')
 NeP.DSL:Register('cooldown.remains', function(_, spell)
-	if NeP.DSL:Get('spell.exists')(_, spell) == true then
+	if NeP.DSL:Get('spell.exists')(_, spell) then
 		return NeP.DSL:Get('spell.cooldown')(_, spell)
 	else
 		return 0
@@ -318,7 +322,7 @@ end)
 --/dump NeP.DSL:Get('cooldown.up')('player','Vanish')
 --/dump NeP.DSL:Get('spell.cooldown')('player','Vanish')
 NeP.DSL:Register('cooldown.up', function(_, spell)
-	if NeP.DSL:Get('spell.exists')(_, spell) == true then
+	if NeP.DSL:Get('spell.exists')(_, spell) then
 		if NeP.DSL:Get('spell.cooldown')(_, spell) == 0 then
       return true
     end
@@ -351,7 +355,7 @@ end)
   --return  GetSpellBaseCooldown(spellID) / 1000
 --/dump NeP.DSL:Get('action.cooldown')('player','Fire Blast')
 NeP.DSL:Register('action.cooldown', function(_, spell)
-  if NeP.DSL:Get('spell.exists')(_, spell) == true then
+  if NeP.DSL:Get('spell.exists')(_, spell) then
 		return NeP.DSL:Get('spell.cooldown')(_, spell)
 	else
 		return 0
@@ -361,7 +365,7 @@ end)
 
 --/dump NeP.DSL:Get('action.charges')('player','Fire Blast')
 NeP.DSL:Register('action.charges', function(_, spell)
-	if NeP.DSL:Get('spell.exists')(_, spell) == true then
+	if NeP.DSL:Get('spell.exists')(_, spell) then
 		return NeP.DSL:Get('spell.charges')(_, spell)
 	else
 		return 0
@@ -370,7 +374,7 @@ end)
 
 --/dump NeP.DSL:Get('cooldown.charges')('player','Fire Blast')
 NeP.DSL:Register('cooldown.charges', function(_, spell)
-	if NeP.DSL:Get('spell.exists')(_, spell) == true then
+	if NeP.DSL:Get('spell.exists')(_, spell) then
 		return NeP.DSL:Get('spell.charges')(_, spell)
 	else
 		return 0
@@ -379,7 +383,7 @@ end)
 
 --/dump NeP.DSL:Get('cooldown.recharge_time')('player','Fire Blast')
 NeP.DSL:Register('cooldown.recharge_time', function(_, spell)
-	if NeP.DSL:Get('spell.exists')(_, spell) == true then
+	if NeP.DSL:Get('spell.exists')(_, spell) then
 		return NeP.DSL:Get('spell.recharge')(_, spell)
 	else
 		return 0
@@ -388,7 +392,7 @@ end)
 
 --/dump NeP.DSL:Get('charges_fractional')('player','Phoenix\'s Flames')
 NeP.DSL:Register('charges_fractional', function(_, spell)
-	if NeP.DSL:Get('spell.exists')(_, spell) == true then
+	if NeP.DSL:Get('spell.exists')(_, spell) then
 		return NeP.DSL:Get('spell.charges')(_, spell)
 	else
 		return 0
@@ -411,7 +415,7 @@ NeP.DSL:Register('gcd.max', function()
 	return NeP.DSL:Get('gcd')()
 end)
 
---/dump NeP.DSL:Get('action.execute_time')('player','Demonbolt')
+--/dump NeP.DSL:Get('action.execute_time')('player','Aimed Shot')
 --/dump NeP.DSL:Get('action.execute_time')('player','Shadow Bolt')
 
 NeP.DSL:Register('action.execute_time', function(_, spell)
@@ -537,7 +541,7 @@ end)
 
 --/dump NeP.DSL:Get('action.cast_time')('player','Frostbolt')
 NeP.DSL:Register('action.cast_time', function(_, spell)
-	if NeP.DSL:Get('spell.exists')(_, spell) == true then
+	if NeP.DSL:Get('spell.exists')(_, spell) then
 		return NeP.DSL:Get('spell.casttime')(_, spell)
 	else
 		return 0
@@ -556,20 +560,30 @@ end)
 --/dump NeP.DSL:Get('talent.enabled')(nil, '4,2')
 NeP.DSL:Register('talent.enabled', function(_, x,y)
   if NeP.DSL:Get('talent')(_, x,y) then
-    return true and 1
+    return 1
   else
-    return false or 0
+    return 0
   end
 end)
 
 --/dump NeP.DSL:Get('xequipped')(2575)
 NeP.DSL:Register('xequipped', function(item)
-	if IsEquippedItem(item) == true then
-    return true and 1
+	if IsEquippedItem(item) then
+    return 1
   else
-    return false or 0
+    return 0
   end
 end)
+
+--/dump NeP.DSL:Get('line_cd')(_, 'Cobra Shot')
+NeP.DSL:Register('line_cd', function(_,spell)
+  local spellID = NeP.Core:GetSpellID(spell)
+  if Xeer.spell_timers[spellID] then
+    return GetTime() - Xeer.spell_timers[spellID].time
+  end
+  return 0
+end)
+
 --------------------------------------------------------------------------------
 ---------------------------------PROT WAR---------------------------------------
 --------------------------------------------------------------------------------
@@ -586,13 +600,12 @@ end)
 --/dump NeP.DSL:Get['ignorepain_max')()
 NeP.DSL:Register('ignorepain_max', function()
 	local ss = NeP.DSL:Get('health.max')('player')
-	if hasTalent(5,2) == true then
+	if hasTalent(5,2) then
 		return NeP.Core.Round((((77.86412474516502 * 1.70) * ss) / 100))
 	else
 		return NeP.Core.Round(((77.86412474516502 * ss) / 100))
 	end
 end)
-
 
 --------------------------------------------------------------------------------
 ---------------------------------FERAL------------------------------------------
@@ -641,12 +654,9 @@ end)
 --/dump select(8, UnitDebuff('target', GetSpellInfo(NeP.Core:GetSpellID(NeP.Core:GetSpellName('Rip')))))
 --/dump select(6, UnitDebuff('target', GetSpellInfo(NeP.Core:GetSpellID(NeP.Core:GetSpellName('Rip')))))
 
-
 --------------------------------------------------------------------------------
 --------------------------------WARLOCK-----------------------------------------
 --------------------------------------------------------------------------------
-
-
 
 --/dump NeP.DSL:Get('warlock.remaining_duration')('Dreadstalker')
 --/dump NeP.DSL:Get('warlock.remaining_duration')('Wild Imp')
@@ -789,21 +799,22 @@ end)
 --------------------------------------------------------------------------------
 --------------------------------- ROGUE ----------------------------------------
 --------------------------------------------------------------------------------
+
 NeP.DSL:Register('parser_bypass2', function()
   local x = NeP.DSL:Get('xtime')()
   if x < 10 then
-    return true and 1
+    return 1
   else
-    return false or 0
+    return 0
   end
 end)
 
 NeP.DSL:Register('parser_bypass3', function()
   local x = NeP.DSL:Get('xtime')()
   if x >= 10 then
-    return true and 1
+    return 1
   else
-    return false or 0
+    return 0
   end
 end)
 
@@ -879,19 +890,52 @@ NeP.DSL:Register('RtB', function()
   elseif int == 2 or int == 3 or ((bearing or shark) and ((UnitBuff("player", GetSpellInfo(13750)) or UnitDebuff("player", GetSpellInfo(202665))))) then
       return true --"Keep."
 
+--[[
       -- If only True Bearing
   elseif bearing then
       return true --"Keep. AR/Curse if ready."
+--]]
 
-      -- If only Shark and CDs ready
-  elseif shark and ((GetSpellCooldown(13750) == 0) or (GetSpellCooldown(202665) == 0)) then
+      -- If only Shark or True Bearing and CDs ready
+  elseif (bearing or shark)  and ((GetSpellCooldown(13750) == 0) or (GetSpellCooldown(202665) == 0)) then
       return true --"AR/Curse NOW and keep!"
 
+        --if we have only ONE bad buff BUT AR/curse is active:
+    elseif int ==1 and ((UnitBuff("player", GetSpellInfo(13750)) or UnitDebuff("player", GetSpellInfo(202665)))) then
+        return true
+
       -- If only one bad buff:
-  else return true --"Reroll now!"
+  else return false --"Reroll now!"
   end
 end)
 
+--------------------------------------------------------------------------------
+--------------------------------- HUNTER ---------------------------------------
+--------------------------------------------------------------------------------
+
+--/dump NeP.DSL:Get('variable.safe_to_build')()
+--actions+=/variable,name=safe_to_build,value=debuff.hunters_mark.down|(buff.trueshot.down&buff.marking_targets.down)
+NeP.DSL:Register('variable.safe_to_build', function()
+  local x = NeP.DSL:Get('debuff')('target','Hunter\'s Mark')
+  local y = NeP.DSL:Get('buff')('player','Trueshot')
+  local z = NeP.DSL:Get('buff')('player','Marking Targets')
+  if x == nil or (y == nil and z == nil) then
+    return true
+  end
+  return false
+end)
+
+--/dump NeP.DSL:Get('variable.use_multishot')()
+--actions+=/variable,name=use_multishot,value=((buff.marking_targets.up|buff.trueshot.up)&spell_targets.multishot>1)|(buff.marking_targets.down&buff.trueshot.down&spell_targets.multishot>2)
+NeP.DSL:Register('variable.use_multishot', function()
+  local x = NeP.DSL:Get('buff')('player','Marking Targets')
+  local y = NeP.DSL:Get('buff')('player','Trueshot')
+  local z = NeP.DSL:Get('area.enemies')('target','8')
+ if ((x or y) and z >= 1) or (x == nil and y == nil and z >= 2) then
+   return true
+ end
+ return false
+end)
 
 --------------------------------------------------------------------------------
 ---------------------------------- WIP -----------------------------------------

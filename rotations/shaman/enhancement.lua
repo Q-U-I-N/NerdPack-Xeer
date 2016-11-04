@@ -1,4 +1,6 @@
 local _, Xeer = ...
+local GUI = {
+}
 
 local exeOnLoad = function()
 	 Xeer.ExeOnLoad()
@@ -44,6 +46,7 @@ local PreCombat = {
 	--actions.precombat+=/snapshot_stats
 	--actions.precombat+=/potion,name=old_war
 	--actions.precombat+=/lightning_shield
+	{'Ghost Wolf', '!player.buff(Ghost Wolf)'},
 }
 
 local Survival = {
@@ -59,12 +62,12 @@ local Interrupts = {
 }
 
 local xCombat = {
-		{'Healing Surge', 'player.health<=80&player.maelstrom>=20', 'player'},
+	{'Healing Surge', 'player.health<=70&player.maelstrom>=20', 'player'},
 	--# Executed every time the actor is available.
 	--# Bloodlust casting behavior mirrors the simulator settings for proxy bloodlust. See options 'bloodlust_percent', and 'bloodlust_time'.
 	--actions+=/bloodlust,if=target.health.pct<25||time>0.500
 	--actions+=/feral_spirit
-	{'Feral Spirit'},
+	{'Feral Spirit', 'toggle(cooldowns)'},
 	--actions+=/crash_lightning,if=artifact.alpha_wolf.rank&prev_gcd.feral_spirit
 	{'Crash Lightning', 'artifact(Alpha Wolf).enabled&prev_gcd(Feral Spirit)'},
 	--actions+=/potion,name=old_war,if=feral_spirit.remains>5|target.time_to_die<=30
@@ -80,13 +83,9 @@ local xCombat = {
 	{'Boulderfist', 'player.buff(Boulderfist).remains<gcd||{spell(Boulderfist).charges>1.75&player.maelstrom<=100&player.area(8).enemies<=2}'},
 	--actions+=/crash_lightning,if=buff.crash_lightning.remains<gcd&active_enemies>=2
 	{'Crash Lightning', 'player.buff(Crash Lightning).remains<gcd&player.area(8).enemies>=2'},
-	--actions+=/windstrike,if=active_enemies>=3&!talent.hailstorm.enabled
-	{'Windstrike', '!talent(4,3)&player.area(8).enemies>=3'},
 	--actions+=/stormstrike,if=active_enemies>=3&!talent.hailstorm.enabled
 	{'Stormstrike', '!talent(4,3)&player.area(8).enemies>=3'},
-	--actions+=/windstrike,if=buff.stormbringer.react
-	{'Windstrike', 'player.buff(Stormbringer)'},
-	--actions+=/stormstrike,if=buff.stormbringer.react
+	--actions+=/stormstrike,if=buff.stormbringer.up
 	{'Stormstrike', 'player.buff(Stormbringer)'},
 	--actions+=/frostbrand,if=talent.hailstorm.enabled&buff.frostbrand.remains<gcd
 	{'Frostbrand', 'talent(4,3)&player.buff(Frostbrand).remains<gcd'},
@@ -102,17 +101,15 @@ local xCombat = {
 	{'Doom Winds'},
 	--actions+=/crash_lightning,if=active_enemies>=3
 	{'Crash Lightning', 'player.area(8).enemies>=3'},
-	--actions+=/windstrike
-	{'Windstrike'},
 	--actions+=/stormstrike
 	{'Stormstrike'},
 	--actions+=/lightning_bolt,if=talent.overcharge.enabled&maelstrom>=60
 	{'Lightning Bolt', 'talent(5,2)&player.maelstrom>=60'},
-	--actions+=/lava_lash,if=buff.hot_hand.react
+	--actions+=/lava_lash,if=buff.hot_hand.up
 	{'Lava Lash', 'player.buff(Hot Hand)'},
 	--actions+=/earthen_spike
 	{'Earthen Spike'},
-	--actions+=/crash_lightning,if=active_enemies>1||talent.crashing_storm.enabled||(pet.feral_spirit.remains>5||pet.frost_wolf.remains>5||pet.fiery_wolf.remains>5||pet.lightning_wolf.remains>5)
+	--actions+=/crash_lightning,if=active_enemies>1|talent.crashing_storm.enabled|feral_spirit.remains>5
 	{'Crash Lightning', 'player.area(8).enemies>1||talent(6,1)||spell(Feral Spirit).cooldown>110'},
 	--actions+=/frostbrand,if=talent.hailstorm.enabled&buff.frostbrand.remains<4.8
 	{'Frostbrand', 'talent(4,3)&player.buff(Frostbrand).remains<4.5'},
@@ -123,7 +120,7 @@ local xCombat = {
 	--actions+=/lava_lash,if=maelstrom>=90
 	{'Lava Lash', 'player.maelstrom>=90'},
 	--actions+=/rockbiter
-	{'Rockbiter'},
+	--{'Rockbiter'},
 	--actions+=/flametongue
 	{'Flametongue'},
 	--actions+=/boulderfist
@@ -151,7 +148,13 @@ local inCombat = {
 
 local outCombat = {
 	{Keybinds},
-	--{PreCombat}
+	{PreCombat}
 }
 
-NeP.CR:Add(263, '[|cff'..Xeer.addonColor..'Xeer|r] Shaman - Enhancement', inCombat, outCombat, exeOnLoad)
+NeP.CR:Add(263, {
+	name = '[|cff'..Xeer.addonColor..'Xeer|r] Shaman - Enhancement',
+	  ic = inCombat,
+	 ooc = outCombat,
+	 gui = GUI,
+	load = exeOnLoad
+})

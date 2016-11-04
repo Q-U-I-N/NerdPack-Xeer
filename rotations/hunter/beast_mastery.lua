@@ -1,5 +1,9 @@
 local _, Xeer = ...
 
+local GUI = {
+
+}
+
 local exeOnLoad = function()
 
 	 Xeer.ExeOnLoad()
@@ -105,7 +109,7 @@ local xCombat = {
  	--actions+=/chimaera_shot,if=player.focus<90
 	{'Chimaera Shot', 'talent(2,3)&player.focus<90'},
  	--actions+=/cobra_shot,if=talent.killer_cobra.enabled&(cooldown.bestial_wrath.remains>=4&(buff.bestial_wrath.up&cooldown.kill_command.remains>=2)||player.focus>119)||!talent.killer_cobra.enabled&player.focus>90
-	{'Cobra Shot', '{talent(7,2)&{cooldown(Bestial Wrath).remains>=4&{player.buff(Bestial Wrath)&cooldown(Kill Command).remains>=2}||player.focus>119}}||{!talent(7,2)&player.focus>90}'},
+	{'Cobra Shot', 'talent(7,2)&{cooldown(Bestial Wrath).remains>=4&{player.buff(Bestial Wrath)&cooldown(Kill Command).remains>=2}||player.focus>119}||{!talent(7,2)&player.focus>90}'},
 }
 
 
@@ -123,7 +127,14 @@ local inCombat = {
 }
 
 local outCombat = {
+	{'Auto Shot', 'target.range<40&target.infront'},
 	{Keybinds},
 }
 
-NeP.CR:Add(253, '[|cff'..Xeer.addonColor..'Xeer|r] HUNTER - Beast Mastery', inCombat, outCombat, exeOnLoad)
+NeP.CR:Add(253, {
+	name = '[|cff'..Xeer.addonColor..'Xeer|r] HUNTER - Beast Mastery',
+	  ic = inCombat,
+	 ooc = outCombat,
+	 gui = GUI,
+	load = exeOnLoad
+})

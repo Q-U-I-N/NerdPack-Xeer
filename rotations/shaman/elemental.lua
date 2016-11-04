@@ -1,4 +1,6 @@
 local _, Xeer = ...
+local GUI = {
+}
 
 local exeOnLoad = function()
 	 Xeer.ExeOnLoad()
@@ -187,4 +189,10 @@ local outCombat = {
 	--{PreCombat}
 }
 
-NeP.CR:Add(262, '[|cff'..Xeer.addonColor..'Xeer|r] Shaman - Elemental', inCombat, outCombat, exeOnLoad)
+NeP.CR:Add(262, {
+	name = '[|cff'..Xeer.addonColor..'Xeer|r] Shaman - Elemental',
+	  ic = inCombat,
+	 ooc = outCombat,
+	 gui = GUI,
+	load = exeOnLoad
+})

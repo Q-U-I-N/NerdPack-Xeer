@@ -1,4 +1,6 @@
-local _, Xeer = ... 
+local _, Xeer = ...
+local GUI = {
+} 
 
 local exeOnLoad = function()
 	-- Xeer.ExeOnLoad()
@@ -46,4 +48,10 @@ local outCombat = {
 	{'Crippling Poison', '!player.buff(Crippling Poison)'},
 }
 
-NeP.CR:Add(259, '[|cff'..Xeer.addonColor..'Xeer|r] Rogue - Assassination', inCombat, outCombat, exeOnLoad)
+NeP.CR:Add(259, {
+	name = '[|cff'..Xeer.addonColor..'Xeer|r] Rogue - Assassination',
+	  ic = inCombat,
+	 ooc = outCombat,
+	 gui = GUI,
+	load = exeOnLoad
+})

@@ -1,4 +1,6 @@
 local _, Xeer = ...
+local GUI = {
+}
 
 local exeOnLoad = function()
 	 Xeer.ExeOnLoad()
@@ -428,7 +430,7 @@ local VF = {
 }
 
 local xCombat = {
-	 --actions=potion,name=deadly_grace,if=buff.bloodlust.react||target.time_to_die<=40||buff.voidform.stack>80
+	 --actions=potion,name=deadly_grace,if=buff.bloodlust.up||target.time_to_die<=40||buff.voidform.stack>80
 	--{'#Deadly Grace', 'player.buff(Bloodlust)||target.time_to_die<=40||player.buff(Voidform).stack>80'},
 	 --actions+=/call_action_list,name=s2m,if=buff.voidform.up&buff.surrender_to_madness.up
 	{S2M, 'player.buff(Voidform)&player.buff(Surrender to Madness)'},
@@ -475,5 +477,11 @@ local outCombat = {
 	{PreCombat},
 }
 
-NeP.CR:Add(258, '[|cff'..Xeer.addonColor..'Xeer|r] PRIEST - Shadow', inCombat, outCombat, exeOnLoad)
+NeP.CR:Add(258, {
+	name = '[|cff'..Xeer.addonColor..'Xeer|r] PRIEST - Shadow',
+	  ic = inCombat,
+	 ooc = outCombat,
+	 gui = GUI,
+	load = exeOnLoad
+})
 --NeP.CR:Add(258, '[Xeer] aaaPriest - Shadow', inCombat, outCombat)

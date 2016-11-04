@@ -1,4 +1,6 @@
 local _, Xeer = ...
+local GUI = {
+}
 
 -- Splash stuff
 local Splash_Frame = CreateFrame("Frame", "Xeer_SPLASH", UIParent)

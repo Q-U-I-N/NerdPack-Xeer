@@ -1,4 +1,6 @@
 local _, Xeer = ...
+local GUI = {
+}
 
 local exeOnLoad = function()
 	Xeer.ExeOnLoad()
@@ -60,9 +62,9 @@ local Survival = {
 	{'Barkskin'},
 	--actions+=/bristling_fur,if=buff.ironfur.remains<2&rage<40
 	{'Bristling Fur', 'player.buff(Ironfur).remains<2&player.rage<40'},
-	{'Mark of Ursol', '!player.buff(Mark of Ursol)&player.incdmg_magic(100)>0'},
+	{'Mark of Ursol', '!player.buff(Mark of Ursol)&player.incdmg_magic(5)>1'},
 	--actions+=/ironfur,if=buff.ironfur.down|rage.deficit<25
-	{'Ironfur', '!player.buff(Ironfur)&player.incdmg_phys(100)>0}'},
+	{'Ironfur', '!player.buff(Ironfur)||rage.deficit<25'},
 	--actions+=/frenzied_regeneration,if=!ticking&incoming_damage_6s/health.max>0.25+(2-charges_fractional)*0.15
 	{'Frenzied Regeneration', '!player.buff(Frenzied Regeneration)&player.incdmg(6)/player.health.max>{0.25+{2-cooldown(Frenzied Regeneration).charges}*0.15}'},
 	--	if not BuffPresent(frenzied_regeneration_buff) and IncomingDamage(6) / MaxHealth() > 0.25 + { 2 - Charges(frenzied_regeneration count=0) } * 0.15 Spell(frenzied_regeneration)
@@ -78,6 +80,7 @@ local Cooldowns = {
 }
 
 local xCombat = {
+	{'Moonfire', 'player.buff(Galactic Guardian)&rage.deficit>=20'},
  	--actions+=/pulverize,cycle_targets=1,if=buff.pulverize.down
 	{'Pulverize', 'talent(7,3)&!player.buff(Pulverize)'},
  	--actions+=/mangle
@@ -96,7 +99,7 @@ local xCombat = {
 	{'Thrash', 'talent(7,3)&player.buff(Pulverize).remains<3.6'},
  	--actions+=/moonfire,cycle_targets=1,if=!ticking
 	{'Moonfire', '!target.dot(Moonfire).ticking||target.dot(Moonfire).remains<=gcd'},
-	{'Maul', 'rage.deficit<=20'},
+	{'&Maul', 'rage.deficit<=20'},
 	{'Swipe'},
 }
 
@@ -106,13 +109,6 @@ local Keybinds = {
 }
 
 local inCombat = {
-	--{"Mark of Ursol", "player.health<=90&target.casting&!player.buff(Mark of Ursol)"},
-	{'Mark of Ursol', '!player.buff(Mark of Ursol)&player.incdmg_magic(2)>0'},
-	--actions+=/ironfur,if=buff.ironfur.down|rage.deficit<25
-	{'Ironfur', '!player.buff(Ironfur)&player.incdmg_phys(2)>0'},
-}
-
-local inCombatx = {
 	{Keybinds},
 	{Survival, 'player.health<100'},
 	{Cooldowns, 'toggle(cooldowns)'},
@@ -124,4 +120,10 @@ local outCombat = {
 	{Keybinds},
 }
 
-NeP.CR:Add(104, '[|cff'..Xeer.addonColor..'Xeer|r] DRUID - Guardian', inCombat, outCombat, exeOnLoad)
+NeP.CR:Add(104, {
+	name = '[|cff'..Xeer.addonColor..'Xeer|r] DRUID - Guardian',
+	  ic = inCombat,
+	 ooc = outCombat,
+	 gui = GUI,
+	load = exeOnLoad
+})

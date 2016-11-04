@@ -1,4 +1,6 @@
 local _, Xeer = ...
+local GUI = {
+}
 
 local exeOnLoad = function()
 	 Xeer.ExeOnLoad()
@@ -69,7 +71,7 @@ local Interrupts = {
 
 local Cooldowns = {
 	--# Executed every time the actor is available.
-	--actions=counterspell,if=target.debuff.casting.react
+	--actions=counterspell,if=target.debuff.casting.up
 	--actions+=/time_warp,if=target.health.pct<25|time=0
 	--actions+=/shard_of_the_exodar_warp,if=buff.bloodlust.down
 	--actions+=/mirror_image,if=buff.combustion.down
@@ -89,7 +91,7 @@ local Talents = {
 	--actions.active_talents+=/cinderstorm,if=cooldown.combustion.remains<cast_time&(buff.rune_of_power.up||!talent.rune_on_power.enabled)||cooldown.combustion.remains>10*spell_haste&!buff.combustion.up
 	{'Cinderstorm', 'talent(7,2)&{cooldown(Combustion).remains<action(Cinderstorm).cast_time&{player.buff(Rune of Power)||!talent(3,2)}||cooldown(Combustion).remains>10*spell_haste&!player.buff(Combustion)}'},
 	--actions.active_talents+=/dragons_breath,if=equipped.132863
-	{'Dragon\'s Breath', 'equipped(132863)'},
+	{'Dragon\'s Breath', 'xequipped(132863)'},
 	--actions.active_talents+=/living_bomb,if=active_enemies>3&buff.combustion.down
 	{'Living Bomb', 'talent(6,1)&target.area(10).enemies>1&!player.buff(Combustion)'}
 }
@@ -127,14 +129,14 @@ local RoP = {
 	{'Pyroblast', 'player.buff(Hot Streak!)'},
 	--actions.rop_phase+=/call_action_list,name=active_talents
 	{Talents},
-	--actions.rop_phase+=/pyroblast,if=buff.kaelthas_ultimate_ability.react
+	--actions.rop_phase+=/pyroblast,if=buff.kaelthas_ultimate_ability.up
 	{'Pyroblast', 'player.buff(Kael\'thas\'s Ultimate Ability)'},
 	--actions.rop_phase+=/fire_blast,if=!prev_off_gcd.fire_blast
 	{'&Fire Blast', 'player.buff(Heating Up)&!player.lastcast(Fire Blast)&!player.casting(Rune of Power)&!player.lastcast(Phoenix\'s Flames)'},
 	--actions.rop_phase+=/phoenixs_flames,if=!prev_gcd.phoenixs_flames
 	{'Phoenix\'s Flames', '!player.lastgcd(Phoenix\'s Flames)'},
 	--actions.rop_phase+=/scorch,if=target.health.pct<=25&equipped.132454
-	{'Scorch', 'target.health<=25&equipped(132454)'},
+	{'Scorch', 'target.health<=25&xequipped(132454)'},
 	--actions.rop_phase+=/fireball
 	{'Fireball'}
 }
@@ -144,13 +146,13 @@ local MainRotation = {
 	{'Pyroblast', 'player.buff(Hot Streak!)&player.buff(Hot Streak!).remains<action(Fireball).execute_time'},
 	--actions.single_target+=/phoenixs_flames,if=charges_fractional>2.7&active_enemies>2
 	{'Phoenix\'s Flames', 'artifact(Phoenix\'s Flames).equipped&{action(Phoenix\'s Flames).charges>2.7&target.area(8).enemies>2}'},
-	--actions.single_target+=/flamestrike,if=talent.flame_patch.enabled&active_enemies>2&buff.hot_streak.react
+	--actions.single_target+=/flamestrike,if=talent.flame_patch.enabled&active_enemies>2&buff.hot_streak.up
 	{'Flamestrike', 'talent(6,3)&target.area(10).enemies>2&player.buff(Hot Streak!)', 'target.ground'},
 	--actions.single_target+=/pyroblast,if=buff.hot_streak.up&!prev_gcd.pyroblast
 	{'&Pyroblast', 'player.buff(Hot Streak!)&!player.lastgcd(Pyroblast)&{player.casting(Fireball).percent>90||player.lastcast(Fireball)}'},--&player.casting(Fireball).percent>90
-	--actions.single_target+=/pyroblast,if=buff.hot_streak.react&target.health.pct<=25&equipped.132454
-	{'Pyroblast', 'player.buff(Hot Streak!)&target.health<=25&equipped(132454)'},
-	--actions.single_target+=/pyroblast,if=buff.kaelthas_ultimate_ability.react
+	--actions.single_target+=/pyroblast,if=buff.hot_streak.up&target.health.pct<=25&equipped.132454
+	{'Pyroblast', 'player.buff(Hot Streak!)&target.health<=25&xequipped(132454)'},
+	--actions.single_target+=/pyroblast,if=buff.kaelthas_ultimate_ability.up
 	{'Pyroblast', 'player.buff(Kael\'thas\'s Ultimate Ability)'},
 	--actions.single_target+=/call_action_list,name=active_talents
 	{Talents},
@@ -164,7 +166,7 @@ local MainRotation = {
 	--actions.single_target+=/phoenixs_flames,if=(buff.combustion.up||buff.rune_of_power.up)&(4-charges_fractional)*30<cooldown.combustion.remains+5
 	{'Phoenix\'s Flames', '{player.buff(Combustion)||player.buff(Rune of Power)}&{4-action(Phoenix\'s Flames).charges}*30<cooldown(Combustion).remains+5'},
 	--actions.single_target+=/scorch,if=target.health.pct<=25&equipped.132454
-	{'Scorch', 'target.health<=25&equipped(132454)'},
+	{'Scorch', 'target.health<=25&xequipped(132454)'},
 	{'Ice Floes', 'cooldown(61304).remains<0.5&xmoving=1&!player.lastcast(Ice Floes)&!player.buff(Ice Floes)'},
 	--actions.single_target+=/fireball
 	{'Fireball', 'xmoving=0||player.buff(Ice Floes)'},
@@ -197,4 +199,10 @@ local outCombat = {
 	--{PreCombat}
 }
 
-NeP.CR:Add(63, '[|cff'..Xeer.addonColor..'Xeer/Gabbz|r] MAGE - Fire', inCombat, outCombat, exeOnLoad)
+NeP.CR:Add(63, {
+	name = '[|cff'..Xeer.addonColor..'Xeer/Gabbz|r] MAGE - Fire',
+	  ic = inCombat,
+	 ooc = outCombat,
+	 gui = GUI,
+	load = exeOnLoad
+})

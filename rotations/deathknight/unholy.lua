@@ -1,4 +1,6 @@
-local _, Xeer = ... 
+local _, Xeer = ...
+local GUI = {
+} 
 
 local exeOnLoad = function()
 	-- Xeer.ExeOnLoad()
@@ -46,4 +48,10 @@ local outCombat = {
 	{Keybinds},
 }
 
-NeP.CR:Add(252, '[|cff'..Xeer.addonColor..'Xeer|r] Death Knight - Unholy', inCombat, outCombat, exeOnLoad)
+NeP.CR:Add(252, {
+	name = '[|cff'..Xeer.addonColor..'Xeer|r] Death Knight - Unholy',
+	  ic = inCombat,
+	 ooc = outCombat,
+	 gui = GUI,
+	load = exeOnLoad
+})

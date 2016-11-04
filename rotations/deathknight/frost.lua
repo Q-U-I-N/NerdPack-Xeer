@@ -1,11 +1,13 @@
 local _, Xeer = ...
+local GUI = {
+}
 
 local exeOnLoad = function()
 	 Xeer.ExeOnLoad()
 
 	print("|cffADFF2F ---------------------------------------------------------------------------|r")
 	print("|cffADFF2F --- |rDEATH KNIGHT |cffADFF2FFrost (MACHINEGUN =v required talets v=) |r")
-	print("|cffADFF2F --- |rFf you want use MACHINEGUN =v required talets v= AND enable toggle button) |r")
+	print("|cffADFF2F --- |rIf you want use MACHINEGUN =v required talets v= AND enable toggle button) |r")
 	print("|cffADFF2F --- |rRecommended Talents:  1/2 - 2/2 - 3/3 - 4/X - 5/X - 6/1 - 7/3")
 	print("|cffADFF2F ---------------------------------------------------------------------------|r")
 
@@ -61,7 +63,7 @@ local PreCombat = {
 
 
 local Survival = {
- {'Death Strike', 'player.health<=75&player.buff(Dark Succor)'},
+ {'Death Strike', 'player.health<=80&player.buff(Dark Succor)'},
 }
 
 local BoS_check = {
@@ -107,17 +109,17 @@ local Cooldowns = {
 }
 
 local Core = {
-	--actions.core+=/frostscythe,if=!talent.breath_of_sindragosa.enabled&(buff.killing_machine.react||spell_targets.frostscythe>=4)
+	--actions.core+=/frostscythe,if=!talent.breath_of_sindragosa.enabled&(buff.killing_machine.up||spell_targets.frostscythe>=4)
 	{'Frostscythe', 'talent(6,1)&!talent(7,2)&{player.buff(Killing Machine)||player.area(8).enemies>=4}'},
  	--actions.core=remorseless_winter,if=artifact.frozen_soul.enabled
 	{'Remorseless Winter', 'artifact(Frozen Soul).enabled'},
  	--actions.core+=/glacial_advance
 	{'Glacial Advance', 'talent(7,3)'},
- 	--actions.core+=/frost_strike,if=buff.obliteration.up&!buff.killing_machine.react
+ 	--actions.core+=/frost_strike,if=buff.obliteration.up&!buff.killing_machine.up
 	{'Frost Strike', 'player.buff(Obliteration)&!player.buff(Killing Machine)'},
  	--actions.core+=/remorseless_winter,if=spell_targets.remorseless_winter>=2||talent.gathering_storm.enabled
 	{'Remorseless Winter', 'player.area(8).enemies>=2||talent(6,3)'},
- 	--actions.core+=/obliterate,if=buff.killing_machine.react
+ 	--actions.core+=/obliterate,if=buff.killing_machine.up
 	{'Obliterate', 'player.buff(Killing Machine)'},
  	--actions.core+=/obliterate
 	{'Obliterate'},
@@ -134,7 +136,7 @@ local IcyTalons = {
 	{'Frost Strike', 'player.buff(Icy Talons).remains<1.5'},
  	--actions.icytalons+=/howling_blast,target_if=!dot.frost_fever.ticking
 	{'Howling Blast', '!target.dot(Frost Fever).ticking'},
- 	--actions.icytalons+=/howling_blast,if=buff.rime.react
+ 	--actions.icytalons+=/howling_blast,if=buff.rime.up
 	{'Howling Blast', 'player.buff(Rime)'},
  	--actions.icytalons+=/frost_strike,if=runic_power>=80||buff.icy_talons.stack<3
 	{'Frost Strike', 'runic_power>=80||player.buff(Icy Talons).stack<3'},
@@ -154,14 +156,14 @@ local BoS = {
 	{'Empower Rune Weapon', 'runic_power<=70'},
  	--actions.bos+=/hungering_rune_weapon
 	{'Hungering Rune Weapon', 'talent(3,2)'},
- 	--actions.bos+=/howling_blast,if=buff.rime.react
+ 	--actions.bos+=/howling_blast,if=buff.rime.up
 	{'Howling Blast', 'player.buff(Rime)'},
 }
 
 local Generic = {
  	--actions.generic=howling_blast,target_if=!dot.frost_fever.ticking
 	{'Howling Blast', '!target.dot(Frost Fever).ticking'},
- 	--actions.generic+=/howling_blast,if=buff.rime.react
+ 	--actions.generic+=/howling_blast,if=buff.rime.up
 	{'Howling Blast', 'player.buff(Rime)'},
  	--actions.generic+=/frost_strike,if=runic_power>=80
 	{'Frost Strike', 'runic_power>=80'},
@@ -175,7 +177,7 @@ local Shatter = {
 	{'Frost Strike', ''},
  	--actions.shatter+=/howling_blast,target_if=!dot.frost_fever.ticking
 	{'Howling Blast', ''},
- 	--actions.shatter+=/howling_blast,if=buff.rime.react
+ 	--actions.shatter+=/howling_blast,if=buff.rime.up
 	{'Howling Blast', ''},
  	--actions.shatter+=/frost_strike,if=runic_power>=80
 	{'Frost Strike', ''},
@@ -189,23 +191,23 @@ local MACHINEGUN = {
 	{'Frost Strike', 'player.buff(Icy Talons).remains<1.5'},
  	--actions.icytalons+=/howling_blast,target_if=!dot.frost_fever.ticking
 	{'Howling Blast', '!target.dot(Frost Fever).ticking'},
- 	--actions.icytalons+=/howling_blast,if=buff.rime.react
+ 	--actions.icytalons+=/howling_blast,if=buff.rime.up
 	{'Howling Blast', 'player.buff(Rime)'},
  	--actions.icytalons+=/frost_strike,if=runic_power>=80||buff.icy_talons.stack<3
 	{'Frost Strike', 'runic_power>=80||player.buff(Icy Talons).stack<3'},
-	--actions.core+=/frostscythe,if=!talent.breath_of_sindragosa.enabled&(buff.killing_machine.react||spell_targets.frostscythe>=4)
+	--actions.core+=/frostscythe,if=!talent.breath_of_sindragosa.enabled&(buff.killing_machine.up||spell_targets.frostscythe>=4)
 	{'Frostscythe', 'talent(6,1)&!talent(7,2)&{player.buff(Killing Machine)||player.area(8).enemies>=4}'},
  	--actions.core=remorseless_winter,if=artifact.frozen_soul.enabled
 	{'Remorseless Winter', 'artifact(Frozen Soul).enabled'},
  	--actions.core+=/glacial_advance
 	{'Glacial Advance', 'talent(7,3)'},
- 	--actions.core+=/frost_strike,if=buff.obliteration.up&!buff.killing_machine.react
+ 	--actions.core+=/frost_strike,if=buff.obliteration.up&!buff.killing_machine.up
 	{'Frost Strike', 'player.buff(Obliteration)&!player.buff(Killing Machine)'},
  	--actions.core+=/remorseless_winter,if=spell_targets.remorseless_winter>=2||talent.gathering_storm.enabled
 	{'Remorseless Winter', 'player.area(8).enemies>=2||talent(6,3)'},
 	--actions.core+=/remorseless_winter
 	{'Remorseless Winter'},
- 	--actions.core+=/obliterate,if=buff.killing_machine.react
+ 	--actions.core+=/obliterate,if=buff.killing_machine.up
 	--{'Obliterate', '!talent(6,1)&player.buff(Killing Machine)'},
  	--actions.core+=/obliterate
 	--{'Obliterate', 'talent(6,1)&!player.buff(Killing Machine)'},
@@ -248,4 +250,10 @@ local outCombat = {
 	{Keybinds},
 	--{PreCombat},
 }
-NeP.CR:Add(251, '[|cff'..Xeer.addonColor..'Xeer|r] Death Knight - Frost', inCombat, outCombat, exeOnLoad)
+NeP.CR:Add(251, {
+	name = '[|cff'..Xeer.addonColor..'Xeer|r] Death Knight - Frost',
+	  ic = inCombat,
+	 ooc = outCombat,
+	 gui = GUI,
+	load = exeOnLoad
+})

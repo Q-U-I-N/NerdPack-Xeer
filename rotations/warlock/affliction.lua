@@ -1,4 +1,6 @@
 local _, Xeer = ...
+local GUI = {
+}
 
 local exeOnLoad = function()
 
@@ -38,7 +40,7 @@ local Cooldowns = {
 	--{'Blood Fury'},
  	--actions+=/soul_harvest
 	{'Soul Harvest', 'talent(4,3)'},
- 	--actions+=/potion,name=deadly_grace,if=buff.soul_harvest.remains|target.time_to_die<=45|trinket.proc.any.react
+ 	--actions+=/potion,name=deadly_grace,if=buff.soul_harvest.remains|target.time_to_die<=45|trinket.proc.any.up
 	--{'', ''},
 }
 
@@ -55,4 +57,10 @@ local outCombat = {
 	--{PreCombat},
 }
 
-NeP.CR:Add(265, '[|cff'..Xeer.addonColor..'Xeer|r] WARLOCK - Affliction', inCombat, outCombat, exeOnLoad)
+NeP.CR:Add(265, {
+	name = '[|cff'..Xeer.addonColor..'Xeer|r] WARLOCK - Affliction',
+	  ic = inCombat,
+	 ooc = outCombat,
+	 gui = GUI,
+	load = exeOnLoad
+})

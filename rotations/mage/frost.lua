@@ -1,4 +1,6 @@
 local _, Xeer = ...
+local GUI = {
+}
 
 local exeOnLoad = function()
 	 Xeer.ExeOnLoad()
@@ -78,7 +80,7 @@ local PreCombat = {
 
 local Cooldowns = {
 	--actions+=/time_warp,if=(time=0&buff.bloodlust.down)|(buff.bloodlust.down&equipped.132410)
-	--{'Time Warp', '{xtime=0&!player.buff(Bloodlust)}||{!player.buff(Bloodlust)&equipped(132410)}'},
+	--{'Time Warp', '{xtime=0&!player.buff(Bloodlust)}||{!player.buff(Bloodlust)&xequipped(132410)}'},
 	--actions.cooldowns=rune_of_power,if=cooldown.icy_veins.remains<cast_time|charges_fractional>1.9&cooldown.icy_veins.remains>10|buff.icy_veins.up|target.time_to_die.remains+5<charges_fractional*10
 	{'Rune of Power', '!player.buff(Rune of Power)&{cooldown(Icy Veins).remains<cooldown(Rune of Power).cast_time||cooldown(Rune of Power).charges<1.9&cooldown(Icy Veins).remains>10||player.buff(Icy Veins)||{target.time_to_die+5<cooldown(Rune of Power).charges*10}}'},
  	--actions.cooldowns+=/icy_veins,if=buff.icy_veins.down
@@ -108,7 +110,7 @@ local xCombat = {
 	{'&Water Jet', 'prev_gcd(Frostbolt)&player.buff(Fingers of Frost).stack<{2+artifact(Icy Hand).enabled}&!player.buff(Brain Freeze)'},
  	--actions+=/ray_of_frost,if=buff.icy_veins.up|(cooldown.icy_veins.remains>action.ray_of_frost.cooldown&buff.rune_of_power.down)
 	{'Ray of Frost', 'player.buff(Icy Veins)||{cooldown(Icy Veins).remains>action(Ray of Frost).cooldown&!player.buff(Rune of Power)}'},
- 	--actions+=/flurry,if=buff.brain_freeze.react&buff.fingers_of_frost.down&prev_gcd.frostbolt
+ 	--actions+=/flurry,if=buff.brain_freeze.up&buff.fingers_of_frost.down&prev_gcd.frostbolt
 	{'Flurry', 'player.buff(Brain Freeze)&!player.buff(Fingers of Frost)&!prev_gcd(Flurry)'},
  	--actions+=/glacial_spike
 	{'Glacial Spike'},
@@ -151,10 +153,11 @@ local Survival = {
 }
 
 local inCombat = {
-	{Keybinds},
-	{Interrupts, 'target.interruptAt(50)&toggle(interrupts)&target.infront&target.range<40'},
+	{'Ice Lance', 'line_cd(Ice Lance)>5'},
+	--{Keybinds},
+	--{Interrupts, 'target.interruptAt(50)&toggle(interrupts)&target.infront&target.range<40'},
 	--{Survival, 'player.health < 100'},
-	{xCombat, 'target.range<40&target.infront'}
+	--{xCombat, 'target.range<40&target.infront'}
 }
 
 local outCombat = {
@@ -162,4 +165,10 @@ local outCombat = {
 	--{PreCombat}
 }
 
-NeP.CR:Add(64, '[|cff'..Xeer.addonColor..'Xeer|r] MAGE - Frost', inCombat, outCombat, exeOnLoad)
+NeP.CR:Add(64, {
+	name = '[|cff'..Xeer.addonColor..'Xeer|r] MAGE - Frost',
+	  ic = inCombat,
+	 ooc = outCombat,
+	 gui = GUI,
+	load = exeOnLoad
+})

@@ -1,4 +1,6 @@
 local _, Xeer = ...
+local GUI = {
+}
 
 local exeOnLoad = function()
 	 Xeer.ExeOnLoad()
@@ -70,7 +72,7 @@ local Builders = {
 }
 
 local Cooldowns ={
- 	--Cooldowns=potion,name=old_war,if=buff.bloodlust.react||target.time_to_die<=25||buff.shadow_blades.up
+ 	--Cooldowns=potion,name=old_war,if=buff.bloodlust.up||target.time_to_die<=25||buff.shadow_blades.up
 	--{'', ''},
  	--Cooldowns+=/blood_fury,if=stealthed
 	{'Blood Fury', 'stealthed'},
@@ -163,4 +165,10 @@ local outCombat = {
 	{PreCombat},
 }
 
-NeP.CR:Add(261, '[|cff'..Xeer.addonColor..'Xeer|r] ROGUE - Subtlety', inCombat, outCombat, exeOnLoad)
+NeP.CR:Add(261, {
+	name = '[|cff'..Xeer.addonColor..'Xeer|r] ROGUE - Subtlety',
+	  ic = inCombat,
+	 ooc = outCombat,
+	 gui = GUI,
+	load = exeOnLoad
+})

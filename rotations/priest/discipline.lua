@@ -1,4 +1,6 @@
 local _, Xeer = ...
+local GUI = {
+}
 
 --local GUI = {
 	--KEYBINDS
@@ -123,4 +125,10 @@ local outCombat = {
 		{'Plea', '!lowest.buff(Atonement)&lowest.health <=95', 'lowest'}
 }
 
-NeP.CR:Add(256, '[|cff'..Xeer.addonColor..'Xeer|r] PRIEST - Discipline', inCombat, outCombat, exeOnLoad)
+NeP.CR:Add(256, {
+	name = '[|cff'..Xeer.addonColor..'Xeer|r] PRIEST - Discipline',
+	  ic = inCombat,
+	 ooc = outCombat,
+	 gui = GUI,
+	load = exeOnLoad
+})
