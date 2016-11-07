@@ -132,8 +132,10 @@ local Ranged = {
 }
 
 local Keybinds = {
+	{'Lightning Surge Totem', 'keybind(lcontrol)' , 'cursor.ground'},
 	-- Pause
 	{'%pause', 'keybind(alt)'}
+
 }
 
 local inCombat = {

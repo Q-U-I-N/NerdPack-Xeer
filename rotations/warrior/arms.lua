@@ -72,6 +72,25 @@ local Cooldowns = {
 	--trinket...
 }
 
+local Opener = {
+	{'Charge'},
+	{'Focused Rage'},
+	{'Colossus Smash'},
+	{'Focused Rage'},
+	{'Battle Cry'},
+	{'Avatar'},
+	{'Mortal Strike'},
+	{'Focused Rage'},
+	{'Colossus Smash'},
+	{'Slam'},
+	{'Focused Rage'},
+	{'Colossus Smash'},
+	{'Slam'},
+	{'Focused Rage'},
+	{'Mortal Strike'},
+	{'Slam'},
+}
+
 local Util = {
 	{Cooldowns, 'toggle(cooldowns)'},
 	--actions+=/hamstring,if=buff.battle_cry_deadly_calm.remains>cooldown.hamstring.remains
@@ -91,7 +110,7 @@ local Util = {
 	--actions+=/ravager
 	{'Ravager', 'talent(7,3)'},
 	--actions+=/overpower,if=buff.overpower.up
-	{'Overpower', 'player.buff(Overpower)'}
+	{'Overpower', 'player.buff(Overpower!)'}
 }
 
 local AoE = {
@@ -102,7 +121,7 @@ local AoE = {
 	--actions.aoe+=/colossus_smash,if=buff.shattered_defenses.down&buff.precise_strikes.down
 	{'Colossus Smash', '!player.buff(Shattered Defenses)&!player.buff(Precise Strikes)'},
 	--actions.aoe+=/warbreaker,if=buff.shattered_defenses.down
-	{'Warbreaker', 'artifact(Warbreaker).equipped&!player.buff(Shattered Defenses)'},
+	{'Warbreaker', '!player.buff(Shattered Defenses)'},
 	--actions.aoe+=/whirlwind,if=talent.fervor_of_battle.enabled&(debuff.colossus_smash.up||rage.deficit<50)&(!talent.focused_rage.enabled||buff.battle_cry_deadly_calm.up||buff.cleave.up)
 	{'Whirlwind', 'talent(3,1)&{target.debuff(Colossus Smash)||rage.deficit<50}&{!talent(5,3)||{player.buff(Battle Cry)&talent(6,1)}||player.buff(Cleave)}'},
 	--actions.aoe+=/rend,if=remains<=duration*0.3
@@ -129,7 +148,7 @@ local Cleave = {
 	--actions.cleave+=/colossus_smash,if=buff.shattered_defenses.down&buff.precise_strikes.down
 	{'Colossus Smash', '!player.buff(Shattered Defenses)&!player.buff(Precise Strikes)'},
 	--actions.cleave+=/warbreaker,if=buff.shattered_defenses.down
-	{'Warbreaker', 'artifact(Warbreaker).equipped&!player.buff(Shattered Defenses)'},
+	{'Warbreaker', '!player.buff(Shattered Defenses)'},
 	--actions.cleave+=/focused_rage,if=buff.shattered_defenses.down
 	{'Focused Rage', '!player.buff(Shattered Defenses)'},
 	--actions.cleave+=/whirlwind,if=talent.fervor_of_battle.enabled&(debuff.colossus_smash.up||rage.deficit<50)&(!talent.focused_rage.enabled||buff.battle_cry_deadly_calm.up||buff.cleave.up)
@@ -156,7 +175,7 @@ local Execute = {
 	--actions.execute+=/colossus_smash,if=buff.shattered_defenses.down
 	{'Colossus Smash', '!player.buff(Shattered Defenses)'},
 	--actions.execute+=/warbreaker,if=buff.shattered_defenses.down&player.rage<=30
-	{'Warbreaker', 'artifact(Warbreaker).equipped&!player.buff(Shattered Defenses)&player.rage<=30'},
+	{'Warbreaker', '!player.buff(Shattered Defenses)&player.rage<=30'},
 	--actions.execute+=/execute,if=buff.shattered_defenses.up&player.rage>22
 	{'Execute', 'player.buff(Shattered Defenses)&player.rage>22'},
 	--actions.execute+=/execute,if=buff.shattered_defenses.down&((equipped.archavons_heavy_hand&rage>40)|!equipped.archavons_heavy_hand)
@@ -175,7 +194,7 @@ local ST = {
 	--actions.single+=/colossus_smash,if=buff.shattered_defenses.down
 	{'Colossus Smash', '!player.buff(Shattered Defenses)'},
 	--actions.single+=/warbreaker,if=buff.shattered_defenses.down&cooldown.mortal_strike.remains<gcd
-	{'Warbreaker', 'artifact(Warbreaker).equipped&!player.buff(Shattered Defenses)&cooldown(Mortal Strike).remains<gcd'},
+	{'Warbreaker', '!player.buff(Shattered Defenses)&cooldown(Mortal Strike).remains<gcd'},
 	--actions.single+=/focused_rage,if=(((!buff.focused_rage.up&prev_gcd.mortal_strike)|!prev_gcd.mortal_strike)&buff.focused_rage.stack<3&(buff.shattered_defenses.up|cooldown.colossus_smash.remains))&player.rage>60
 	{'Focused Rage', '{{{!player.buff(Focused Rage)&prev_gcd(Mortal Strike)}||!prev_gcd(Mortal Strike)}&player.buff(Focused Rage).stack<3&{player.buff(Shattered Defenses)||cooldown(Colossus Smash).remains>gcd}}&player.rage>60'},
 	--actions.single+=/mortal_strike
@@ -187,11 +206,11 @@ local ST = {
 	--{'Whirlwind', 'talent(3,1)&{{player.buff(Battle Cry)&talent(6,1)}||player.buff(Focused Rage).stack=3||rage.deficit<=30}'},
 	--actions.single+=/slam,if=buff.battle_cry_deadly_calm.up||buff.focused_rage.stack=3||rage.deficit<=30
 	--{'Slam', '!talent(3,1)&{{player.buff(Battle Cry)&talent(6,1)}||player.buff(Focused Rage).stack=3||rage.deficit<=30}'},
-
+	{'Mortal Strike', '!talent(5,3)'},
 	--actions.single+=/whirlwind,if=spell_targets.whirlwind>1
-	{'Whirlwind', 'player.area(8).enemies>1'},
+	{'Whirlwind', 'player.area(8).enemies>1||talent(3,1)&player.rage>=45'},
 	--actions.single+=/slam,if=spell_targets.whirlwind=1
-	{'Slam', 'player.area(8).enemies=1&player.rage>=32'},
+	{'Slam', '!talent(3,1)&player.area(8).enemies=1&player.rage>=32'},
 	--actions.single+=/execute,if=equipped.archavons_heavy_hand
 	{'Execute', 'xequipped(137060)'},
 	--actions.single+=/focused_rage,if=equipped.archavons_heavy_hand
@@ -241,3 +260,44 @@ NeP.CR:Add(71, {
 	 gui = GUI,
 	load = exeOnLoad
 })
+
+--[[
+TODO:
+
+Opener:
+Charge
+Focused Rage -> Colossus Smash
+Focused Rage -> Battle Cry
+Avatar
+Mortal Strike
+Focused Rage -> Colossus Smash (Slam if Tactician didn’t proc)
+Focused Rage -> Colossus Smash (Slam if Tactician didn’t proc, or if you have Shattered Defenses)
+Focused Rage -> Mortal Strike (Slam if Tactician didn’t proc)
+
+Standard Rotation/Priority list:
+Above 20%:
+Use Colossus Smash and Mortal Strike on cooldown (Don't overwrite Shattered Defenses).
+If you get a Colossus Smash proc, do Colossus Smash Focused Rage -> Mortal Strike.
+Use slam when above 32 rage and both Colossus Smash and Mortal Strike are on cd.
+Use Focused Rage to not avoid ragecapping (about 25 rage from cap).
+
+Below 20%:
+Use Colossus Smash on CD (Don't overwrite Shattered Defenses) -> 22 (18 with Dauntless and 3/3 PS) rage
+Execute with the Shattered Defenses -> spam Execute when you don’t have Shattered Defenses.
+Use Focused Rage if you're about to rage cap (about 25 rage from cap), save Focused Rage stacks for Battle Cry.
+
+Battle Cry Rotation:
+Above 20%:
+Colossus Smash -> Battle Cry
+Focused Rage
+Mortal Strike -> Focused Rage
+Colossus Smash (Slam if no Colossus Smash) -> Focused Rage
+Colossus Smash (Slam if no Colossus Smash, or Shattered Defenses proc) -> Mortal Strike (Colossus Smash if Mortal Strike isn't up and no Shattered Defenses buff, Slam if neither Colossus Smash/Mortal Strike is up)
+Below 20%:
+Colossus Smash -> Battle Cry
+Execute
+Focused Rage -> Execute
+Focused Rage -> Execute
+Focused Rage -> x3 Focused Rage
+Mortal Strike (Only use Colossus Smash if the debuff isn’t on the target. 2 Executes are more damage than 1 Colossus Smash + 1 Shattered Defenses Execute)
+--]]

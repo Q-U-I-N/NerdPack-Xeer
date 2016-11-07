@@ -91,7 +91,7 @@ local Talents = {
 	--actions.active_talents+=/cinderstorm,if=cooldown.combustion.remains<cast_time&(buff.rune_of_power.up||!talent.rune_on_power.enabled)||cooldown.combustion.remains>10*spell_haste&!buff.combustion.up
 	{'Cinderstorm', 'talent(7,2)&{cooldown(Combustion).remains<action(Cinderstorm).cast_time&{player.buff(Rune of Power)||!talent(3,2)}||cooldown(Combustion).remains>10*spell_haste&!player.buff(Combustion)}'},
 	--actions.active_talents+=/dragons_breath,if=equipped.132863
-	{'Dragon\'s Breath', 'xequipped(132863)'},
+	{'Dragon\'s Breath', 'equipped(132863)'},
 	--actions.active_talents+=/living_bomb,if=active_enemies>3&buff.combustion.down
 	{'Living Bomb', 'talent(6,1)&target.area(10).enemies>1&!player.buff(Combustion)'}
 }
@@ -136,7 +136,7 @@ local RoP = {
 	--actions.rop_phase+=/phoenixs_flames,if=!prev_gcd.phoenixs_flames
 	{'Phoenix\'s Flames', '!player.lastgcd(Phoenix\'s Flames)'},
 	--actions.rop_phase+=/scorch,if=target.health.pct<=25&equipped.132454
-	{'Scorch', 'target.health<=25&xequipped(132454)'},
+	{'Scorch', 'target.health<=25&equipped(132454)'},
 	--actions.rop_phase+=/fireball
 	{'Fireball'}
 }
@@ -151,7 +151,7 @@ local MainRotation = {
 	--actions.single_target+=/pyroblast,if=buff.hot_streak.up&!prev_gcd.pyroblast
 	{'&Pyroblast', 'player.buff(Hot Streak!)&!player.lastgcd(Pyroblast)&{player.casting(Fireball).percent>90||player.lastcast(Fireball)}'},--&player.casting(Fireball).percent>90
 	--actions.single_target+=/pyroblast,if=buff.hot_streak.up&target.health.pct<=25&equipped.132454
-	{'Pyroblast', 'player.buff(Hot Streak!)&target.health<=25&xequipped(132454)'},
+	{'Pyroblast', 'player.buff(Hot Streak!)&target.health<=25&equipped(132454)'},
 	--actions.single_target+=/pyroblast,if=buff.kaelthas_ultimate_ability.up
 	{'Pyroblast', 'player.buff(Kael\'thas\'s Ultimate Ability)'},
 	--actions.single_target+=/call_action_list,name=active_talents
@@ -160,13 +160,13 @@ local MainRotation = {
 	--actions.single_target+=/fire_blast,if=!talent.kindling.enabled&buff.heating_up.up&(!talent.rune_of_power.enabled||charges_fractional>1.4||cooldown.combustion.remains<40)&(3-charges_fractional)*(12*spell_haste)<cooldown.combustion.remains+3||target.time_to_die.remains<4
 	{'&Fire Blast', 'player.casting(Fireball).percent>40&xtime>3&!player.casting(Rune of Power)&!talent(7,1)&player.buff(Heating Up)&!player.lastcast(Fire Blast)&{!talent(3,2)||action(Fire Blast).charges>1.4||cooldown(Combustion).remains<40}&(3-action(Fire Blast).charges)*(12*spell_haste)<=cooldown(Combustion).remains+3'},
 	--actions.single_target+=/fire_blast,if=talent.kindling.enabled&buff.heating_up.up&(!talent.rune_of_power.enabled||charges_fractional>1.5||cooldown.combustion.remains<40)&(3-charges_fractional)*(18*spell_haste)<cooldown.combustion.remains+3||target.time_to_die.remains<4
-  	{'&Fire Blast', 'player.casting(Fireball).percent>40&xtime>3&!player.casting(Rune of Power)&talent(7,1)&player.buff(Heating Up)&!player.lastcast(Fire Blast)&{!talent(3,2)||action(Fire Blast).charges>1.5||cooldown(Combustion).remains<40}&{3-action(Fire Blast).charges}*{18*spell_haste}<=cooldown(Combustion).remains+3'},
+  {'&Fire Blast', 'player.casting(Fireball).percent>40&xtime>3&!player.casting(Rune of Power)&talent(7,1)&player.buff(Heating Up)&!player.lastcast(Fire Blast)&{!talent(3,2)||action(Fire Blast).charges>1.5||cooldown(Combustion).remains<40}&{3-action(Fire Blast).charges}*{18*spell_haste}<=cooldown(Combustion).remains+3'},
 	--actions.single_target+=/phoenixs_flames,if=(buff.combustion.up||buff.rune_of_power.up||buff.incanters_flow.stack>3||talent.mirror_image.enabled)&artifact.phoenix_reborn.enabled&(4-charges_fractional)*13<cooldown.combustion.remains+5||target.time_to_die.remains<10
 	{'Phoenix\'s Flames', '{player.buff(Combustion)||player.buff(Rune of Power)||player.buff(Incanter\'s Flow).stack>3||talent(3,1)}&{4-action(Phoenix\'s Flames).charges}*13<cooldown(Combustion).remains+5||target.time_to_die<10'},
 	--actions.single_target+=/phoenixs_flames,if=(buff.combustion.up||buff.rune_of_power.up)&(4-charges_fractional)*30<cooldown.combustion.remains+5
 	{'Phoenix\'s Flames', '{player.buff(Combustion)||player.buff(Rune of Power)}&{4-action(Phoenix\'s Flames).charges}*30<cooldown(Combustion).remains+5'},
 	--actions.single_target+=/scorch,if=target.health.pct<=25&equipped.132454
-	{'Scorch', 'target.health<=25&xequipped(132454)'},
+	{'Scorch', 'target.health<=25&equipped(132454)'},
 	{'Ice Floes', 'cooldown(61304).remains<0.5&xmoving=1&!player.lastcast(Ice Floes)&!player.buff(Ice Floes)'},
 	--actions.single_target+=/fireball
 	{'Fireball', 'xmoving=0||player.buff(Ice Floes)'},

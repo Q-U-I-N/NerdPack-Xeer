@@ -1,6 +1,6 @@
 local _, Xeer = ...
 
-Xeer.Version = '1.8.4'
+Xeer.Version = '1.8.5'
 Xeer.Branch = 'RELEASE'
 Xeer.Name = 'NerdPack - Xeer Routines'
 Xeer.Author = 'Xeer'
@@ -505,7 +505,30 @@ function Xeer.SA_Cleanup(guid)
 				end
 		end
 end
+--/dump UnitDebuff('target', 'Moonfire', "",'PLAYER')
+--spell='Rake', debuff='Infected Wound'
+function Xeer.AutoDoT(debuff)
+	for _, Obj in pairs(NeP.OM:Get('Enemy')) do
+		if UnitExists(Obj.key) then
+			if (NeP.DSL:Get('combat')(Obj.key) or Obj.isdummy) then
+				if (NeP.DSL:Get('infront')(Obj.key)) then
+					if (NeP.DSL:Get('debuff.duration')(Obj.key, debuff) < NeP.DSL:Get('gcd')()) then
+						local _, _, _, lagWorld = GetNetStats()
+						local latency = lagWorld / 1000
+						C_Timer.After(latency, function ()
+						if (NeP.DSL:Get('debuff.duration')(Obj.key, debuff) < NeP.DSL:Get('gcd')()) then
+							NeP:Queue(debuff, Obj.key)
+							return true
+						end
+					end)
+					end
+				end
+			end
+		end
+	end
+end
 
+--]]
 --------------------------------------------------------------------------------
 -------------------------------- TRAVEL SPEED-----------------------------------
 --------------------------------------------------------------------------------

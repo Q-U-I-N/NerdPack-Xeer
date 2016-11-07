@@ -231,6 +231,8 @@ end)
 
 
 --/dump NeP.DSL:Get('buff.up')('player','Incanter\'s Flow')
+--/dump NeP.DSL:Get('buff')('player','Rejuvenation')
+--/dump NeP.DSL:Get('debuff')('target','Sunfire')
 NeP.DSL:Register('buff.up', function(target, spell)
 	local x = NeP.DSL:Get('buff.count')(target, spell)
   if x == 1 then
@@ -275,18 +277,18 @@ end)
 --TODO: work out off gcd/gcd only skills now all of this is just like SiMC 'prev'
 
 --/dump NeP.DSL:Get('prev_off_gcd')('player', 'Water Jet')
-NeP.DSL:Register('prev_off_gcd', function(_, Spell)
+NeP.DSL:Register('prev_off_gcd', function(Spell)
 	return NeP.DSL:Get('lastcast')('player', Spell)
 end)
 
---/dump NeP.DSL:Get('prev_gcd')('player', 'Vampiric Touch')
+--/dump NeP.DSL:Get('prev_gcd')('Shadowstrike')
 --/dump NeP.DSL:Get('lastcast')('player', 'Fireball')
-NeP.DSL:Register('prev_gcd', function(_, Spell)
+NeP.DSL:Register('prev_gcd', function(Spell)
 	return  NeP.DSL:Get('lastgcd')('player', Spell)
 end)
 
 --/dump NeP.DSL:Get('prev')('player', 'Thrash')
-NeP.DSL:Register('prev', function(_, Spell)
+NeP.DSL:Register('prev', function(Spell)
   --if  select(1, GetSpellCooldown(61304)) == 0 and NeP.DSL:Get('lastcast')('player', Spell) then
 	   return NeP.DSL:Get('lastcast')('player', Spell)
   --end
@@ -650,6 +652,9 @@ end)
 --/dump NeP.Core:GetSpellID('Rip')
 --/dump select(8, UnitDebuff('target', GetSpellInfo(NeP.Core:GetSpellID(NeP.Core:GetSpellName('Rip')))))
 --/dump select(6, UnitDebuff('target', GetSpellInfo(NeP.Core:GetSpellID(NeP.Core:GetSpellName('Rip')))))
+NeP.DSL:Register('autodotx', function(spell,debuff)
+	return Xeer.AutoDoT(spell, debuff)
+end)
 
 --------------------------------------------------------------------------------
 --------------------------------WARLOCK-----------------------------------------
@@ -824,14 +829,14 @@ NeP.DSL:Register('stealthed', function()
 end)
 --/dump NeP.DSL:Get('variable.ssw_er')()
 NeP.DSL:Register('variable.ssw_er', function()
-  --actions=variable,name=ssw_er,value=equipped.shadow_satyrs_walk*(10-floor(target.distance*0.5))
+  --actions=variable,name=ssw_er,value=equipped.shadow_satyrs_walk*(10+floor(target.distance*0.5))
 local range_check
   if NeP.DSL:Get('range')('target') then
    range_check = NeP.DSL:Get('range')('target')
   else
     range_check = 0
   end
-  local x = (NeP.DSL:Get('xequipped')('137032') * (10 - (range_check * 0.5)))
+  local x = (NeP.DSL:Get('xequipped')('137032') * (10 + (range_check * 0.5)))
   return x
 end)
 
