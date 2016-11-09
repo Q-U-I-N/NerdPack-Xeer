@@ -159,9 +159,9 @@ local PowerT = {
     [3] = ('^.-Energy'),
 }
 
---/dump NeP.DSL:Get('action.cost')('Rake')
---/dump NeP.DSL:Get('action.cost')('Rejuvenation')
-NeP.DSL:Register('action.cost', function(spell)
+--/dump NeP.DSL:Get('action.cost')(nil,'Rake')
+--/dump NeP.DSL:Get('action.cost')(nil, 'Rejuvenation')
+NeP.DSL:Register('action.cost', function(_, spell)
     local costText = Xeer.Scan_SpellCost(spell)
     local numcost = 0
     for i = 0, 3 do
@@ -275,18 +275,18 @@ end)
 --TODO: work out off gcd/gcd only skills now all of this is just like SiMC 'prev'
 
 --/dump NeP.DSL:Get('prev_off_gcd')('player', 'Water Jet')
-NeP.DSL:Register('prev_off_gcd', function(Spell)
+NeP.DSL:Register('prev_off_gcd', function(_, spell)
     return NeP.DSL:Get('lastcast')('player', Spell)
 end)
 
 --/dump NeP.DSL:Get('prev_gcd')('Shadowstrike')
 --/dump NeP.DSL:Get('lastcast')('player', 'Fireball')
-NeP.DSL:Register('prev_gcd', function(Spell)
+NeP.DSL:Register('prev_gcd', function(_, spell)
     return NeP.DSL:Get('lastgcd')('player', Spell)
 end)
 
 --/dump NeP.DSL:Get('prev')('player', 'Thrash')
-NeP.DSL:Register('prev', function(Spell)
+NeP.DSL:Register('prev', function(_, spell)
     --if select(1, GetSpellCooldown(61304)) == 0 and NeP.DSL:Get('lastcast')('player', Spell) then
     return NeP.DSL:Get('lastcast')('player', Spell)
         --end
@@ -566,7 +566,7 @@ NeP.DSL:Register('xequipped', function(item)
 end)
 
 --/dump NeP.DSL:Get('line_cd')(_, 'Cobra Shot')
-NeP.DSL:Register('line_cd', function(_,spell)
+NeP.DSL:Register('line_cd', function(_, spell)
     local spellID = NeP.Core:GetSpellID(spell)
     if Xeer.spell_timers[spellID] then
         return GetTime() - Xeer.spell_timers[spellID].time
@@ -637,15 +637,30 @@ NeP.DSL:Register('dot.tick_time', function(_, spell)
     end
 end)
 
---/dump NeP.DSL:Get('gcd')()
---/dump NeP.DSL:Get('dot.x')('target', 'Moonfire')
---/dump NeP.DSL:Get('dot.tick_time')('Moonfire')
+--/dump NeP.DSL:Get('dot.pmultiplier')(nil, 'Rip')
+NeP.DSL:Register('dot.pmultiplier', function(_, spell)
+    local GUID = UnitGUID('target')
+    local name = string.lower(spell)
+    if Xeer.f_Snapshots[name][GUID] then
+      return Xeer.f_Snapshots[name][GUID]
+    else
+      return 0
+    end
+end)
 
---/dump NeP.Core:GetSpellID('Rip')
---/dump select(8, UnitDebuff('target', GetSpellInfo(NeP.Core:GetSpellID(NeP.Core:GetSpellName('Rip')))))
---/dump select(6, UnitDebuff('target', GetSpellInfo(NeP.Core:GetSpellID(NeP.Core:GetSpellName('Rip')))))
-NeP.DSL:Register('autodotx', function(spell,debuff)
-    return Xeer.AutoDoT(spell, debuff)
+--/dump NeP.DSL:Get('persistent_multiplier')(nil, 'Rip')
+NeP.DSL:Register('persistent_multiplier', function(_, spell)
+  local name = string.lower(spell)
+  if Xeer.f_Snapshots[name].current then
+    return Xeer.f_Snapshots[name].current
+  else
+    return 1
+  end
+end)
+
+--/dump NeP.DSL:Get('f_test')()
+NeP.DSL:Register('f_test', function()
+  return Xeer.f_Snapshots
 end)
 
 --------------------------------------------------------------------------------

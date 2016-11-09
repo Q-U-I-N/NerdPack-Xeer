@@ -1,6 +1,6 @@
 local _, Xeer = ...
 
-Xeer.Version = '1.8.7'
+Xeer.Version = '1.8.8'
 Xeer.Branch = 'RELEASE'
 Xeer.Name = 'NerdPack - Xeer Routines'
 Xeer.Author = 'Xeer'
@@ -8,7 +8,7 @@ Xeer.addonColor = 'ADFF2F'
 Xeer.Logo = 'Interface\\AddOns\\NerdPack-Xeer\\media\\logo.blp'
 Xeer.Splash = 'Interface\\AddOns\\NerdPack-Xeer\\media\\splash.blp'
 
-local frame = CreateFrame('GameTooltip', 'NeP_ScanningTooltip', UIParent, 'GameTooltipTemplate')
+local frame = CreateFrame('GameTooltip', 'Xeer_ScanningTooltip', UIParent, 'GameTooltipTemplate')
 
 Xeer.class = select(3,UnitClass("player"))
 Xeer.spell_timers = {}
@@ -215,31 +215,31 @@ end
 ----------------------------------ToolTips--------------------------------------
 --------------------------------------------------------------------------------
 
---/dump Xeer.Scan_SpellCost('Rip')
+--/dump Xeer.Scan_SpellCost('Rake')
 function Xeer.Scan_SpellCost(spell)
-local spell = NeP.Core:GetSpellID(NeP.Core:GetSpellName(spell))
-frame:SetOwner(UIParent, 'ANCHOR_NONE')
-frame:SetSpellByID(spell)
-for i = 2, frame:NumLines() do
-  local tooltipText = _G['NeP_ScanningTooltipTextLeft' .. i]:GetText()
-  return tooltipText
-end
-return false
+  local spellID = NeP.Core:GetSpellID(spell)
+  frame:SetOwner(UIParent, 'ANCHOR_NONE')
+  frame:SetSpellByID(spellID)
+  for i = 2, frame:NumLines() do
+    local tooltipText = _G['Xeer_ScanningTooltipTextLeft' .. i]:GetText()
+    return tooltipText
+  end
+  return false
 end
 
 --/dump Xeer.Scan_IgnorePain()
 function Xeer.Scan_IgnorePain()
-for i = 1, 40 do
-  local qqq = select(11,UnitBuff('player', i))
-  if qqq == 190456 then
-    frame:SetOwner(UIParent, 'ANCHOR_NONE')
-    frame:SetUnitBuff('player', i)
-    local tooltipText = _G['NeP_ScanningTooltipTextLeft2']:GetText()
-    local match = tooltipText:lower():match('of the next.-$')
-    return gsub(match, '%D', '') + 0
+  for i = 1, 40 do
+    local qqq = select(11,UnitBuff('player', i))
+    if qqq == 190456 then
+      frame:SetOwner(UIParent, 'ANCHOR_NONE')
+      frame:SetUnitBuff('player', i)
+      local tooltipText = _G['Xeer_ScanningTooltipTextLeft2']:GetText()
+      local match = tooltipText:lower():match('of the next.-$')
+      return gsub(match, '%D', '') + 0
+    end
   end
-end
-return false
+  return false
 end
 
 --------------------------------------------------------------------------------
@@ -444,109 +444,139 @@ Xeer.demon_count = 0
 Xeer.minions = {"Wild Imp", "Dreadstalker", "Imp", "Felhunter", "Succubus", "Felguard", "Darkglare", "Doomguard", "Infernal", "Voidwalker"}
 
 function Xeer.update_demons()
---print('Xeer.update_demons')
-for key,value in pairs(Xeer.active_demons) do
-  if (Xeer.is_demon_dead(Xeer.active_demons[key].name, Xeer.active_demons[key].time)) then
-    Xeer.active_demons[key] = nil
-    Xeer.demon_count = Xeer.demon_count - 1
-    --Xeer.sort_demons()
-  end
-end
-end
-
-function Xeer.is_demon_empowered(guid)
---print('Xeer.is_demon_empowered')
-if (Xeer.active_demons[guid].empower_time ~= 0 and GetTime() - Xeer.active_demons[guid].empower_time <= 12) then
-  return true
-end
-return false
-end
-
-function Xeer.Empower()
---print('Xeer.Empower')
-if Xeer.demon_count == 0 and UnitExists("pet") then
-  Xeer.empower = NeP.DSL:Get('buff.remains')('pet','Demonic Empowerment')
-  return Xeer.empower
-end
-if Xeer.demon_count > 0 then
-  for _,v in pairs(Xeer.active_demons) do
-    if Xeer.is_demon_empowered(v.guid) then
-      emp1 = Xeer.get_remaining_time('Empower', v.empower_time)
-      emp2 = NeP.DSL:Get('buff.remains')('pet','Demonic Empowerment')
-      if emp1 < emp2 then
-        Xeer.empower = emp1
-      else
-        Xeer.empower = emp2
-      end
-    else
-      Xeer.empower = 0
+  --print('Xeer.update_demons')
+  for key,value in pairs(Xeer.active_demons) do
+    if (Xeer.is_demon_dead(Xeer.active_demons[key].name, Xeer.active_demons[key].time)) then
+      Xeer.active_demons[key] = nil
+      Xeer.demon_count = Xeer.demon_count - 1
+      --Xeer.sort_demons()
     end
   end
 end
-return Xeer.empower
+
+function Xeer.is_demon_empowered(guid)
+  --print('Xeer.is_demon_empowered')
+  if (Xeer.active_demons[guid].empower_time ~= 0 and GetTime() - Xeer.active_demons[guid].empower_time <= 12) then
+    return true
+  end
+  return false
+end
+
+function Xeer.Empower()
+  --print('Xeer.Empower')
+  if Xeer.demon_count == 0 and UnitExists("pet") then
+    Xeer.empower = NeP.DSL:Get('buff.remains')('pet','Demonic Empowerment')
+    return Xeer.empower
+  end
+  if Xeer.demon_count > 0 then
+    for _,v in pairs(Xeer.active_demons) do
+      if Xeer.is_demon_empowered(v.guid) then
+        emp1 = Xeer.get_remaining_time('Empower', v.empower_time)
+        emp2 = NeP.DSL:Get('buff.remains')('pet','Demonic Empowerment')
+        if emp1 < emp2 then
+          Xeer.empower = emp1
+        else
+          Xeer.empower = emp2
+        end
+      else
+        Xeer.empower = 0
+      end
+    end
+  end
+  return Xeer.empower
 end
 
 function Xeer.count_active_demon_type(demon)
---print('Xeer.count_active_demon_type')
-local count = 0
-for _,v in pairs(Xeer.active_demons) do
-  if v.name == demon then
-    count = count + 1
+  --print('Xeer.count_active_demon_type')
+  local count = 0
+  for _,v in pairs(Xeer.active_demons) do
+    if v.name == demon then
+      count = count + 1
+    end
   end
-end
-return count
+  return count
 end
 
 function Xeer.remaining_duration(demon)
---print('Xeer.remaining_duration')
-for _,v in pairs(Xeer.active_demons) do
-  if v.name == demon then
-    return Xeer.get_remaining_time(v.name, v.time)
+  --print('Xeer.remaining_duration')
+  for _,v in pairs(Xeer.active_demons) do
+    if v.name == demon then
+      return Xeer.get_remaining_time(v.name, v.time)
+    end
   end
-end
 end
 
 function Xeer.implosion_cast()
---print('Xeer.implosion_cast')
-for key,v in pairs(Xeer.active_demons) do
-  if (Xeer.active_demons[key].name == "Wild Imp") then
-    -- if (Xeer.active_demons[key].name == "Дикие бесы") then
-    Xeer.active_demons[key] = nil
-    Xeer.demon_count = Xeer.demon_count - 1
-    --Xeer.sort_demons()
+  --print('Xeer.implosion_cast')
+  for key,v in pairs(Xeer.active_demons) do
+    if (Xeer.active_demons[key].name == "Wild Imp") then
+      Xeer.active_demons[key] = nil
+      Xeer.demon_count = Xeer.demon_count - 1
+      --Xeer.sort_demons()
+    end
   end
-end
 end
 
 function Xeer.is_demon_dead(name, spawn)
---print('Xeer.is_demon_dead')
-if (Xeer.get_remaining_time(name, spawn) <= 0) then
-  return true
-end
-return false
+  --print('Xeer.is_demon_dead')
+  if (Xeer.get_remaining_time(name, spawn) <= 0) then
+    return true
+  end
+  return false
 end
 
 function Xeer.get_remaining_time(name, spawn)
---print('Xeer.get_remaining_time')
-if name == 'Empower' then
-  return 12 - (GetTime() - spawn)
-else
-  return Xeer.durations[name] - (GetTime() - spawn)
-end
+  --print('Xeer.get_remaining_time')
+  if name == 'Empower' then
+    return 12 - (GetTime() - spawn)
+  else
+    return Xeer.durations[name] - (GetTime() - spawn)
+  end
 end
 
 function Xeer.IsMinion(name)
---print('Xeer.IsMinion')
-for i = 1, #Xeer.minions do
-  if (name == Xeer.minions[i]) then
-    return true
+  --print('Xeer.IsMinion')
+  for i = 1, #Xeer.minions do
+    if (name == Xeer.minions[i]) then
+      return true
+    end
   end
-end
-return false
+  return false
 end
 
+NeP.Listener:Add('Xeer_Warlock_Pets', 'COMBAT_LOG_EVENT_UNFILTERED', function(timestamp, combatevent, hideCaster, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, spellID, spellName, spellSchool, amount, ...)
+  if Xeer.class == 9 then
+    if (combatevent == "SPELL_SUMMON" and sourceName == UnitName("player")) then
+      if (Xeer.IsMinion(destName)) then
+        Xeer.active_demons[destGUID]              = {}
+        Xeer.active_demons[destGUID].guid         = destGUID
+        Xeer.active_demons[destGUID].name         = destName
+        Xeer.active_demons[destGUID].time         = GetTime()
+        Xeer.active_demons[destGUID].empower_time = 0
+        Xeer.active_demons[destGUID].duration     = Xeer.durations[destName]
+        Xeer.demon_count                          = Xeer.demon_count + 1
+        --Xeer.sort_demons()
+      end
+    end
+
+    if ((combatevent == "SPELL_AURA_APPLIED" or combatevent == "SPELL_AURA_REFRESH") and spellID == 193396 and sourceName == UnitName("player")) then
+      --print('Demonic Empowerment')
+      if(Xeer.IsMinion(destName)) then
+        Xeer.active_demons[destGUID].empower_time = GetTime()
+      end
+    end
+
+    if (combatevent == "SPELL_CAST_SUCCESS" and spellID == 196277 and sourceName == UnitName("player")) then
+      --print('Implosion')
+      Xeer.implosion_cast()
+    end
+    Xeer.update_demons()
+    return true
+  end
+end)
+
 --------------------------------------------------------------------------------
----------------------------------PRIEST-----------------------------------------
+--------------------------------- PRIEST ---------------------------------------
 --------------------------------------------------------------------------------
 
 Xeer.Voidform_Summary = true
@@ -557,202 +587,492 @@ Xeer.S2M_Summary = true
 --Xeer.SA_TOTAL = 0
 
 function Xeer.SA_Cleanup(guid)
-if Xeer_SA_STATS[guid] then
-  Xeer.SA_TOTAL = Xeer.SA_TOTAL - Xeer_SA_STATS[guid].Count
-  if Xeer.SA_TOTAL < 0 then
-    Xeer.SA_TOTAL = 0
-  end
-  Xeer_SA_STATS[guid].Count = nil
-  Xeer_SA_STATS[guid].LastUpdate = nil
-  Xeer_SA_STATS[guid] = nil
-  Xeer_SA_NUM_UNITS = Xeer_SA_NUM_UNITS - 1
-  if Xeer_SA_NUM_UNITS < 0 then
-    Xeer_SA_NUM_UNITS = 0
+  if Xeer_SA_STATS[guid] then
+    Xeer.SA_TOTAL = Xeer.SA_TOTAL - Xeer_SA_STATS[guid].Count
+    if Xeer.SA_TOTAL < 0 then
+      Xeer.SA_TOTAL = 0
+    end
+    Xeer_SA_STATS[guid].Count = nil
+    Xeer_SA_STATS[guid].LastUpdate = nil
+    Xeer_SA_STATS[guid] = nil
+    Xeer_SA_NUM_UNITS = Xeer_SA_NUM_UNITS - 1
+    if Xeer_SA_NUM_UNITS < 0 then
+      Xeer_SA_NUM_UNITS = 0
+    end
   end
 end
-end
+
+NeP.Listener:Add('Xeer_SA', 'COMBAT_LOG_EVENT_UNFILTERED', function(timestamp,combatevent,_,sourceGUID,sourcename,_,_,destGUID,destname,_,_,spellid,spellname,_,_,_,_,_,_,_,spellcritical,_,_,_,spellmultistrike)
+  if Xeer.class == 5 then
+    local CurrentTime = GetTime()
+    Xeer_SA_NUM_UNITS = Xeer_SA_NUM_UNITS or 0
+    Xeer.SA_TOTAL     = Xeer.SA_TOTAL or 0
+    -- Stats buffer
+    Xeer_SA_STATS     = Xeer_SA_STATS or {}
+    Xeer_SA_DEAD      = Xeer_SA_DEAD or {}
+    Xeer_LAST_CONTINUITY_CHECK = Xeer_LAST_CONTINUITY_CHECK or GetTime()
+    if sourceGUID == UnitGUID("player") then
+      if spellid == 147193 and combatevent == "SPELL_CAST_SUCCESS" then -- Shadowy Apparition Spawned
+        if not Xeer_SA_STATS[destGUID] or Xeer_SA_STATS[destGUID] == nil then
+          Xeer_SA_STATS[destGUID]       = {}
+          Xeer_SA_STATS[destGUID].Count = 0
+          Xeer_SA_NUM_UNITS             = Xeer_SA_NUM_UNITS + 1
+        end
+        Xeer.SA_TOTAL = Xeer.SA_TOTAL + 1
+        --print('SA spawn :'..Xeer.SA_TOTAL..' remaining SA')
+        Xeer_SA_STATS[destGUID].Count      = Xeer_SA_STATS[destGUID].Count + 1
+        Xeer_SA_STATS[destGUID].LastUpdate = CurrentTime
+      elseif spellid == 148859 and combatevent == "SPELL_DAMAGE" then --Auspicious Spirit Hit
+        if Xeer.SA_TOTAL < 0 then
+          Xeer.SA_TOTAL = 0
+        else
+          Xeer.SA_TOTAL = Xeer.SA_TOTAL - 1
+        end
+        --print('SA hit :'..Xeer.SA_TOTAL..' remaining SA')
+        if Xeer_SA_STATS[destGUID] and Xeer_SA_STATS[destGUID].Count > 0 then
+          Xeer_SA_STATS[destGUID].Count      = Xeer_SA_STATS[destGUID].Count - 1
+          Xeer_SA_STATS[destGUID].LastUpdate = CurrentTime
+          if Xeer_SA_STATS[destGUID].Count <= 0 then
+            Xeer.SA_Cleanup(destGUID)
+          end
+        end
+      end
+    end
+    if Xeer.SA_TOTAL < 0 then
+      Xeer.SA_TOTAL = 0
+    end
+    for guid,count in pairs(Xeer_SA_STATS) do
+      if (CurrentTime - Xeer_SA_STATS[guid].LastUpdate) > 10 then
+        --If we haven't had a new SA spawn in 10sec, that means all SAs that are out have hit the target (usually), or, the target disappeared.
+        Xeer.SA_Cleanup(guid)
+      end
+    end
+    if (combatevent == "UNIT_DIED" or combatevent == "UNIT_DESTROYED" or combatevent == "SPELL_INSTAKILL") then -- Unit Died, remove them from the target list.
+      Xeer.SA_Cleanup(destGUID)
+    end
+
+    if UnitIsDeadOrGhost("player") or not UnitAffectingCombat("player") or not InCombatLockdown() then -- We died, or, exited combat, go ahead and purge the list
+      for guid,count in pairs(Xeer_SA_STATS) do
+        Xeer.SA_Cleanup(guid)
+      end
+      Xeer_SA_STATS     = {}
+      Xeer_SA_NUM_UNITS = 0
+      Xeer.SA_TOTAL     = 0
+    end
+    if CurrentTime - Xeer_LAST_CONTINUITY_CHECK > 10 then --Force check of unit count every 10sec
+      local newUnits = 0
+      for guid,count in pairs(Xeer_SA_STATS) do
+        newUnits = newUnits + 1
+      end
+      Xeer_SA_NUM_UNITS          = newUnits
+      Xeer_LAST_CONTINUITY_CHECK = CurrentTime
+    end
+    if Xeer_SA_NUM_UNITS > 0 then
+      local totalSAs = 0
+      for guid,count in pairs(Xeer_SA_STATS) do
+        if Xeer_SA_STATS[guid].Count <= 0 or (UnitIsDeadOrGhost(guid)) then
+          Xeer_SA_DEAD[guid] = true
+        else
+          totalSAs = totalSAs + Xeer_SA_STATS[guid].Count
+        end
+      end
+      if totalSAs > 0 and Xeer.SA_TOTAL > 0 then
+        return true
+      end
+    end
+    return false
+  end
+end)
+
+NeP.Listener:Add('Xeer_VF_S2M', 'COMBAT_LOG_EVENT_UNFILTERED', function(timestamp,combatevent,_,sourceGUID,sourcename,_,_,destGUID,destname,_,_,spellid,spellname,_,_,_,_,_,_,_,spellcritical,_,_,_,spellmultistrike)
+  if Xeer.class == 5 then
+    local CurrentTime = GetTime()
+    Xeer.Voidform_Total_Stacks        = Xeer.Voidform_Total_Stacks or 0
+    Xeer.Voidform_Previous_Stack_Time = Xeer.Voidform_Previous_Stack_Time or 0
+    Xeer.Voidform_Drain_Stacks        = Xeer.Voidform_Drain_Stacks or 0
+    Xeer.Voidform_VoidTorrent_Stacks  = Xeer.Voidform_VoidTorrent_Stacks or 0
+    Xeer.Voidform_Dispersion_Stacks   = Xeer.Voidform_Dispersion_Stacks or 0
+    Xeer.Voidform_Current_Drain_Rate  = Xeer.Voidform_Current_Drain_Rate or 0
+    if Xeer.Voidform_Total_Stacks >= 100 then
+      if (CurrentTime - Xeer.Voidform_Previous_Stack_Time) >= 1 then
+        Xeer.Voidform_Previous_Stack_Time  = CurrentTime
+        Xeer.Voidform_Total_Stacks         = Xeer.Voidform_Total_Stacks + 1
+        if Xeer.Voidform_VoidTorrent_Start == nil and Xeer.Voidform_Dispersion_Start == nil then
+          Xeer.Voidform_Drain_Stacks       = Xeer.Voidform_Drain_Stacks + 1
+          -- print('Xeer.Voidform_Drain_Stacks1: '..Xeer.Voidform_Drain_Stacks)
+          Xeer.Voidform_Current_Drain_Rate = (9.0 + ((Xeer.Voidform_Drain_Stacks - 1) / 2))
+          -- print('Xeer.Voidform_Current_Drain_Rate1: '..Xeer.Voidform_Current_Drain_Rate)
+        elseif Xeer.Voidform_VoidTorrent_Start ~= nil then
+          Xeer.Voidform_VoidTorrent_Stacks = Xeer.Voidform_VoidTorrent_Stacks + 1
+        else
+          Xeer.Voidform_Dispersion_Stacks  = Xeer.Voidform_Dispersion_Stacks + 1
+        end
+      end
+    end
+    if sourceGUID == UnitGUID("player") then
+      if spellid == 194249 then
+        if combatevent == "SPELL_AURA_APPLIED" then -- Entered Voidform
+          Xeer.Voidform_Previous_Stack_Time = CurrentTime
+          Xeer.Voidform_VoidTorrent_Start   = nil
+          Xeer.Voidform_Dispersion_Start    = nil
+          Xeer.Voidform_Drain_Stacks        = 1
+          Xeer.Voidform_Start_Time          = CurrentTime
+          Xeer.Voidform_Total_Stacks        = 1
+          Xeer.Voidform_VoidTorrent_Stacks  = 0
+          Xeer.Voidform_Dispersion_Stacks   = 0
+        elseif combatevent == "SPELL_AURA_APPLIED_DOSE" then -- New Voidform Stack
+          Xeer.Voidform_Previous_Stack_Time  = CurrentTime
+          Xeer.Voidform_Total_Stacks         = Xeer.Voidform_Total_Stacks + 1
+          if Xeer.Voidform_VoidTorrent_Start == nil and Xeer.Voidform_Dispersion_Start == nil then
+            Xeer.Voidform_Drain_Stacks       = Xeer.Voidform_Drain_Stacks + 1
+            -- print('Xeer.Voidform_Drain_Stacks2: '..Xeer.Voidform_Drain_Stacks)
+            Xeer.Voidform_Current_Drain_Rate = (9.0 + ((Xeer.Voidform_Drain_Stacks - 1) / 2))
+            -- print('Xeer.Voidform_Current_Drain_Rate2: '..Xeer.Voidform_Current_Drain_Rate)
+          elseif Xeer.Voidform_VoidTorrent_Start ~= nil then
+            Xeer.Voidform_VoidTorrent_Stacks = Xeer.Voidform_VoidTorrent_Stacks + 1
+          else
+            Xeer.Voidform_Dispersion_Stacks  = Xeer.Voidform_Dispersion_Stacks + 1
+          end
+        elseif combatevent == "SPELL_AURA_REMOVED" then -- Exited Voidform
+          if Xeer.Voidform_Summary == true then
+            print("Voidform Info:")
+            print("--------------------------")
+            print(string.format("Voidform Duration: %.2f seconds", (CurrentTime-Xeer.Voidform_Start_Time)))
+            if Xeer.Voidform_Total_Stacks > 100 then
+              print(string.format("Voidform Stacks: 100 (+%.0f)", (Xeer.Voidform_Total_Stacks - 100)))
+            else
+              print(string.format("Voidform Stacks: %.0f", Xeer.Voidform_Total_Stacks))
+            end
+            print(string.format("Dispersion Stacks: %.0f", Xeer.Voidform_Dispersion_Stacks))
+            print(string.format("Void Torrent Stacks: %.0f", Xeer.Voidform_VoidTorrent_Stacks))
+            print("Final Drain: "..Xeer.Voidform_Drain_Stacks.." stacks, "..Xeer.Voidform_Current_Drain_Rate.." / sec")
+          end
+          Xeer.Voidform_VoidTorrent_Start  = nil
+          Xeer.Voidform_Dispersion_Start   = nil
+          Xeer.Voidform_Drain_Stacks       = 0
+          Xeer.Voidform_Current_Drain_Rate = 0
+          Xeer.Voidform_Start_Time         = nil
+          Xeer.Voidform_Total_Stacks       = 0
+          Xeer.Voidform_VoidTorrent_Stacks = 0
+          Xeer.Voidform_Dispersion_Stacks  = 0
+        end
+
+      elseif spellid == 205065 then
+        if combatevent == "SPELL_AURA_APPLIED" then -- Started channeling Void Torrent
+          Xeer.Voidform_VoidTorrent_Start = CurrentTime
+        elseif combatevent == "SPELL_AURA_REMOVED" and Xeer.Voidform_VoidTorrent_Start ~= nil then -- Stopped channeling Void Torrent
+          Xeer.Voidform_VoidTorrent_Start = nil
+        end
+
+      elseif spellid == 47585 then
+        if combatevent == "SPELL_AURA_APPLIED" then -- Started channeling Dispersion
+          Xeer.Voidform_Dispersion_Start  = CurrentTime
+        elseif combatevent == "SPELL_AURA_REMOVED" and Xeer.Voidform_Dispersion_Start ~= nil then -- Stopped channeling Dispersion
+          Xeer.Voidform_Dispersion_Start  = nil
+        end
+
+      elseif spellid == 212570 then
+        if combatevent == "SPELL_AURA_APPLIED" then -- Gain Surrender to Madness
+          Xeer.Voidform_S2M_Activated     = true
+          Xeer.Voidform_S2M_Start         = CurrentTime
+        elseif combatevent == "SPELL_AURA_REMOVED" then -- Lose Surrender to Madness
+          Xeer.Voidform_S2M_Activated     = false
+        end
+      end
+
+    elseif destGUID == UnitGUID("player") and (combatevent == "UNIT_DIED" or combatevent == "UNIT_DESTROYED" or combatevent == "SPELL_INSTAKILL") and Xeer.Voidform_S2M_Activated == true then
+      Xeer.Voidform_S2M_Activated = false
+      if Xeer.S2M_Summary == true then
+        print("Surrender to Madness Info:")
+        print("--------------------------")
+        print(string.format("S2M Duration: %.2f seconds", (CurrentTime-Xeer.Voidform_S2M_Start)))
+        print(string.format("Voidform Duration: %.2f seconds", (CurrentTime-Xeer.Voidform_Start_Time)))
+        if Xeer.Voidform_Total_Stacks > 100 then
+          print(string.format("Voidform Stacks: 100 (+%.0f)", (Xeer.Voidform_Total_Stacks - 100)))
+        else
+          print(string.format("Voidform Stacks: %.0f", Xeer.Voidform_Total_Stacks))
+        end
+        print(string.format("Dispersion Stacks: %.0f", Xeer.Voidform_Dispersion_Stacks))
+        print(string.format("Void Torrent Stacks: %.0f", Xeer.Voidform_VoidTorrent_Stacks))
+        print("Final Drain: "..Xeer.Voidform_Drain_Stacks.." stacks, "..Xeer.Voidform_Current_Drain_Rate.." / sec")
+      end
+      Xeer.Voidform_S2M_Start          = nil
+      Xeer.Voidform_VoidTorrent_Start  = nil
+      Xeer.Voidform_Dispersion_Start   = nil
+      Xeer.Voidform_Drain_Stacks       = 0
+      Xeer.Voidform_Current_Drain_Rate = 0
+      Xeer.Voidform_Start_Time         = nil
+      Xeer.Voidform_Total_Stacks       = 0
+      Xeer.Voidform_VoidTorrent_Stacks = 0
+      Xeer.Voidform_Dispersion_Stacks  = 0
+    end
+  end
+end)
 
 --------------------------------------------------------------------------------
 --------------------------------- DRUID ----------------------------------------
 --------------------------------------------------------------------------------
 
-function Xeer.Multiplier(debuff)
-end
+Xeer.f_pguid = UnitGUID("player")
+Xeer.f_cp = 0
+Xeer.f_cleanUpTimer = nil
+Xeer.f_lastUpdate = 0
+Xeer.f_nextUpdateDmg = nil
 
---Initialize variables and parameters
-
-Xeer.pguid = UnitGUID("player")
-Xeer.cp = 0
-Xeer.cleanUpTimer = nil
-Xeer.lastUpdate = 0
-Xeer.nextUpdateDmg = nil
-Xeer.buffs = {
-["tigersFury"] = 0,
-["savageRoar"] = 0,
-["bloodtalons"] = 0,
-["incarnation"] = 0,
-["prowl"] = 1,
-["shadowmeld"] = 1
+Xeer.f_buffs = {
+  ["tigersFury"]  = 0,
+  ["savageRoar"]  = 0,
+  ["bloodtalons"] = 0,
+  ["incarnation"] = 0,
+  ["prowl"]       = 1,
+  ["shadowmeld"]  = 1,
 }
 
---event and spell ID lists
-Xeer.events = {
-["SPELL_AURA_APPLIED"] = true,
-["SPELL_AURA_REFRESH"] = true,
-["SPELL_AURA_REMOVED"] = true,
-["SPELL_CAST_SUCCESS"] = true,
-["SPELL_MISSED"] = true
+Xeer.f_events = {
+  ["SPELL_AURA_APPLIED"] = true,
+  ["SPELL_AURA_REFRESH"] = true,
+  ["SPELL_AURA_REMOVED"] = true,
+  ["SPELL_CAST_SUCCESS"] = true,
+  ["SPELL_MISSED"]       = true,
 }
 
-Xeer.buffID = {
-[5217] = "tigersFury",
-[52610] = "savageRoar",
-[145152] = "bloodtalons",
-[102543] = "incarnation",
-[5215] = "prowl",
-[102547] = "prowl",
-[58984] = "shadowmeld",
+Xeer.f_buffID = {
+  [5217]   = "tigersFury",
+  [52610]  = "savageRoar",
+  [145152] = "bloodtalons",
+  [102543] = "incarnation",
+  [5215]   = "prowl",
+  [102547] = "prowl",
+  [58984]  = "shadowmeld",
 }
 
-Xeer.debuffID = {
-[163505] = "rake", --stun effect
-[1822] = "rake", --initial dmg
-[1079] = "rip",
-[106830] = "thrash",
-[155722] = "rake", --dot
-[155625] = "moonfire"
+Xeer.f_debuffID = {
+  [163505] = "rake", --stun effect
+  [1822]   = "rake", --initial dmg
+  [1079]   = "rip",
+  [106830] = "thrash",
+  [155722] = "rake", --dot
+  [155625] = "moonfire",
 }
 
 --Initialize tables to hold all snapshot data
-feralSnapshots = {
-["rake"] = {},
-["rip"] = {},
-["thrash"] = {},
-["moonfire"] = {}
+Xeer.f_Snapshots = {
+  ["rake"]     = {},
+  ["rip"]      = {},
+  ["thrash"]   = {},
+  ["moonfire"] = {},
 }
 
 --Create localization strings
-Xeer.strings = {
-["tigersFury"] = GetSpellInfo(5217) or "Tiger's Fury",
-["savageRoar"] = GetSpellInfo(52610) or "Savage Roar",
-["bloodtalons"] = GetSpellInfo(145152) or "Bloodtalons",
-["incarnation"] = GetSpellInfo(102543) or "Incarnation: King of the Jungle",
-["prowl"] = GetSpellInfo(5215) or "Prowl",
-["shadowmeld"] = GetSpellInfo(58984) or "Shadowmeld"
+Xeer.f_strings = {
+  ["tigersFury"]  = GetSpellInfo(5217) or "Tiger's Fury",
+  ["savageRoar"]  = GetSpellInfo(52610) or "Savage Roar",
+  ["bloodtalons"] = GetSpellInfo(145152) or "Bloodtalons",
+  ["incarnation"] = GetSpellInfo(102543) or "Incarnation: King of the Jungle",
+  ["prowl"]       = GetSpellInfo(5215) or "Prowl",
+  ["shadowmeld"]  = GetSpellInfo(58984) or "Shadowmeld",
 }
 
 --Create update function for checking for buffs
-Xeer.update = function()
-local b = Xeer.buffs
-local s = Xeer.strings
-local now = GetTime()
+function Xeer.f_update()
+  local b = Xeer.f_buffs
+  local s = Xeer.f_strings
+  local now = GetTime()
+  Xeer.f_lastUpdate = now
 
-Xeer.lastUpdate = now
-
-b.tigersFury = select(7,UnitBuff("player", s.tigersFury)) or b.tigersFury
-b.savageRoar = select(7,UnitBuff("player", s.savageRoar)) or b.savageRoar
-b.bloodtalons = select(7,UnitBuff("player", s.bloodtalons)) or b.bloodtalons
-b.incarnation = select(7,UnitBuff("player", s.incarnation)) or b.incarnation
-b.prowl = select(7,UnitBuff("player", s.prowl)) or b.prowl
-b.shadowmeld = select(7,UnitBuff("player", s.shadowmeld)) or b.shadowmeld
-Xeer.updateDmg()
+  b.tigersFury  = select(7,UnitBuff("player", s.tigersFury)) or b.tigersFury
+  b.savageRoar  = select(7,UnitBuff("player", s.savageRoar)) or b.savageRoar
+  b.bloodtalons = select(7,UnitBuff("player", s.bloodtalons)) or b.bloodtalons
+  b.incarnation = select(7,UnitBuff("player", s.incarnation)) or b.incarnation
+  b.prowl       = select(7,UnitBuff("player", s.prowl)) or b.prowl
+  b.shadowmeld  = select(7,UnitBuff("player", s.shadowmeld)) or b.shadowmeld
+  Xeer.f_updateDmg()
 end
 
 --Create update function for calculating current snapshot strength
-Xeer.updateDmg = function()
-local b = Xeer.buffs
-local now = GetTime()
-local dmgMulti = 1
-local rakeMulti = 1
-local bloodtalonsMulti = 1
-local currentCP = UnitPower("player",4)
-
-if currentCP ~= 0 then
-  Xeer.cp = currentCP
-end
-
-if b.tigersFury > now then dmgMulti = dmgMulti * 1.15 end
-if b.savageRoar > now then dmgMulti = dmgMulti * 1.25 end
-
-if b.bloodtalons > now then bloodtalonsMulti = 1.5 end
-
-if b.incarnation > now or b.prowl > now or b.shadowmeld > now then rakeMulti=2
-elseif b.prowl == 0 or b.shadowmeld == 0 then rakeMulti=2
-end
-
-feralSnapshots.rip.current = dmgMulti*bloodtalonsMulti*Xeer.cp
-feralSnapshots.rip.current5CP = dmgMulti*bloodtalonsMulti*5
-feralSnapshots.rake.current = dmgMulti*bloodtalonsMulti*rakeMulti
-feralSnapshots.thrash.current = dmgMulti*bloodtalonsMulti
-feralSnapshots.moonfire.current = dmgMulti
+function Xeer.f_updateDmg()
+  local b = Xeer.f_buffs
+  local now = GetTime()
+  local dmgMulti = 1
+  local rakeMulti = 1
+  local bloodtalonsMulti = 1
+  local currentCP = UnitPower("player",4)
+  if currentCP ~= 0 then
+    Xeer.f_cp = currentCP
+  end
+  if b.tigersFury > now then dmgMulti = dmgMulti * 1.15 end
+  if b.savageRoar > now then dmgMulti = dmgMulti * 1.25 end
+  if b.bloodtalons > now then bloodtalonsMulti = 1.5 end
+  if b.incarnation > now or b.prowl > now or b.shadowmeld > now then rakeMulti=2
+  elseif b.prowl == 0 or b.shadowmeld == 0 then rakeMulti=2 end
+  Xeer.f_Snapshots.rip.current      = dmgMulti*bloodtalonsMulti*Xeer.f_cp
+  Xeer.f_Snapshots.rip.current5CP   = dmgMulti*bloodtalonsMulti*5
+  Xeer.f_Snapshots.rake.current     = dmgMulti*bloodtalonsMulti*rakeMulti
+  Xeer.f_Snapshots.thrash.current   = dmgMulti*bloodtalonsMulti
+  Xeer.f_Snapshots.moonfire.current = dmgMulti
 end
 
 --Create function for handling clean up of the snapshot table
-Xeer.cleanUp = function()
---Cancel existing scheduled cleanup first if there is one
-if Xeer.cleanUpTimer then Xeer.cancelCleanUp() end
-
-Xeer.cleanupTimer = C_Timer.NewTimer(30,
-  function()
-    if not UnitAffectingCombat("player") then
-      feralSnapshots = {
-        ["rake"] = {},
-        ["rip"] = {},
-        ["thrash"] = {},
+function Xeer.f_cleanUp()
+  --Cancel existing scheduled cleanup first if there is one
+  if Xeer.f_cleanUpTimer then Xeer.f_cancelCleanUp() end
+  Xeer.f_cleanUpTimer = C_Timer.NewTimer(30,function()
+    if UnitIsDeadOrGhost("player") or not UnitAffectingCombat("player") or not InCombatLockdown() then
+    --if not UnitAffectingCombat("player") then
+      Xeer.f_Snapshots = {
+        ["rake"]     = {},
+        ["rip"]      = {},
+        ["thrash"]   = {},
         ["moonfire"] = {}
       }
     end
-  end
-)
+  end)
 end
 
 --Create clean up function
-Xeer.cancelCleanUp = function()
-if Xeer.cleanupTimer then
-  Xeer.cleanupTimer:Cancel()
-  Xeer.cleanupTimer = nil
-end
-end
-
-Xeer.trigger1 = function()
---This trigger runs the update function if there have been no updates recently
---due to a lack of relevant combat events.
-if GetTime() - Xeer.lastUpdate >= 3 then Xeer.update() end
---if GetTime() - Xeer.lastDmgUpdate >= 0.045 then Xeer.updateDmg() end
-if Xeer.nextUpdateDmg and GetTime() > Xeer.nextUpdateDmg then
-  Xeer.nextUpdateDmg = nil
-  Xeer.updateDmg()
-end
---This 'return true' makes the icon take up space.
---Change to 'return false' if you don't want the icon to take up space.
-return true
+function Xeer.f_cancelCleanUp()
+  if Xeer.f_cleanUpTimer then
+    Xeer.f_cleanUpTimer:Cancel()
+    Xeer.f_cleanUpTimer = nil
+  end
 end
 
-Xeer.trigger2 = function()
---This trigger forces the WeakAura to run its initialization code when
---loading into a zone or when switching specs.
-Xeer.update()
-end
+NeP.Listener:Add('Xeer_f_update1', 'ZONE_CHANGED_NEW_AREA', function()
+  if Xeer.class == 11 then
+    Xeer.f_update()
+  end
+end)
 
-Xeer.trigger4 = function(event, unit, type)
-if unit == "player" and type == "COMBO_POINTS" then
-  Xeer.updateDmg()
-end
-end
+NeP.Listener:Add('Xeer_f_update2', 'ACTIVE_TALENT_GROUP_CHANGED', function()
+  if Xeer.class == 11 then
+    Xeer.f_update()
+  end
+end)
 
-Xeer.trigger5 = function(event)
---This trigger manages clean up of snapshots when it is safe to do so
---1. Schedule cleanup of snapshots when combat ends
-if event == "PLAYER_REGEN_ENABLED" then
-  Xeer.cleanUp()
-  --2. Check for and cancel scheduled cleanup when combat starts
-elseif event == "PLAYER_REGEN_DISABLED" then
-  Xeer.cancelCleanUp()
-end
-end
+NeP.Listener:Add('Xeer_f_updateDmg', 'UNIT_POWER', function(unit, type)
+  if Xeer.class == 11 then
+    if unit == "player" and type == "COMBO_POINTS" then
+      Xeer.f_updateDmg()
+    end
+  end
+end)
 
+NeP.Listener:Add('Xeer_f_Snapshot', 'COMBAT_LOG_EVENT_UNFILTERED', function(timestamp, combatevent, _, sourceGUID, _,_,_, destGUID, _,_,_, spellID)
+  if Xeer.class == 11 then
+    --This trigger listens for bleed events to record snapshots.
+    --This trigger also listens for changes in buffs to recalculate bleed damage.
 
---]]
+    --Check for only relevant player events
+    if not Xeer.f_buffID[spellID] and not Xeer.f_debuffID[spellID] then return end
+    if not Xeer.f_events[combatevent] then return end
+    if sourceGUID ~= Xeer.f_pguid then return end
+
+    --Handle AURA_APPLY and AURA_REFRESH as the same event type
+    if combatevent == "SPELL_AURA_REFRESH" then combatevent = "SPELL_AURA_APPLIED" end
+
+    --Convert rake stun events into rake casts to handle corner case with prowl+rake
+    if spellID == 163505 and (combatevent=="SPELL_MISSED" or combatevent=="SPELL_AURA_APPLIED") then
+      spellID = 1822
+      combatevent = "SPELL_CAST_SUCCESS"
+    end
+
+    --Listen for buff changes on player that affect snapshots
+    if destGUID == Xeer.f_pguid then
+      if combatevent == "SPELL_AURA_APPLIED" then Xeer.f_update() return
+      elseif combatevent == "SPELL_AURA_REMOVED" then
+      	local spellName = Xeer.f_buffID[spellID]
+        local dur = 0
+        --Add small timing window for buffs that can expire before cast
+        if spellName == "bloodtalons" then dur    = 0.1
+        elseif spellName == "prowl" then dur      = 0.1
+        elseif spellName == "shadowmeld" then dur = 0.1
+        end
+
+        if spellName then
+          Xeer.f_buffs[spellName] = GetTime() + dur
+          Xeer.f_nextUpdateDmg    = GetTime() + dur + 0.01
+          return
+        end
+      end
+    end
+
+    -- The following code handles application and expiration of bleeds
+
+    -- 1. Snapshot dmg on spell cast success
+    local fs = Xeer.f_Snapshots
+    if combatevent == "SPELL_CAST_SUCCESS" then
+      local spellName
+      if spellID == 1822 then spellName       = "rake"
+      elseif spellID == 1079 then spellName   = "rip"
+      elseif spellID == 106830 then spellName = "thrash"
+      elseif spellID == 155625 then spellName = "moonfire"
+      end
+
+      if spellName then
+        Xeer.f_update()
+        fs[spellName]["onCast"] = fs[spellName]["current"]
+        return
+      end
+
+      --2. Record snapshot for target if and when the bleed is applied
+    elseif combatevent == "SPELL_AURA_APPLIED" then
+      local spellName
+      if spellID == 155722 then spellName     = "rake"
+      elseif spellID == 1079 then spellName   = "rip"
+      elseif spellID == 106830 then spellName = "thrash"
+      elseif spellID == 155625 then spellName = "moonfire"
+      end
+
+      if spellName then
+        fs[spellName][destGUID] = fs[spellName]["onCast"]
+        return
+      end
+
+      --3. Remove snapshot for target when bleed expires
+    elseif combatevent == "SPELL_AURA_REMOVED" then
+      local spellName
+      if spellID == 155722 then spellName     = "rake"
+      elseif spellID == 1079 then spellName   = "rip"
+      elseif spellID == 106830 then spellName = "thrash"
+      elseif spellID == 155625 then spellName = "moonfire"
+      end
+
+      if spellName then
+        fs[spellName][destGUID] = nil
+        return
+      end
+    end
+  end
+end)
+
+NeP.Listener:Add('Xeer_OutOfCombat', 'PLAYER_REGEN_ENABLED', function()
+  if Xeer.class == 9 then
+    --This trigger manages clean up of snapshots when it is safe to do so
+    --1. Schedule cleanup of snapshots when combat ends
+  	Xeer.f_cleanUp()
+  end
+end)
+
+NeP.Listener:Add('Xeer_InCombat', 'PLAYER_REGEN_DISABLED', function()
+  if Xeer.class == 9 then
+    --2. Check for and cancel scheduled cleanup when combat starts
+  	Xeer.f_cancelCleanUp()
+
+    C_Timer.NewTicker(1.5, (function()
+      --This trigger runs the update function if there have been no updates recently
+      --due to a lack of relevant combat events.
+    	if not UnitIsDeadOrGhost("player") and (UnitAffectingCombat("player") or InCombatLockdown()) then
+        if GetTime() - Xeer.f_lastUpdate >= 3 then Xeer.f_update() end
+        --if GetTime() - Xeer.lastDmgUpdate >= 0.045 then Xeer.f_updateDmg() end
+        if Xeer.f_nextUpdateDmg and GetTime() > Xeer.f_nextUpdateDmg then
+          Xeer.f_nextUpdateDmg = nil
+          Xeer.f_updateDmg()
+        end
+      end
+    end), nil)
+  end
+end)
+
 --------------------------------------------------------------------------------
 -------------------------------- TRAVEL SPEED-----------------------------------
 --------------------------------------------------------------------------------
@@ -761,19 +1081,19 @@ end
 -- To recover travel speed, open up /eventtrace, calculate difference between SPELL_CAST_SUCCESS and SPELL_DAMAGE events
 
 local Travel_Chart = {
-[116] = 23.174, -- Frostbolt
-[228597] = 23.174, -- Frostbolt
-[133] = 45.805, -- Fireball
-[11366] = 52, -- Pyroblast
-[29722] = 18, -- Incinerate
-[30455] = 25.588, -- Ice Lance
-[105174] = 33, -- Hand of Gul'dan
-[120644] = 10, -- Halo
-[122121] = 25, -- Divine Star
-[127632] = 19, -- Cascade
-[210714] = 38, -- Icefury
-[51505] = 38.090, -- Lava Burst
-[205181] = 32.737, -- Shadowflame
+  [116]    = 23.174, -- Frostbolt
+  [228597] = 23.174, -- Frostbolt
+  [133]    = 45.805, -- Fireball
+  [11366]  = 52, -- Pyroblast
+  [29722]  = 18, -- Incinerate
+  [30455]  = 25.588, -- Ice Lance
+  [105174] = 33, -- Hand of Gul'dan
+  [120644] = 10, -- Halo
+  [122121] = 25, -- Divine Star
+  [127632] = 19, -- Cascade
+  [210714] = 38, -- Icefury
+  [51505]  = 38.090, -- Lava Burst
+  [205181] = 32.737, -- Shadowflame
 }
 
 -- Return the time a spell will need to travel to the current target
@@ -814,252 +1134,14 @@ end
 --]]
 
 --------------------------------------------------------------------------------
--------------------------------- LISTENER --------------------------------------
+----------------------------- MISC LISTENERS -----------------------------------
 --------------------------------------------------------------------------------
-
-NeP.Listener:Add('Xeer_Listener1', 'COMBAT_LOG_EVENT_UNFILTERED', function(timestamp, combatevent, hideCaster, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, spellID, spellName, spellSchool, amount, ...)
-  if Xeer.class == 9 then
-    if (combatevent == "SPELL_SUMMON" and sourceName == UnitName("player")) then
-      if (Xeer.IsMinion(destName)) then
-        Xeer.active_demons[destGUID] = {}
-        Xeer.active_demons[destGUID].guid = destGUID
-        Xeer.active_demons[destGUID].name = destName
-        Xeer.active_demons[destGUID].time = GetTime()
-        Xeer.active_demons[destGUID].empower_time = 0
-        Xeer.active_demons[destGUID].duration = Xeer.durations[destName]
-        Xeer.demon_count = Xeer.demon_count + 1
-        --Xeer.sort_demons()
-      end
-    end
-
-    if ((combatevent == "SPELL_AURA_APPLIED" or combatevent == "SPELL_AURA_REFRESH") and spellID == 193396 and sourceName == UnitName("player")) then
-      --print('Demonic Empowerment')
-      if(Xeer.IsMinion(destName)) then
-        Xeer.active_demons[destGUID].empower_time = GetTime()
-      end
-    end
-
-    if (combatevent == "SPELL_CAST_SUCCESS" and spellID == 196277 and sourceName == UnitName("player")) then
-      --print('Implosion')
-      Xeer.implosion_cast()
-    end
-    Xeer.update_demons()
-    return true
-  end
-end)
-
-NeP.Listener:Add('Xeer_Listener2', 'COMBAT_LOG_EVENT_UNFILTERED', function(time,type,_,sourceGUID,sourcename,_,_,destGUID,destname,_,_,spellid,spellname,_,_,_,_,_,_,_,spellcritical,_,_,_,spellmultistrike)
-  if Xeer.class == 5 then
-    local CurrentTime = GetTime()
-    Xeer_SA_NUM_UNITS = Xeer_SA_NUM_UNITS or 0
-    Xeer.SA_TOTAL = Xeer.SA_TOTAL or 0
-    -- Stats buffer
-    Xeer_SA_STATS = Xeer_SA_STATS or {}
-    Xeer_SA_DEAD = Xeer_SA_DEAD or {}
-    Xeer_LAST_CONTINUITY_CHECK = Xeer_LAST_CONTINUITY_CHECK or GetTime()
-    if sourceGUID == UnitGUID("player") then
-      if spellid == 147193 and type == "SPELL_CAST_SUCCESS" then -- Shadowy Apparition Spawned
-        if not Xeer_SA_STATS[destGUID] or Xeer_SA_STATS[destGUID] == nil then
-          Xeer_SA_STATS[destGUID] = {}
-          Xeer_SA_STATS[destGUID].Count = 0
-          Xeer_SA_NUM_UNITS = Xeer_SA_NUM_UNITS + 1
-        end
-        Xeer.SA_TOTAL = Xeer.SA_TOTAL + 1
-        --print('SA spawn :'..Xeer.SA_TOTAL..' remaining SA')
-        Xeer_SA_STATS[destGUID].Count = Xeer_SA_STATS[destGUID].Count + 1
-        Xeer_SA_STATS[destGUID].LastUpdate = CurrentTime
-      elseif spellid == 148859 and type == "SPELL_DAMAGE" then --Auspicious Spirit Hit
-        if Xeer.SA_TOTAL < 0 then
-          Xeer.SA_TOTAL = 0
-        else
-          Xeer.SA_TOTAL = Xeer.SA_TOTAL - 1
-        end
-        --print('SA hit :'..Xeer.SA_TOTAL..' remaining SA')
-        if Xeer_SA_STATS[destGUID] and Xeer_SA_STATS[destGUID].Count > 0 then
-          Xeer_SA_STATS[destGUID].Count = Xeer_SA_STATS[destGUID].Count - 1
-          Xeer_SA_STATS[destGUID].LastUpdate = CurrentTime
-          if Xeer_SA_STATS[destGUID].Count <= 0 then
-            Xeer.SA_Cleanup(destGUID)
-          end
-        end
-      end
-    end
-    if Xeer.SA_TOTAL < 0 then
-      Xeer.SA_TOTAL = 0
-    end
-    for guid,count in pairs(Xeer_SA_STATS) do
-      if (CurrentTime - Xeer_SA_STATS[guid].LastUpdate) > 10 then
-        --If we haven't had a new SA spawn in 10sec, that means all SAs that are out have hit the target (usually), or, the target disappeared.
-        Xeer.SA_Cleanup(guid)
-      end
-    end
-    if (type == "UNIT_DIED" or type == "UNIT_DESTROYED" or type == "SPELL_INSTAKILL") then -- Unit Died, remove them from the target list.
-      Xeer.SA_Cleanup(destGUID)
-    end
-
-    if UnitIsDeadOrGhost("player") or not UnitAffectingCombat("player") or not InCombatLockdown() then -- We died, or, exited combat, go ahead and purge the list
-      for guid,count in pairs(Xeer_SA_STATS) do
-        Xeer.SA_Cleanup(guid)
-      end
-      Xeer_SA_STATS = {}
-      Xeer_SA_NUM_UNITS = 0
-      Xeer.SA_TOTAL = 0
-    end
-    if CurrentTime - Xeer_LAST_CONTINUITY_CHECK > 10 then --Force check of unit count every 10sec
-      local newUnits = 0
-      for guid,count in pairs(Xeer_SA_STATS) do
-        newUnits = newUnits + 1
-      end
-      Xeer_SA_NUM_UNITS = newUnits
-      Xeer_LAST_CONTINUITY_CHECK = CurrentTime
-    end
-    if Xeer_SA_NUM_UNITS > 0 then
-      local totalSAs = 0
-      for guid,count in pairs(Xeer_SA_STATS) do
-        if Xeer_SA_STATS[guid].Count <= 0 or (UnitIsDeadOrGhost(guid)) then
-          Xeer_SA_DEAD[guid] = true
-        else
-          totalSAs = totalSAs + Xeer_SA_STATS[guid].Count
-        end
-      end
-      if totalSAs > 0 and Xeer.SA_TOTAL > 0 then
-        return true
-      end
-    end
-    return false
-  end
-end)
-
-NeP.Listener:Add('Xeer_Listener3', 'COMBAT_LOG_EVENT_UNFILTERED', function(time,type,_,sourceGUID,sourcename,_,_,destGUID,destname,_,_,spellid,spellname,_,_,_,_,_,_,_,spellcritical,_,_,_,spellmultistrike)
-  if Xeer.class == 5 then
-    local CurrentTime = GetTime()
-    Xeer.Voidform_Total_Stacks = Xeer.Voidform_Total_Stacks or 0
-    Xeer.Voidform_Previous_Stack_Time = Xeer.Voidform_Previous_Stack_Time or 0
-    Xeer.Voidform_Drain_Stacks = Xeer.Voidform_Drain_Stacks or 0
-    Xeer.Voidform_VoidTorrent_Stacks = Xeer.Voidform_VoidTorrent_Stacks or 0
-    Xeer.Voidform_Dispersion_Stacks = Xeer.Voidform_Dispersion_Stacks or 0
-    Xeer.Voidform_Current_Drain_Rate = Xeer.Voidform_Current_Drain_Rate or 0
-    if Xeer.Voidform_Total_Stacks >= 100 then
-      if (CurrentTime - Xeer.Voidform_Previous_Stack_Time) >= 1 then
-        Xeer.Voidform_Previous_Stack_Time = CurrentTime
-        Xeer.Voidform_Total_Stacks = Xeer.Voidform_Total_Stacks + 1
-        if Xeer.Voidform_VoidTorrent_Start == nil and Xeer.Voidform_Dispersion_Start == nil then
-          Xeer.Voidform_Drain_Stacks = Xeer.Voidform_Drain_Stacks + 1
-          -- print('Xeer.Voidform_Drain_Stacks1: '..Xeer.Voidform_Drain_Stacks)
-          Xeer.Voidform_Current_Drain_Rate = (9.0 + ((Xeer.Voidform_Drain_Stacks - 1) / 2))
-          -- print('Xeer.Voidform_Current_Drain_Rate1: '..Xeer.Voidform_Current_Drain_Rate)
-        elseif Xeer.Voidform_VoidTorrent_Start ~= nil then
-          Xeer.Voidform_VoidTorrent_Stacks = Xeer.Voidform_VoidTorrent_Stacks + 1
-        else
-          Xeer.Voidform_Dispersion_Stacks = Xeer.Voidform_Dispersion_Stacks + 1
-        end
-      end
-    end
-    if sourceGUID == UnitGUID("player") then
-      if spellid == 194249 then
-        if type == "SPELL_AURA_APPLIED" then -- Entered Voidform
-          Xeer.Voidform_Previous_Stack_Time = CurrentTime
-          Xeer.Voidform_VoidTorrent_Start = nil
-          Xeer.Voidform_Dispersion_Start = nil
-          Xeer.Voidform_Drain_Stacks = 1
-          Xeer.Voidform_Start_Time = CurrentTime
-          Xeer.Voidform_Total_Stacks = 1
-          Xeer.Voidform_VoidTorrent_Stacks = 0
-          Xeer.Voidform_Dispersion_Stacks = 0
-        elseif type == "SPELL_AURA_APPLIED_DOSE" then -- New Voidform Stack
-          Xeer.Voidform_Previous_Stack_Time = CurrentTime
-          Xeer.Voidform_Total_Stacks = Xeer.Voidform_Total_Stacks + 1
-          if Xeer.Voidform_VoidTorrent_Start == nil and Xeer.Voidform_Dispersion_Start == nil then
-            Xeer.Voidform_Drain_Stacks = Xeer.Voidform_Drain_Stacks + 1
-            -- print('Xeer.Voidform_Drain_Stacks2: '..Xeer.Voidform_Drain_Stacks)
-            Xeer.Voidform_Current_Drain_Rate = (9.0 + ((Xeer.Voidform_Drain_Stacks - 1) / 2))
-            -- print('Xeer.Voidform_Current_Drain_Rate2: '..Xeer.Voidform_Current_Drain_Rate)
-          elseif Xeer.Voidform_VoidTorrent_Start ~= nil then
-            Xeer.Voidform_VoidTorrent_Stacks = Xeer.Voidform_VoidTorrent_Stacks + 1
-          else
-            Xeer.Voidform_Dispersion_Stacks = Xeer.Voidform_Dispersion_Stacks + 1
-          end
-        elseif type == "SPELL_AURA_REMOVED" then -- Exited Voidform
-          if Xeer.Voidform_Summary == true then
-            print("Voidform Info:")
-            print("--------------------------")
-            print(string.format("Voidform Duration: %.2f seconds", (CurrentTime-Xeer.Voidform_Start_Time)))
-            if Xeer.Voidform_Total_Stacks > 100 then
-              print(string.format("Voidform Stacks: 100 (+%.0f)", (Xeer.Voidform_Total_Stacks - 100)))
-            else
-              print(string.format("Voidform Stacks: %.0f", Xeer.Voidform_Total_Stacks))
-            end
-            print(string.format("Dispersion Stacks: %.0f", Xeer.Voidform_Dispersion_Stacks))
-            print(string.format("Void Torrent Stacks: %.0f", Xeer.Voidform_VoidTorrent_Stacks))
-            print("Final Drain: "..Xeer.Voidform_Drain_Stacks.." stacks, "..Xeer.Voidform_Current_Drain_Rate.." / sec")
-          end
-          Xeer.Voidform_VoidTorrent_Start = nil
-          Xeer.Voidform_Dispersion_Start = nil
-          Xeer.Voidform_Drain_Stacks = 0
-          Xeer.Voidform_Current_Drain_Rate = 0
-          Xeer.Voidform_Start_Time = nil
-          Xeer.Voidform_Total_Stacks = 0
-          Xeer.Voidform_VoidTorrent_Stacks = 0
-          Xeer.Voidform_Dispersion_Stacks = 0
-        end
-
-      elseif spellid == 205065 then
-        if type == "SPELL_AURA_APPLIED" then -- Started channeling Void Torrent
-          Xeer.Voidform_VoidTorrent_Start = CurrentTime
-        elseif type == "SPELL_AURA_REMOVED" and Xeer.Voidform_VoidTorrent_Start ~= nil then -- Stopped channeling Void Torrent
-          Xeer.Voidform_VoidTorrent_Start = nil
-        end
-
-      elseif spellid == 47585 then
-        if type == "SPELL_AURA_APPLIED" then -- Started channeling Dispersion
-          Xeer.Voidform_Dispersion_Start = CurrentTime
-        elseif type == "SPELL_AURA_REMOVED" and Xeer.Voidform_Dispersion_Start ~= nil then -- Stopped channeling Dispersion
-          Xeer.Voidform_Dispersion_Start = nil
-        end
-
-      elseif spellid == 212570 then
-        if type == "SPELL_AURA_APPLIED" then -- Gain Surrender to Madness
-          Xeer.Voidform_S2M_Activated = true
-          Xeer.Voidform_S2M_Start = CurrentTime
-        elseif type == "SPELL_AURA_REMOVED" then -- Lose Surrender to Madness
-          Xeer.Voidform_S2M_Activated = false
-        end
-      end
-
-    elseif destGUID == UnitGUID("player") and (type == "UNIT_DIED" or type == "UNIT_DESTROYED" or type == "SPELL_INSTAKILL") and Xeer.Voidform_S2M_Activated == true then
-      Xeer.Voidform_S2M_Activated = false
-      if Xeer.S2M_Summary == true then
-        print("Surrender to Madness Info:")
-        print("--------------------------")
-        print(string.format("S2M Duration: %.2f seconds", (CurrentTime-Xeer.Voidform_S2M_Start)))
-        print(string.format("Voidform Duration: %.2f seconds", (CurrentTime-Xeer.Voidform_Start_Time)))
-        if Xeer.Voidform_Total_Stacks > 100 then
-          print(string.format("Voidform Stacks: 100 (+%.0f)", (Xeer.Voidform_Total_Stacks - 100)))
-        else
-          print(string.format("Voidform Stacks: %.0f", Xeer.Voidform_Total_Stacks))
-        end
-        print(string.format("Dispersion Stacks: %.0f", Xeer.Voidform_Dispersion_Stacks))
-        print(string.format("Void Torrent Stacks: %.0f", Xeer.Voidform_VoidTorrent_Stacks))
-        print("Final Drain: "..Xeer.Voidform_Drain_Stacks.." stacks, "..Xeer.Voidform_Current_Drain_Rate.." / sec")
-      end
-      Xeer.Voidform_S2M_Start = nil
-      Xeer.Voidform_VoidTorrent_Start = nil
-      Xeer.Voidform_Dispersion_Start = nil
-      Xeer.Voidform_Drain_Stacks = 0
-      Xeer.Voidform_Current_Drain_Rate = 0
-      Xeer.Voidform_Start_Time = nil
-      Xeer.Voidform_Total_Stacks = 0
-      Xeer.Voidform_VoidTorrent_Stacks = 0
-      Xeer.Voidform_Dispersion_Stacks = 0
-    end
-  end
-end)
 
 NeP.Listener:Add('Xeer_Listener4', 'COMBAT_LOG_EVENT_UNFILTERED', function(timestamp, combatevent, hideCaster, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, spellID, spellName, spellSchool, amount, ...)
   if (combatevent == "SPELL_CAST_SUCCESS" and sourceName == UnitName("player")) then
-    Xeer.spell_timers[spellID] = {}
+    Xeer.spell_timers[spellID]      = {}
     Xeer.spell_timers[spellID].name = spellName
-    Xeer.spell_timers[spellID].id = spellID
+    Xeer.spell_timers[spellID].id   = spellID
     Xeer.spell_timers[spellID].time = GetTime()
   end
   if UnitIsDeadOrGhost("player") or not UnitAffectingCombat("player") or not InCombatLockdown() then
@@ -1067,92 +1149,6 @@ NeP.Listener:Add('Xeer_Listener4', 'COMBAT_LOG_EVENT_UNFILTERED', function(times
   end
 end)
 
-NeP.Listener:Add('Xeer_Listener5', 'COMBAT_LOG_EVENT_UNFILTERED', function(event, timestamp, msg, _, sourceGUID, _, _, _, destGUID, _, _, _, spellID)
-  if Xeer.class == 5 then
-    --This trigger listens for bleed events to record snapshots.
-    --This trigger also listens for changes in buffs to recalculate bleed damage.
-
-    --Check for only relevant player events
-    if not Xeer.buffID[spellID] and not Xeer.debuffID[spellID] then return end
-    if not Xeer.events[msg] then return end
-    if sourceGUID ~= Xeer.pguid then return end
-
-    --Handle AURA_APPLY and AURA_REFRESH as the same event type
-    if msg == "SPELL_AURA_REFRESH" then msg = "SPELL_AURA_APPLIED" end
-
-    --Convert rake stun events into rake casts to handle corner case with prowl+rake
-    if spellID == 163505 and (msg=="SPELL_MISSED" or msg=="SPELL_AURA_APPLIED") then
-      spellID = 1822
-      msg = "SPELL_CAST_SUCCESS"
-    end
-
-    --Listen for buff changes on player that affect snapshots
-    if destGUID == Xeer.pguid then
-      if msg == "SPELL_AURA_APPLIED" then Xeer.update() return
-      elseif msg == "SPELL_AURA_REMOVED" then
-      	local spellName = Xeer.buffID[spellID]
-        local dur = 0
-        --Add small timing window for buffs that can expire before cast
-        if spellName == "bloodtalons" then dur = 0.1
-        elseif spellName == "prowl" then dur = 0.1
-        elseif spellName == "shadowmeld" then dur = 0.1
-        end
-
-        if spellName then
-          Xeer.buffs[spellName] = GetTime() + dur
-          Xeer.nextUpdateDmg = GetTime() + dur + 0.01
-          return
-        end
-      end
-    end
-
-    -- The following code handles application and expiration of bleeds
-    -- 1. Snapshot dmg on spell cast success
-    local fs = feralSnapshots
-    if msg == "SPELL_CAST_SUCCESS" then
-      local spellName
-      if spellID == 1822 then spellName = "rake"
-      elseif spellID == 1079 then spellName = "rip"
-      elseif spellID == 106830 then spellName = "thrash"
-      elseif spellID == 155625 then spellName = "moonfire"
-      end
-
-      if spellName then
-        Xeer.update()
-        fs[spellName]["onCast"] = fs[spellName]["current"]
-        return
-      end
-
-      --2. Record snapshot for target if and when the bleed is applied
-    elseif msg == "SPELL_AURA_APPLIED" then
-      local spellName
-      if spellID == 155722 then spellName = "rake"
-      elseif spellID == 1079 then spellName = "rip"
-      elseif spellID == 106830 then spellName = "thrash"
-      elseif spellID == 155625 then spellName = "moonfire"
-      end
-
-      if spellName then
-        fs[spellName][destGUID] = fs[spellName]["onCast"]
-        return
-      end
-
-      --3. Remove snapshot for target when bleed expires
-    elseif msg == "SPELL_AURA_REMOVED" then
-      local spellName
-      if spellID == 155722 then spellName = "rake"
-      elseif spellID == 1079 then spellName = "rip"
-      elseif spellID == 106830 then spellName = "thrash"
-      elseif spellID == 155625 then spellName = "moonfire"
-      end
-
-      if spellName then
-        fs[spellName][destGUID] = nil
-        return
-      end
-    end
-  end
-end)
 
 --[[
 NeP.Listener:Add('Xeer_Listener_TravelSpeed', 'COMBAT_LOG_EVENT_UNFILTERED', function(timestamp, combatevent, hideCaster, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, spellID, spellName, spellSchool, amount, ...)
