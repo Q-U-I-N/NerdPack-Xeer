@@ -15,54 +15,7 @@ local exeOnLoad = function()
 	print('|cffADFF2F --- |rRecommended Talents: 1/3 - 2/1 - 3/2 - 4/2 - 5/1 - 6/1 - 7/1')
 	print('|cffADFF2F ----------------------------------------------------------------------|r')
 
---[[
-	NeP.Interface:AddToggle({
-		key = 'v1',
-		name = 'Version 1',
-		text = 'RoF+IN+CS talents needed!',
-		icon = 'Interface\\Icons\\spell_frost_chillingblast',
-	})
-
-	NeP.Interface:AddToggle({
-		key = 'v2',
-		name = 'Version 2',
-		text = 'BC+FT+TV talents needed!',
-		icon = 'Interface\\Icons\\ability_mage_chilledtothebone',
-	})
---]]
 end
-
-local _Xeer = { -- some non-SiMC stuffs
-	--{'@Xeer.Targeting()', {'!target.alive&toggle(AutoTarget)'}},
-
-
---[[
-mage="Mage_Frost_T19P"
-level=110
-race=orc
-role=spell
-position=back
-v1:talents=1121113
-v3:talents=3122111
-artifact=53:132791:133030:132791:0:783:1:786:3:788:6:789:3:790:3:792:3:793:1:795:1:796:1:1296:1
-spec=frost
-
-# Gear Summary
-# gear_ilvl=842.00
-# gear_stamina=17965
-# gear_intellect=18709
-# gear_crit_rating=5566
-# gear_haste_rating=9800
-# gear_mastery_rating=1603
-# gear_versatility_rating=898
-# gear_leech_rating=404
-# gear_armor=1570
-# set_bonus=tier19p_cloth_2pc=1
---]]
-
-}
-
-
 
 local PreCombat = {
 	--actions.precombat=flask,type=flask_of_the_whispered_pact
@@ -74,9 +27,7 @@ local PreCombat = {
 	--actions.precombat+=/mirror_image
 	--actions.precombat+=/potion,name=deadly_grace
 	--actions.precombat+=/frostbolt
-
 }
-
 
 local Cooldowns = {
 	--actions+=/time_warp,if=(time=0&buff.bloodlust.down)|(buff.bloodlust.down&equipped.132410)
@@ -153,16 +104,15 @@ local Survival = {
 }
 
 local inCombat = {
-	{'Ice Lance', 'line_cd(Ice Lance)>5'},
-	--{Keybinds},
-	--{Interrupts, 'target.interruptAt(50)&toggle(interrupts)&target.infront&target.range<40'},
-	--{Survival, 'player.health < 100'},
-	--{xCombat, 'target.range<40&target.infront'}
+	{Keybinds},
+	{Interrupts, 'target.interruptAt(50)&toggle(interrupts)&target.infront&target.range<40'},
+	{Survival, 'player.health < 100'},
+	{xCombat, 'target.range<40&target.infront'}
 }
 
 local outCombat = {
 	{Keybinds},
-	--{PreCombat}
+	{PreCombat}
 }
 
 NeP.CR:Add(64, {
