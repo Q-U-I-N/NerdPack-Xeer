@@ -127,7 +127,6 @@ local inCombat = {
 }
 
 local outCombat = {
-	{'Auto Shot', 'target.range<40&target.infront'},
 	{Keybinds},
 }
 

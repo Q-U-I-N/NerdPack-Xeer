@@ -128,6 +128,12 @@ NeP.DSL:Register('pet_range', function()
     return NeP.DSL:Get('petrange')('target')
 end)
 
+
+
+--/dump NeP.DSL:Get('indoors')()
+NeP.DSL:Register('indoors', function()
+    return IsIndoors()
+end)
 --------------------------------------------------------------------------------
 --------------------------------SIMC STUFFS-------------------------------------
 --------------------------------------------------------------------------------
@@ -276,19 +282,18 @@ end)
 
 --/dump NeP.DSL:Get('prev_off_gcd')('player', 'Water Jet')
 NeP.DSL:Register('prev_off_gcd', function(_, spell)
-    return NeP.DSL:Get('lastcast')('player', Spell)
+    return NeP.DSL:Get('lastcast')('player', spell)
 end)
 
---/dump NeP.DSL:Get('prev_gcd')('Shadowstrike')
+--/dump NeP.DSL:Get('prev_gcd')(nil, 'Shadowstrike')
 --/dump NeP.DSL:Get('lastcast')('player', 'Fireball')
 NeP.DSL:Register('prev_gcd', function(_, spell)
-    return NeP.DSL:Get('lastgcd')('player', Spell)
+    return NeP.DSL:Get('lastgcd')('player', spell)
 end)
 
 --/dump NeP.DSL:Get('prev')('player', 'Thrash')
 NeP.DSL:Register('prev', function(_, spell)
-    --if select(1, GetSpellCooldown(61304)) == 0 and NeP.DSL:Get('lastcast')('player', Spell) then
-    return NeP.DSL:Get('lastcast')('player', Spell)
+    return NeP.DSL:Get('lastcast')('player', spell)
         --end
 end)
 

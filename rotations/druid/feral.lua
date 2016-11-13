@@ -12,25 +12,11 @@ local exeOnLoad = function()
 
 end
 
-local PreCombat = {
-	--actions.precombat=flask,type=flask_of_the_seventh_demon
-	--{'', ''},
-	--actions.precombat+=/food,type=nightborne_delicacy_platter
-	--{'', ''},
-	--actions.precombat+=/augmentation,type=defiled
-	--{'', ''},
-	--actions.precombat+=/Regrowth,if=talent.bloodtalons.enabled
-	{'Regrowth', 'talent(7,2)&target.range>10&!player.buff(Cat Form)'},
-	--actions.precombat+=/cat_form
-	{'Cat Form', '!player.buff(Cat Form)&!player.buff(Travel Form)'},
-	--actions.precombat+=/prowl
- 	{'Prowl', '!player.buff(Prowl)&player.buff(Cat Form)&target.enemy'},
- 	{'Rake', 'player.buff(Prowl)&target.range<5&target.infront'},
-	--actions.precombat+=/potion,name=old_war
-	--{'', ''},
-}
-
 ------------------ POOLING START ------------------
+
+local Regrowth = {
+	{'!Regrowth'},
+}
 
 local Moonfire = {
 	{'%pause', 'player.energy<30&!player.buff(Clearcasting)'},
@@ -68,10 +54,29 @@ local Swipe = {
 
 ------------------ POOLING END ------------------
 
+local PreCombat = {
+	{'Travel Form', '!indoors&!player.buff(Travel Form)&!player.buff(Prowl)&!target.enemy'},
+	--actions.precombat=flask,type=flask_of_the_seventh_demon
+	--{'', ''},
+	--actions.precombat+=/food,type=nightborne_delicacy_platter
+	--{'', ''},
+	--actions.precombat+=/augmentation,type=defiled
+	--{'', ''},
+	--actions.precombat+=/Regrowth,if=talent.bloodtalons.enabled
+	{Regrowth, 'talent(7,2)&target.enemy&target.alive&!player.buff(Prowl)&!prev(Regrowth)&player.buff(Bloodtalons).stack<2'},
+	--actions.precombat+=/cat_form
+	{'Cat Form', '!player.buff(Cat Form)&!player.buff(Travel Form)'},
+	--actions.precombat+=/prowl
+ 	{'Prowl', '!player.buff(Prowl)&target.enemy&target.alive'},
+ 	{'Rake', 'player.buff(Prowl)&target.range<5&target.infront'},
+	--actions.precombat+=/potion,name=old_war
+	--{'', ''},
+}
+
 local SBT_Opener = {
 	--# Hard-cast a Regrowth for Bloodtalons buff. Use Dash to re-enter Cat Form.
 	--actions.sbt_opener=Regrowth,if=talent.bloodtalons.enabled&combo_points=5&!buff.bloodtalons.up&!dot.rip.ticking
-	{'Regrowth', 'talent(7,2)&combo_points=5&!player.buff(Bloodtalons)&!target.dot(Rip).ticking'},
+	{Regrowth, 'talent(7,2)&combo_points=5&!player.buff(Bloodtalons)&!target.dot(Rip).ticking'},
 	--# Force use of Tiger's Fury before applying Rip.
 	--actions.sbt_opener+=/tigers_fury,if=!dot.rip.ticking&combo_points=5
 	{'Tiger\'s Fury', '!target.dot(Rip).ticking&combo_points=5'},
@@ -97,12 +102,12 @@ local Cooldowns = {
 	--actions.=/ferocious_bite,cycle_targets=1,if=dot.rip.ticking&dot.rip.remains<3&target.time_to_die>3&(target.health.pct<25||talent.sabertooth.enabled)
 	{Ferocious_Bite, 'target.dot(Rip).ticking&target.dot(Rip)remains<3&target.time_to_die>3&{target.health<25||talent(6,1)}'},
 	--actions.=/Regrowth,if=talent.bloodtalons.enabled&buff.predatory_swiftness.up&(combo_points>=5||buff.predatory_swiftness.remains<1.5||(talent.bloodtalons.enabled&combo_points=2&buff.bloodtalons.down&cooldown.ashamanes_frenzy.remains<gcd)||(talent.elunes_guidance.enabled&((cooldown.elunes_guidance.remains<gcd&combo_points=0)||(buff.elunes_guidance.up&combo_points>=4))))
-	{'Regrowth', 'talent(7,2)&player.buff(Predatory Swiftness)&{combo_points>=5||player.buff(Predatory Swiftness).remains<1.5||{talent(7,2)&combo_points=2&!player.buff(Bloodtalons)&cooldown(Ashamane\'s Frenzy).remains<gcd}}'},
+	{Regrowth, 'talent(7,2)&player.buff(Predatory Swiftness)&{combo_points>=5||player.buff(Predatory Swiftness).remains<1.5||{talent(7,2)&combo_points=2&!player.buff(Bloodtalons)&cooldown(Ashamane\'s Frenzy).remains<gcd}}'},
 	--actions.=/call_action_list,name=sbt_opener,if=talent.sabertooth.enabled&time<20
 	{SBT_Opener, 'talent(6,1)&xtime<20'},
 	--# Special logic for Ailuro Pouncers legendary.
 	--actions.=/Regrowth,if=equipped.ailuro_pouncers&talent.bloodtalons.enabled&buff.predatory_swiftness.stack>1&buff.bloodtalons.down
-	{'Regrowth', 'equipped(137024)&talent(7,2)&player.buff(Predatory Swiftness).stack>1&!player.buff(Bloodtalons)'},
+	{Regrowth, 'equipped(137024)&talent(7,2)&player.buff(Predatory Swiftness).stack>1&!player.buff(Bloodtalons)'},
 }
 
 local Finisher = {
@@ -146,7 +151,7 @@ local Generator = {
 	--actions.generator+=/rake,if=combo_points<5&(!ticking||(!talent.bloodtalons.enabled&remains<duration*0.3)||(talent.bloodtalons.enabled&buff.bloodtalons.up&(!talent.soul_of_the_forest.enabled&remains<=7||remains<=5)&persistent_multiplier>dot.rake.pmultiplier*0.80))&target.time_to_die-remains>tick_time
 	{Rake, 'combo_points<5&{!target.dot(Rake).ticking||{!talent(7,2)&target.dot(Rake).remains<target.dot(Rake).duration*0.3}||{talent(7,2)&player.buff(Bloodtalons)&{!talent(5,1)&target.dot(Rake).remains<=7||target.dot(Rake).remains<=5}&persistent_multiplier(Rake)>dot(Rake).pmultiplier*0.80}}&target.time_to_die-target.dot(Rake).remains>dot(Rake).tick_time'},
 	--actions.generator+=/moonfire_cat,cycle_targets=1,if=combo_points<5&remains<=4.2&target.time_to_die-remains>tick_time*2
-	{Moonfire, 'combo_points<5&target.dot(Moonfire).remains<=4.2&target.time_to_die-target.dot(Moonfire).remains>dot(Moonfire).tick_time*2'},
+	{Moonfire, 'talent(1,3)&combo_points<5&target.dot(Moonfire).remains<=4.2&target.time_to_die-target.dot(Moonfire).remains>dot(Moonfire).tick_time*2'},
 	--actions.generator+=/pool_resource,for_next=1
 	--actions.generator+=/Thrash_cat,cycle_targets=1,if=remains<=duration*0.3&spell_targets.Swipe_cat>=2
 	{Thrash, 'target.dot(Thrash).remains<=target.dot(Thrash).duration*0.3&player.area(8).enemies>=2'},
@@ -177,8 +182,8 @@ local Interrupts = {
 }
 
 local Survival = {
-	{'/run CancelShapeshiftForm()', 'form>0&talent(3,3)&!player.buff(Rejuvenation)'},
-	{'Rejuvenation', 'talent(3,3)&!player.buff(Rejuvenation)', 'player'},
+	--{'/run CancelShapeshiftForm()', 'form>0&talent(3,3)&!player.buff(Rejuvenation)'},
+	--{'Rejuvenation', 'talent(3,3)&!player.buff(Rejuvenation)', 'player'},
 	{'/run CancelShapeshiftForm()', 'cooldown(Swiftmend)up.&form>0&talent(3,3)&player.health<=75'},
 	{'Swiftmend', 'talent(3,3)&player.health<=75', 'player'},
 }
@@ -187,9 +192,9 @@ local inCombat = {
 	{Keybinds},
 	{Interrupts, 'target.interruptAt(43)&toggle(interrupts)&target.infront&target.range<=8'},
   {Survival, 'player.health<100'},
-	{'Cat Form', '!player.buff(Cat Form)&!player.buff(Travel Form)'},
+	{'Cat Form', '!player.buff(Cat Form)&{!player.buff(Travel Form)||player.area(8).enemies>=1}'},
 	{Cooldowns, 'toggle(cooldowns)'},
-	{Moonfire, 'target.range>8&target.range<=40&target.infront&!player.buff(Prowl)'},
+	{Moonfire, 'talent(1,3)&target.range>8&target.range<=40&target.infront&!player.buff(Prowl)'},
 	{xCombat, 'target.range<8&target.infront'},
 }
 
