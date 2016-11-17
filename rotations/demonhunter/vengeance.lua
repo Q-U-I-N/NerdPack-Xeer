@@ -15,6 +15,19 @@ end
 local XeerX = {
 	{'@Xeer.Targeting'},
 
+
+	-- /cast [@player] Infernal Strike
+	-- /cast [@player] Sigil of Flame
+	-- /cast [@player] Sigil of Chains
+	-- /cast [@player] Sigil of Silence
+	-- /cast [@player] Sigil of Misery
+	--
+	-- /cast [@cursor] Infernal Strike
+	-- /cast [@cursor] Sigil of Flame
+	-- /cast [@cursor] Sigil of Chains
+	-- /cast [@cursor] Sigil of Silence
+	-- /cast [@cursor] Sigil of Misery
+
 --[[
 demonhunter='Demon_Hunter_Vengeance_T19P'
 level=110
@@ -39,10 +52,12 @@ spec=vengeance
 }
 
 local Keybinds = {
-	{'Sigil of Flame', 'keybind(alt)', 'mouseover.target'},
+	{'/cast [@cursor] Sigil of Flame', 'keybind(alt)'},
+	--{'Sigil of Flame', 'keybind(alt)', 'mouseover.target'},
 	{'%pause', 'keybind(lshift)'},
 	--{'Metamorphosis', 'keybind(lcontrol)', 'mouseover.target'},
-	{'Infernal Strike', 'keybind(lcontrol)', 'cursor.ground'}
+	--{'Infernal Strike', 'keybind(lcontrol)', 'cursor.ground'}
+	{'/cast [@cursor] Infernal Strike', 'keybind(lcontrol)'},
 }
 
 local Interrupts = {

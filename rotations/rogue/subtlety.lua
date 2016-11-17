@@ -131,8 +131,8 @@ local xCombat = {
 	{Stealthed, 'stealthed||player.buff(Shadowmeld)'},
  	--actions+=/call_action_list,name=Finishers,if=combo_points>=5||{combo_points>=4&spell_targets.shuriken_storm>=3&spell_targets.shuriken_storm<=4}
 	{Finishers, 'combo_points>=5||{combo_points>=4&player.area(10).enemies>=3&player.area(10).enemies<=4}'},
- 	--actions+=/call_action_list,name=Stealth_Cooldowns,if=combo_points.deficit>=2+talent.premeditation.enabled&{variable.ed_threshold||{cooldown.shadowmeld.up&!cooldown.vanish.up&cooldown.shadow_dance.charges<=1}||target.time_to_die<12}
-	{Stealth_Cooldowns, 'combo_points.deficit>=2+talent(6,1).enabled&{variable.ed_threshold||{cooldown(Shadowmeld).up&!cooldown(Vanish).up&cooldown(Shadow Dance).charges<=1}||target.time_to_die<12}'},
+	--actions+=/call_action_list,name=Stealth_Cooldowns,if=combo_points.deficit>=2+talent.premeditation.enabled&{variable.ed_threshold||{cooldown.shadowmeld.up&!cooldown.vanish.up&cooldown.shadow_dance.charges<=1}||target.time_to_die<12||spell_targets.shuriken_storm>=5}
+	{Stealth_Cooldowns, 'combo_points.deficit>=2+talent(6,1).enabled&{variable.ed_threshold||{cooldown(Shadowmeld).up&!cooldown(Vanish).up&cooldown(Shadow Dance).charges<=1}||target.time_to_die<12||player.area(10).enemies>=5}'},
  	--actions+=/call_action_list,name=Builders,if=variable.ed_threshold
 	{Builders, 'variable.ed_threshold'},
 }

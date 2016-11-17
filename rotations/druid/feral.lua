@@ -13,6 +13,10 @@ local exeOnLoad = function()
 end
 
 ------------------ POOLING START ------------------
+local Bear_Heal = {
+	{'Bear Form', 'form~=1'},
+	{'Frenzied Regeneration'},
+}
 
 local Regrowth = {
 	{'!Regrowth'},
@@ -55,7 +59,7 @@ local Swipe = {
 ------------------ POOLING END ------------------
 
 local PreCombat = {
-	{'Travel Form', '!indoors&!player.buff(Travel Form)&!player.buff(Prowl)&!target.enemy'},
+	{'Travel Form', '!indoors&!player.buff(Travel Form)&!player.buff(Prowl)&{!target.enemy||target.enemy&!target.alive}'},
 	--actions.precombat=flask,type=flask_of_the_seventh_demon
 	--{'', ''},
 	--actions.precombat+=/food,type=nightborne_delicacy_platter
@@ -125,20 +129,20 @@ local Finisher = {
 	--actions.finisher+=/savage_roar,if=(buff.savage_roar.remains<=10.5||(buff.savage_roar.remains<=7.2&!talent.jagged_wounds.enabled))&combo_points=5&(energy.time_to_max<1||buff.berserk.up||buff.incarnation.up||buff.elunes_guidance.up||cooldown.tigers_fury.remains<3||set_bonus.tier18_4pc||buff.clearcasting.up||talent.soul_of_the_forest.enabled||!dot.rip.ticking||(dot.rake.remains<1.5&spell_targets.Swipe_cat<6))
 	{Savage_Roar, 'talent(5,3)&{{{player.buff(Savage Roar).duration<=10.5&talent(6,2)}||{player.buff(Savage Roar).duration<=7.2&!talent(6,2)}}&combo_points=5&{energy.time_to_max<1||player.buff(Berserk)||player.buff(Incarnation: King of the Jungle)||cooldown(Tiger\'s Fury).remains<3||player.buff(Clearcasting)||talent(5,1)||!target.debuff(Rip)||{target.debuff(Rake).duration<1.5&player.area(8).enemies<6}}}'},
 	--actions.finisher+=/Swipe_cat,if=combo_points=5&(spell_targets.Swipe_cat>=6||(spell_targets.Swipe_cat>=3&!talent.bloodtalons.enabled))&combo_points=5&(energy.time_to_max<1||buff.berserk.up||buff.incarnation.up||buff.elunes_guidance.up||cooldown.tigers_fury.remains<3||set_bonus.tier18_4pc||(talent.moment_of_clarity.enabled&buff.clearcasting.up))
-	{Swipe, 'combo_points=5&{player.area(8).enemies>=6||{player.area(8).enemies>=3&!talent(7,2)}}&combo_points=5&{energy.time_to_max<1||player.buff(Berserk)||player.buff(Incarnation: King of the Jungle)||cooldown(Tiger\'s Fury).remains<3||{talent(7,3)&player.buff(Clearcasting)}}'},
+	{'Swipe', 'combo_points=5&{player.area(8).enemies>=6||{player.area(8).enemies>=3&!talent(7,2)}}&combo_points=5&{energy.time_to_max<1||player.buff(Berserk)||player.buff(Incarnation: King of the Jungle)||cooldown(Tiger\'s Fury).remains<3||{talent(7,3)&player.buff(Clearcasting)}}'},
 	--actions.finisher+=/ferocious_bite,max_energy=1,cycle_targets=1,if=combo_points=5&(energy.time_to_max<1||buff.berserk.up||buff.incarnation.up||buff.elunes_guidance.up||cooldown.tigers_fury.remains<3||set_bonus.tier18_4pc||(talent.moment_of_clarity.enabled&buff.clearcasting.up))
-	{Ferocious_Bite, 'energy.deficit=0&combo_points=5&{energy.time_to_max<1||player.buff(Berserk)||player.buff(Incarnation: King of the Jungle)||cooldown(Tiger\'s Fury).remains<3||{talent(7,3)&player.buff(Clearcasting)}}'},
+	{'Ferocious Bite', 'energy.deficit=0&combo_points=5&{energy.time_to_max<1||player.buff(Berserk)||player.buff(Incarnation: King of the Jungle)||cooldown(Tiger\'s Fury).remains<3||{talent(7,3)&player.buff(Clearcasting)}}'},
 }
 
 local Generator = {
 	--actions.generator=brutal_slash,if=spell_targets.brutal_slash>desired_targets&combo_points<5
 	{'Brutal Slash', 'talent(7,1)&combo_points<5'},
 	--actions.generator+=/ashamanes_frenzy,if=combo_points<=2&buff.elunes_guidance.down&(buff.bloodtalons.up||!talent.bloodtalons.enabled)&(buff.savage_roar.up||!talent.savage_roar.enabled)
-	{'Ashamane\'s Frenzy', 'combo_points<=2&{player.buff(Bloodtalons)||!talent(7,2)}&{player.buff(Savage Roar)||!talent(5,3)}'},
+	{'!Ashamane\'s Frenzy', 'combo_points<=2&toggle(cooldowns)&{player.buff(Bloodtalons)||!talent(7,2)}&{player.buff(Savage Roar)||!talent(5,3)}'},
 	--actions.generator+=/pool_resource,if=talent.elunes_guidance.enabled&combo_points=0&energy<action.ferocious_bite.cost+25-energy.regen*cooldown.elunes_guidance.remains
-	{'Elune\'s Guidance', 'talent(6,3)&{combo_points=0&player.energy<action(Ferocious Bite).cost+25-energy.regen*cooldown(Elune\'s Guidance).remains}'},
+	--{'Elune\'s Guidance', 'talent(6,3)&{combo_points=0&player.energy<action(Ferocious Bite).cost+25-energy.regen*cooldown(Elune\'s Guidance).remains}'},
 	--actions.generator+=/elunes_guidance,if=talent.elunes_guidance.enabled&combo_points=0&player.energy>=action.ferocious_bite.cost+25
-	{'Elune\'s Guidance', 'talent(6,3)&{combo_points=0&player.energy>=action(Ferocious Bite).cost+25}'},
+	--{'Elune\'s Guidance', 'talent(6,3)&{combo_points=0&player.energy>=action(Ferocious Bite).cost+25}'},
 	--actions.generator+=/pool_resource,for_next=1
 	--actions.generator+=/Thrash_cat,if=talent.brutal_slash.enabled&spell_targets.Thrash_cat>=9
 	{Thrash, 'talent(7,1)&player.area(8).enemies>=9'},
@@ -182,6 +186,7 @@ local Interrupts = {
 }
 
 local Survival = {
+	{Bear_Heal, 'talent(3,2)&player.incdmg(5)>player.health.max*0.20&!player.buff(Frenzied Regeneration)'},
 	--{'/run CancelShapeshiftForm()', 'form>0&talent(3,3)&!player.buff(Rejuvenation)'},
 	--{'Rejuvenation', 'talent(3,3)&!player.buff(Rejuvenation)', 'player'},
 	{'/run CancelShapeshiftForm()', 'cooldown(Swiftmend)up.&form>0&talent(3,3)&player.health<=75'},
@@ -192,10 +197,10 @@ local inCombat = {
 	{Keybinds},
 	{Interrupts, 'target.interruptAt(43)&toggle(interrupts)&target.infront&target.range<=8'},
   {Survival, 'player.health<100'},
-	{'Cat Form', '!player.buff(Cat Form)&{!player.buff(Travel Form)||player.area(8).enemies>=1}'},
-	{Cooldowns, 'toggle(cooldowns)'},
-	{Moonfire, 'talent(1,3)&target.range>8&target.range<=40&target.infront&!player.buff(Prowl)'},
-	{xCombat, 'target.range<8&target.infront'},
+	{'Cat Form', '!player.buff(Frenzied Regeneration)&{!player.buff(Cat Form)&{!player.buff(Travel Form)||player.area(8).enemies>=1}}'},
+	{Cooldowns, '!player.buff(Frenzied Regeneration)&toggle(cooldowns)'},
+	{Moonfire, 'talent(1,3)&target.range>8&target.range<=40&target.infront&!player.buff(Prowl)&!target.debuff(Moonfire)'},
+	{xCombat, '!player.buff(Frenzied Regeneration)&target.range<8&target.infront'},
 }
 
 local outCombat = {

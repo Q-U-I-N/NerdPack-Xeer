@@ -269,11 +269,16 @@ NeP.DSL:Register('debuff.up', function(target, spell)
     end
 end)
 
+--/dump NeP.DSL:Get('debuff.stack')('target','Thrash')
 NeP.DSL:Register('debuff.stack', function(target, spell)
     return NeP.DSL:Get('debuff.count')(target, spell)
 end)
 
+--/dump UnitDebuff('target', 'Thrash')
 --/dump NeP.DSL:Get('debuff.remains')('target', 'Thrash')
+--/dump NeP.DSL:Get('debuff.remains')('target', 'Rake')
+--/dump NeP.DSL:Get('debuff.remains')('target', 'Rip')
+--/dump NeP.DSL:Get('debuff.remains')('target', 'Moonfire')
 NeP.DSL:Register('debuff.remains', function(target, spell)
     return NeP.DSL:Get('debuff.duration')(target, spell)
 end)

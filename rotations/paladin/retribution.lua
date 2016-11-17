@@ -12,33 +12,6 @@ local exeOnLoad = function()
 
 end
 
-local _Xeer = { -- some non-SiMC stuffs
-
-	{'@Xeer.Targeting()', {'!target.alive', 'toggle(AutoTarget)'}},
-
---[[
-paladin="Paladin_Retribution_T19P"
-level=110
-race=blood_elf
-role=attack
-position=back
-talents=1111112
-artifact=2:136717:137316:136717:0:40:1:41:3:42:3:47:1:50:3:51:3:53:6:350:1:353:1:1275:1
-spec=retribution
-
-# Gear Summary
-# gear_ilvl=842.00
-# gear_strength=11306
-# gear_stamina=17964
-# gear_crit_rating=7401
-# gear_haste_rating=7170
-# gear_mastery_rating=687
-# gear_versatility_rating=1704
-# gear_armor=3965
-# set_bonus=tier19p_plate_2pc=1
---]]
-
-}
 
 local PreCombat = {
 	--# Executed before combat begins. Accepts non-harmful actions only.
@@ -152,7 +125,19 @@ local xCombat = {
 	{'Templar\'s Verdict', 'target.debuff(Judgment)&holy_power>=3&{{talent(7,2)&!toggle(cooldowns)}||!talent(7,2)||cooldown(Crusade).remains>gcd*5}'},
 }
 
+local Util = {
+-- Add stuff that should be done part of encounter, dont cast while, dont attack, dont etc
+--BOSS
+	{ '%pause' , 'player.debuff(200904)' },			--Sapped Soul
+	{ '%pause' , 'player.debuff(Sapped Soul)' }, 	--Sapped Soul
+	-- FREEDOOM! --Should add a toggle for this
+	{ 'Blessing of Freedom', 'player.state.stun' },
+	{ 'Blessing of Freedom', 'player.state.root' },
+	{ 'Blessing of Freedom', 'player.state.snare' },
+}
+
 local inCombat = {
+	{Util},
 	{Keybinds},
 	{Interrupts, 'target.interruptAt(50)&toggle(interrupts)&target.infront&target.range<=8'},
 	{Survival, 'player.health<100'},

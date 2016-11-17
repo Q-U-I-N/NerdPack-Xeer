@@ -1,6 +1,6 @@
 local _, Xeer = ...
 
-Xeer.Version = '1.8.10'
+Xeer.Version = '1.8.11'
 Xeer.Branch = 'RELEASE'
 Xeer.Name = 'NerdPack - Xeer Routines'
 Xeer.Author = 'Xeer'
@@ -813,6 +813,8 @@ end)
 --------------------------------- DRUID ----------------------------------------
 --------------------------------------------------------------------------------
 
+--Feral
+
 Xeer.f_pguid = UnitGUID("player")
 Xeer.f_cp = 0
 Xeer.f_cleanUpTimer = nil
@@ -1072,6 +1074,8 @@ NeP.Listener:Add('Xeer_InCombat', 'PLAYER_REGEN_DISABLED', function()
     end), nil)
   end
 end)
+
+--Guardian--
 
 --------------------------------------------------------------------------------
 -------------------------------- TRAVEL SPEED-----------------------------------
