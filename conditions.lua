@@ -607,6 +607,24 @@ NeP.DSL:Register('ignorepain_max', function()
     end
 end)
 
+--heistcodes revenge procc tracker
+local Revenge = false
+	NeP.Listener:Add('RevengeProcStart', 'SPELL_ACTIVATION_OVERLAY_GLOW_SHOW', function(spellID)
+		if spellID == 6572 then
+			Revenge = true
+		end
+	end)
+
+	NeP.Listener:Add('RevengeProcStop', 'SPELL_ACTIVATION_OVERLAY_GLOW_HIDE', function(spellID)
+		if spellID == 6572 then
+			Revenge = false
+		end
+	end)
+
+	NeP.DSL:Register("revengeproc", function()
+		return Revenge
+	end)
+
 --------------------------------------------------------------------------------
 ---------------------------------FERAL------------------------------------------
 --------------------------------------------------------------------------------
