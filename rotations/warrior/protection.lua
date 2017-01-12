@@ -1,7 +1,17 @@
 local _, Xeer = ...
 
 local GUI = {
-
+		--KEYBINDS
+	{type = 'header', text = 'Keybinds', align = 'center'},
+	{type = 'text', text = 'left Ctrl (only select one!)', align = 'center'},
+	{type = 'checkbox', text = 'Heroic Leap', key = 'k_leap_ctrl', width = 55, default = true},
+	{type = 'checkbox', text = 'Heroic Throw', key = 'k_throw_ctrl', width = 55, default = false},
+	{type = 'text', text = 'left Shift (only select one!)', align = 'center'},
+	{type = 'checkbox', text = 'Heroic Leap', key = 'k_leap_shift', width = 55, default = false},
+	{type = 'checkbox', text = 'Heroic Throw', key = 'k_throw_shift', width = 55, default = true},
+	{type = 'text', text = 'Alt', align = 'center'},
+	{type = 'checkbox', text = 'Pause', key = 'k_P', width = 55, default = true},
+	{type = 'ruler'},{type = 'spacer'}
 } 
 
 local exeOnLoad = function()
@@ -53,9 +63,15 @@ spec=protection
 }
 
 local Keybinds = {
-	-- Pause
-	{'%pause', 'keybind(alt)'},
-	{'Heroic Leap', 'keybind(lcontrol)' , 'cursor.ground'}
+	{'%pause', 'keybind(alt)&UI(k_P)'},
+	--keybinds ctrl
+	{'Heroic Leap', 'ui(k_leap_ctrl)&keybind(lcontrol)' , 'cursor.ground'},
+	{'Heroic Throw', 'ui(k_throw_ctrl)&keybind(lcontrol)&mouseover.range>8&mouseover.range<=30&mouseover.infront&!mouseovertarget.isself', 'mouseover'},
+	{'Heroic Throw', 'ui(k_throw_ctrl)&keybind(lcontrol)&target.range>8&target.range<=30&target.infront&!targettarget.isself'},
+	--keybinds shift
+	{'Heroic Leap', 'ui(k_leap_shift)&keybind(lshift)' , 'cursor.ground'},
+	{'Heroic Throw', 'ui(k_throw_shift)&keybind(lshift)&mouseover.range>8&mouseover.range<=30&mouseover.infront&!mouseovertarget.isself', 'mouseover'},
+	{'Heroic Throw', 'ui(k_throw_shift)&keybind(lshift)&target.range>8&target.range<=30&target.infront&!targettarget.isself'}
 }
 
 local Interrupts = {
@@ -152,8 +168,7 @@ local ST = {
 
 local inCombat = {
 	{Keybinds},
-	--auto-attack if not attacking
-	{'/startattack', '!isattacking'},
+	--{'/startattack', '!isattacking'},
 	{Interrupts, 'target.interruptAt(50)&toggle(interrupts)&target.infront&target.range<=8'},
 	--{Cooldowns},
 	--{_Xeer},
