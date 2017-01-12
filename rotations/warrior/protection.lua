@@ -152,6 +152,8 @@ local ST = {
 
 local inCombat = {
 	{Keybinds},
+	--auto-attack if not attacking
+	{'/startattack', '!isattacking'},
 	{Interrupts, 'target.interruptAt(50)&toggle(interrupts)&target.infront&target.range<=8'},
 	--{Cooldowns},
 	--{_Xeer},
