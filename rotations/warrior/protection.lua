@@ -104,9 +104,12 @@ local AoE = {
 	{Something},
 	--actions.prot_aoe+=/neltharions_fury,if=buff.battle_cry.up
 	{'Neltharion\'s Fury', 'artifact(Neltharion\'s Fury).equipped&player.buff(Battle Cry)'},
+	--high priority revenge if aoe and freeprocc
+	{'Revenge', 'revengeproc'},
 	--actions.prot_aoe+=/shield_slam,if=!(cooldown.shield_block.remains<=gcd.max*2&!buff.shield_block.up&talent.heavy_repercussions.enabled)
 	{'Shield Slam', '!{spell(Shield Block).cooldown<=gcd*2&!player.buff(Shield Block)&talent(7,2)}'},
 	--actions.prot_aoe+=/revenge
+	--less priority if it costs rage ;)
 	{'Revenge'},
 	--actions.prot_aoe+=/thunder_clap,if=spell_targets.thunder_clap>=3
 	--{'Thunder Clap', 'player.area(6).enemies>=3'},
@@ -140,7 +143,8 @@ local ST = {
 	{'Shield Slam', '!talent(7,2)'},
 	--actions.prot+=/revenge,if=cooldown.shield_slam.remains<=gcd.max*2
 	--{'Revenge', 'spell(Shield Slam).cooldown<=gcd*2||player.rage<=5'},
-	{'Revenge', 'player.buff(Shield Block).duration>=gcd*2||spell(shield block).cooldown>=3'},
+	--Revenge if free-proc, shield block remains long enough to build rage or shield block on cd
+	{'Revenge', 'revengeproc||player.buff(Shield Block).duration>=gcd*2||spell(shield block).cooldown>=3'},
 	{'Thunder Clap'},
 	--actions.prot+=/devastate
 	{'Devastate'}
