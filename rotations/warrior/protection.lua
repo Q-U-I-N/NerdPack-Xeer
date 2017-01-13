@@ -1,6 +1,18 @@
 local _, Xeer = ...
-local GUI = {
-} 
+
+local GUI = {
+		--KEYBINDS
+	{type = 'header', text = 'Keybinds', align = 'center'},
+	{type = 'text', text = 'left Ctrl (only select one!)', align = 'center'},
+	{type = 'checkbox', text = 'Heroic Leap', key = 'k_leap_ctrl', width = 55, default = true},
+	{type = 'checkbox', text = 'Heroic Throw', key = 'k_throw_ctrl', width = 55, default = false},
+	{type = 'text', text = 'left Shift (only select one!)', align = 'center'},
+	{type = 'checkbox', text = 'Heroic Leap', key = 'k_leap_shift', width = 55, default = false},
+	{type = 'checkbox', text = 'Heroic Throw', key = 'k_throw_shift', width = 55, default = true},
+	{type = 'text', text = 'Alt', align = 'center'},
+	{type = 'checkbox', text = 'Pause', key = 'k_P', width = 55, default = true},
+	{type = 'ruler'},{type = 'spacer'}
+} 
 
 local exeOnLoad = function()
 	Xeer.ExeOnLoad()
@@ -8,6 +20,7 @@ local exeOnLoad = function()
 	print("|cffADFF2F ----------------------------------------------------------------------|r")
 	print("|cffADFF2F --- |rWARRIOR |cffADFF2FProtection |r")
 	print("|cffADFF2F --- |rRecommended Talents: 1/1 - 2/1 - 3/2 - 4/2 - 5/3 - 6/1 - 7/2")
+	print("|cffADFF2F --- |rRecommended Talents: 1/3 - 2/1 - 3/1 - 4/2 - 5/1 - 6/1 - 7/2")
 	print("|cffADFF2F ----------------------------------------------------------------------|r")
 --[[
 	NeP.Interface:AddToggle({
@@ -50,9 +63,15 @@ spec=protection
 }
 
 local Keybinds = {
-	-- Pause
-	{'%pause', 'keybind(alt)'},
-	{'Heroic Leap', 'keybind(lcontrol)' , 'cursor.ground'}
+	{'%pause', 'keybind(alt)&UI(k_P)'},
+	--keybinds ctrl
+	{'Heroic Leap', 'ui(k_leap_ctrl)&keybind(lcontrol)' , 'cursor.ground'},
+	{'Heroic Throw', 'ui(k_throw_ctrl)&keybind(lcontrol)&mouseover.range>8&mouseover.range<=30&mouseover.infront&!mouseovertarget.isself', 'mouseover'},
+	{'Heroic Throw', 'ui(k_throw_ctrl)&keybind(lcontrol)&target.range>8&target.range<=30&target.infront&!targettarget.isself'},
+	--keybinds shift
+	{'Heroic Leap', 'ui(k_leap_shift)&keybind(lshift)' , 'cursor.ground'},
+	{'Heroic Throw', 'ui(k_throw_shift)&keybind(lshift)&mouseover.range>8&mouseover.range<=30&mouseover.infront&!mouseovertarget.isself', 'mouseover'},
+	{'Heroic Throw', 'ui(k_throw_shift)&keybind(lshift)&target.range>8&target.range<=30&target.infront&!targettarget.isself'}
 }
 
 local Interrupts = {
@@ -85,7 +104,7 @@ local Something = {
 	--same skills in same order in both parts of rotation... placed them here :)
 	--actions.prot_aoe=focused_rage,if=talent.ultimatum.enabled&buff.ultimatum.up&!talent.vengeance.enabled
 	--actions.prot+=/focused_rage,if=talent.ultimatum.enabled&buff.ultimatum.up&!talent.vengeance.enabled
-	{'Focused Rage', 'talent(3,2)&player.buff(Ultimatum)&!talent(6,1)'},
+	--{'Focused Rage', 'talent(3,2)&player.buff(Ultimatum)&!talent(6,1)'},
 	--actions.prot_aoe+=/battle_cry,if=(talent.vengeance.enabled&talent.ultimatum.enabled&cooldown.shield_slam.remains<=5-gcd.max-0.5)||!talent.vengeance.enabled
 	--actions.prot+=/battle_cry,if=(talent.vengeance.enabled&talent.ultimatum.enabled&cooldown.shield_slam.remains<=5-gcd.max-0.5)||!talent.vengeance.enabled
 	{'Battle Cry', '{talent(6,1)&talent(3,2)&spell(Shield Slam).cooldown<=4.5-gcd}||!talent(6,1)'},
@@ -104,9 +123,11 @@ local AoE = {
 	--actions.prot_aoe+=/shield_slam,if=!(cooldown.shield_block.remains<=gcd.max*2&!buff.shield_block.up&talent.heavy_repercussions.enabled)
 	{'Shield Slam', '!{spell(Shield Block).cooldown<=gcd*2&!player.buff(Shield Block)&talent(7,2)}'},
 	--actions.prot_aoe+=/revenge
+	--less priority if it costs rage ;)
 	{'Revenge'},
 	--actions.prot_aoe+=/thunder_clap,if=spell_targets.thunder_clap>=3
-	{'Thunder Clap', 'player.area(6).enemies>=3'},
+	--{'Thunder Clap', 'player.area(6).enemies>=3'},
+	
 	--actions.prot_aoe+=/devastate
 	{'Devastate'}
 }
@@ -115,18 +136,21 @@ local ST = {
 	--actions.prot=shield_block,if=!buff.neltharions_fury.up&((cooldown.shield_slam.remains<6&!buff.shield_block.up)||(cooldown.shield_slam.remains<6+buff.shield_block.remains&buff.shield_block.up))
 	{'Shield Block', '!player.buff(Neltharion\'s Fury)&{{spell(Shield Slam).cooldown<6&!player.buff(Shield Block)}||{spell(Shield Slam).cooldown<6+player.buff(Shield Block).duration&player.buff(Shield Block)}}'},
 	--actions.prot+=/ignore_pain,if=(player.rage>=60&!talent.vengeance.enabled)||(buff.vengeance_ignore_pain.up&buff.ultimatum.up)||(buff.vengeance_ignore_pain.up&player.rage>=30)||(talent.vengeance.enabled&!buff.ultimatum.up&!buff.vengeance_ignore_pain.up&!buff.vengeance_focused_rage.up&player.rage<30)
-	{'!Ignore Pain','{player.buff(Vengeance: Ignore Pain)&player.buff(Ignore Pain).duration<=gcd*2&player.rage>=13}||{!player.buff(Vengeance: Ignore Pain)&player.buff(Ignore Pain).duration<=gcd*2&player.rage>=20}||{player.rage>=60&!talent(6,1)}||{player.buff(Vengeance: Ignore Pain)&player.buff(Ultimatum)}||{player.buff(Vengeance: Ignore Pain)&player.rage>=30}||{talent(6,1)&!player.buff(Ultimatum)&!player.buff(Vengeance: Ignore Pain)&!player.buff(Vengeance: Focused Rage)&player.rage<30}'},
+	{'!Ignore Pain','{player.buff(Vengeance: Ignore Pain)&player.buff(Ignore Pain).duration<=gcd*2&player.rage>=13}||{!player.buff(Vengeance: Ignore Pain)&player.buff(Ignore Pain).duration<=gcd*2&player.rage>=20}||{player.rage>=60&!talent(6,1)}||{player.buff(Vengeance: Ignore Pain)&player.buff(Ultimatum)}||{player.buff(Vengeance: Ignore Pain)&player.rage>=30}||{talent(6,1)&!player.buff(Ultimatum)&!player.buff(Vengeance: Ignore Pain)&!player.buff(Vengeance: revenge)&player.rage<30}'},
 	--actions.prot+=/focused_rage,if=(buff.vengeance_focused_rage.up&!buff.vengeance_ignore_pain.up)||(buff.ultimatum.up&buff.vengeance_focused_rage.up&!buff.vengeance_ignore_pain.up)||(talent.vengeance.enabled&buff.ultimatum.up&!buff.vengeance_ignore_pain.up&!buff.vengeance_focused_rage.up)||(talent.vengeance.enabled&!buff.vengeance_ignore_pain.up&!buff.vengeance_focused_rage.up&player.rage>=30)||(buff.ultimatum.up&buff.vengeance_ignore_pain.up&cooldown.shield_slam.remains=0&player.rage<10)||(player.rage>=100)
-	{'Focused Rage', '{player.buff(Vengeance: Focused Rage)&!player.buff(Vengeance: Ignore Pain)}||{player.buff(Ultimatum)&player.buff(Vengeance: Focused Rage)&!player.buff(Vengeance: Ignore Pain)}||{talent(6,1)&player.buff(Ultimatum)&!player.buff(Vengeance: Ignore Pain)&!player.buff(Vengeance: Focused Rage)}||{talent(6,1)&!player.buff(Vengeance: Ignore Pain)&!player.buff(Vengeance: Focused Rage)&player.rage>=30}||{player.buff(Ultimatum)&player.buff(Vengeance: Ignore Pain)&spell(Shield Slam)&player.rage<10}||{player.rage>=100}'},
+	--{'Focused Rage', '{player.buff(Vengeance: Focused Rage)&!player.buff(Vengeance: Ignore Pain)}||{player.buff(Ultimatum)&player.buff(Vengeance: Focused Rage)&!player.buff(Vengeance: Ignore Pain)}||{talent(6,1)&player.buff(Ultimatum)&!player.buff(Vengeance: Ignore Pain)&!player.buff(Vengeance: Focused Rage)}||{talent(6,1)&!player.buff(Vengeance: Ignore Pain)&!player.buff(Vengeance: Focused Rage)&player.rage>=30}||{player.buff(Ultimatum)&player.buff(Vengeance: Ignore Pain)&spell(Shield Slam)&player.rage<10}||{player.rage>=100}'},
 	--actions.prot+=/demoralizing_shout,if=incoming_damage_2500ms>player.health.max*0.20
 	{'Demoralizing Shout', 'player.incdmg(2.5)>player.health.max*0.20'},
 	--actions.prot+=/shield_wall,if=incoming_damage_2500ms>player.health.max*0.50
 	{'Shield Wall', 'player.incdmg(2.5)>player.health.max*0.50'},
 	--actions.prot+=/last_stand,if=incoming_damage_2500ms>player.health.max*0.50&!cooldown.shield_wall.remains=0
 	{'Last Stand', 'player.incdmg(2.5)>player.health.max*0.50&!spell(Shield Wall).cooldown=0'},
+	--high priority revenge if freeprocc
+	{'Revenge', 'revengeproc'},
 	--actions.prot+=/potion,name=unbending_potion,if=(incoming_damage_2500ms>player.health.max*0.15&!buff.potion.up)||target.time_to_die<=25
 	--actions.prot+=/call_action_list,name=prot_aoe,if=spell_targets.neltharions_fury>=2
-	{AoE, 'toggle(aoe)&player.area(8).enemies>=2'},
+--	{AoE, 'toggle(aoe)&player.area(8).enemies>=2'},
+	{AoE, 'player.area(8).enemies>=2'},
 	{Something},
 	--actions.prot+=/neltharions_fury,if=incoming_damage_2500ms>player.health.max*0.20&!buff.shield_block.up
 	{'Neltharion\'s Fury', 'artifact(Neltharion\'s Fury).equipped&player.incdmg(2.5)>player.health.max*0.20&!player.buff(Shield Block)'},
@@ -134,13 +158,17 @@ local ST = {
 	{'Shield Slam', '!{spell(Shield Block).cooldown<=gcd&!player.buff(Shield Block)&talent(7,2)}||{player.buff(Vengeance: Ignore Pain)&player.buff(Ignore Pain).duration<=gcd*2&player.rage<13}||{!player.buff(Vengeance: Ignore Pain)&player.buff(Ignore Pain).duration<=gcd*2&player.rage<20}||'},
 	{'Shield Slam', '!talent(7,2)'},
 	--actions.prot+=/revenge,if=cooldown.shield_slam.remains<=gcd.max*2
-	{'Revenge', 'spell(Shield Slam).cooldown<=gcd*2||player.rage<=5'},
+	--{'Revenge', 'spell(Shield Slam).cooldown<=gcd*2||player.rage<=5'},
+	--Revenge if free-proc, shield block remains long enough to build rage or shield block on cd
+	{'Revenge', 'revengeproc||player.buff(Shield Block).duration>=gcd*2||spell(shield block).cooldown>=3'},
+	{'Thunder Clap'},
 	--actions.prot+=/devastate
 	{'Devastate'}
 }
 
 local inCombat = {
 	{Keybinds},
+	--{'/startattack', '!isattacking'},
 	{Interrupts, 'target.interruptAt(50)&toggle(interrupts)&target.infront&target.range<=8'},
 	--{Cooldowns},
 	--{_Xeer},
