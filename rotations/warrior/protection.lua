@@ -120,8 +120,6 @@ local AoE = {
 	{Something},
 	--actions.prot_aoe+=/neltharions_fury,if=buff.battle_cry.up
 	{'Neltharion\'s Fury', 'artifact(Neltharion\'s Fury).equipped&player.buff(Battle Cry)'},
-	--high priority revenge if aoe and freeprocc
-	{'Revenge', 'revengeproc'},
 	--actions.prot_aoe+=/shield_slam,if=!(cooldown.shield_block.remains<=gcd.max*2&!buff.shield_block.up&talent.heavy_repercussions.enabled)
 	{'Shield Slam', '!{spell(Shield Block).cooldown<=gcd*2&!player.buff(Shield Block)&talent(7,2)}'},
 	--actions.prot_aoe+=/revenge
@@ -147,6 +145,8 @@ local ST = {
 	{'Shield Wall', 'player.incdmg(2.5)>player.health.max*0.50'},
 	--actions.prot+=/last_stand,if=incoming_damage_2500ms>player.health.max*0.50&!cooldown.shield_wall.remains=0
 	{'Last Stand', 'player.incdmg(2.5)>player.health.max*0.50&!spell(Shield Wall).cooldown=0'},
+	--high priority revenge if freeprocc
+	{'Revenge', 'revengeproc'},
 	--actions.prot+=/potion,name=unbending_potion,if=(incoming_damage_2500ms>player.health.max*0.15&!buff.potion.up)||target.time_to_die<=25
 	--actions.prot+=/call_action_list,name=prot_aoe,if=spell_targets.neltharions_fury>=2
 --	{AoE, 'toggle(aoe)&player.area(8).enemies>=2'},
